@@ -9,7 +9,7 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "São características de sistemas vivos, exceto:",
+            questionText = "São características de sistemas vivos, exceto...:",
             answers = new string[] {
                 "Utilizar a energia do ambiente",
                 "Possuir organização microcópica.",
