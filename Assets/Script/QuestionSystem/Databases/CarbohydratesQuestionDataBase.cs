@@ -514,7 +514,78 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_44"
         },
-    };
+        new Question {
+            questionDatabankName = "Os carboidratos são moléculas formadas, principalmente, por:",
+            answers = new string[] {
+                "Hidrogênio, enxofre e oxigênio",
+                "Carbono, hidrogênio e oxigênio",
+                "Carbono, nitrogênio e fósforo",
+                "Oxigênio, fósforo e magnésio",
+            correctIndex = 1,
+            questionNumber = 45,
+            isImageAnswer = false,
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A fórmula geral mais comum dos monossacarídeos é:",
+            answers = new string[] {
+                "CnH2n-2On",
+                "CnHnOn",
+                "CnH2n+2On",
+                "CnH2nOn"},
+            correctIndex = 3,
+            questionNumber = 46,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A ligação que une os monossacarídeos para formar dissacarídeos e polissacarídeos chama-se:",
+            answers = new string[] {
+                "Ligação glicosídica",
+                "Ligação peptídica",
+                "Ligação dissulfeto",
+                "Ligação fosfodiéster"},
+            correctIndex = 0,
+            questionNumber = 47,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual polissacarídeo é a principal reserva energética dos animais?",
+            answers = new string[] {
+                "Amido",
+                "Quitina",
+                "Glicogênio",
+                "Celulose"},
+            correctIndex = 2,
+            questionNumber = 48,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A quitina é um polissacarídeo estrutural encontrado em:",
+            answers = new string[] {
+                "Fígado humano",
+                "Algas vermelhas",
+                "Plantas superiores",
+                "Parede celular de fungos e exoesqueleto de artrópodes"},
+            correctIndex = 3,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A sacarose é formada pela união de quais monossacarídeos?",
+            answers = new string[] {
+                "Glicose + Frutose",
+                "Glicose + Galactose",
+                "Glicose + Glicose",
+                "Frutose + Galactose"},
+            correctIndex = 0,
+            questionNumber = 50,
+            isImageAnswer = false
+        }
+    }, 
 
     public List<Question> GetQuestions()
     {

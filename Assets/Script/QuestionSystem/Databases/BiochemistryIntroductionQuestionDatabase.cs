@@ -9,7 +9,7 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "São características de sistemas vivos, exceto...:",
+            questionText = "São características de sistemas vivos, exceto:",
             answers = new string[] {
                 "Utilizar a energia do ambiente",
                 "Possuir organização microcópica.",
@@ -658,7 +658,7 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "Identifique o isômeto cis nas estruturas abaixo",
+            questionText = "Identifique o isômero cis nas estruturas abaixo",
             answers = new string[] {
                 "AnswerImages/IntroductionDB/trans-dihidroxi-eteno",
                 "AnswerImages/IntroductionDB/cis-dihidroxi-eteno",
@@ -668,6 +668,45 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             correctIndex = 1,
             questionNumber = 50,
             isImageAnswer = true
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual das opções abaixo NÃO é considerada uma biomolécula fundamental?",
+            answers = new string[] {
+                "Proteína",
+                "Lipídio",
+                "Carboidrato",
+                "Água"
+            },
+            correctIndex = 3,
+            questionNumber = 51
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "O que diferencia os aminoácidos entre si, apesar de todos possuírem o mesmo grupo amino e carboxila?",
+            answers = new string[] {
+                "O número de átomos de hidrogênio",
+                "A cadeia lateral (grupo R)",
+                "O tipo de ligação peptídica",
+                "A presença de oxigênio no grupo carboxila"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A bioquímica é o ramo da ciência que estuda:",
+            answers = new string[] {
+                "As leis da física aplicadas ao corpo humano.",
+                "A estrutura dos organismos vivos no nível populacional.",
+                "As transformações químicas que ocorrem nos seres vivos.",
+                "As reações químicas em ambientes inorgânicos."
+            },
+            correctIndex = 2,
+            questionNumber = 53,
+            isImageAnswer = false
         }
     };
 
