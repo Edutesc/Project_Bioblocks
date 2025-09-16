@@ -584,8 +584,44 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 50,
             isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A glicose, a frutose e a galactose são exemplos de:",
+            answers = new string[] {
+                "Oligossacarídeos",
+                "Monossacarídeos",
+                "Dissacarídeos",
+                "Polissacarídeos"},
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A celulose difere do amido principalmente porque:",
+            answers = new string[] {
+                "É solúvel em água, enquanto o amido não é",
+                "Possui ligações β(1→4), enquanto o amido possui α(1→4)",
+                "É formada por frutose, enquanto o amido é formado por glicose",
+                "É composta por galactose, e não glicosedeos"},
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual das funções abaixo NÃO está relacionada aos carboidratos?",
+            answers = new string[] {
+                "Estrutura celular",
+                "Fornecimento de energia",
+                "Armazenamento de energia",
+                "Catálise enzimática direta"},
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false
         }
-    }, 
+    },
 
     public List<Question> GetQuestions()
     {
