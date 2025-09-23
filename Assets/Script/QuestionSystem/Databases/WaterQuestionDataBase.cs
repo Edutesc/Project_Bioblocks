@@ -705,6 +705,160 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 50,
             isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A molécula de água é formada por:",
+            answers = new string[] {
+                "Dois átomos de hidrogênio e um de oxigênio",
+                "Dois átomos de oxigênio e um de hidrogênio",
+                "Três átomos de oxigênio",
+                "Dois átomos de hidrogênio apenas"
+            },
+            correctIndex = 0,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A água é considerada uma molécula:",
+            answers = new string[] {
+                "Apolar",
+                "Polar",
+                "Neutra sem polaridade",
+                "Somente iônica"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A ligação que mantém os átomos de hidrogênio e oxigênio dentro da molécula de água é:",
+            answers = new string[] {
+                "Ligação de hidrogênio",
+                "Ligação iônica",
+                "Ligação covalente",
+                "Ligação metálica"
+            },
+            correctIndex = 2,
+            questionNumber = 53,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "As interações entre moléculas de água, responsáveis por suas propriedades especiais, são chamadas de:",
+            answers = new string[] {
+                "Ligações dissulfeto",
+                "Ligações de hidrogênio",
+                "Ligações peptídicas",
+                "Ligações covalentes duplas"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "Qual das funções abaixo é desempenhada pela água no organismo?",
+            answers = new string[] {
+                "Fonte primária de energia",
+                "Solvente universal e transporte de substâncias",
+                "Armazenamento de informação genética",
+                "Estrutura básica das proteínas"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "Qual das funções abaixo é desempenhada pela água no organismo?",
+            answers = new string[] {
+                "Fonte primária de energia",
+                "Solvente universal e transporte de substâncias",
+                "Armazenamento de informação genética",
+                "Estrutura básica das proteínas"
+            },
+            correctIndex = 1,
+            questionNumber = 55,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A alta capacidade térmica da água permite que:",
+            answers = new string[] {
+                "O corpo humano mantenha a temperatura estável",
+                "As proteínas sejam formadas mais rapidamente",
+                "Os lipídeos se dissolvam facilmente",
+                "O oxigênio seja transportado sem hemoglobina"
+            },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O processo em que moléculas de água "grudam" entre si devido às ligações de hidrogênio é chamado de:",
+            answers = new string[] {
+                "Adesão",
+                "Coesão",
+                "Capilaridade",
+                "Dissociação"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O fenômeno da capilaridade ocorre porque a água apresenta:",
+            answers = new string[] {
+                "Apenas coesão",
+                "Apenas adesão",
+                "Coesão e adesão",
+                "Nem coesão nem adesão"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A densidade da água é maior em qual estado físico?",
+            answers = new string[] {
+                "Sólido (gelo)",
+                "Líquido",
+                "Gasoso",
+                "Plasma"
+            },
+            correctIndex = 1,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A importância da água na reação de hidrólise está relacionada a:",
+            answers = new string[] {
+                "Sua função como fonte de energia",
+                "Sua participação na quebra de moléculas",
+                "Sua capacidade de armazenar DNA",
+                "Sua atuação como catalisador enzimático"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
         } 
     };
 

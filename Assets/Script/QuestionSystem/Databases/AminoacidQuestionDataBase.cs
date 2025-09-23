@@ -721,8 +721,128 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 50,
             isImageAnswer = false
         }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Os aminoácidos são considerados os blocos de construção de qual macromolécula?",
+            answers = new string[] {
+                "Proteínas",
+                "Carboidratos",
+                "Lipídios",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 0,
+            questionNumber = 51,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Os aminoácidos essenciais são aqueles que:",
+            answers = new string[] {
+                "Precisam ser obtidos pela dieta",
+                "Não participam de síntese proteica",
+                "São encontrados apenas em proteínas animais",
+                "Podem ser sintetizados pelo corpo humano em qualquer condição"
+            },
+            correctIndex = 0,
+            questionNumber = 52,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido é conhecido por ser o mais simples, possuindo apenas um átomo de hidrogênio como cadeia lateral?",
+            answers = new string[] {
+                "Serina",
+                "Alanina",
+                "Prolina",
+                "Glicina"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual grupo funcional é característico de todos os aminoácidos?",
+            answers = new string[] {
+                "Amino e carboxila",
+                "Aldeído e cetona",
+                "Hidroxila e metila",
+                "Fosfato e sulfato"
+            },
+            correctIndex = 0,
+            questionNumber = 54,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual dos seguintes aminoácidos NÃO é essencial para o ser humano adulto?",
+            answers = new string[] {
+                "Valina",
+                "Leucina",
+                "Hidroxila e metila",
+                "Glicina"
+            },
+            correctIndex = 3,
+            questionNumber = 55,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Quantos aminoácidos proteicos canônicos existem no código genético padrão?",
+            answers = new string[] {
+                "30",
+                "10",
+                "64",
+                "20"
+            },
+            correctIndex = 3,
+            questionNumber = 56,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido possui uma cadeia lateral com enxofre, sendo importante para a formação de pontes dissulfeto?",
+            answers = new string[] {
+                "Treonina",
+                "Cisteína",
+                "Fenilalanina",
+                "Valina"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        }
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "O grupo R de um aminoácido determina:",
+            answers = new string[] {
+                "O número de códons",
+                "A ligação peptídica",
+                "A quantidade de ATP produzido",
+                "As propriedades químicas e estruturais do aminoácido"
+            },
+            correctIndex = 3,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
     };
-
+      
     public List<Question> GetQuestions()
     {
         return questions;

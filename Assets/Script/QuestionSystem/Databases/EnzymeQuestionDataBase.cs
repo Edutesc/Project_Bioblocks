@@ -598,6 +598,118 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 42,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas são classificadas como:",
+            answers = new string[] {
+                "Proteínas",
+                "Carboidratos",
+                "Vitaminas",
+                "Lipídios"
+            },
+            correctIndex = 0,
+            questionNumber = 43,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual é a principal função das enzimas no metabolismo celular?",
+            answers = new string[] {
+                "Transportar oxigênio",
+                "Armazenar energia",
+                "Produzir hormônios",
+                "Acelerar reações químicas"
+            },
+            correctIndex = 3,
+            questionNumber = 44,
+            isImageAnswer = false
+        }, 
+         new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O local da enzima onde o substrato se liga é chamado de:",
+            answers = new string[] {
+                "Sítio ativo",
+                "Cofator",
+                "Produto",
+                "Cofator enzimático"
+            },
+            correctIndex = 0,
+            questionNumber = 45,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual destes fatores pode alterar a atividade enzimática?",
+            answers = new string[] {
+                "Cor da enzima",
+                "Pressão osmótica",
+                "Temperatura e pH",
+                "Massa molecular"
+            },
+            correctIndex = 2,
+            questionNumber = 46,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Quando uma enzima perde sua estrutura tridimensional devido a altas temperaturas, esse processo é chamado:",
+            answers = new string[] {
+                "Redução",
+                "Fusão",
+                "Oxidação",
+                "Desnaturação"
+            },
+            correctIndex = 3,
+            questionNumber = 47,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A energia mínima necessária para iniciar uma reação química é chamada de:",
+            answers = new string[] {
+                "Energia solar",
+                "nergia cinética",
+                "Energia de ativação",
+                "Energia potencial"
+            },
+            correctIndex = 2,
+            questionNumber = 48,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Quando uma molécula semelhante ao substrato compete pelo sítio ativo da enzima, temos:",
+            answers = new string[] {
+                "Ativação enzimática",
+                "Inibição não-competitiva",
+                "Inibição competitiva",
+                "Regulação alostérica"
+            },
+            correctIndex = 2,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas atuam de forma mais eficiente em:",
+            answers = new string[] {
+                "Temperatura e pH ótimos",
+                "Qualquer temperatura ou pH",
+                "Ambiente sem água",
+                "Altas pressões"
+            },
+            correctIndex = 0,
+            questionNumber = 50,
+            isImageAnswer = false
+        }, 
     };
     
     public List<Question> GetQuestions()

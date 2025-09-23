@@ -575,6 +575,149 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 43,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A membrana plasmática é composta principalmente por:",
+            answers = new string[] { 
+                "Proteínas e ácidos nucleicos", 
+                "Lipídios e proteínas", 
+                "Carboidratos e aminoácidos", 
+                "Água e sais minerais" },
+            correctIndex = 1,
+            questionNumber = 44,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O modelo aceito para descrever a estrutura da membrana plasmática é chamado:",
+            answers = new string[] { 
+                "Modelo mosaico fluido", 
+                "Modelo chave-fechadura", 
+                "Modelo helicoidal", 
+                "Modelo tripla hélice" },
+            correctIndex = 0,
+            questionNumber = 45,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual é o lipídeo mais abundante nas membranas celulares?",
+            answers = new string[] { 
+                "Triglicerídeos", 
+                "Fosfolipídios", 
+                "Esteroides", 
+                "Cerídeos" },
+            correctIndex = 1,
+            questionNumber = 46,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A bicamada lipídica é formada por fosfolipídios que apresentam regiões:",
+            answers = new string[] { 
+                "Totalmente polares", 
+                "Totalmente apolares", 
+                "Polares e apolares (anfipáticas)", 
+                "Apenas hidrofílicas" },
+            correctIndex = 2,
+            questionNumber = 46,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A bicamada lipídica é formada por fosfolipídios que apresentam regiões:",
+            answers = new string[] { 
+                "Totalmente polares", 
+                "Totalmente apolares", 
+                "Polares e apolares (anfipáticas)", 
+                "Apenas hidrofílicas" },
+            correctIndex = 2,
+            questionNumber = 47,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O colesterol, presente nas membranas, tem como função principal:",
+            answers = new string[] { 
+                "Armazenar energia", 
+                "Regular a fluidez da membrana", 
+                "Transportar oxigênio", 
+                "Produzir ATP" },
+            correctIndex = 1,
+            questionNumber = 48,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "As proteínas que atravessam toda a bicamada lipídica são chamadas de:",
+            answers = new string[] { 
+                "Proteínas periféricas", 
+                "Proteínas integrais", 
+                "Enzimas extracelulares", 
+                "Proteínas nucleares" },
+            correctIndex = 1,
+            questionNumber = 48,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Os carboidratos presentes na membrana estão associados principalmente a:",
+            answers = new string[] { 
+                "Reconhecimento celular", 
+                "Produção de energia imediata", 
+                "Transporte ativo", 
+                "Síntese proteica" },
+            correctIndex = 0,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O transporte de moléculas contra o gradiente de concentração, com gasto de energia, é chamado:",
+            answers = new string[] { 
+                "Difusão simples", 
+                "Difusão facilitada", 
+                "Transporte ativo", 
+                "Osmose" },
+            correctIndex = 2,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A passagem de água pela membrana sem gasto de energia recebe o nome de:",
+            answers = new string[] { 
+                "Osmose", 
+                "Transporte ativo", 
+                "Endocitose", 
+                "Exocitose" },
+            correctIndex = 0,
+            questionNumber = 50,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual dos processos abaixo envolve a entrada de partículas grandes ou fluidos pela membrana?",
+            answers = new string[] { 
+                "Osmose", 
+                "Difusão simples", 
+                "Endocitose", 
+                "Transporte passivo" },
+            correctIndex = 2,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
     };
 
     public List<Question> GetQuestions()

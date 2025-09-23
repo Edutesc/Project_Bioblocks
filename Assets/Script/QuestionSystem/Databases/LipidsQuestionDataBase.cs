@@ -613,6 +613,188 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 43,
             isImageAnswer = false
         }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são, em sua maioria, compostos por:",
+            answers = new string[] {
+                "Nitrogênio e fósforo",
+                "Carbono e enxofre",
+                "Carbono, hidrogênio e oxigênio",
+                "Oxigênio e cloro"
+            },
+            correctIndex = 2,
+            questionNumber = 44,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual das funções abaixo é típica dos lipídeos?",
+            answers = new string[] {
+                "Transportar oxigênio",
+                "Carregar informações genéticas",
+                "Catalisar reações químicas",
+                "Armazenar energia"
+            },
+            correctIndex = 3,
+            questionNumber = 45,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos insolúveis em água são considerados:",
+            answers = new string[] {
+                "Hidrofílicos",
+                "Hidrofóbicos",
+                "Anfipáticos",
+                "Polares"
+            },
+            correctIndex = 1,
+            questionNumber = 46,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual lipídeo é o principal componente das membranas celulares?",
+            answers = new string[] {
+                "Fosfolipídios",
+                "Triglicerídeos",
+                "Cerídeos",
+                "Esteroides"
+            },
+            correctIndex = 0,
+            questionNumber = 46,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os triglicerídeos são formados por:",
+            answers = new string[] {
+                "Ácidos graxos e glicerol",
+                "Triglicerídeos",
+                "Nucleotídeos e açúcar",
+                "Glicerol e bases nitrogenadas"
+            },
+            correctIndex = 0,
+            questionNumber = 47,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os triglicerídeos são formados por:",
+            answers = new string[] {
+                "Ácidos graxos e glicerol",
+                "Triglicerídeos",
+                "Nucleotídeos e açúcar",
+                "Glicerol e bases nitrogenadas"
+            },
+            correctIndex = 0,
+            questionNumber = 47,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual lipídeo atua como precursor dos hormônios esteroides?",
+            answers = new string[] {
+                "Lecitina",
+                "Colesterol",
+                "Ácido oleico",
+                "Cerídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 48,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados por:",
+            answers = new string[] {
+                "Terem oxigênio extra",
+                "Colesterol",
+                "Ácido oleico",
+                "Não possuírem carbono"
+            },
+            correctIndex = 1,
+            questionNumber = 49,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados por:",
+            answers = new string[] {
+                "Terem oxigênio extra",
+                "Colesterol",
+                "Ácido oleico",
+                "Não possuírem carbono"
+            },
+            correctIndex = 1,
+            questionNumber = 50,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados por:",
+            answers = new string[] {
+                "Terem oxigênio extra",
+                "Colesterol",
+                "Estarem sempre sólidos à temperatura ambiente",
+                "Apresentarem ligações duplas na cadeia carbônica"
+            },
+            correctIndex = 3,
+            questionNumber = 51,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Um exemplo de lipídeo de reserva energética encontrado em animais é:",
+            answers = new string[] {
+                "Glicogênio",
+                "Colesterol",
+                "Triglicerídeo",
+                "Fosfolipídio"
+            },
+            correctIndex = 2,
+            questionNumber = 52,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos que apresentam regiões polares e apolares são chamados de:",
+            answers = new string[] {
+                "Hidrofílicos",
+                "Hidrofóbicos",
+                "Aromáticos",
+                "Anfipáticos"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A função dos fosfolipídios na membrana celular é principalmente:",
+            answers = new string[] {
+                "Produzir energia imediata",
+                "Armazenar glicose",
+                "Formar a bicamada lipídica",
+                "Catalisar reações químicas"
+            },
+            correctIndex = 2,
+            questionNumber = 54,
+            isImageAnswer = false
+        }
     };
 
     public List<Question> GetQuestions()

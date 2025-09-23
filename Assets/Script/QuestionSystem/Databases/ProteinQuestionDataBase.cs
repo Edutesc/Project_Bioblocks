@@ -486,6 +486,156 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/ProteinDB/function_and_structure32"
         },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas são polímeros formados por:",
+            answers = new string[] {
+                "Monossacarídeos",
+                "Nucleotídeos",
+                "Aminoácidos",
+                "Lipídios"
+            },
+            correctIndex = 0,
+            questionNumber = 34,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual é a ligação que une os aminoácidos em uma proteína?",
+            answers = new string[] {
+                "Ligação iônica",
+                "Ligação de hidrogênio",
+                "Ligação dissulfeto",
+                "Ligação peptídica"
+            },
+            correctIndex = 3,
+            questionNumber = 35,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A sequência linear de aminoácidos em uma proteína define sua:",
+            answers = new string[] {
+                "Estrutura primária",
+                "Estrutura secundária",
+                "Estrutura terciária",
+                "Estrutura quaternária"
+            },
+            correctIndex = 0,
+            questionNumber = 36,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As estruturas secundárias mais comuns das proteínas são:",
+            answers = new string[] {
+                "Hélice alfa e folha beta",
+                "Dobra gama e alfa-barril",
+                "Hélice dupla e tríplice folha",
+                "Folha zeta e hélice delta"
+            },
+            correctIndex = 0,
+            questionNumber = 37,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A estrutura terciária de uma proteína está relacionada à:",
+            answers = new string[] {
+                "Sequência de nucleotídeos",
+                "Dobra tridimensional da cadeia polipeptídica",
+                "Associação de várias subunidades",
+                "Formação de pontes de hidrogênio apenas"
+            },
+            correctIndex = 1,
+            questionNumber = 38,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Quando várias cadeias polipeptídicas se associam para formar uma proteína funcional, isso corresponde à:",
+            answers = new string[] {
+                "Estrutura primária",
+                "Estrutura secundária",
+                "Estrutura terciária",
+                "Estrutura quaternária"
+            },
+            correctIndex = 3,
+            questionNumber = 39,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual das funções abaixo não é típica das proteínas?",
+            answers = new string[] {
+                "Catálise de reações (enzimas)",
+                "Transporte de substâncias",
+                "Defesa imunológica",
+                "Armazenamento de informação genética"
+            },
+            correctIndex = 3,
+            questionNumber = 40,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A hemoglobina é um exemplo de proteína que exerce função de:",
+            answers = new string[] {
+                "Reserva energética",
+                "Transporte de oxigênio",
+                "Defesa contra patógenos",
+                "Catalisar reações"
+            },
+            correctIndex = 1,
+            questionNumber = 41,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "O processo em que uma proteína perde sua forma funcional devido a alterações de temperatura ou pH chama-se:",
+            answers = new string[] {
+                "Desnaturação",
+                "Oxidação",
+                "Polimerização",
+                "Transcrição"
+            },
+            correctIndex = 0,
+            questionNumber = 42,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+         new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As enzimas, que são catalisadores biológicos, são classificadas quimicamente como:",
+            answers = new string[] {
+                "Proteínas",
+                "Lipídios",
+                "Polissacarídeos",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 0,
+            questionNumber = 43,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
     };
 
     public List<Question> GetQuestions()

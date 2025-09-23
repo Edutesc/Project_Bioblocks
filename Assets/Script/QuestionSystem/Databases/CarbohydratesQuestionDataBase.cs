@@ -620,7 +620,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 53,
             isImageAnswer = false
-        }
+        },
     },
 
     public List<Question> GetQuestions()
