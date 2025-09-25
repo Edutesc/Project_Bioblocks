@@ -378,7 +378,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "DNA e proteínas"
             },
             correctIndex = 0,
-            questionNumber = 35,
+            questionNumber = 36,
             isImageAnswer = false
         },
         new Question {
@@ -391,7 +391,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Maltose"
             },
             correctIndex = 2,
-            questionNumber = 36,
+            questionNumber = 37,
             isImageAnswer = false
         },
          new Question {
@@ -404,7 +404,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Uracila"
             },
             correctIndex = 2,
-            questionNumber = 37,
+            questionNumber = 38,
             isImageAnswer = false
         },
          new Question {
@@ -417,7 +417,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Franklin e Mendel"
             },
             correctIndex = 1,
-            questionNumber = 38,
+            questionNumber = 39,
             isImageAnswer = false
         },
         new Question {
@@ -430,7 +430,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "RNA nuclear"
             },
             correctIndex = 2,
-            questionNumber = 39,
+            questionNumber = 40,
             isImageAnswer = false
         },
         new Question {
@@ -443,7 +443,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Citosina"
             },
             correctIndex = 1,
-            questionNumber = 40,
+            questionNumber = 41,
             isImageAnswer = false
         },
         new Question {
@@ -456,23 +456,10 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Mutação"
             },
             correctIndex = 1,
-            questionNumber = 41,
-            isImageAnswer = false
-        },
-        new Question {
-            questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "O nucleotídeo ATP é conhecido principalmente por:",
-            answers = new string[] {
-                "Formar a bicamada lipídica",
-                "Ser uma fonte de energia celular",
-                "Carregar oxigênio no sangue",
-                "Transportar aminoácidos"
-            },
-            correctIndex = 1,
             questionNumber = 42,
             isImageAnswer = false
         },
-         new Question {
+        new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
             questionText = "O nucleotídeo ATP é conhecido principalmente por:",
             answers = new string[] {
@@ -487,6 +474,19 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
         },
          new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O nucleotídeo ATP é conhecido principalmente por:",
+            answers = new string[] {
+                "Formar a bicamada lipídica",
+                "Ser uma fonte de energia celular",
+                "Carregar oxigênio no sangue",
+                "Transportar aminoácidos"
+            },
+            correctIndex = 1,
+            questionNumber = 44,
+            isImageAnswer = false
+        },
+         new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
             questionText = "Durante a replicação do DNA, a enzima responsável por unir os nucleotídeos é a:",
             answers = new string[] {
                 "DNA polimerase",
@@ -495,7 +495,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transcriptase reversa"
             },
             correctIndex = ,
-            questionNumber = 44,
+            questionNumber = 45,
             isImageAnswer = false
         },
     };

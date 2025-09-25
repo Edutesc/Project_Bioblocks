@@ -624,7 +624,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Polares e apolares (anfipáticas)", 
                 "Apenas hidrofílicas" },
             correctIndex = 2,
-            questionNumber = 46,
+            questionNumber = 47,
             isImageAnswer = false
         },
         new Question
@@ -637,7 +637,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Polares e apolares (anfipáticas)", 
                 "Apenas hidrofílicas" },
             correctIndex = 2,
-            questionNumber = 47,
+            questionNumber = 48,
             isImageAnswer = false
         },
         new Question
@@ -650,7 +650,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transportar oxigênio", 
                 "Produzir ATP" },
             correctIndex = 1,
-            questionNumber = 48,
+            questionNumber = 49,
             isImageAnswer = false
         },
         new Question
@@ -663,7 +663,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Enzimas extracelulares", 
                 "Proteínas nucleares" },
             correctIndex = 1,
-            questionNumber = 48,
+            questionNumber = 50,
             isImageAnswer = false
         },
         new Question
@@ -676,7 +676,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transporte ativo", 
                 "Síntese proteica" },
             correctIndex = 0,
-            questionNumber = 49,
+            questionNumber = 51,
             isImageAnswer = false
         },
         new Question
@@ -689,7 +689,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transporte ativo", 
                 "Osmose" },
             correctIndex = 2,
-            questionNumber = 49,
+            questionNumber = 52,
             isImageAnswer = false
         },
         new Question
@@ -702,7 +702,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Endocitose", 
                 "Exocitose" },
             correctIndex = 0,
-            questionNumber = 50,
+            questionNumber = 53,
             isImageAnswer = false
         },
         new Question
@@ -715,7 +715,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Endocitose", 
                 "Transporte passivo" },
             correctIndex = 2,
-            questionNumber = 51,
+            questionNumber = 54,
             isImageAnswer = false
         },
     };

@@ -705,7 +705,147 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 50,
             isImageAnswer = false
-        }
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Segundo Arrhenius, um ácido é toda substância que em solução aquosa libera:",
+            answers = new string[] {
+                "OH⁻",
+                "H⁺ (prótons)",
+                "Na⁺",
+                "Cl⁻"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Segundo Arrhenius, uma base é toda substância que em solução aquosa libera:",
+            answers = new string[] {
+                "H⁺",
+                "OH⁻",
+                "CO₂",
+                "O₂"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "A escala de pH mede:",
+            answers = new string[] {
+                "A concentração de oxigênio em uma solução",
+                "A concentração de prótons (H⁺) em uma solução",
+                "A quantidade de sais dissolvidos",
+                "A densidade da água"
+            },
+            correctIndex = 1,
+            questionNumber = 53,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Uma solução com pH menor que 7 é considerada:",
+            answers = new string[] {
+                "Neutra",
+                "Ácida",
+                "Básica",
+                "Isotônica"
+            },
+            correctIndex = 0,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Uma solução com pH maior que 7 é considerada:",
+            answers = new string[] {
+                "Ácida",
+                "Neutra",
+                "Básica",
+                "Saturada"
+            },
+            correctIndex = 2,
+            questionNumber = 55,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "O pH de uma solução neutra (como água pura, a 25 °C) é:",
+            answers = new string[] {
+                "0",
+                "7",
+                "10",
+                "14"
+            },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Os sistemas tampão (buffers) no organismo têm como principal função:",
+            answers = new string[] {
+                "Regular a temperatura corporal",
+                "Transportar oxigênio",
+                "Manter o pH estável",
+                "Produzir energia imediata"
+            },
+            correctIndex = 2,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual par funciona como sistema tampão importante no sangue?",
+            answers = new string[] {
+                "Glicose/Insulina",
+                "Hemoglobina/O₂",
+                "H₂CO₃/HCO₃⁻ (ácido carbônico/bicarbonato)",
+                "DNA/RNA"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Uma solução com alta concentração de íons OH⁻ é classificada como:",
+            answers = new string[] {
+                "Ácida",
+                "Neutra",
+                "Básica",
+                "Isotônica"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual indicador muda de cor para identificar se uma solução é ácida ou básica?",
+            answers = new string[] {
+                "Cloreto de sódio",
+                "Fenolftaleína ou papel de tornassol",
+                "Glicose",
+                "Albumina"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
     };
 
     public List<Question> GetQuestions()
