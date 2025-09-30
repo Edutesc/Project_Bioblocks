@@ -621,7 +621,7 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageAnswer = false,
             isImageQuestion = false
         },
-         new Question
+        new Question
         {
             questionDatabankName = "ProteinQuestionDatabase",
             questionText = "As enzimas, que são catalisadores biológicos, são classificadas quimicamente como:",
@@ -633,6 +633,156 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 43,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas são polímeros formados por unidades chamadas:",
+            answers = new string[] {
+                "Monossacarídeos",
+                "Nucleotídeos",
+                "Aminoácidos",
+                "Aminoácidos"
+            },
+            correctIndex = 2,
+            questionNumber = 44,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A ligação que une os aminoácidos em uma proteína é chamada:",
+            answers = new string[] {
+                "Glicosídica",
+                "Peptídica",
+                "Fosfodiéster",
+                "Iônica"
+            },
+            correctIndex = 1,
+            questionNumber = 45,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual estrutura da proteína corresponde à sequência linear de aminoácidos?",
+            answers = new string[] {
+                "Estrutura primária",
+                "Estrutura secundária",
+                "Estrutura terciária",
+                "Estrutura quaternária"
+            },
+            correctIndex = 0,
+            questionNumber = 46,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As hélices alfa e folhas beta são exemplos de qual nível de organização proteica?",
+            answers = new string[] {
+                "Primário",
+                "Secundário",
+                "Terciário",
+                "Quaternário"
+            },
+            correctIndex = 1,
+            questionNumber = 47,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A hemoglobina é exemplo de proteína com estrutura:",
+            answers = new string[] {
+                "Primário",
+                "Secundário",
+                "Terciário",
+                "Quaternário"
+            },
+            correctIndex = 3,
+            questionNumber = 48,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual é a função principal das enzimas, que são proteínas especializadas?",
+            answers = new string[] {
+                "Armazenar energia",
+                "Catalisar reações químicas",
+                "Transportar gases",
+                "Formar membranas"
+            },
+            correctIndex = 1,
+            questionNumber = 49,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "O colágeno, proteína encontrada em tecidos conjuntivos, tem função principalmente:",
+            answers = new string[] {
+                "Energética",
+                "Estrutural",
+                "Catalítica",
+                "Hormonal"
+            },
+            correctIndex = 1,
+            questionNumber = 50,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A desnaturação de uma proteína pode ser causada por:",
+            answers = new string[] {
+                "Aumento de temperatura ou variação extrema de pH",
+                "Formação de ligação peptídica",
+                "Diminuição da concentração de glicose",
+                "Ação de oxigênio atmosférico"
+            },
+            correctIndex = 0,
+            questionNumber = 51,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A insulina é um exemplo de proteína com função:",
+            answers = new string[] {
+                "Hormonal",
+                "Estrutural",
+                "Energética",
+                "Enzimática"
+            },
+            correctIndex = 0,
+            questionNumber = 52,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas podem atuar no transporte de moléculas. Um exemplo é:",
+            answers = new string[] {
+                "DNA",
+                "Hemoglobina",
+                "Glicogênio",
+                "Amido"
+            },
+            correctIndex = 1,
+            questionNumber = 53,
             isImageAnswer = false,
             isImageQuestion = false
         },

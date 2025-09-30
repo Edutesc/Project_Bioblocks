@@ -472,7 +472,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 43,
             isImageAnswer = false
         },
-         new Question {
+        new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
             questionText = "O nucleotídeo ATP é conhecido principalmente por:",
             answers = new string[] {
@@ -485,7 +485,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 44,
             isImageAnswer = false
         },
-         new Question {
+        new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
             questionText = "Durante a replicação do DNA, a enzima responsável por unir os nucleotídeos é a:",
             answers = new string[] {
@@ -494,8 +494,138 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ligase",
                 "Transcriptase reversa"
             },
-            correctIndex = ,
+            correctIndex = 0,
             questionNumber = 45,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Os ácidos nucleicos são macromoléculas formadas por unidades chamadas:",
+            answers = new string[] {
+                "Aminoácidos",
+                "Nucleotídeos",
+                "Monossacarídeos",
+                "Lipídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 46,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Um nucleotídeo é composto por:",
+            answers = new string[] {
+                "Pentose + fosfato + base nitrogenada",
+                "Hexose + lipídio + aminoácido",
+                "Glicose + fosfato + proteína",
+                "Glicerol + base nitrogenada + ácido graxo"
+            },
+            correctIndex = 0,
+            questionNumber = 47,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A base nitrogenada presente apenas no RNA é:",
+            answers = new string[] {
+                "Timina",
+                "Citosina",
+                "Uracila",
+                "Adenina"
+            },
+            correctIndex = 2,
+            questionNumber = 48,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A base nitrogenada presente apenas no DNA é:",
+            answers = new string[] {
+                "Uracila",
+                "Adenina",
+                "Timina",
+                "Guanina"
+            },
+            correctIndex = 2,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A molécula de DNA tem a forma característica conhecida como:",
+            answers = new string[] {
+                "Hélice simples",
+                "Tripla hélice",
+                "Dupla hélice",
+                "Cadeia linear"
+            },
+            correctIndex = 2,
+            questionNumber = 50,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A pentose presente no DNA é:",
+            answers = new string[] {
+                "Ribose",
+                "Desoxirribose",
+                "Glicose",
+                "Frutose"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "No pareamento de bases do DNA, a adenina sempre se liga à:",
+            answers = new string[] {
+                "Guanina",
+                "Citosina",
+                "Uracila",
+                "Timina"
+            },
+            correctIndex = 3,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A principal função do RNA mensageiro (RNAm) é:",
+            answers = new string[] {
+                "Formar a estrutura dos ribossomos",
+                "Transportar aminoácidos",
+                "Levar a informação genética do DNA até os ribossomos",
+                "Catalisar reações químicas"
+            },
+            correctIndex = 2,
+            questionNumber = 53,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA transportador (RNAt) tem como função:",
+            answers = new string[] {
+                "Levar aminoácidos até os ribossomos durante a síntese proteica",
+                "Carregar energia química",
+                "Armazenar informação genética",
+                "Catalisar reações metabólicas"
+            },
+            correctIndex = 0,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Qual é a função principal do DNA nas células?",
+            answers = new string[] {
+                "Atuar como catalisador enzimático",
+                "Fornecer energia imediata",
+                "Armazenar e transmitir a informação genética",
+                "Transportar oxigênio"
+            },
+            correctIndex = 2,
+            questionNumber = 55,
             isImageAnswer = false
         },
     };
