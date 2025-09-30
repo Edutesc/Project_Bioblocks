@@ -718,6 +718,85 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 54,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A função principal das proteínas de membrana é:",
+            answers = new string[] { 
+                "Atuar como enzimas, transportadores ou receptores", 
+                "Fornecer energia para a célula", 
+                "Servir como reserva de aminoácidos", 
+                "Produzir ATP" },
+            correctIndex = 0,
+            questionNumber = 55,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O colesterol na membrana plasmática atua principalmente:",
+            answers = new string[] { 
+                "Fornecendo energia à célula", 
+                "Estabilizando a fluidez da membrana", 
+                "Participando da respiração celular", 
+                "Transportando oxigênio" },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O transporte passivo é caracterizado por:",
+            answers = new string[] { 
+                "Consumo de ATP", 
+                "Movimento contra o gradiente de concentração", 
+                "Movimento a favor do gradiente de concentração sem gasto de energia", 
+                "Exclusivamente realizado por proteínas" },
+            correctIndex = 2,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual das opções abaixo é um exemplo de transporte ativo?",
+            answers = new string[] { 
+                "Difusão simples", 
+                "Difusão facilitada", 
+                "Osmose", 
+                "Bomba de sódio e potássio" },
+            correctIndex = 3,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A entrada de água através da membrana por diferença de concentração é chamada de:",
+            answers = new string[] { 
+                "Pinocitose", 
+                "Osmose", 
+                "Difusão simples", 
+                "Transporte ativo" },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "As glicoproteínas e glicolipídeos da membrana têm papel fundamental em:",
+            answers = new string[] { 
+                "Armazenar energia", 
+                "Formação de ATP", 
+                "Reconhecimento celular e comunicação", 
+                "Produção de hormônios" },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false
+        }
+        },
     };
 
     public List<Question> GetQuestions()

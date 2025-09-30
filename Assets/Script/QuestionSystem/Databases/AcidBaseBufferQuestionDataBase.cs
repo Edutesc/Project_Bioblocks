@@ -846,6 +846,118 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 60,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual indicador muda de cor para identificar se uma solução é ácida ou básica?",
+            answers = new string[] {
+                "Cloreto de sódio",
+                "Fenolftaleína ou papel de tornassol",
+                "Glicose",
+                "Albumina"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual das substâncias abaixo é considerada uma base de Arrhenius?",
+            answers = new string[] {
+                "HCl",
+                "NaOH",
+                "CO₂",
+                "H₂SO₄"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "O par ácido-base que difere por apenas um próton (H⁺) é chamado de:",
+            answers = new string[] {
+                "Par conjugado",
+                "Par isotópico",
+                "Par redox",
+                "Par covalente"
+            },
+            correctIndex = 0,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual o pH de uma solução neutra a 25 °C?",
+            answers = new string[] {
+                "0",
+                "7",
+                "14",
+                "10"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Se uma solução tem [H⁺] = 1 × 10⁻⁹ mol/L, seu pH é:",
+            answers = new string[] {
+                "5",
+                "7",
+                "9",
+                "11"
+            },
+            correctIndex = 2,
+            questionNumber = 64,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "O ácido clorídrico (HCl) é classificado como:",
+            answers = new string[] {
+                "Ácido fraco",
+                "Base fraca",
+                "Ácido forte",
+                "Base forte"
+            },
+            correctIndex = 2,
+            questionNumber = 65,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual destas soluções apresenta caráter básico?",
+            answers = new string[] {
+                "pH = 2",
+                "pH = 6",
+                "pH = 7",
+                "pH = 12"
+            },
+            correctIndex = 3,
+            questionNumber = 66,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "O produto iônico da água a 25 °C (Kw) é:",
+            answers = new string[] {
+                "1 × 10⁻¹⁴",
+                "1 × 10⁻⁷",
+                "1 × 10⁻¹",
+                "1 × 10⁻¹⁰"
+            },
+            correctIndex = 0,
+            questionNumber = 67,
+            isImageAnswer = false
+        },
     };
 
     public List<Question> GetQuestions()

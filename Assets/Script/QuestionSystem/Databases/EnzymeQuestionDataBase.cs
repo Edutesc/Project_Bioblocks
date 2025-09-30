@@ -708,8 +708,134 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 50,
+            isImageAnswer = false 
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A região da enzima onde o substrato se liga é chamada de:",
+            answers = new string[] {
+                "Cofator",
+                "Sítio ativo",
+                "Centro metabólico",
+                "Núcleo catalítico"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
             isImageAnswer = false
-        }, 
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O modelo “chave-fechadura” é usado para explicar:",
+            answers = new string[] {
+                "A especificidade entre enzima e substrato",
+                "O armazenamento de energia na célula",
+                "A formação de polissacarídeos",
+                "A síntese de proteínas"
+            },
+            correctIndex = 0,
+            questionNumber = 52,
+            isImageAnswer = false
+        },  
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual desses fatores não influencia a atividade enzimática?",
+            answers = new string[] {
+                "Temperatura",
+                "pH",
+                "Concentração de substrato",
+                "Cor da solução"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false
+        },   
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Coenzimas são:",
+            answers = new string[] {
+                "Íons metálicos que ajudam as enzimas",
+                "Moléculas orgânicas auxiliares, muitas vezes derivadas de vitaminas",
+                "Aminoácidos que formam o sítio ativo",
+                "Produtos da reação enzimática"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas aceleram as reações químicas porque:",
+            answers = new string[] {
+                "Aumentam a energia de ativação",
+                "Diminuem a energia de ativação",
+                "Fornecem calor à reação",
+                "Transformam substratos em vitaminas"
+            },
+            correctIndex = 1,
+            questionNumber = 55,
+            isImageAnswer = false
+        },   
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A enzima que catalisa a quebra de amido em maltose é:",
+            answers = new string[] {
+                "Lactase",
+                "Amilase",
+                "Lipase",
+                "Protease"
+            },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas possuem elevada:",
+            answers = new string[] {
+                "Especificidade",
+                "Aleatoriedade",
+                "Instabilidade",
+                "Toxicidade"
+            },
+            correctIndex = 0,
+            questionNumber = 57,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O inibidor competitivo atua:",
+            answers = new string[] {
+                "Ligando-se a um local diferente do sítio ativo",
+                "Alterando irreversivelmente a enzima",
+                "Compete com o substrato pelo sítio ativo",
+                "Aumentando a afinidade da enzima pelo substrato"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A urease, enzima que degrada ureia, foi a primeira enzima cristalizada. Isso demonstrou que:",
+            answers = new string[] {
+                "Todas as enzimas são carboidratos",
+                "Enzimas são proteínas",
+                "Enzimas não podem ser isoladas",
+                "Enzimas são apenas cofatores minerais"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        },    
     };
     
     public List<Question> GetQuestions()

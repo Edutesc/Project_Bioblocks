@@ -841,6 +841,146 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 58,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Os aminoácidos são considerados as unidades básicas de qual macromolécula?",
+            answers = new string[] {
+                "Lipídios",
+                "Carboidratos",
+                "Proteínas",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual grupo funcional está presente em todos os aminoácidos?",
+            answers = new string[] {
+                "Hidroxila (-OH) e fosfato (-PO₄³⁻)",
+                "Amino (-NH₂) e carboxila (-COOH)",
+                "Sulfato (-SO₄²⁻) e éster (-COOR)",
+                "Aldeído (-CHO) e cetona (C=O)"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "O que diferencia os aminoácidos entre si?",
+            answers = new string[] {
+                "O número de carbonos do grupo carboxila",
+                "O tipo de ligação peptídica formada",
+                "A cadeia lateral (radical R)",
+                "A presença de nitrogênio no grupo amino"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Quantos aminoácidos são considerados essenciais para humanos adultos?",
+            answers = new string[] {
+                "3",
+                "9",
+                "12",
+                "20"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido contém enxofre em sua estrutura?",
+            answers = new string[] {
+                "Glicina",
+                "Alanina",
+                "Cisteína",
+                "Lisina"
+            },
+            correctIndex = 2,
+            questionNumber = 64,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "A ligação entre dois aminoácidos é chamada de:",
+            answers = new string[] {
+                "Ligação glicosídica",
+                "Ligação peptídica",
+                "Ligação fosfodiéster",
+                "Ligação de hidrogênio"
+            },
+            correctIndex = 2,
+            questionNumber = 65,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido é o mais simples, com apenas um átomo de hidrogênio como cadeia lateral?",
+            answers = new string[] {
+                "Alanina",
+                "Glicina",
+                "Serina",
+                "Prolina"
+            },
+            correctIndex = 1,
+            questionNumber = 66,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual destes aminoácidos é aromático?",
+            answers = new string[] {
+                "Valina",
+                "Fenilalanina",
+                "Lisina",
+                "Treonina"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "A prolina é considerada um aminoácido especial porque:",
+            answers = new string[] {
+                "Não participa de ligações peptídicas",
+                "Possui cadeia lateral aromática",
+                "Sua cadeia lateral se liga ao próprio nitrogênio do grupo amino",
+                "Não contém grupo carboxila"
+            },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Em pH fisiológico (~7,4), um aminoácido geralmente está em qual forma?",
+            answers = new string[] {
+                "Totalmente protonado",
+                "Totalmente desprotonado",
+                "Zwitteriônica (com cargas positivas e negativas)",
+                "Neutra, sem cargas"
+            },
+            correctIndex = 2,
+            questionNumber = 69,
+            isImageAnswer = false
+        },
     };
       
     public List<Question> GetQuestions()

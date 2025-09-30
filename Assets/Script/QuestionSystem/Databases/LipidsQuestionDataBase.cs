@@ -795,6 +795,159 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 56,
             isImageAnswer = false
         }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são principalmente compostos por:",
+            answers = new string[] {
+                "Aminoácidos e nucleotídeos",
+                "Glicerol e ácidos graxos",
+                "Monossacarídeos e polissacarídeos",
+                "Peptídeos e cofatores"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual é a principal função dos lipídeos de reserva nos animais?",
+            answers = new string[] {
+                "Armazenar informações genéticas",
+                "Catalisar reações químicas",
+                "Armazenar energia a longo prazo",
+                "Transportar oxigênio"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "O colesterol é classificado como:",
+            answers = new string[] {
+                "Esteroide",
+                "Fosfolipídeo",
+                "Glicerídeo",
+                "Terpeno"
+            },
+            correctIndex = 0,
+            questionNumber = 59,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os fosfolipídeos são fundamentais porque:",
+            answers = new string[] {
+                "Atuam como catalisadores",
+                "Formam a bicamada das membranas celulares",
+                "São hormônios sexuais",
+                "Fornecem energia imediata"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "O que diferencia ácidos graxos saturados de insaturados?",
+            answers = new string[] {
+                "Presença ou ausência de grupo carboxila",
+                "Quantidade de átomos de oxigênio",
+                "Presença de ligações duplas entre carbonos",
+                "Presença de fósforo na cadeia"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os óleos vegetais, em temperatura ambiente, geralmente são:",
+            answers = new string[] {
+                "Sólidos, pois são saturados",
+                "Líquidos, pois são insaturados",
+                "Gasosos, pois são voláteis",
+                "Sólidos, pois contêm esteroides"
+            },
+            correctIndex = 1,
+            questionNumber = 62,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são moléculas:",
+            answers = new string[] {
+                "Hidrossolúveis",
+                "Insolúveis em água e solúveis em solventes orgânicos",
+                "Sempre solúveis em água",
+                "Exclusivamente polares"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são moléculas:",
+            answers = new string[] {
+                "Hidrossolúveis",
+                "Insolúveis em água e solúveis em solventes orgânicos",
+                "Sempre solúveis em água",
+                "Exclusivamente polares"
+            },
+            correctIndex = 1,
+            questionNumber = 64,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os hormônios sexuais (como testosterona e estrógeno) derivam de qual lipídeo?",
+            answers = new string[] {
+                "Fosfolipídeos",
+                "Colesterol",
+                "Glicerídeos",
+                "Carotenoides"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A principal função dos lipídeos na membrana plasmática é:",
+            answers = new string[] {
+                "Armazenar glicose",
+                "Regular a temperatura do corpo",
+                "Garantir a barreira seletiva e a fluidez da membrana",
+                "Fornecer aminoácidos essenciais"
+            },
+            correctIndex = 2,
+            questionNumber = 66,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A manteiga é rica em ácidos graxos:",
+            answers = new string[] {
+                "Insaturados, geralmente líquidos à temperatura ambiente",
+                "Saturados, geralmente sólidos à temperatura ambiente",
+                "Aromáticos, voláteis",
+                "Fosforilados, presentes em membranas"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false
     };
 
     public List<Question> GetQuestions()

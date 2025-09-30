@@ -621,6 +621,138 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 53,
             isImageAnswer = false
         },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Os carboidratos também são conhecidos como:",
+            answers = new string[] {
+                "Lípidos",
+                "Glicídios",
+                "Aminoácidos",
+                "Nucleotídeos"},
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A fórmula geral mais comum dos monossacarídeos é:",
+            answers = new string[] {
+                "Cn(H₂O)n",
+                "CnH₂nOn",
+                "Cn(H₂O)2n",
+                "CnHnOn"},
+            correctIndex = 1,
+            questionNumber = 55,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual dos seguintes é um monossacarídeo?",
+            answers = new string[] {
+                "Sacarose",
+                "Maltose",
+                "Glicose",
+                "Amido"},
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A sacarose, encontrada no açúcar de mesa, é formada por:",
+            answers = new string[] {
+                "Glicose + Frutose",
+                "Glicose + Galactose",
+                "Frutose + Galactose",
+                "Glicose + Glicose"},
+            correctIndex = 0,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "O amido é o principal polissacarídeo de reserva:",
+            answers = new string[] {
+                "Animal",
+                "Fúngico",
+                "Vegetal",
+                "Bacteriano"},
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "O glicogênio é o polissacarídeo de reserva característico de:",
+            answers = new string[] {
+                "Plantas",
+                "Fungos e animais",
+                "Bactérias",
+                "Protozoários"},
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A celulose tem como função principal nos vegetais:",
+            answers = new string[] {
+                "Armazenar energia",
+                "Dar resistência à parede celular",
+                "Servir como reserva osmótica",
+                "Participar da respiração celular"},
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A lactose, presente no leite, é formada por:",
+            answers = new string[] {
+                "Glicose + Glicose",
+                "Glicose + Galactose",
+                "Glicose + Frutose",
+                "Galactose + Frutose"},
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "O tipo de ligação que une os monossacarídeos nos dissacarídeos e polissacarídeos é:",
+            answers = new string[] {
+                "Ligação peptídica",
+                "Ligação éster",
+                "Ligação glicosídica",
+                "Ligação de hidrogênio"},
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
+            answers = new string[] {
+                "Amido",
+                "Glicogênio",
+                "Celulose",
+                "Maltose"},
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
+            answers = new string[] {
+                "Amido",
+                "Glicogênio",
+                "Celulose",
+                "Maltose"},
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
     },
 
     public List<Question> GetQuestions()
