@@ -786,6 +786,275 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageAnswer = false,
             isImageQuestion = false
         },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A ligação que une os aminoácidos na formação das proteínas é chamada de:",
+            answers = new string[] {
+                "Ligação de hidrogênio",
+                "Ligação glicosídica",
+                "Ligação peptídica",
+                "Ligação fosfodiéster"
+            },
+            correctIndex = 2,
+            questionNumber = 54,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A estrutura tridimensional que representa o dobramento total da proteína é a:",
+            answers = new string[] {
+                "Estrutura primária",
+                "Estrutura secundária",
+                "Estrutura terciária",
+                "Estrutura quaternária"
+            },
+            correctIndex = 2,
+            questionNumber = 55,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A sequência linear de aminoácidos em uma proteína corresponde à:",
+            answers = new string[] {
+                "Estrutura primária",
+                "Estrutura secundária",
+                "Estrutura terciária",
+                "Estrutura quaternária"
+            },
+            correctIndex = 0,
+            questionNumber = 56,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A hemoglobina é um exemplo de proteína com:",
+            answers = new string[] {
+                "Estrutura primária",
+                "Estrutura secundária",
+                "Estrutura terciária",
+                "Estrutura quaternária"
+            },
+            correctIndex = 3,
+            questionNumber = 57,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas podem atuar como:",
+            answers = new string[] {
+                "Catalisadores biológicos, hormônios e elementos estruturais",
+                "Fonte primária de energia imediata, como a glicose",
+                "Material genético das células",
+                "Lipídios armazenados em vacúolos"
+            },
+            correctIndex = 0,
+            questionNumber = 58,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A desnaturação de uma proteína ocorre quando:",
+            answers = new string[] {
+                "Ela perde sua sequência primária",
+                "Suas interações químicas são rompidas, alterando sua forma",
+                "Há aumento da quantidade de aminoácidos",
+                "Ela se torna insolúvel em lipídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A desnaturação de uma proteína ocorre quando:",
+            answers = new string[] {
+                "Ela perde sua sequência primária",
+                "Suas interações químicas são rompidas, alterando sua forma",
+                "Há aumento da quantidade de aminoácidos",
+                "Ela se torna insolúvel em lipídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual dessas proteínas atua no transporte de oxigênio no sangue?",
+            answers = new string[] {
+                "Insulina",
+                "Hemoglobina",
+                "Colágeno",
+                "Tripsina"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A estrutura primária de uma proteína refere-se a:",
+            answers = new string[] {
+                "O enovelamento tridimensional da proteína",
+                "A sequência linear de aminoácidos",
+                "A associação de várias cadeias polipeptídicas",
+                "A formação de hélices alfa e folhas beta"
+            },
+            correctIndex = 1,
+            questionNumber = 62,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A insulina é um exemplo de proteína com função:",
+            answers = new string[] {
+                "Estrutural",
+                "Hormonal",
+                "Catalítica",
+                "Energética"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A insulina é um exemplo de proteína com função:",
+            answers = new string[] {
+                "Estrutural",
+                "Hormonal",
+                "Catalítica",
+                "Energética"
+            },
+            correctIndex = 1,
+            questionNumber = 64,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas podem atuar como:",
+            answers = new string[] {
+                "Catalisadores biológicos (enzimas)",
+                "Moléculas de armazenamento de energia imediata",
+                "Componentes principais da membrana nuclear",
+                "Moléculas de informação genética"
+            },
+            correctIndex = 0,
+            questionNumber = 65,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual desses fatores pode desnaturar uma proteína?",
+            answers = new string[] {
+                "Temperatura elevada",
+                "pH extremo",
+                "Presença de solventes orgânicos",
+                "Todas as anteriores"
+            },
+            correctIndex = 3,
+            questionNumber = 66,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Qual desses fatores pode desnaturar uma proteína?",
+            answers = new string[] {
+                "Temperatura elevada",
+                "pH extremo",
+                "Presença de solventes orgânicos",
+                "Todas as anteriores"
+            },
+            correctIndex = 3,
+            questionNumber = 67,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "A albumina presente no ovo é uma proteína com função principalmente:",
+            answers = new string[] {
+                "Hormonal",
+                "Energética e de reserva",
+                "Estrutural",
+                "Transportadora de oxigênio"
+            },
+            correctIndex = 1,
+            questionNumber = 68,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas chamadas fibrosas, como a queratina e o colágeno, têm função principal:",
+            answers = new string[] {
+                "Hormonal",
+                "Catalítica",
+                "Estrutural",
+                "De defesa imunológica"
+            },
+            correctIndex = 2,
+            questionNumber = 69,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "Os anticorpos (imunoglobulinas) são proteínas com função:",
+            answers = new string[] {
+                "Energética",
+                "Estrutural",
+                "De defesa",
+                "Hormonal"
+            },
+            correctIndex = 2,
+            questionNumber = 70,
+            isImageAnswer = false,
+            isImageQuestion = false
+        },
+        new Question
+        {
+            questionDatabankName = "ProteinQuestionDatabase",
+            questionText = "As proteínas que atuam como hormônios, como a insulina, têm função:",
+            answers = new string[] {
+                "Estrutural",
+                "Reguladora",
+                "Energética",
+                "De transporte"
+            },
+            correctIndex = 1,
+            questionNumber = 71,
+            isImageAnswer = false,
+            isImageQuestion = false
     };
 
     public List<Question> GetQuestions()
