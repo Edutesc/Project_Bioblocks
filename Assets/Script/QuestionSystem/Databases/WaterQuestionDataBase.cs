@@ -779,12 +779,12 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
-            questionText = "Qual das funções abaixo é desempenhada pela água no organismo?",
+            questionText = "A capacidade da água de dissolver muitas substâncias faz com que seja chamada de:",
             answers = new string[] {
-                "Fonte primária de energia",
-                "Solvente universal e transporte de substâncias",
-                "Armazenamento de informação genética",
-                "Estrutura básica das proteínas"
+                "Soluto universal",
+                "Solvente universal",
+                "Cofator biológico",
+                "Enzima natural"
             },
             correctIndex = 1,
             questionNumber = 56,
@@ -860,6 +860,104 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 61,
             isImageAnswer = false
         } 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "Qual é a porcentagem aproximada de água no corpo humano adulto?",
+            answers = new string[] {
+                "20%",
+                "40%",
+                "60%",
+                "80%"
+            },
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false
+        } 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A atração entre moléculas de água, que explica fenômenos como a tensão superficial, é devida a:",
+            answers = new string[] {
+                "Ligações covalentes",
+                "Ligações de hidrogênio",
+                "Ligações peptídicas",
+                "Ligações glicosídicas"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        } 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O calor específico elevado da água é importante porque:",
+            answers = new string[] {
+                "Permite que organismos mantenham a temperatura estável",
+                "Reduz a evaporação nos rios",
+                "Facilita o transporte de gases no sangue",
+                "Torna a água uma boa fonte de energia"
+            },
+            correctIndex = 0,
+            questionNumber = 64,
+            isImageAnswer = false
+        } 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O movimento da água através de uma membrana semipermeável é chamado:",
+            answers = new string[] {
+                "Difusão",
+                "Osmose",
+                "Transporte ativo",
+                "Exocitose"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false
+        } 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A densidade da água no estado sólido é menor que no líquido. Isso explica:",
+            answers = new string[] {
+                "A evaporação da água em baixas temperaturas",
+                "O gelo flutuar na água",
+                "A água ser polar",
+                "O pH neutro da água"
+            },
+            correctIndex = 1,
+            questionNumber = 66,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A função da água como reagente é observada em processos como:",
+            answers = new string[] {
+                "Respiração celular",
+                "Hidrólise",
+                "Fotossíntese",
+                "Todas as alternativas anteriores"
+            },
+            correctIndex = 3,
+            questionNumber = 67,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A propriedade da água que permite a subida da seiva nas plantas pelo xilema é chamada:",
+            answers = new string[] {
+                "Difusão",
+                "Evaporação",
+                "Adesão e coesão",
+                "Ionização"
+            },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false
+        }
     };
 
     public List<Question> GetQuestions()
