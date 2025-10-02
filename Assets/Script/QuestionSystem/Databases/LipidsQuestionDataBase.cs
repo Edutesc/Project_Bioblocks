@@ -948,6 +948,134 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 67,
             isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídios são compostos orgânicos caracterizados principalmente por:",
+            answers = new string[] {
+                "Alta solubilidade em água",
+                "Baixa solubilidade em água e solubilidade em solventes orgânicos",
+                "Estrutura formada por nucleotídeos",
+                "Sempre possuírem função enzimática"
+            },
+            correctIndex = 1,
+            questionNumber = 68,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os principais componentes de óleos e gorduras são:",
+            answers = new string[] {
+                "Fosfolipídios",
+                "Glicídios",
+                "Triglicerídeos",
+                "Esteroides"
+            },
+            correctIndex = 2,
+            questionNumber = 69,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Um lipídio formado por glicerol + 3 ácidos graxos é denominado:",
+            answers = new string[] {
+                "Fosfolipídio",
+                "Esteroide",
+                "Triglicerídeo",
+                "Cerídeo"
+            },
+            correctIndex = 2,
+            questionNumber = 70,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os fosfolipídios são importantes porque:",
+            answers = new string[] {
+                "Formam a parede celular dos vegetais",
+                "Atuam como catalisadores",
+                "Compõem a membrana plasmática das células",
+                "São responsáveis pelo transporte de oxigênio"
+            },
+            correctIndex = 2,
+            questionNumber = 71,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual dos lipídios abaixo possui função hormonal?",
+            answers = new string[] {
+                "Triglicerídeos",
+                "Esteroides",
+                "Fosfolipídios",
+                "Cerídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 72,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A principal função dos lipídios de reserva é:",
+            answers = new string[] {
+                "Fornecer energia de curto prazo",
+                "Armazenar energia de longo prazo",
+                "Atuar como cofatores enzimáticos",
+                "Regular o pH celular"
+            },
+            correctIndex = 1,
+            questionNumber = 73,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídios que atuam como isolantes térmicos em animais são principalmente:",
+            answers = new string[] {
+                "Fosfolipídios",
+                "Esteroides",
+                "Glicídios",
+                "Triglicerídeos"
+            },
+            correctIndex = 3,
+            questionNumber = 74,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Um exemplo de cera (cerídeo) é:",
+            answers = new string[] {
+                "Colesterol",
+                "Cutina das folhas",
+                "Fosfatidilcolina",
+                "Amido"
+            },
+            correctIndex = 1,
+            questionNumber = 75,
+            isImageAnswer = false
+            },
+            new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados porque:",
+            answers = new string[] {
+                "Possuem cadeias ramificadas",
+                "Apresentam uma ou mais duplas ligações na cadeia carbônica",
+                "Não contêm hidrogênio em sua estrutura",
+                "São encontrados apenas em animais"
+            },
+            correctIndex = 1,
+            questionNumber = 76,
+            isImageAnswer = false
+            },
+        }
     };
 
     public List<Question> GetQuestions()

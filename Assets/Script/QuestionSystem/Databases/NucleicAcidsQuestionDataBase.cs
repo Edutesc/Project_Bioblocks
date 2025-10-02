@@ -628,6 +628,123 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 55,
             isImageAnswer = false
         },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Os ácidos nucleicos são formados por unidades chamadas:",
+            answers = new string[] {
+                "Aminoácidos",
+                "Monossacarídeos",
+                "Nucleotídeos",
+                "Ácidos graxos"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Cada nucleotídeo é composto por:",
+            answers = new string[] {
+                "Aminoácido, fosfato e água",
+                "Açúcar, base nitrogenada e fosfato",
+                "Glicerol, ácido graxo e base nitrogenada",
+                "Açúcar, lipídio e proteína"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O DNA possui como açúcar:",
+            answers = new string[] {
+                "Glicose",
+                "Ribose",
+                "Desoxirribose",
+                "Galactose"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA possui como açúcar:",
+            answers = new string[] {
+                "Glicose",
+                "Ribose",
+                "Desoxirribose",
+                "Maltose"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Na estrutura de dupla hélice do DNA, as bases emparelham-se segundo a regra de Chargaff:",
+            answers = new string[] {
+                "A – G e C – T",
+                "A – C e T – G",
+                "A – T e C – G",
+                "A – U e C – G"
+            },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA mensageiro (RNAm) tem como função principal:",
+            answers = new string[] {
+                "Transportar aminoácidos",
+                "Atuar como catalisador enzimático",
+                "Levar a informação do DNA até os ribossomos",
+                "Formar a dupla hélice do DNA"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA transportador (RNAt) é responsável por:",
+            answers = new string[] {
+                "Levar aminoácidos até o ribossomo durante a síntese de proteínas",
+                "Duplicar o DNA",
+                "Formar a membrana celular",
+                "Produzir energia na respiração"
+            },
+            correctIndex = 0,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Quem descreveu o modelo da dupla hélice do DNA em 1953?",
+            answers = new string[] {
+                "Darwin e Mendel",
+                "Watson e Crick",
+                "Franklin e Chargaff",
+                "Pauling e Wöhler"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Quem descreveu o modelo da dupla hélice do DNA em 1953?",
+            answers = new string[] {
+                "Darwin e Mendel",
+                "Watson e Crick",
+                "Franklin e Chargaff",
+                "Pauling e Wöhler"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
     };
 
     public List<Question> GetQuestions()
