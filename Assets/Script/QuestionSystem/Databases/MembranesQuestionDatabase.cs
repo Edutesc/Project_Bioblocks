@@ -575,6 +575,357 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 43,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A membrana plasmática é composta principalmente por:",
+            answers = new string[] { 
+                "Proteínas e ácidos nucleicos", 
+                "Lipídios e proteínas", 
+                "Carboidratos e aminoácidos", 
+                "Água e sais minerais" },
+            correctIndex = 1,
+            questionNumber = 44,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O modelo aceito para descrever a estrutura da membrana plasmática é chamado:",
+            answers = new string[] { 
+                "Modelo mosaico fluido", 
+                "Modelo chave-fechadura", 
+                "Modelo helicoidal", 
+                "Modelo tripla hélice" },
+            correctIndex = 0,
+            questionNumber = 45,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual é o lipídeo mais abundante nas membranas celulares?",
+            answers = new string[] { 
+                "Triglicerídeos", 
+                "Fosfolipídios", 
+                "Esteroides", 
+                "Cerídeos" },
+            correctIndex = 1,
+            questionNumber = 46,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A bicamada lipídica é formada por fosfolipídios que apresentam regiões:",
+            answers = new string[] { 
+                "Totalmente polares", 
+                "Totalmente apolares", 
+                "Polares e apolares (anfipáticas)", 
+                "Apenas hidrofílicas" },
+            correctIndex = 2,
+            questionNumber = 47,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A bicamada lipídica é formada por fosfolipídios que apresentam regiões:",
+            answers = new string[] { 
+                "Totalmente polares", 
+                "Totalmente apolares", 
+                "Polares e apolares (anfipáticas)", 
+                "Apenas hidrofílicas" },
+            correctIndex = 2,
+            questionNumber = 48,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O colesterol, presente nas membranas, tem como função principal:",
+            answers = new string[] { 
+                "Armazenar energia", 
+                "Regular a fluidez da membrana", 
+                "Transportar oxigênio", 
+                "Produzir ATP" },
+            correctIndex = 1,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "As proteínas que atravessam toda a bicamada lipídica são chamadas de:",
+            answers = new string[] { 
+                "Proteínas periféricas", 
+                "Proteínas integrais", 
+                "Enzimas extracelulares", 
+                "Proteínas nucleares" },
+            correctIndex = 1,
+            questionNumber = 50,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Os carboidratos presentes na membrana estão associados principalmente a:",
+            answers = new string[] { 
+                "Reconhecimento celular", 
+                "Produção de energia imediata", 
+                "Transporte ativo", 
+                "Síntese proteica" },
+            correctIndex = 0,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O transporte de moléculas contra o gradiente de concentração, com gasto de energia, é chamado:",
+            answers = new string[] { 
+                "Difusão simples", 
+                "Difusão facilitada", 
+                "Transporte ativo", 
+                "Osmose" },
+            correctIndex = 2,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A passagem de água pela membrana sem gasto de energia recebe o nome de:",
+            answers = new string[] { 
+                "Osmose", 
+                "Transporte ativo", 
+                "Endocitose", 
+                "Exocitose" },
+            correctIndex = 0,
+            questionNumber = 53,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual dos processos abaixo envolve a entrada de partículas grandes ou fluidos pela membrana?",
+            answers = new string[] { 
+                "Osmose", 
+                "Difusão simples", 
+                "Endocitose", 
+                "Transporte passivo" },
+            correctIndex = 2,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A função principal das proteínas de membrana é:",
+            answers = new string[] { 
+                "Atuar como enzimas, transportadores ou receptores", 
+                "Fornecer energia para a célula", 
+                "Servir como reserva de aminoácidos", 
+                "Produzir ATP" },
+            correctIndex = 0,
+            questionNumber = 55,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O colesterol na membrana plasmática atua principalmente:",
+            answers = new string[] { 
+                "Fornecendo energia à célula", 
+                "Estabilizando a fluidez da membrana", 
+                "Participando da respiração celular", 
+                "Transportando oxigênio" },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O transporte passivo é caracterizado por:",
+            answers = new string[] { 
+                "Consumo de ATP", 
+                "Movimento contra o gradiente de concentração", 
+                "Movimento a favor do gradiente de concentração sem gasto de energia", 
+                "Exclusivamente realizado por proteínas" },
+            correctIndex = 2,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual das opções abaixo é um exemplo de transporte ativo?",
+            answers = new string[] { 
+                "Difusão simples", 
+                "Difusão facilitada", 
+                "Osmose", 
+                "Bomba de sódio e potássio" },
+            correctIndex = 3,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A entrada de água através da membrana por diferença de concentração é chamada de:",
+            answers = new string[] { 
+                "Pinocitose", 
+                "Osmose", 
+                "Difusão simples", 
+                "Transporte ativo" },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "As glicoproteínas e glicolipídeos da membrana têm papel fundamental em:",
+            answers = new string[] { 
+                "Armazenar energia", 
+                "Formação de ATP", 
+                "Reconhecimento celular e comunicação", 
+                "Produção de hormônios" },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O principal modelo que descreve a estrutura da membrana plasmática é chamado de:",
+            answers = new string[] { 
+                "Modelo do mosaico fluido", 
+                "Modelo da dupla hélice", 
+                "Modelo chave-fechadura", 
+                "Modelo do tapete contínuo" },
+            correctIndex = 0,
+            questionNumber = 61,
+            isImageAnswer = false
+        }
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "As membranas biológicas são constituídas principalmente por:",
+            answers = new string[] { 
+                "Proteínas e ácidos nucleicos", 
+                "Lipídeos e carboidratos", 
+                "Lipídeos e proteínas", 
+                "Carboidratos e aminoácidos" },
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Os lipídeos mais abundantes nas membranas celulares são:",
+            answers = new string[] { 
+                "Glicerídeos", 
+                "Fosfolipídeos", 
+                "Esteroides", 
+                "Carotenoides" },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Qual lipídeo ajuda a regular a fluidez da membrana plasmática em células animais?",
+            answers = new string[] { 
+                "Triglicerídeos", 
+                "Colesterol", 
+                "Carotenoides", 
+                "Ácidos graxos livres" },
+            correctIndex = 1,
+            questionNumber = 64,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "As proteínas que atravessam completamente a bicamada lipídica são chamadas de:",
+            answers = new string[] { 
+                "Proteínas periféricas", 
+                "Proteínas integrais de membrana", 
+                "Enzimas citoplasmáticas", 
+                "Proteínas ribossômicas" },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Os carboidratos presentes na membrana estão ligados principalmente a:",
+            answers = new string[] { 
+                "Aminoácidos essenciais", 
+                "DNA e RNA", 
+                "Fosfolipídeos e proteínas", 
+                "Colesterol e triglicerídeos" },
+            correctIndex = 2,
+            questionNumber = 66,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A função mais importante da membrana plasmática é:",
+            answers = new string[] { 
+                "Produzir energia", 
+                "Estocar material genético", 
+                "Fosfolipídeos e proteínas", 
+                "Regular a entrada e saída de substâncias" },
+            correctIndex = 3,
+            questionNumber = 67,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "O transporte que ocorre a favor do gradiente de concentração, sem gasto de energia, é chamado de:",
+            answers = new string[] { 
+                "Transporte ativo", 
+                "Osmose", 
+                "Transporte passivo", 
+                "Endocitose" },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "A difusão facilitada se diferencia da difusão simples porque:",
+            answers = new string[] { 
+                "Precisa de energia (ATP)", 
+                "Utiliza proteínas transportadoras ou canais", 
+                "Só ocorre em soluções hipertônicas", 
+                "É exclusiva de bactérias" },
+            correctIndex = 1,
+            questionNumber = 69,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "MembranesQuestionDatabase",
+            questionText = "Quando a célula engloba partículas grandes por meio da membrana, esse processo é chamado de:",
+            answers = new string[] { 
+                "Exocitose", 
+                "Pinocitose", 
+                "Fagocitose", 
+                "Difusão" },
+            correctIndex = 2,
+            questionNumber = 70,
+            isImageAnswer = false
+        },
     };
 
     public List<Question> GetQuestions()

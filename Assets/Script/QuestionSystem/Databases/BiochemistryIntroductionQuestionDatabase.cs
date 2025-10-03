@@ -658,7 +658,7 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "Identifique o isômeto cis nas estruturas abaixo",
+            questionText = "Identifique o isômero cis nas estruturas abaixo",
             answers = new string[] {
                 "AnswerImages/IntroductionDB/trans-dihidroxi-eteno",
                 "AnswerImages/IntroductionDB/cis-dihidroxi-eteno",
@@ -668,7 +668,189 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             correctIndex = 1,
             questionNumber = 50,
             isImageAnswer = true
-        }
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual das opções abaixo NÃO é considerada uma biomolécula fundamental?",
+            answers = new string[] {
+                "Proteína",
+                "Lipídio",
+                "Carboidrato",
+                "Água"
+            },
+            correctIndex = 3,
+            questionNumber = 51
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "O que diferencia os aminoácidos entre si, apesar de todos possuírem o mesmo grupo amino e carboxila?",
+            answers = new string[] {
+                "O número de átomos de hidrogênio",
+                "A cadeia lateral (grupo R)",
+                "O tipo de ligação peptídica",
+                "A presença de oxigênio no grupo carboxila"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A bioquímica é o ramo da ciência que estuda:",
+            answers = new string[] {
+                "As leis da física aplicadas ao corpo humano.",
+                "A estrutura dos organismos vivos no nível populacional.",
+                "As transformações químicas que ocorrem nos seres vivos.",
+                "As reações químicas em ambientes inorgânicos."
+            },
+            correctIndex = 2,
+            questionNumber = 53,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal solvente dos sistemas biológicos?",
+            answers = new string[] {
+                "Etanol",
+                "Água",
+                "Metano",
+                "Glicerol"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal solvente dos sistemas biológicos?",
+            answers = new string[] {
+                "Etanol",
+                "Água",
+                "Metano",
+                "Glicerol"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "As macromoléculas biológicas incluem:",
+            answers = new string[] {
+                "Proteínas, lipídios, carboidratos e ácidos nucleicos",
+                "Vitaminas, sais minerais e proteínas",
+                "Gases, água, lipídios e enzimas",
+                "Açúcares simples, ATP e DNA"
+            },
+            correctIndex = 0,
+            questionNumber = 55,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A molécula de DNA é responsável principalmente por:",
+            answers = new string[] {
+                "Produzir energia imediata",
+                "Transportar oxigênio",
+                "Armazenar e transmitir informações genéticas",
+                "Formar membranas celulares"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "O ATP é considerado a “moeda energética” da célula porque:",
+            answers = new string[] {
+                "É um lipídio armazenado em grandes quantidades",
+                "Armazena energia em suas ligações fosfato",
+                "É uma proteína que atua como enzima",
+                "Faz parte da estrutura dos ácidos nucleicos"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal carboidrato utilizado como fonte imediata de energia pelas células?",
+            answers = new string[] {
+                "Amido",
+                "Glicogênio",
+                "Glicose",
+                "Frutose"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "As enzimas são:",
+            answers = new string[] {
+                "Vitaminas essenciais à vida",
+                "Moléculas de DNA que controlam a divisão celular",
+                "Catalisadores biológicos, geralmente proteínas",
+                "Lipídios que fornecem energia"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Em organismos vivos, os lipídios têm como função principal:",
+            answers = new string[] {
+                "Formar cadeias polipeptídicas",
+                "Servir como catalisadores",
+                "Armazenar energia e compor membranas celulares",
+                "Atuar como código genético"
+            },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A bioquímica surgiu como disciplina independente principalmente com:",
+            answers = new string[] {
+                "A descoberta da penicilina",
+                "O isolamento da ureia por Wöhler",
+                "A teoria celular de Schleiden e Schwann",
+                "A descoberta da dupla hélice do DNA"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Um dos principais objetivos da Bioquímica é:",
+            answers = new string[] {
+                "Entender as interações entre espécies diferentes",
+                "Explicar como as reações químicas sustentam os processos vitais",
+                "Descrever a anatomia dos organismos",
+                "Estudar apenas as doenças humanas"
+            },
+            correctIndex = 1,
+            questionNumber = 62,
+            isImageAnswer = false
+        };    
+         new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Os principais elementos químicos que constituem os seres vivos são:",
+            answers = new string[] {
+                "C, H, O, N",
+                "Fe, Cu, Zn, Mg",
+                "Na, K, Cl, Ca",
+                "S, P, Cl, Ar"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false
+        };    
     };
 
     public List<Question> GetQuestions()
