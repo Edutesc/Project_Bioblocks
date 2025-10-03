@@ -521,6 +521,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Carbono, hidrogênio e oxigênio",
                 "Carbono, nitrogênio e fósforo",
                 "Oxigênio, fósforo e magnésio",
+            },
             correctIndex = 1,
             questionNumber = 45,
             isImageAnswer = false,
@@ -532,7 +533,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "CnH2n-2On",
                 "CnHnOn",
                 "CnH2n+2On",
-                "CnH2nOn"},
+                "CnH2nOn"
+                },
             correctIndex = 3,
             questionNumber = 46,
             isImageAnswer = false
@@ -544,7 +546,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ligação glicosídica",
                 "Ligação peptídica",
                 "Ligação dissulfeto",
-                "Ligação fosfodiéster"},
+                "Ligação fosfodiéster"
+                },
             correctIndex = 0,
             questionNumber = 47,
             isImageAnswer = false
@@ -556,7 +559,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Amido",
                 "Quitina",
                 "Glicogênio",
-                "Celulose"},
+                "Celulose"
+                },
             correctIndex = 2,
             questionNumber = 48,
             isImageAnswer = false
@@ -568,7 +572,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Fígado humano",
                 "Algas vermelhas",
                 "Plantas superiores",
-                "Parede celular de fungos e exoesqueleto de artrópodes"},
+                "Parede celular de fungos e exoesqueleto de artrópodes"
+                },
             correctIndex = 3,
             questionNumber = 49,
             isImageAnswer = false
@@ -580,12 +585,13 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Glicose + Frutose",
                 "Glicose + Galactose",
                 "Glicose + Glicose",
-                "Frutose + Galactose"},
+                "Frutose + Galactose"
+                },
             correctIndex = 0,
             questionNumber = 50,
             isImageAnswer = false
-        }
-    }, 
+        },
+    };
 
     public List<Question> GetQuestions()
     {
