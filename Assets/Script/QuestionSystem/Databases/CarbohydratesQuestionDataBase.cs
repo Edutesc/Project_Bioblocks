@@ -743,14 +743,98 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-            questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
+            questionText = "A fórmula geral mais comum dos carboidratos é:",
+            answers = new string[] {
+                "Cn(H₂O)n",
+                "CnH₂nOn",
+                "CnH₂n+₂On",
+                "CnHnOn"},
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+            new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A glicose é classificada como:",
+            answers = new string[] {
+                "Dissacarídeo",
+                "Monossacarídeo",
+                "Polissacarídeo",
+                "Oligossacarídeo"},
+            correctIndex = 1,
+            questionNumber = 64,
+            isImageAnswer = false
+        },
+            new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A sacarose é formada pela união de:",
+            answers = new string[] {
+                "Glicose + Glicose",
+                "Glicose + Galactose",
+                "Glicose + Frutose",
+                "Glicose + Manose"},
+            correctIndex = 2,
+            questionNumber = 65,
+            isImageAnswer = false
+        },
+         new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual destes carboidratos é considerado um polissacarídeo de armazenamento em animais?",
             answers = new string[] {
                 "Amido",
-                "Glicogênio",
                 "Celulose",
-                "Maltose"},
+                "Glicogênio",
+                "Quitina"},
             correctIndex = 2,
-            questionNumber = 62,
+            questionNumber = 66,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual destes carboidratos é um polissacarídeo estrutural presente na parede celular de vegetais?",
+            answers = new string[] {
+                "Amido",
+                "Celulose",
+                "Maltose",
+                "Lactose"},
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual destes carboidratos está presente no leite?",
+            answers = new string[] {
+                "Sacarose",
+                "Lactose",
+                "Maltose",
+                "Glicogênio"},
+            correctIndex = 1,
+            questionNumber = 68,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Os carboidratos podem ser classificados de acordo com:",
+            answers = new string[] {
+                "O número de radicais R",
+                "O número de átomos de carbono e grupos funcionais",
+                "A presença de ácidos graxos",
+                "O número de ligações peptídicas"},
+            correctIndex = 1,
+            questionNumber = 69,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual das opções representa uma função principal dos carboidratos nos organismos vivos?",
+            answers = new string[] {
+                "Atuar como catalisadores biológicos",
+                "Armazenar informações genéticas",
+                "Fornecer energia e servir como reserva energética",
+                "Compor membranas celulares"},
+            correctIndex = 2,
+            questionNumber = 70,
             isImageAnswer = false
         },
     },

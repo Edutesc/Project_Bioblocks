@@ -838,6 +838,19 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             questionNumber = 62,
             isImageAnswer = false
         };    
+         new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Os principais elementos químicos que constituem os seres vivos são:",
+            answers = new string[] {
+                "C, H, O, N",
+                "Fe, Cu, Zn, Mg",
+                "Na, K, Cl, Ca",
+                "S, P, Cl, Ar"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false
+        };    
     };
 
     public List<Question> GetQuestions()

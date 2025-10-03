@@ -835,7 +835,147 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 57,
             isImageAnswer = false
-        },    
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas são, em sua maioria:",
+            answers = new string[] {
+                "Lipídios",
+                "Carboidratos",
+                "Proteínas",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },   
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A função principal das enzimas é:",
+            answers = new string[] {
+                "Armazenar energia",
+                "Acelerar reações químicas",
+                "Servir como estrutura da célula",
+                "Transportar oxigênio"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O local da enzima onde o substrato se liga é chamado de:",
+            answers = new string[] {
+                "Cofator",
+                "Sítio ativo",
+                "Grupo prostético",
+                "Complexo enzimático"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O modelo que explica a interação enzima-substrato como “chave-fechadura” é conhecido como:",
+            answers = new string[] {
+                "Modelo do encaixe induzido",
+                "Modelo da catálise covalente",
+                "Modelo chave-fechadura",
+                "Modelo do estado de transição"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual dos fatores abaixo não afeta a atividade enzimática?",
+            answers = new string[] {
+                "Temperatura",
+                "pH",
+                "Concentração de substrato",
+                "Cor do substrato"
+            },
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Moléculas não proteicas que auxiliam algumas enzimas em sua atividade são chamadas de:",
+            answers = new string[] {
+                "Cofatores",
+                "Polissacarídeos",
+                "Hormônios",
+                "Nucleotídeos"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A enzima que catalisa a quebra de moléculas pela adição de água é:",
+            answers = new string[] {
+                "Oxidorredutase",
+                "Hidrolase",
+                "Isomerase",
+                "Ligase"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A desnaturalização de uma enzima ocorre quando:",
+            answers = new string[] {
+                "A enzima é ativada por cofatores",
+                "Há alteração em sua estrutura tridimensional",
+                "O substrato se liga ao sítio ativo",
+                "O pH se mantém constante"
+            },
+            correctIndex = 1,
+            questionNumber = 66,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas reduzem:",
+            answers = new string[] {
+                "A concentração de substrato",
+                "A energia de ativação da reação",
+                "A quantidade de produtos formados",
+                "A velocidade da reação"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas apresentam elevada:",
+            answers = new string[] {
+                "Generalidade",
+                "Inespecificidade",
+                "Especificidade",
+                "Toxicidade"
+            },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false
+        },
     };
     
     public List<Question> GetQuestions()
