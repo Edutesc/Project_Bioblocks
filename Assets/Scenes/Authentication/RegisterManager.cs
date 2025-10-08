@@ -77,9 +77,7 @@ public class RegisterManager : MonoBehaviour
             Debug.Log("=== LIMPEZA CONCLUÍDA, INICIANDO REGISTRO ===");
 
             await AuthenticationRepository.Instance.RegisterUserAsync(nameInput.text, nickNameInput.text, emailInput.text, passwordInput.text);
-
-            // Aguarda os dados do usuário serem carregados
-            await Task.Delay(100);
+            await Task.Delay(300);
 
             // Recarrega os dados do usuário recém-criado
             var user = AuthenticationRepository.Instance.Auth.CurrentUser;
@@ -89,8 +87,9 @@ public class RegisterManager : MonoBehaviour
                 if (userData != null)
                 {
                     UserDataStore.CurrentUserData = userData;
-                    // ⭐ CRÍTICO: Força atualização igual ao Login
+                    await Task.Delay(300);
                     await AnsweredQuestionsManager.Instance.ForceUpdate();
+                    await Task.Delay(400);
                 }
                 else
                 {
@@ -127,12 +126,6 @@ public class RegisterManager : MonoBehaviour
         if (backButton != null)
         {
             backButton.interactable = interactable;
-        }
-
-        Button[] allButtons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (Button button in allButtons)
-        {
-            button.interactable = interactable;
         }
         
         nameInput.interactable = interactable;

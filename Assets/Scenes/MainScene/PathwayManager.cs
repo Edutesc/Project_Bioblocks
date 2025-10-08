@@ -9,6 +9,20 @@ public class PathwayManager : MonoBehaviour
     {
 #if DEBUG
         Debug.Log($"PathwayManager initialized in {BioBlocksSettings.ENVIRONMENT} mode");
+
+        // ⭐ VERIFICAÇÃO CRÍTICA
+        Debug.Log($"[PATHWAY] ========== VERIFICANDO BOTTOMBAR ==========");
+        Debug.Log($"[PATHWAY] NavigationBottomBarManager.Instance existe? {NavigationBottomBarManager.Instance != null}");
+
+        if (NavigationBottomBarManager.Instance != null)
+        {
+            Debug.Log("[PATHWAY] Instance encontrada! Forçando setup manual...");
+            StartCoroutine(ManualBottomBarSetup());
+        }
+        else
+        {
+            Debug.LogError("[PATHWAY] ⚠️ NavigationBottomBarManager.Instance é NULL!");
+        }
 #endif
 
         if (UserDataStore.CurrentUserData != null)
@@ -40,6 +54,24 @@ public class PathwayManager : MonoBehaviour
         {
             Debug.LogError("User data not loaded. Redirecting to Login.");
             UnityEngine.SceneManagement.SceneManager.LoadScene("Login");
+        }
+
+        StartCoroutine(DiagnoseAfterDelay());
+    }
+
+    private IEnumerator DiagnoseAfterDelay()
+    {
+        yield return new WaitForSeconds(2f);
+
+        Debug.Log("[PATHWAY] Chamando diagnóstico da BottomBar...");
+
+        if (NavigationBottomBarManager.Instance != null)
+        {
+            NavigationBottomBarManager.Instance.DiagnoseButtons();
+        }
+        else
+        {
+            Debug.LogError("[PATHWAY] Instance é NULL!");
         }
     }
 
@@ -169,5 +201,50 @@ public class PathwayManager : MonoBehaviour
     {
         Debug.Log($"Navigating to {sceneName}");
         NavigationManager.Instance.NavigateTo(sceneName);
+    }
+
+    public void TestBottomBarFix()
+    {
+        Debug.Log("=== TESTE: Forçando reconexão manual ===");
+
+        if (NavigationBottomBarManager.Instance != null)
+        {
+            // Força setup dos listeners novamente
+            var setupMethod = typeof(NavigationBottomBarManager).GetMethod("SetupButtonListeners",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (setupMethod != null)
+            {
+                setupMethod.Invoke(NavigationBottomBarManager.Instance, null);
+                Debug.Log("Listeners reconectados manualmente!");
+            }
+        }
+    }
+    private IEnumerator ManualBottomBarSetup()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log("[PATHWAY] Executando setup manual da BottomBar...");
+
+        if (NavigationBottomBarManager.Instance != null)
+        {
+            // Usa reflexão para chamar SetupButtonListeners
+            var setupMethod = typeof(NavigationBottomBarManager).GetMethod("SetupButtonListeners",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (setupMethod != null)
+            {
+                setupMethod.Invoke(NavigationBottomBarManager.Instance, null);
+                Debug.Log("[PATHWAY] ✓ SetupButtonListeners executado manualmente!");
+            }
+            else
+            {
+                Debug.LogError("[PATHWAY] ⚠️ Método SetupButtonListeners não encontrado!");
+            }
+        }
+        else
+        {
+            Debug.LogError("[PATHWAY] ⚠️ Instance perdida durante espera!");
+        }
     }
 }

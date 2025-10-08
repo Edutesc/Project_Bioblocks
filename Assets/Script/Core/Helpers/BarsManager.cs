@@ -12,10 +12,18 @@ public abstract class BarsManager : MonoBehaviour
     protected bool isSceneBeingLoaded = false;
     protected abstract string BarName { get; }
     protected abstract string BarChildName { get; }
+    protected bool isDuplicate = false;
 
     protected virtual void Awake()
     {
         ConfigureSingleton();
+
+        if (isDuplicate)
+        {
+            if (debugLogs) Debug.Log($"{BarName}: Duplicata detectada, abortando inicialização");
+            return;
+        }
+
         DontDestroyOnLoad(gameObject);
         OnAwake();
 
