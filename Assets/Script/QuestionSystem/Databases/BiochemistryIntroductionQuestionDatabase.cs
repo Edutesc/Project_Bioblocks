@@ -679,7 +679,7 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 "Água"
             },
             correctIndex = 3,
-            questionNumber = 51
+            questionNumber = 51,
             isImageAnswer = false
         },
         new Question {

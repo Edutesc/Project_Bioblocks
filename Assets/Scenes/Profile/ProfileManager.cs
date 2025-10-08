@@ -404,6 +404,32 @@ public class ProfileManager : MonoBehaviour
                 }
 
                 ReenableSceneInteractions();
+
+                // Limpa UserDataStore
+                UserDataStore.CurrentUserData = null;
+                Debug.Log("✓ UserDataStore limpo");
+
+                // Limpa AnsweredQuestionsManager
+                if (AnsweredQuestionsManager.Instance != null)
+                {
+                    AnsweredQuestionsManager.Instance.ResetManager();
+                    Debug.Log("✓ AnsweredQuestionsManager resetado");
+                }
+
+                // ⭐ Limpa TODOS os dados do AnsweredQuestionsListStore
+                AnsweredQuestionsListStore.ClearAll();
+                Debug.Log("✓ AnsweredQuestionsListStore completamente limpo");
+
+                // ⭐ Força reinicialização da BottomBar se existir
+                if (NavigationBottomBarManager.Instance != null)
+                {
+                    Debug.Log("✓ Preparando BottomBar para próximo usuário");
+                }
+
+                Debug.Log("=== LIMPEZA COMPLETA FINALIZADA ===");
+
+                await Task.Delay(150);
+
                 LoadingSpinnerComponent.Instance.ShowSpinnerUntilSceneLoaded("LoginView");
                 Navigate("LoginView");
             }

@@ -97,10 +97,35 @@ public class NavigationBottomBarManager : BarsManager
                     }
                     else
                     {
-                        Debug.LogError("NavigationManager não encontrado! Certifique-se de que está presente na cena.");
+                        Debug.LogError("NavigationManager não encontrado! Tentando reinicializar...");
+                        StartCoroutine(RetryNavigation(targetSceneName, targetButtonName));
                     }
                 });
             }
+        }
+    }
+
+    private System.Collections.IEnumerator RetryNavigation(string sceneName, string buttonName)
+    {
+        if (debugLogs) Debug.Log($"Aguardando NavigationManager para navegar para {sceneName}...");
+
+        float timeout = 2f;
+        float elapsed = 0f;
+
+        while (NavigationManager.Instance == null && elapsed < timeout)
+        {
+            yield return new WaitForSeconds(0.1f);
+            elapsed += 0.1f;
+        }
+
+        if (NavigationManager.Instance != null)
+        {
+            if (debugLogs) Debug.Log($"NavigationManager recuperado - navegando para {sceneName}");
+            NavigationManager.Instance.NavigateTo(sceneName);
+        }
+        else
+        {
+            Debug.LogError($"Timeout: Não foi possível navegar para {sceneName} após {timeout}s - NavigationManager não disponível");
         }
     }
 
@@ -195,10 +220,44 @@ public class NavigationBottomBarManager : BarsManager
 
         if (shouldShow && gameObject.activeSelf)
         {
+            // Reinicializa botões quando PathwayScene carrega
+            if (sceneName == "PathwayScene")
+            {
+                if (debugLogs) Debug.Log("PathwayScene carregada - reinicializando BottomBar");
+                StartCoroutine(ReinitializeBottomBar());
+            }
             UpdateButtonDisplay(sceneName);
         }
 
         Debug.Log($"{BarName}: Visibilidade após carregamento de cena: {gameObject.activeSelf}");
+    }
+
+    private System.Collections.IEnumerator ReinitializeBottomBar()
+    {
+        yield return null;
+
+        // Aguarda NavigationManager estar pronto
+        float timeout = 3f;
+        float elapsed = 0f;
+
+        while (NavigationManager.Instance == null && elapsed < timeout)
+        {
+            yield return new WaitForSeconds(0.1f);
+            elapsed += 0.1f;
+        }
+
+        if (NavigationManager.Instance != null)
+        {
+            if (debugLogs) Debug.Log("NavigationManager pronto - reconectando listeners");
+
+            // Força a reconexão dos listeners
+            InitializeButtons();
+            SetupButtonListeners();
+        }
+        else
+        {
+            Debug.LogError("NavigationManager não inicializou após timeout!");
+        }
     }
 
     protected override void OnCleanup()

@@ -72,9 +72,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "O que são epímeros?",
             answers = new string[] {
-                "Diastereoisômeros que diferem em um único centro quiral", 
-                "Enanciômeros que diferem em todos os centros quirais", 
-                "Isômeros que diferem no número de átomos de carbono", 
+                "Diastereoisômeros que diferem em um único centro quiral",
+                "Enanciômeros que diferem em todos os centros quirais",
+                "Isômeros que diferem no número de átomos de carbono",
                 "Isômeros que diferem no tipo de ligação"},
             correctIndex = 0,
             questionNumber = 6,
@@ -98,9 +98,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "O que são anômeros?",
             answers = new string[] {
-                "Isômeros cíclicos que diferem na configuração do carbono anomérico", 
+                "Isômeros cíclicos que diferem na configuração do carbono anomérico",
                 "Isômeros de cadeia aberta",
-                "Isômeros que diferem na posição do grupo hidroxila", 
+                "Isômeros que diferem na posição do grupo hidroxila",
                 "Isômeros que diferem no tipo de ligação"
             },
             correctIndex = 0,
@@ -233,9 +233,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "O que são glicoproteínas?",
             answers = new string[] {
-                "Proteínas ligadas a carboidratos", 
-                "Proteínas ligadas a lipídeos", 
-                "Proteínas ligadas a ácidos nucleicos", 
+                "Proteínas ligadas a carboidratos",
+                "Proteínas ligadas a lipídeos",
+                "Proteínas ligadas a ácidos nucleicos",
                 "Proteínas ligadas a outras proteínas"
             },
             correctIndex = 0,
@@ -246,9 +246,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "O que são glicosaminoglicanos?",
             answers = new string[] {
-                "Homopolissacarídeos que presentes no citoplasma celular.", 
-                "Heteropolissacarídeos que compõe a matriz extracelular.", 
-                "São glicoses ligadas a aminas presentes no sangue", 
+                "Homopolissacarídeos que presentes no citoplasma celular.",
+                "Heteropolissacarídeos que compõe a matriz extracelular.",
+                "São glicoses ligadas a aminas presentes no sangue",
                 "São dissacarídeos ligados à proteínas"
             },
             correctIndex = 1,
@@ -259,9 +259,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "O que são proteoglicanos?",
             answers = new string[] {
-                "Glicosaminoglicanos ligados a proteínas", 
-                "Glicoproteínas ligadas a lipídeos", 
-                "Glicolipídeos ligados a proteínas", 
+                "Glicosaminoglicanos ligados a proteínas",
+                "Glicoproteínas ligadas a lipídeos",
+                "Glicolipídeos ligados a proteínas",
                 "Proteínas ligadas a ácidos nucleicos"
             },
             correctIndex = 0,
@@ -441,9 +441,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual a diferença entre um homopolissacarídeo e um heteropolissacarídeo?",
             answers = new string[] {
-                "Um homopolissacarídeo contém apenas um tipo de monossacarídeo, um heteropolissacarídeo contém múltiplos tipos", 
-                "Um homopolissacarídeo é linear, um heteropolissacarídeo é ramificado", 
-                "Um homopolissacarídeo é solúvel em água, um heteropolissacarídeo é insolúvel", 
+                "Um homopolissacarídeo contém apenas um tipo de monossacarídeo, um heteropolissacarídeo contém múltiplos tipos",
+                "Um homopolissacarídeo é linear, um heteropolissacarídeo é ramificado",
+                "Um homopolissacarídeo é solúvel em água, um heteropolissacarídeo é insolúvel",
                 "Um homopolissacarídeo é um polímero, um heteropolissacarídeo é um monômero"},
             correctIndex = 0,
             questionNumber = 39,
@@ -453,9 +453,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Dê exemplos de homopolissacarídeos.",
             answers = new string[] {
-                "Amido, glicogênio, celulose", 
-                "Sacarose, lactose, maltose", 
-                "Glicose, frutose, galactose", 
+                "Amido, glicogênio, celulose",
+                "Sacarose, lactose, maltose",
+                "Glicose, frutose, galactose",
                 "Todos os polissacarídeos são homopolissacarídeos"},
             correctIndex = 0,
             questionNumber = 40,
@@ -464,9 +464,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Dê exemplos de heteropolissacarídeos.",
-            answers = new string[] { 
-                "Amido, glicogênio, celulose", 
-                "Sacarose, lactose, maltose", 
+            answers = new string[] {
+                "Amido, glicogênio, celulose",
+                "Sacarose, lactose, maltose",
                 "Peptídeoglicano, glicosaminoglicanos",
                 "Glicose, frutose, galactose"},
             correctIndex = 2,
@@ -521,6 +521,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Carbono, hidrogênio e oxigênio",
                 "Carbono, nitrogênio e fósforo",
                 "Oxigênio, fósforo e magnésio",
+            },
             correctIndex = 1,
             questionNumber = 45,
             isImageAnswer = false,
@@ -532,7 +533,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "CnH2n-2On",
                 "CnHnOn",
                 "CnH2n+2On",
-                "CnH2nOn"},
+                "CnH2nOn"
+            },
             correctIndex = 3,
             questionNumber = 46,
             isImageAnswer = false
@@ -544,7 +546,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ligação glicosídica",
                 "Ligação peptídica",
                 "Ligação dissulfeto",
-                "Ligação fosfodiéster"},
+                "Ligação fosfodiéster"
+            },
             correctIndex = 0,
             questionNumber = 47,
             isImageAnswer = false
@@ -556,7 +559,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Amido",
                 "Quitina",
                 "Glicogênio",
-                "Celulose"},
+                "Celulose"
+            },
             correctIndex = 2,
             questionNumber = 48,
             isImageAnswer = false
@@ -568,7 +572,8 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Fígado humano",
                 "Algas vermelhas",
                 "Plantas superiores",
-                "Parede celular de fungos e exoesqueleto de artrópodes"},
+                "Parede celular de fungos e exoesqueleto de artrópodes"
+            },
             correctIndex = 3,
             questionNumber = 49,
             isImageAnswer = false
@@ -580,12 +585,13 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Glicose + Frutose",
                 "Glicose + Galactose",
                 "Glicose + Glicose",
-                "Frutose + Galactose"},
+                "Frutose + Galactose"
+            },
             correctIndex = 0,
             questionNumber = 50,
             isImageAnswer = false
         }
-    }, 
+    }; 
 
     public List<Question> GetQuestions()
     {
