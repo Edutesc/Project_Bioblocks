@@ -7,24 +7,6 @@ public class PathwayManager : MonoBehaviour
 {
     private void Start()
     {
-#if DEBUG
-        Debug.Log($"PathwayManager initialized in {BioBlocksSettings.ENVIRONMENT} mode");
-
-        // ⭐ VERIFICAÇÃO CRÍTICA
-        Debug.Log($"[PATHWAY] ========== VERIFICANDO BOTTOMBAR ==========");
-        Debug.Log($"[PATHWAY] NavigationBottomBarManager.Instance existe? {NavigationBottomBarManager.Instance != null}");
-
-        if (NavigationBottomBarManager.Instance != null)
-        {
-            Debug.Log("[PATHWAY] Instance encontrada! Forçando setup manual...");
-            StartCoroutine(ManualBottomBarSetup());
-        }
-        else
-        {
-            Debug.LogError("[PATHWAY] ⚠️ NavigationBottomBarManager.Instance é NULL!");
-        }
-#endif
-
         if (UserDataStore.CurrentUserData != null)
         {
             FirestoreRepository.Instance.ListenToUserData(
@@ -33,8 +15,6 @@ public class PathwayManager : MonoBehaviour
                 null,
                 null
             );
-
-            UserDataStore.OnUserDataChanged += OnUserDataChanged;
 
             InitializeTopBar();
 
@@ -52,26 +32,7 @@ public class PathwayManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("User data not loaded. Redirecting to Login.");
             UnityEngine.SceneManagement.SceneManager.LoadScene("Login");
-        }
-
-        StartCoroutine(DiagnoseAfterDelay());
-    }
-
-    private IEnumerator DiagnoseAfterDelay()
-    {
-        yield return new WaitForSeconds(2f);
-
-        Debug.Log("[PATHWAY] Chamando diagnóstico da BottomBar...");
-
-        if (NavigationBottomBarManager.Instance != null)
-        {
-            NavigationBottomBarManager.Instance.DiagnoseButtons();
-        }
-        else
-        {
-            Debug.LogError("[PATHWAY] Instance é NULL!");
         }
     }
 
@@ -79,45 +40,29 @@ public class PathwayManager : MonoBehaviour
     {
         if (TopBarManager.Instance != null)
         {
-            Debug.Log("Configurando TopBar na PathwayManager...");
             TopBarManager.Instance.AddSceneToButtonVisibility("HubButton", "ProfileScene");
             TopBarManager.Instance.AddSceneToButtonVisibility("EngineButton", "ProfileScene");
-            TopBarManager.Instance.DebugListButtons();
-            Debug.Log("TopBar configurada na PathwayManager");
-        }
-        else
-        {
-            Debug.LogWarning("TopBarManager não encontrado na cena!");
         }
     }
 
     private IEnumerator InitializeDatabaseStatistics()
     {
         yield return null;
-
-        Debug.Log("PathwayManager iniciando inicialização das estatísticas");
         var task = DatabaseStatisticsManager.Instance.Initialize();
         while (!task.IsCompleted)
         {
             yield return null;
         }
-
-        if (task.IsFaulted)
-        {
-            Debug.LogError($"Erro ao inicializar estatísticas: {task.Exception}");
-        }
     }
 
     private void OnDatabaseStatisticsReady()
     {
-        Debug.Log("PathwayManager: Estatísticas prontas, atualizando porcentagens");
         UpdateAnsweredQuestionsPercentages();
         DatabaseStatisticsManager.OnStatisticsReady -= OnDatabaseStatisticsReady;
     }
 
     private void OnDestroy()
     {
-        UserDataStore.OnUserDataChanged -= OnUserDataChanged;
         AnsweredQuestionsManager.OnAnsweredQuestionsUpdated -= HandleAnsweredQuestionsUpdated;
         DatabaseStatisticsManager.OnStatisticsReady -= OnDatabaseStatisticsReady;
     }
@@ -125,8 +70,6 @@ public class PathwayManager : MonoBehaviour
     private void HandleAnsweredQuestionsUpdated(Dictionary<string, int> answeredCounts)
     {
         if (this == null) return;
-
-        Debug.Log("Received update from AnsweredQuestionsManager");
 
         if (UserDataStore.CurrentUserData != null)
         {
@@ -138,11 +81,6 @@ public class PathwayManager : MonoBehaviour
         }
 
         UpdateAnsweredQuestionsPercentages();
-    }
-
-    private void OnUserDataChanged(UserData userData)
-    {
-        // Pode incluir aqui qualquer evento a partir da atualização dos dados do usuário
     }
 
     private void UpdateAnsweredQuestionsPercentages()
@@ -185,7 +123,6 @@ public class PathwayManager : MonoBehaviour
                 if (tmpText != null)
                 {
                     tmpText.text = $"{percentageAnswered}%";
-                    Debug.Log($"{databankName}PorcentageText updated to {percentageAnswered}% ({count}/{totalQuestions})");
                 }
 
                 CircularProgressIndicator progressIndicator = textObject.GetComponentInParent<CircularProgressIndicator>();
@@ -199,52 +136,6 @@ public class PathwayManager : MonoBehaviour
 
     public void Navigate(string sceneName)
     {
-        Debug.Log($"Navigating to {sceneName}");
         NavigationManager.Instance.NavigateTo(sceneName);
-    }
-
-    public void TestBottomBarFix()
-    {
-        Debug.Log("=== TESTE: Forçando reconexão manual ===");
-
-        if (NavigationBottomBarManager.Instance != null)
-        {
-            // Força setup dos listeners novamente
-            var setupMethod = typeof(NavigationBottomBarManager).GetMethod("SetupButtonListeners",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-            if (setupMethod != null)
-            {
-                setupMethod.Invoke(NavigationBottomBarManager.Instance, null);
-                Debug.Log("Listeners reconectados manualmente!");
-            }
-        }
-    }
-    private IEnumerator ManualBottomBarSetup()
-    {
-        yield return new WaitForSeconds(1f);
-
-        Debug.Log("[PATHWAY] Executando setup manual da BottomBar...");
-
-        if (NavigationBottomBarManager.Instance != null)
-        {
-            // Usa reflexão para chamar SetupButtonListeners
-            var setupMethod = typeof(NavigationBottomBarManager).GetMethod("SetupButtonListeners",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-            if (setupMethod != null)
-            {
-                setupMethod.Invoke(NavigationBottomBarManager.Instance, null);
-                Debug.Log("[PATHWAY] ✓ SetupButtonListeners executado manualmente!");
-            }
-            else
-            {
-                Debug.LogError("[PATHWAY] ⚠️ Método SetupButtonListeners não encontrado!");
-            }
-        }
-        else
-        {
-            Debug.LogError("[PATHWAY] ⚠️ Instance perdida durante espera!");
-        }
     }
 }

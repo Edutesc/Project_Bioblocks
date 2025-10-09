@@ -6,7 +6,6 @@ public abstract class BarsManager : MonoBehaviour
 {
     [Header("Configurações")]
     [SerializeField] protected string currentScene = "";
-    [SerializeField] protected bool debugLogs = true;
 
     protected List<string> scenesWithoutBar = new List<string>();
     protected bool isSceneBeingLoaded = false;
@@ -20,14 +19,11 @@ public abstract class BarsManager : MonoBehaviour
 
         if (isDuplicate)
         {
-            if (debugLogs) Debug.Log($"{BarName}: Duplicata detectada, abortando inicialização");
             return;
         }
 
         DontDestroyOnLoad(gameObject);
         OnAwake();
-
-        if (debugLogs) Debug.Log($"{BarName} inicializado");
     }
 
     protected virtual void Start()
@@ -57,8 +53,6 @@ public abstract class BarsManager : MonoBehaviour
     {
         currentScene = SceneManager.GetActiveScene().name;
         AdjustVisibilityForCurrentScene();
-
-        if (debugLogs) Debug.Log($"{BarName} OnEnable: verificando visibilidade para cena {currentScene}");
     }
 
     protected abstract void ConfigureSingleton();
@@ -71,7 +65,6 @@ public abstract class BarsManager : MonoBehaviour
         if (NavigationManager.Instance != null)
         {
             NavigationManager.Instance.OnSceneChanged += OnSceneChanged;
-            if (debugLogs) Debug.Log($"{BarName}: Registrado com o NavigationManager");
         }
         else
         {
@@ -83,18 +76,12 @@ public abstract class BarsManager : MonoBehaviour
     {
         if (isSceneBeingLoaded)
         {
-            if (debugLogs) Debug.Log($"{BarName}: Ignorando notificação durante carregamento de cena");
             return;
         }
-
-        if (debugLogs) Debug.Log($"{BarName}: Cena mudou para {sceneName}");
 
         currentScene = sceneName;
         bool shouldShowBar = !scenesWithoutBar.Contains(sceneName);
         SetBarVisibility(shouldShowBar);
-
-        if (debugLogs)
-            Debug.Log($"{BarName}: Visibilidade definida para {shouldShowBar} na cena {sceneName}");
 
         if (shouldShowBar)
         {
@@ -114,22 +101,12 @@ public abstract class BarsManager : MonoBehaviour
             UpdateButtonVisibility(sceneName);
             EnsureBarIntegrity();
         }
-
-        if (debugLogs) Debug.Log($"{BarName}: Estado atualizado para cena {sceneName}");
     }
 
     protected virtual void UpdateButtonVisibility(string sceneName) { }
     protected virtual void AdjustVisibilityForCurrentScene()
     {
         bool shouldShowBar = !scenesWithoutBar.Contains(currentScene);
-
-        if (debugLogs)
-        {
-            Debug.Log($"{BarName}: Ajustando visibilidade para cena {currentScene}");
-            Debug.Log($"{BarName}: Deve mostrar barra = {shouldShowBar}");
-            Debug.Log($"{BarName}: Estado atual = {gameObject.activeSelf}");
-            Debug.Log($"{BarName}: Cenas sem barra: {string.Join(", ", scenesWithoutBar)}");
-        }
 
         SetBarVisibility(shouldShowBar);
 
@@ -140,14 +117,9 @@ public abstract class BarsManager : MonoBehaviour
             if (barChild != null)
             {
                 barChild.gameObject.SetActive(true);
-                if (debugLogs) Debug.Log($"{BarName}: Visibilidade do filho {BarChildName} ajustada para {shouldShowBar}");
             }
 
             UpdateCanvasElements(true);
-        }
-        else
-        {
-            if (debugLogs) Debug.Log($"[{BarName} Debug] desativando completamente {gameObject.name} na cena {currentScene}");
         }
     }
 
@@ -172,7 +144,6 @@ public abstract class BarsManager : MonoBehaviour
     {
         if (scenesWithoutBar.Contains(currentScene))
         {
-            if (debugLogs) Debug.Log($"{BarName}: EnsureBarIntegrity() ignorado para cena {currentScene} (está na lista de exclusão)");
             return;
         }
 
@@ -182,41 +153,32 @@ public abstract class BarsManager : MonoBehaviour
         if (canvas != null && !canvas.enabled)
         {
             canvas.enabled = true;
-            if (debugLogs) Debug.Log($"{BarName}: Corrigido Canvas desativado");
         }
 
         CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup != null)
         {
-            bool needsFix = false;
 
             if (canvasGroup.alpha < 1f)
             {
                 canvasGroup.alpha = 1f;
-                needsFix = true;
             }
 
             if (!canvasGroup.interactable)
             {
                 canvasGroup.interactable = true;
-                needsFix = true;
             }
 
             if (!canvasGroup.blocksRaycasts)
             {
                 canvasGroup.blocksRaycasts = true;
-                needsFix = true;
             }
-
-            if (needsFix && debugLogs)
-                Debug.Log($"{BarName}: Corrigidas propriedades do CanvasGroup");
         }
 
         Transform barChild = transform.Find(BarChildName);
         if (barChild != null && !barChild.gameObject.activeSelf)
         {
             barChild.gameObject.SetActive(true);
-            if (debugLogs) Debug.Log($"{BarName}: Ativado filho {BarChildName} que estava inativo");
         }
     }
 
@@ -230,8 +192,6 @@ public abstract class BarsManager : MonoBehaviour
             {
                 AdjustVisibilityForCurrentScene();
             }
-
-            if (debugLogs) Debug.Log($"{BarName}: Adicionada cena '{sceneName}' à lista de exclusão");
         }
     }
 
@@ -245,8 +205,6 @@ public abstract class BarsManager : MonoBehaviour
             {
                 AdjustVisibilityForCurrentScene();
             }
-
-            if (debugLogs) Debug.Log($"{BarName}: Removida cena '{sceneName}' da lista de exclusão");
         }
     }
 
@@ -254,7 +212,6 @@ public abstract class BarsManager : MonoBehaviour
     {
         currentScene = SceneManager.GetActiveScene().name;
         AdjustVisibilityForCurrentScene();
-        if (debugLogs) Debug.Log($"{BarName}: Verificação de visibilidade forçada para cena {currentScene}");
     }
 
     public virtual void ForceRefreshState()
@@ -282,7 +239,6 @@ public abstract class BarsManager : MonoBehaviour
         if (gameObject.activeSelf != visible)
         {
             gameObject.SetActive(visible);
-            if (debugLogs) Debug.Log($"{BarName}: Visibilidade alterada para {visible}");
         }
     }
 }

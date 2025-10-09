@@ -24,11 +24,6 @@ public class InitializationManager : MonoBehaviour
 
     private void Awake()
     {
-        BioBlocksSettings.Instance.IsDebugMode();
-#if DEBUG
-        Debug.Log($"Bioblocks initialized in {BioBlocksSettings.ENVIRONMENT} mode");
-#endif
-
         InitializeGlobalSpinner();
     }
 
@@ -63,7 +58,6 @@ public class InitializationManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            // Log error but don't fail initialization
             Debug.LogError($"Error initializing spinner: {e.Message}");
         }
     }
@@ -85,16 +79,10 @@ public class InitializationManager : MonoBehaviour
 
     private async void StartInitialization()
     {
-#if DEBUG
-        Debug.Log($"Starting app initialization in {BioBlocksSettings.ENVIRONMENT} mode...");
-        Debug.Log($"App Version: {BioBlocksSettings.VERSION}");
-#endif
-        Debug.Log("Starting app initialization...");
         float startTime = Time.time;
 
         try
         {
-            // Show spinner safely using a try-catch block to avoid errors
             try
             {
                 if (globalSpinner != null)
@@ -136,7 +124,6 @@ public class InitializationManager : MonoBehaviour
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
             }
 
-            // Use a try-catch to handle spinner operations safely
             try
             {
                 if (isAuthenticated && userDataLoaded)
@@ -156,10 +143,8 @@ public class InitializationManager : MonoBehaviour
                     SceneManager.LoadScene("LoginView");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.LogError($"Error with spinner during scene transition: {e.Message}");
-                // Continue with scene loading even if spinner fails
                 if (isAuthenticated && userDataLoaded)
                 {
                     SceneManager.LoadScene("PathwayScene");
@@ -170,14 +155,8 @@ public class InitializationManager : MonoBehaviour
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-#if DEBUG
-            Debug.LogError($"Detailed initialization error: {e.Message}\nStackTrace: {e.StackTrace}");
-#else
-            Debug.LogError("An initialization error occurred.");
-#endif
-            // Hide spinner safely
             try
             {
                 if (globalSpinner != null)
@@ -227,7 +206,7 @@ public class InitializationManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Error loading user data: {e.Message}\nStackTrace: {e.StackTrace}");
+            Debug.LogError($"Erro ao carregar dados: {e.Message}");
             throw;
         }
     }
@@ -242,9 +221,8 @@ public class InitializationManager : MonoBehaviour
                 await user.ReloadAsync();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.LogError($"Error reloading user: {e.Message}");
                 return false;
             }
         }
