@@ -18,7 +18,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -32,7 +33,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -46,7 +48,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 3,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -60,7 +63,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -74,7 +78,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 5,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -88,7 +93,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -102,7 +108,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 7,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -117,7 +124,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 8,
             isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/AminoacidsDB/ImageQuestionContainer8"
+            questionImagePath =  "AnswerImages/AminoacidsDB/ImageQuestionContainer8",
+            questionLevel = 1
         },
         new Question
         {
@@ -132,7 +140,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 9,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer9"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer9",
+            questionLevel = 1
         },
         new Question
         {
@@ -147,7 +156,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 10,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer10"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer10",
+            questionLevel = 1
         },
          new Question
         {
@@ -162,7 +172,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 11,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer11"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer11",
+            questionLevel = 1
         },
         new Question
         {
@@ -177,7 +188,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 12,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer12"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer12",
+            questionLevel = 1
         },
         new Question
         {
@@ -192,7 +204,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 13,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer13"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer13",
+            questionLevel = 1
         },
         new Question
         {
@@ -206,7 +219,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 14,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -220,7 +234,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 15,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -234,7 +249,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 16,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -248,7 +264,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 17,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -262,7 +279,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -276,7 +294,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 19,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -290,7 +309,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -304,7 +324,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -318,7 +339,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -332,7 +354,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -346,7 +369,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -360,7 +384,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -374,7 +399,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -388,7 +414,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 27,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -403,7 +430,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 28,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer28"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer28",
+            questionLevel = 1
         },
        new Question
         {
@@ -417,7 +445,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 29,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -431,7 +460,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -446,7 +476,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 31,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer31"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer31",
+            questionLevel = 1
         },
         new Question
         {
@@ -461,7 +492,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 32,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer32"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer32",
+            questionLevel = 1
         },
         new Question
         {
@@ -475,7 +507,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 33,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -489,7 +522,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 34,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -503,7 +537,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 35,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -517,7 +552,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 36,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -531,7 +567,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 37,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -545,7 +582,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 38,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -559,7 +597,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -573,7 +612,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -588,7 +628,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 41,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer41"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer41",
+            questionLevel = 1
         },
         new Question
         {
@@ -603,7 +644,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 42,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer42"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer42",
+            questionLevel = 1
         },
         new Question
         {
@@ -618,7 +660,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 43,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer43"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer43",
+            questionLevel = 1
         },
         new Question
         {
@@ -633,7 +676,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 44,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer44"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer44",
+            questionLevel = 1
         },
         new Question
         {
@@ -647,7 +691,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 45,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -661,7 +706,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -676,7 +722,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 47,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer47"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer47",
+            questionLevel = 1
         },
         new Question
         {
@@ -691,7 +738,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 48,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer48"
+            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer48",
+            questionLevel = 1
         },
         new Question
         {
@@ -705,7 +753,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 49,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -719,8 +768,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 50,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -734,8 +783,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 51,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -749,8 +798,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 52,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -764,8 +813,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 53,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -779,8 +828,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 54,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -794,8 +843,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 55,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -809,8 +858,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 56,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -824,8 +873,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 57,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -839,7 +888,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 58,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -853,7 +903,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 59,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -867,7 +918,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 60,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -881,7 +933,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 61,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -895,7 +948,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 63,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -909,7 +963,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 64,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -923,7 +978,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 65,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -937,7 +993,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 66,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -951,7 +1008,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 67,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -965,7 +1023,8 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 68,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -979,8 +1038,9 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 69,
-            isImageAnswer = false
-        },
+            isImageAnswer = false,
+            questionLevel = 1
+        }
     };
       
     public List<Question> GetQuestions()

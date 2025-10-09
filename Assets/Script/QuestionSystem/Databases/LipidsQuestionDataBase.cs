@@ -18,7 +18,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -32,7 +33,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -46,7 +48,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 3,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -60,7 +63,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -74,7 +78,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 5,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -88,7 +93,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -102,7 +108,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 7,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -116,7 +123,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 8,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -130,7 +138,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 9,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -144,7 +153,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 10,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -158,7 +168,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 11,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -172,7 +183,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 12,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -186,7 +198,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 13,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -200,7 +213,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 14,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -214,7 +228,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 15,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -228,7 +243,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 16,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -242,7 +258,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 17,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -256,7 +273,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -270,7 +288,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 19,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -284,7 +303,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -298,7 +318,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -312,7 +333,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -326,7 +348,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -340,7 +363,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -354,7 +378,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -368,7 +393,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -383,7 +409,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 27,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_27"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_27",
+            questionLevel = 1
         },
         new Question
         {
@@ -397,7 +424,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 28,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -411,7 +439,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 29,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -425,7 +454,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -439,7 +469,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 31,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -453,7 +484,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 32,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -468,7 +500,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 33,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_33"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_33",
+            questionLevel = 2
         },
         new Question
         {
@@ -483,7 +516,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 34,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_34"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_34",
+            questionLevel = 2
         },
         new Question
         {
@@ -498,7 +532,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 35,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_35"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_35",
+            questionLevel = 2
         },
          new Question
         {
@@ -513,7 +548,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 36,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_36"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_36",
+            questionLevel = 2
         },
         new Question
         {
@@ -527,7 +563,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 37,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 2
         },
         new Question
         {
@@ -541,7 +578,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 38,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -555,7 +593,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -569,7 +608,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -583,7 +623,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 41,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -597,7 +638,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 42,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -611,7 +653,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 43,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -625,7 +668,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 44,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -639,7 +683,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 45,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -653,7 +698,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -667,7 +713,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 47,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -681,7 +728,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 48,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -695,7 +743,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 49,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -709,7 +758,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 50,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -723,7 +773,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 51,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -737,7 +788,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 52,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -751,7 +803,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 53,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -765,7 +818,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 54,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -779,7 +833,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 55,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -793,8 +848,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 56,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 2
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -807,8 +863,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 57,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 2
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -821,8 +878,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 58,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -835,8 +893,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 59,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -849,8 +908,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 60,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -863,8 +923,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 61,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -877,8 +938,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 62,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -891,8 +953,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 63,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -905,8 +968,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 64,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -919,8 +983,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 65,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -933,8 +998,9 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 66,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 1
+        },
         new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
@@ -947,9 +1013,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 67,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Os lipídios são compostos orgânicos caracterizados principalmente por:",
@@ -961,9 +1028,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 68,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Os principais componentes de óleos e gorduras são:",
@@ -975,9 +1043,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 69,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Um lipídio formado por glicerol + 3 ácidos graxos é denominado:",
@@ -989,9 +1058,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 70,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Os fosfolipídios são importantes porque:",
@@ -1003,9 +1073,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 71,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Qual dos lipídios abaixo possui função hormonal?",
@@ -1017,9 +1088,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 72,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "A principal função dos lipídios de reserva é:",
@@ -1031,9 +1103,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 73,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Os lipídios que atuam como isolantes térmicos em animais são principalmente:",
@@ -1045,9 +1118,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 74,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Um exemplo de cera (cerídeo) é:",
@@ -1059,9 +1133,10 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 75,
-            isImageAnswer = false
-            },
-            new Question
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
         {
             questionDatabankName = "LipidsQuestionDatabase",
             questionText = "Os ácidos graxos insaturados diferem dos saturados porque:",
@@ -1073,8 +1148,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 76,
-            isImageAnswer = false
-            },
+            isImageAnswer = false,
+            questionLevel = 1
         }
     };
 

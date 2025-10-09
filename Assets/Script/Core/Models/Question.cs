@@ -13,6 +13,7 @@ namespace QuestionSystem{
         public bool isImageAnswer;
         public bool isImageQuestion;
         public string questionImagePath;
+        public int questionLevel;
     } 
 }
 

@@ -266,6 +266,11 @@ public class BonusApplicationManager : MonoBehaviour
                 OnBonusMultiplierUpdated?.Invoke(GetTotalMultiplier());
             }
 
+            if (!anyBonusActive && activeBonuses.Count == 0)
+            {
+                yield break;
+            }
+
             if (Time.time - lastFirestoreUpdateTime > 30f)
             {
                 UpdateBonusTimestampsInFirestore();

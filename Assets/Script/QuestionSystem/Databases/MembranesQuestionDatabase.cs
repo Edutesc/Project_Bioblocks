@@ -17,7 +17,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ácidos Nucleicos"},
             correctIndex = 1,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
                 {
@@ -30,7 +31,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ceras, esteroides, glicerofosfolipídeos"},
             correctIndex = 1,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
         {
@@ -43,7 +45,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Solúvel apenas em água"},
             correctIndex = 0,
             questionNumber = 3,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
         {
@@ -56,7 +59,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Remoção de resíduos"},
             correctIndex = 2,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
         {
@@ -69,7 +73,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ligação fosfodiéster"},
             correctIndex = 2,
             questionNumber = 5,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
         {
@@ -82,7 +87,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Fosfato"},
             correctIndex = 2,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
         {
@@ -95,7 +101,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Armazena energia"},
             correctIndex = 0,
             questionNumber = 7,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
        },
         new Question
         {
@@ -108,7 +115,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                  "Ligação fosfodiéster" },
             correctIndex = 3,
             questionNumber = 8,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -121,7 +129,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Cerebrosídeo" },
             correctIndex = 1,
             questionNumber = 9,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -134,7 +143,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Sinalização celular" },
             correctIndex = 2,
             questionNumber = 10,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -148,7 +158,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 11,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -161,7 +172,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Fosfato" },
             correctIndex = 1,
             questionNumber = 12,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -174,7 +186,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Glicerol e esfingosina" },
             correctIndex = 0,
             questionNumber = 13,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
        new Question
         {
@@ -188,7 +201,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 14,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -201,7 +215,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Esteroides" },
             correctIndex = 1,
             questionNumber = 15,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -214,7 +229,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Um grupo fosfato" },
             correctIndex = 0,
             questionNumber = 16,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -227,7 +243,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Cortisol" },
             correctIndex = 2,
             questionNumber = 17,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -240,7 +257,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Atividade enzimática" },
             correctIndex = 2,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -253,7 +271,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Um tipo de proteína" },
             correctIndex = 1,
             questionNumber = 19,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -266,7 +285,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Os lipídeos estão distribuídos aleatoriamente" },
             correctIndex = 1,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -279,7 +299,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ressonância magnética nuclear" },
             correctIndex = 2,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -292,7 +313,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Um modelo de metabolismo de carboidratos" },
             correctIndex = 0,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -305,7 +327,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Difusão transversal" },
             correctIndex = 1,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -320,7 +343,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 24,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_40"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_40",
+            questionLevel = 1
         },
         new Question
         {
@@ -333,7 +357,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Aumentam a permeabilidade" },
             correctIndex = 1,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -346,7 +371,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Aumentam a permeabilidade" },
             correctIndex = 0,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -360,7 +386,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 27,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -373,7 +400,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Todas as alternativas acima" },
             correctIndex = 3,
             questionNumber = 28,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -386,7 +414,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Uma ligação entre um fosfato e o glicerol" },
             correctIndex = 1,
             questionNumber = 29,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -399,7 +428,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "As micelas são pequenas, as bicamadas são grandes" },
             correctIndex = 0,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -412,7 +442,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Sintetizar proteínas" },
             correctIndex = 0,
             questionNumber = 31,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -425,7 +456,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Todas as alternativas acima" },
             correctIndex = 3,
             questionNumber = 32,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -438,7 +470,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Todas as alternativas acima" },
             correctIndex = 0,
             questionNumber = 33,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -451,7 +484,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Atividade enzimática" },
             correctIndex = 0,
             questionNumber = 34,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -464,7 +498,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Armazenar energia" },
             correctIndex = 0,
             questionNumber = 35,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -477,7 +512,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Mediu a espessura da membrana" },
             correctIndex = 0,
             questionNumber = 36,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -492,7 +528,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 37,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_37"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_37",
+            questionLevel = 1
         },
         new Question
         {
@@ -507,7 +544,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 38,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_38"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_38",
+            questionLevel = 1
         },
         new Question
         {
@@ -521,7 +559,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 39,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -534,7 +573,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "O comprimento das caudas dos ácidos graxos determina a fluidez" },
             correctIndex = 0,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -547,7 +587,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Todas as alternativas acima" },
             correctIndex = 3,
             questionNumber = 41,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -560,7 +601,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Todas as alternativas acima" },
             correctIndex = 3,
             questionNumber = 42,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -573,7 +615,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "As proteínas integrais são enzimas, as proteínas periféricas são estruturais" },
             correctIndex = 0,
             questionNumber = 43,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -586,7 +629,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Água e sais minerais" },
             correctIndex = 1,
             questionNumber = 44,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -599,7 +643,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Modelo tripla hélice" },
             correctIndex = 0,
             questionNumber = 45,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -612,7 +657,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Cerídeos" },
             correctIndex = 1,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -625,7 +671,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Apenas hidrofílicas" },
             correctIndex = 2,
             questionNumber = 47,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -638,7 +685,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Apenas hidrofílicas" },
             correctIndex = 2,
             questionNumber = 48,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -651,7 +699,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Produzir ATP" },
             correctIndex = 1,
             questionNumber = 49,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -664,7 +713,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Proteínas nucleares" },
             correctIndex = 1,
             questionNumber = 50,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -677,7 +727,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Síntese proteica" },
             correctIndex = 0,
             questionNumber = 51,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -690,7 +741,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Osmose" },
             correctIndex = 2,
             questionNumber = 52,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -703,7 +755,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Exocitose" },
             correctIndex = 0,
             questionNumber = 53,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -716,7 +769,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transporte passivo" },
             correctIndex = 2,
             questionNumber = 54,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -729,7 +783,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Produzir ATP" },
             correctIndex = 0,
             questionNumber = 55,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -742,7 +797,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transportando oxigênio" },
             correctIndex = 1,
             questionNumber = 56,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -755,7 +811,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Exclusivamente realizado por proteínas" },
             correctIndex = 2,
             questionNumber = 57,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -768,7 +825,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Bomba de sódio e potássio" },
             correctIndex = 3,
             questionNumber = 58,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -781,7 +839,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Transporte ativo" },
             correctIndex = 1,
             questionNumber = 59,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -794,8 +853,9 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Produção de hormônios" },
             correctIndex = 2,
             questionNumber = 60,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 3
+        },
         new Question
         {
             questionDatabankName = "MembranesQuestionDatabase",
@@ -807,8 +867,9 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Modelo do tapete contínuo" },
             correctIndex = 0,
             questionNumber = 61,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            questionLevel = 3
+        },
         new Question
         {
             questionDatabankName = "MembranesQuestionDatabase",
@@ -820,7 +881,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Carboidratos e aminoácidos" },
             correctIndex = 2,
             questionNumber = 62,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -833,7 +895,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Carotenoides" },
             correctIndex = 1,
             questionNumber = 63,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -846,7 +909,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ácidos graxos livres" },
             correctIndex = 1,
             questionNumber = 64,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -859,7 +923,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Proteínas ribossômicas" },
             correctIndex = 1,
             questionNumber = 65,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -872,7 +937,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Colesterol e triglicerídeos" },
             correctIndex = 2,
             questionNumber = 66,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -885,7 +951,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Regular a entrada e saída de substâncias" },
             correctIndex = 3,
             questionNumber = 67,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -898,7 +965,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Endocitose" },
             correctIndex = 2,
             questionNumber = 68,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -911,7 +979,8 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "É exclusiva de bactérias" },
             correctIndex = 1,
             questionNumber = 69,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -924,10 +993,10 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Difusão" },
             correctIndex = 2,
             questionNumber = 70,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
     };
-
     public List<Question> GetQuestions()
     {
         return questions;
