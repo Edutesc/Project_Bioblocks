@@ -355,6 +355,396 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 34,
             isImageAnswer = false
         }
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Os ácidos nucleicos são polímeros formados por unidades chamadas:",
+            answers = new string[] {
+                "Aminoácidos",
+                "Nucleotídeos",
+                "Monossacarídeos",
+                "Lipídios"
+            },
+            correctIndex = 1,
+            questionNumber = 35,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Quais são os dois principais tipos de ácidos nucleicos encontrados nos seres vivos?",
+            answers = new string[] {
+                "DNA e RNA",
+                "DNA e ATP",
+                "RNA e lipídios",
+                "DNA e proteínas"
+            },
+            correctIndex = 0,
+            questionNumber = 36,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O açúcar presente no RNA é:",
+            answers = new string[] {
+                "Desoxirribose",
+                "Glicose",
+                "Ribose",
+                "Maltose"
+            },
+            correctIndex = 2,
+            questionNumber = 37,
+            isImageAnswer = false
+        },
+         new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "No DNA, a adenina sempre se emparelha com:",
+            answers = new string[] {
+                "Guanina",
+                "Citosina",
+                "Timina",
+                "Uracila"
+            },
+            correctIndex = 2,
+            questionNumber = 38,
+            isImageAnswer = false
+        },
+         new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A estrutura de dupla hélice do DNA foi proposta por:",
+            answers = new string[] {
+                "Darwin e Lamarck",
+                "Watson e Crick",
+                "Pasteur e Koch",
+                "Franklin e Mendel"
+            },
+            correctIndex = 1,
+            questionNumber = 39,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA que leva a informação genética do DNA até os ribossomos chama-se:",
+            answers = new string[] {
+                "RNA ribossômico (rRNA)",
+                "RNA transportador (tRNA)",
+                "RNA mensageiro (mRNA)",
+                "RNA nuclear"
+            },
+            correctIndex = 2,
+            questionNumber = 40,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Qual base nitrogenada é exclusiva do RNA e substitui a timina do DNA?",
+            answers = new string[] {
+                "Guanina",
+                "Uracila",
+                "Adenina",
+                "Citosina"
+            },
+            correctIndex = 1,
+            questionNumber = 41,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O processo de síntese de RNA a partir de DNA é chamado de:",
+            answers = new string[] {
+                "Tradução",
+                "Transcrição",
+                "Replicação",
+                "Mutação"
+            },
+            correctIndex = 1,
+            questionNumber = 42,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O nucleotídeo ATP é conhecido principalmente por:",
+            answers = new string[] {
+                "Formar a bicamada lipídica",
+                "Ser uma fonte de energia celular",
+                "Carregar oxigênio no sangue",
+                "Transportar aminoácidos"
+            },
+            correctIndex = 1,
+            questionNumber = 43,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O nucleotídeo ATP é conhecido principalmente por:",
+            answers = new string[] {
+                "Formar a bicamada lipídica",
+                "Ser uma fonte de energia celular",
+                "Carregar oxigênio no sangue",
+                "Transportar aminoácidos"
+            },
+            correctIndex = 1,
+            questionNumber = 44,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Durante a replicação do DNA, a enzima responsável por unir os nucleotídeos é a:",
+            answers = new string[] {
+                "DNA polimerase",
+                "RNA polimerase",
+                "Ligase",
+                "Transcriptase reversa"
+            },
+            correctIndex = 0,
+            questionNumber = 45,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Os ácidos nucleicos são macromoléculas formadas por unidades chamadas:",
+            answers = new string[] {
+                "Aminoácidos",
+                "Nucleotídeos",
+                "Monossacarídeos",
+                "Lipídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 46,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Um nucleotídeo é composto por:",
+            answers = new string[] {
+                "Pentose + fosfato + base nitrogenada",
+                "Hexose + lipídio + aminoácido",
+                "Glicose + fosfato + proteína",
+                "Glicerol + base nitrogenada + ácido graxo"
+            },
+            correctIndex = 0,
+            questionNumber = 47,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A base nitrogenada presente apenas no RNA é:",
+            answers = new string[] {
+                "Timina",
+                "Citosina",
+                "Uracila",
+                "Adenina"
+            },
+            correctIndex = 2,
+            questionNumber = 48,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A base nitrogenada presente apenas no DNA é:",
+            answers = new string[] {
+                "Uracila",
+                "Adenina",
+                "Timina",
+                "Guanina"
+            },
+            correctIndex = 2,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A molécula de DNA tem a forma característica conhecida como:",
+            answers = new string[] {
+                "Hélice simples",
+                "Tripla hélice",
+                "Dupla hélice",
+                "Cadeia linear"
+            },
+            correctIndex = 2,
+            questionNumber = 50,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A pentose presente no DNA é:",
+            answers = new string[] {
+                "Ribose",
+                "Desoxirribose",
+                "Glicose",
+                "Frutose"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "No pareamento de bases do DNA, a adenina sempre se liga à:",
+            answers = new string[] {
+                "Guanina",
+                "Citosina",
+                "Uracila",
+                "Timina"
+            },
+            correctIndex = 3,
+            questionNumber = 52,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "A principal função do RNA mensageiro (RNAm) é:",
+            answers = new string[] {
+                "Formar a estrutura dos ribossomos",
+                "Transportar aminoácidos",
+                "Levar a informação genética do DNA até os ribossomos",
+                "Catalisar reações químicas"
+            },
+            correctIndex = 2,
+            questionNumber = 53,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA transportador (RNAt) tem como função:",
+            answers = new string[] {
+                "Levar aminoácidos até os ribossomos durante a síntese proteica",
+                "Carregar energia química",
+                "Armazenar informação genética",
+                "Catalisar reações metabólicas"
+            },
+            correctIndex = 0,
+            questionNumber = 54,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Qual é a função principal do DNA nas células?",
+            answers = new string[] {
+                "Atuar como catalisador enzimático",
+                "Fornecer energia imediata",
+                "Armazenar e transmitir a informação genética",
+                "Transportar oxigênio"
+            },
+            correctIndex = 2,
+            questionNumber = 55,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Os ácidos nucleicos são formados por unidades chamadas:",
+            answers = new string[] {
+                "Aminoácidos",
+                "Monossacarídeos",
+                "Nucleotídeos",
+                "Ácidos graxos"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Cada nucleotídeo é composto por:",
+            answers = new string[] {
+                "Aminoácido, fosfato e água",
+                "Açúcar, base nitrogenada e fosfato",
+                "Glicerol, ácido graxo e base nitrogenada",
+                "Açúcar, lipídio e proteína"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O DNA possui como açúcar:",
+            answers = new string[] {
+                "Glicose",
+                "Ribose",
+                "Desoxirribose",
+                "Galactose"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA possui como açúcar:",
+            answers = new string[] {
+                "Glicose",
+                "Ribose",
+                "Desoxirribose",
+                "Maltose"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Na estrutura de dupla hélice do DNA, as bases emparelham-se segundo a regra de Chargaff:",
+            answers = new string[] {
+                "A – G e C – T",
+                "A – C e T – G",
+                "A – T e C – G",
+                "A – U e C – G"
+            },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA mensageiro (RNAm) tem como função principal:",
+            answers = new string[] {
+                "Transportar aminoácidos",
+                "Atuar como catalisador enzimático",
+                "Levar a informação do DNA até os ribossomos",
+                "Formar a dupla hélice do DNA"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "O RNA transportador (RNAt) é responsável por:",
+            answers = new string[] {
+                "Levar aminoácidos até o ribossomo durante a síntese de proteínas",
+                "Duplicar o DNA",
+                "Formar a membrana celular",
+                "Produzir energia na respiração"
+            },
+            correctIndex = 0,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Quem descreveu o modelo da dupla hélice do DNA em 1953?",
+            answers = new string[] {
+                "Darwin e Mendel",
+                "Watson e Crick",
+                "Franklin e Chargaff",
+                "Pauling e Wöhler"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "Quem descreveu o modelo da dupla hélice do DNA em 1953?",
+            answers = new string[] {
+                "Darwin e Mendel",
+                "Watson e Crick",
+                "Franklin e Chargaff",
+                "Pauling e Wöhler"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
     };
 
     public List<Question> GetQuestions()

@@ -598,6 +598,384 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 42,
             isImageAnswer = false
         },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas são classificadas como:",
+            answers = new string[] {
+                "Proteínas",
+                "Carboidratos",
+                "Vitaminas",
+                "Lipídios"
+            },
+            correctIndex = 0,
+            questionNumber = 43,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual é a principal função das enzimas no metabolismo celular?",
+            answers = new string[] {
+                "Transportar oxigênio",
+                "Armazenar energia",
+                "Produzir hormônios",
+                "Acelerar reações químicas"
+            },
+            correctIndex = 3,
+            questionNumber = 44,
+            isImageAnswer = false
+        }, 
+         new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O local da enzima onde o substrato se liga é chamado de:",
+            answers = new string[] {
+                "Sítio ativo",
+                "Cofator",
+                "Produto",
+                "Cofator enzimático"
+            },
+            correctIndex = 0,
+            questionNumber = 45,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual destes fatores pode alterar a atividade enzimática?",
+            answers = new string[] {
+                "Cor da enzima",
+                "Pressão osmótica",
+                "Temperatura e pH",
+                "Massa molecular"
+            },
+            correctIndex = 2,
+            questionNumber = 46,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Quando uma enzima perde sua estrutura tridimensional devido a altas temperaturas, esse processo é chamado:",
+            answers = new string[] {
+                "Redução",
+                "Fusão",
+                "Oxidação",
+                "Desnaturação"
+            },
+            correctIndex = 3,
+            questionNumber = 47,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A energia mínima necessária para iniciar uma reação química é chamada de:",
+            answers = new string[] {
+                "Energia solar",
+                "nergia cinética",
+                "Energia de ativação",
+                "Energia potencial"
+            },
+            correctIndex = 2,
+            questionNumber = 48,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Quando uma molécula semelhante ao substrato compete pelo sítio ativo da enzima, temos:",
+            answers = new string[] {
+                "Ativação enzimática",
+                "Inibição não-competitiva",
+                "Inibição competitiva",
+                "Regulação alostérica"
+            },
+            correctIndex = 2,
+            questionNumber = 49,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas atuam de forma mais eficiente em:",
+            answers = new string[] {
+                "Temperatura e pH ótimos",
+                "Qualquer temperatura ou pH",
+                "Ambiente sem água",
+                "Altas pressões"
+            },
+            correctIndex = 0,
+            questionNumber = 50,
+            isImageAnswer = false 
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A região da enzima onde o substrato se liga é chamada de:",
+            answers = new string[] {
+                "Cofator",
+                "Sítio ativo",
+                "Centro metabólico",
+                "Núcleo catalítico"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O modelo “chave-fechadura” é usado para explicar:",
+            answers = new string[] {
+                "A especificidade entre enzima e substrato",
+                "O armazenamento de energia na célula",
+                "A formação de polissacarídeos",
+                "A síntese de proteínas"
+            },
+            correctIndex = 0,
+            questionNumber = 52,
+            isImageAnswer = false
+        },  
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual desses fatores não influencia a atividade enzimática?",
+            answers = new string[] {
+                "Temperatura",
+                "pH",
+                "Concentração de substrato",
+                "Cor da solução"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false
+        },   
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Coenzimas são:",
+            answers = new string[] {
+                "Íons metálicos que ajudam as enzimas",
+                "Moléculas orgânicas auxiliares, muitas vezes derivadas de vitaminas",
+                "Aminoácidos que formam o sítio ativo",
+                "Produtos da reação enzimática"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas aceleram as reações químicas porque:",
+            answers = new string[] {
+                "Aumentam a energia de ativação",
+                "Diminuem a energia de ativação",
+                "Fornecem calor à reação",
+                "Transformam substratos em vitaminas"
+            },
+            correctIndex = 1,
+            questionNumber = 55,
+            isImageAnswer = false
+        },   
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A enzima que catalisa a quebra de amido em maltose é:",
+            answers = new string[] {
+                "Lactase",
+                "Amilase",
+                "Lipase",
+                "Protease"
+            },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas possuem elevada:",
+            answers = new string[] {
+                "Especificidade",
+                "Aleatoriedade",
+                "Instabilidade",
+                "Toxicidade"
+            },
+            correctIndex = 0,
+            questionNumber = 57,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O inibidor competitivo atua:",
+            answers = new string[] {
+                "Ligando-se a um local diferente do sítio ativo",
+                "Alterando irreversivelmente a enzima",
+                "Compete com o substrato pelo sítio ativo",
+                "Aumentando a afinidade da enzima pelo substrato"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },    
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A urease, enzima que degrada ureia, foi a primeira enzima cristalizada. Isso demonstrou que:",
+            answers = new string[] {
+                "Todas as enzimas são carboidratos",
+                "Enzimas são proteínas",
+                "Enzimas não podem ser isoladas",
+                "Enzimas são apenas cofatores minerais"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+        }, 
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas são, em sua maioria:",
+            answers = new string[] {
+                "Lipídios",
+                "Carboidratos",
+                "Proteínas",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+        },   
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A função principal das enzimas é:",
+            answers = new string[] {
+                "Armazenar energia",
+                "Acelerar reações químicas",
+                "Servir como estrutura da célula",
+                "Transportar oxigênio"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O local da enzima onde o substrato se liga é chamado de:",
+            answers = new string[] {
+                "Cofator",
+                "Sítio ativo",
+                "Grupo prostético",
+                "Complexo enzimático"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "O modelo que explica a interação enzima-substrato como “chave-fechadura” é conhecido como:",
+            answers = new string[] {
+                "Modelo do encaixe induzido",
+                "Modelo da catálise covalente",
+                "Modelo chave-fechadura",
+                "Modelo do estado de transição"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Qual dos fatores abaixo não afeta a atividade enzimática?",
+            answers = new string[] {
+                "Temperatura",
+                "pH",
+                "Concentração de substrato",
+                "Cor do substrato"
+            },
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Moléculas não proteicas que auxiliam algumas enzimas em sua atividade são chamadas de:",
+            answers = new string[] {
+                "Cofatores",
+                "Polissacarídeos",
+                "Hormônios",
+                "Nucleotídeos"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A enzima que catalisa a quebra de moléculas pela adição de água é:",
+            answers = new string[] {
+                "Oxidorredutase",
+                "Hidrolase",
+                "Isomerase",
+                "Ligase"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "A desnaturalização de uma enzima ocorre quando:",
+            answers = new string[] {
+                "A enzima é ativada por cofatores",
+                "Há alteração em sua estrutura tridimensional",
+                "O substrato se liga ao sítio ativo",
+                "O pH se mantém constante"
+            },
+            correctIndex = 1,
+            questionNumber = 66,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas reduzem:",
+            answers = new string[] {
+                "A concentração de substrato",
+                "A energia de ativação da reação",
+                "A quantidade de produtos formados",
+                "A velocidade da reação"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "As enzimas apresentam elevada:",
+            answers = new string[] {
+                "Generalidade",
+                "Inespecificidade",
+                "Especificidade",
+                "Toxicidade"
+            },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false
+        },
     };
     
     public List<Question> GetQuestions()

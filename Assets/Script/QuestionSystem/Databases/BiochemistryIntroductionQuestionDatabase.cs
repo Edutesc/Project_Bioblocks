@@ -707,7 +707,150 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             correctIndex = 2,
             questionNumber = 53,
             isImageAnswer = false
-        }
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal solvente dos sistemas biológicos?",
+            answers = new string[] {
+                "Etanol",
+                "Água",
+                "Metano",
+                "Glicerol"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal solvente dos sistemas biológicos?",
+            answers = new string[] {
+                "Etanol",
+                "Água",
+                "Metano",
+                "Glicerol"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "As macromoléculas biológicas incluem:",
+            answers = new string[] {
+                "Proteínas, lipídios, carboidratos e ácidos nucleicos",
+                "Vitaminas, sais minerais e proteínas",
+                "Gases, água, lipídios e enzimas",
+                "Açúcares simples, ATP e DNA"
+            },
+            correctIndex = 0,
+            questionNumber = 55,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A molécula de DNA é responsável principalmente por:",
+            answers = new string[] {
+                "Produzir energia imediata",
+                "Transportar oxigênio",
+                "Armazenar e transmitir informações genéticas",
+                "Formar membranas celulares"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "O ATP é considerado a “moeda energética” da célula porque:",
+            answers = new string[] {
+                "É um lipídio armazenado em grandes quantidades",
+                "Armazena energia em suas ligações fosfato",
+                "É uma proteína que atua como enzima",
+                "Faz parte da estrutura dos ácidos nucleicos"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal carboidrato utilizado como fonte imediata de energia pelas células?",
+            answers = new string[] {
+                "Amido",
+                "Glicogênio",
+                "Glicose",
+                "Frutose"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "As enzimas são:",
+            answers = new string[] {
+                "Vitaminas essenciais à vida",
+                "Moléculas de DNA que controlam a divisão celular",
+                "Catalisadores biológicos, geralmente proteínas",
+                "Lipídios que fornecem energia"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Em organismos vivos, os lipídios têm como função principal:",
+            answers = new string[] {
+                "Formar cadeias polipeptídicas",
+                "Servir como catalisadores",
+                "Armazenar energia e compor membranas celulares",
+                "Atuar como código genético"
+            },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A bioquímica surgiu como disciplina independente principalmente com:",
+            answers = new string[] {
+                "A descoberta da penicilina",
+                "O isolamento da ureia por Wöhler",
+                "A teoria celular de Schleiden e Schwann",
+                "A descoberta da dupla hélice do DNA"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false
+            },
+            new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Um dos principais objetivos da Bioquímica é:",
+            answers = new string[] {
+                "Entender as interações entre espécies diferentes",
+                "Explicar como as reações químicas sustentam os processos vitais",
+                "Descrever a anatomia dos organismos",
+                "Estudar apenas as doenças humanas"
+            },
+            correctIndex = 1,
+            questionNumber = 62,
+            isImageAnswer = false
+        };    
+         new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Os principais elementos químicos que constituem os seres vivos são:",
+            answers = new string[] {
+                "C, H, O, N",
+                "Fe, Cu, Zn, Mg",
+                "Na, K, Cl, Ca",
+                "S, P, Cl, Ar"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false
+        };    
     };
 
     public List<Question> GetQuestions()
