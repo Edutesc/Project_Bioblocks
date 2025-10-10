@@ -294,35 +294,29 @@ public class QuestionManager : MonoBehaviour
     private void ShowLevelCompletionFeedback(int completedLevel, bool isLastLevel)
     {
         string levelName = GetLevelName(completedLevel);
-        string message;
+        string title;
+        string bodyText;
 
         if (isLastLevel)
         {
-            message = $"🏆 INCRÍVEL!\n\n" +
-                      $"Você completou o Nível {levelName}!\n\n" +
-                      $"Este é o nível mais difícil!\n\n" +
-                      $"Você dominou este tópico! 🎉";
+            title = "🏆 INCRÍVEL!";
+            bodyText = $"Você completou o Nível {levelName}!\n\n" +
+                       $"Este é o nível mais difícil!\n\n" +
+                       $"Você dominou este tópico! 🎉";
         }
         else
         {
             int nextLevel = completedLevel + 1;
             string nextLevelName = GetLevelName(nextLevel);
 
-            message = $"🎉 PARABÉNS!\n\n" +
-                      $"Você completou o Nível {levelName}!\n\n" +
-                      $"O Nível {nextLevelName} foi desbloqueado!\n\n" +
-                      $"Continue assim! 💪";
+            title = "🎉 PARABÉNS!";
+            bodyText = $"Você completou o Nível {levelName}!\n\n" +
+                       $"O Nível {nextLevelName} foi desbloqueado!\n\n" +
+                       $"Continue assim! 💪";
         }
 
-        feedbackElements.FeedbackText.text = message;
-        questionCanvasGroupManager.ShowAnswerFeedback(true, HexToColor("#D4EDDA"), HexToColor("#D4EDDA"));
-        StartCoroutine(HideFeedbackAfterDelay(3f));
-    }
-
-    private System.Collections.IEnumerator HideFeedbackAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        questionCanvasGroupManager.HideAnswerFeedback();
+        // Usa o novo sistema de feedback
+        feedbackElements.ShowLevelCompletionFeedback(title, bodyText, true);
     }
 
     private string GetLevelName(int level)
