@@ -21,6 +21,7 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionLoadManager loadManager;
     [SerializeField] private QuestionAnswerManager answerManager;
     [SerializeField] private QuestionScoreManager scoreManager;
+    [SerializeField] private QuestionCounterManager counterManager;
 
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
@@ -83,6 +84,9 @@ public class QuestionManager : MonoBehaviour
         if (transitionManager == null)
             Debug.LogError("QuestionManager: transitionManager é null");
 
+        if (counterManager == null)
+            Debug.LogWarning("QuestionManager: counterManager é null (opcional, mas recomendado)");
+
         bool isValid = questionBottomBarManager != null &&
                questionUIManager != null &&
                questionCanvasGroupManager != null &&
@@ -91,7 +95,9 @@ public class QuestionManager : MonoBehaviour
                answerManager != null &&
                scoreManager != null &&
                feedbackElements != null &&
-               transitionManager != null;
+               transitionManager != null &&
+               counterManager != null;
+            
 
         return isValid;
     }
@@ -110,11 +116,9 @@ public class QuestionManager : MonoBehaviour
             string currentDatabaseName = database.GetDatabankName();
             loadManager.databankName = currentDatabaseName;
 
-            // ═════ NOVO: Guardar TODAS as questões ═════
             allDatabaseQuestions = database.GetQuestions();
             maxLevelInDatabase = LevelCalculator.GetMaxLevel(allDatabaseQuestions);
             Debug.Log($"📚 Banco {currentDatabaseName} possui {maxLevelInDatabase} níveis");
-            // ============================================
 
             List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
@@ -146,6 +150,16 @@ public class QuestionManager : MonoBehaviour
             }
 
             currentSession = new QuestionSession(questions);
+
+            if (counterManager != null)
+            {
+                counterManager.Initialize(allDatabaseQuestions, answeredQuestions);
+                Debug.Log("QuestionCounterManager inicializado");
+            }
+            else
+            {
+                Debug.LogWarning("QuestionCounterManager não está atribuído - contador não será exibido");
+            }
         }
         catch (Exception e)
         {
@@ -218,13 +232,18 @@ public class QuestionManager : MonoBehaviour
                 ShowAnswerFeedback(feedbackMessage, true);
                 await scoreManager.UpdateScore(baseScore, true, currentQuestion);
 
-                // ═════ NOVO: Verificar se completou um nível ═════
+                if (counterManager != null)
+                {
+                    counterManager.MarkQuestionAsAnswered(currentQuestion.questionNumber);
+                    counterManager.UpdateCounter(currentQuestion);
+                    Debug.Log($"Questão {currentQuestion.questionNumber} marcada no contador");
+                }
+
                 await CheckLevelCompletionAfterCorrectAnswer(currentQuestion);
-                // =================================================
             }
             else
             {
-                Debug.Log($"❌ Q{currentQuestion.questionNumber} (Nível {currentQuestion.questionLevel}) - ERRADA");
+                Debug.Log($"Q{currentQuestion.questionNumber} (Nível {currentQuestion.questionLevel}) - ERRADA");
                 ShowAnswerFeedback("Resposta errada!\n-2 Pontos.", false);
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
@@ -255,7 +274,7 @@ public class QuestionManager : MonoBehaviour
 
             int questionLevel = answeredQuestion.questionLevel > 0 ? answeredQuestion.questionLevel : 1;
 
-            Debug.Log($"\n🔍 Verificando se nível {questionLevel} foi completado...");
+            Debug.Log($"\n Verificando se nível {questionLevel} foi completado...");
 
             // Obtém questões respondidas do Firebase
             List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
@@ -270,7 +289,7 @@ public class QuestionManager : MonoBehaviour
 
             if (isComplete)
             {
-                Debug.Log($"✅ Nível {questionLevel} COMPLETO!");
+                Debug.Log($"Nível {questionLevel} COMPLETO!");
 
                 if (questionLevel >= maxLevelInDatabase)
                 {
@@ -283,12 +302,12 @@ public class QuestionManager : MonoBehaviour
             }
             else
             {
-                Debug.Log($"⏳ Nível {questionLevel} ainda não completo");
+                Debug.Log($"Nível {questionLevel} ainda não completo");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"❌ Erro ao verificar conclusão de nível: {e.Message}");
+            Debug.LogError($"Erro ao verificar conclusão de nível: {e.Message}");
         }
     }
     private void ShowLevelCompletionFeedback(int completedLevel, bool isLastLevel)
@@ -388,17 +407,18 @@ public class QuestionManager : MonoBehaviour
                 isImageAnswer: nextQuestionToShow.isImageAnswer
             );
             questionUIManager.ShowQuestion(nextQuestionToShow);
+
+            if (counterManager != null)
+            {
+                counterManager.UpdateCounter(nextQuestionToShow);
+            }
+
             nextQuestionToShow = null;
         }
         else
         {
             StartCoroutine(HandleNoMoreQuestions());
         }
-    }
-
-    private void CleanupPreloadedResources()
-    {
-        questionUIManager.ClearPreloadedResources();
     }
 
     private IEnumerator HandleNoMoreQuestions()
@@ -415,6 +435,11 @@ public class QuestionManager : MonoBehaviour
                 isImageAnswer: newQuestion.isImageAnswer
             );
             questionUIManager.ShowQuestion(newQuestion);
+
+            if (counterManager != null)
+            {
+                counterManager.UpdateCounter(newQuestion);
+            }
         }
     }
 
@@ -429,6 +454,13 @@ public class QuestionManager : MonoBehaviour
                 isImageAnswer: currentQuestion.isImageAnswer
             );
             questionUIManager.ShowQuestion(currentQuestion);
+
+            if (counterManager != null)
+            {
+                counterManager.UpdateCounter(currentQuestion);
+                Debug.Log($"Contador atualizado para questão {currentQuestion.questionNumber}");
+            }
+
             timerManager.StartTimer();
         }
         catch (Exception e)
@@ -511,7 +543,7 @@ public class QuestionManager : MonoBehaviour
                 // Verifica se há mais níveis
                 if (currentLevel < maxLevelInDatabase)
                 {
-                    string message = $"🎯 Nível {GetLevelName(currentLevel)} Completo!\n\n" +
+                    string message = $"Nível {GetLevelName(currentLevel)} Completo!\n" +
                         $"Volte ao menu para acessar as questões do {GetLevelName(currentLevel + 1)}!";
 
                     ShowAnswerFeedback(message, true, true);
@@ -529,9 +561,9 @@ public class QuestionManager : MonoBehaviour
                         {
                             await HandleDatabaseCompletion(currentDatabaseName);
 
-                            string completionMessage = $"CONQUISTA DESBLOQUEADA!\n\n" +
-                                $"Você completou TODAS as {totalQuestions} questões!\n\n" +
-                                $"Todos os {maxLevelInDatabase} níveis foram dominados!\n\n" +
+                            string completionMessage = $"CONQUISTA DESBLOQUEADA!\n" +
+                                $"Você completou TODAS as {totalQuestions} questões!\n" +
+                                $"Todos os {maxLevelInDatabase} níveis foram dominados!\n" +
                                 $"Bônus das Listas desbloqueado!";
 
                             ShowAnswerFeedback(completionMessage, true, true);
