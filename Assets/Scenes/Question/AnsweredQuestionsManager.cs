@@ -213,14 +213,9 @@ public class AnsweredQuestionsManager : MonoBehaviour
                         }
 
                         int count = distinctQuestions.Count;
-
-                        // Validar se o count não excede o limite
-                        if (count > 50)
-                        {
-                            Debug.LogError($"ERRO: Número de questões ({count}) excede o limite de 50 para {databankName}");
-                            count = 50; // Forçar limite máximo
-                        }
-
+                        int totalQuestions = QuestionBankStatistics.GetTotalQuestions(databankName);
+                        // Garantir que a contagem não exceda o total real
+                        count = Mathf.Min(count, totalQuestions);
                         answeredCounts[databankName] = count;
                         AnsweredQuestionsListStore.UpdateAnsweredQuestionsCount(userId, databankName, count);
                         Debug.Log($"Atualizado {databankName}: {count} questões respondidas (Lista: {string.Join(", ", distinctQuestions)})");
