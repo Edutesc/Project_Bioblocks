@@ -299,20 +299,16 @@ public class QuestionManager : MonoBehaviour
 
         if (isLastLevel)
         {
-            title = "🏆 INCRÍVEL!";
-            bodyText = $"Você completou o Nível {levelName}!\n\n" +
-                       $"Este é o nível mais difícil!\n\n" +
-                       $"Você dominou este tópico! 🎉";
+            title = "INCRÍVEL!";
+            bodyText = $"Você completou o Nível {levelName}. Este é o nível mais difícil.";
         }
         else
         {
             int nextLevel = completedLevel + 1;
             string nextLevelName = GetLevelName(nextLevel);
 
-            title = "🎉 PARABÉNS!";
-            bodyText = $"Você completou o Nível {levelName}!\n\n" +
-                       $"O Nível {nextLevelName} foi desbloqueado!\n\n" +
-                       $"Continue assim! 💪";
+            title = "PARABÉNS!";
+            bodyText = $"Você completou o Nível {levelName}. O Nível {nextLevelName} foi desbloqueado.";
         }
 
         // Usa o novo sistema de feedback
@@ -533,17 +529,17 @@ public class QuestionManager : MonoBehaviour
                         {
                             await HandleDatabaseCompletion(currentDatabaseName);
 
-                            string completionMessage = $"🏆 CONQUISTA DESBLOQUEADA!\n\n" +
+                            string completionMessage = $"CONQUISTA DESBLOQUEADA!\n\n" +
                                 $"Você completou TODAS as {totalQuestions} questões!\n\n" +
                                 $"Todos os {maxLevelInDatabase} níveis foram dominados!\n\n" +
-                                $"🎁 Bônus das Listas desbloqueado!";
+                                $"Bônus das Listas desbloqueado!";
 
                             ShowAnswerFeedback(completionMessage, true, true);
                         }
                         catch (Exception bonusEx)
                         {
                             Debug.LogError($"Erro ao processar bônus: {bonusEx.Message}");
-                            ShowAnswerFeedback($"🏆 Parabéns! Você completou todos os níveis!", true, true);
+                            ShowAnswerFeedback($"Parabéns! Você completou todos os níveis!", true, true);
                         }
 
                         return;
