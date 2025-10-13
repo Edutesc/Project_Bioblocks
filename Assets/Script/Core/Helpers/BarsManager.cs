@@ -74,17 +74,23 @@ public abstract class BarsManager : MonoBehaviour
 
     protected virtual void OnSceneChanged(string sceneName)
     {
+        Debug.Log($"[{BarName}] OnSceneChanged chamado: {sceneName} | isSceneBeingLoaded: {isSceneBeingLoaded}");
+
         if (isSceneBeingLoaded)
         {
+            Debug.LogWarning($"[{BarName}] Cena está sendo carregada, ignorando...");
             return;
         }
 
         currentScene = sceneName;
         bool shouldShowBar = !scenesWithoutBar.Contains(sceneName);
+        Debug.Log($"[{BarName}] shouldShowBar: {shouldShowBar}");
+
         SetBarVisibility(shouldShowBar);
 
         if (shouldShowBar)
         {
+            Debug.Log($"[{BarName}] Chamando OnSceneChangedSpecific para {sceneName}");
             OnSceneChangedSpecific(sceneName);
             UpdateBarState(currentScene);
         }

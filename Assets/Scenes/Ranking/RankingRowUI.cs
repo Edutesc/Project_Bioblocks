@@ -180,12 +180,12 @@ public class RankingRowUI : MonoBehaviour
                     ColorUtility.TryParseHtmlString("#7DF7FF", out backgroundColor);
                     break;
                 case 3: // Terceiro lugar - Amarelo
-                    ColorUtility.TryParseHtmlString("#EF9102", out textColor);
-                    ColorUtility.TryParseHtmlString("#FFFCB5", out backgroundColor);
+                    ColorUtility.TryParseHtmlString("#9E4F90", out textColor);
+                    ColorUtility.TryParseHtmlString("#F2D4EC", out backgroundColor);
                     break;
                 default:
-                    ColorUtility.TryParseHtmlString("#000000", out textColor);
-                    ColorUtility.TryParseHtmlString("#FFFFFF", out backgroundColor);
+                    ColorUtility.TryParseHtmlString("#EF9102", out textColor);
+                    ColorUtility.TryParseHtmlString("#FFFCB5", out backgroundColor);
                     break;
             }
         }
@@ -199,8 +199,8 @@ public class RankingRowUI : MonoBehaviour
             }
             else
             {
-                ColorUtility.TryParseHtmlString("#000000", out textColor);
-                ColorUtility.TryParseHtmlString("#FFFFFF", out backgroundColor);
+                ColorUtility.TryParseHtmlString("#EF9102", out textColor);
+                ColorUtility.TryParseHtmlString("#FFFCB5", out backgroundColor);
             }
         }
 
