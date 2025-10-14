@@ -26,7 +26,7 @@ public class RankingImageManager : MonoBehaviour
     {
         imageContent = rawImage;
         ConfigureImageMask();
-        LoadStandardProfileImage(); // Carrega a imagem padrão imediatamente
+        LoadStandardProfileImage();
     }
 
     private void ConfigureImageMask()

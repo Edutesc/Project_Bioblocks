@@ -172,7 +172,7 @@ public class RankingRowUI : MonoBehaviour
             switch (rank)
             {
                 case 1: // Primeiro lugar - Verde
-                    ColorUtility.TryParseHtmlString("#00824B", out textColor);
+                    ColorUtility.TryParseHtmlString("#004699", out textColor);
                     ColorUtility.TryParseHtmlString("#91FF7D", out backgroundColor);
                     break;
                 case 2: // Segundo lugar - Azul
@@ -180,12 +180,12 @@ public class RankingRowUI : MonoBehaviour
                     ColorUtility.TryParseHtmlString("#7DF7FF", out backgroundColor);
                     break;
                 case 3: // Terceiro lugar - Amarelo
-                    ColorUtility.TryParseHtmlString("#EF9102", out textColor);
-                    ColorUtility.TryParseHtmlString("#FFFCB5", out backgroundColor);
+                    ColorUtility.TryParseHtmlString("#004699", out textColor);
+                    ColorUtility.TryParseHtmlString("#F2D4EC", out backgroundColor);
                     break;
                 default:
-                    ColorUtility.TryParseHtmlString("#000000", out textColor);
-                    ColorUtility.TryParseHtmlString("#FFFFFF", out backgroundColor);
+                    ColorUtility.TryParseHtmlString("#004699", out textColor);
+                    ColorUtility.TryParseHtmlString("#FFFEDE", out backgroundColor);
                     break;
             }
         }
@@ -194,13 +194,13 @@ public class RankingRowUI : MonoBehaviour
         {
             if (isCurrentUser)
             {
-                ColorUtility.TryParseHtmlString("#000000", out textColor);
+                ColorUtility.TryParseHtmlString("#004699", out textColor);
                 ColorUtility.TryParseHtmlString("#E5E5E5", out backgroundColor);
             }
             else
             {
-                ColorUtility.TryParseHtmlString("#000000", out textColor);
-                ColorUtility.TryParseHtmlString("#FFFFFF", out backgroundColor);
+                ColorUtility.TryParseHtmlString("#004699", out textColor);
+                ColorUtility.TryParseHtmlString("#FFFEDE", out backgroundColor);
             }
         }
 

@@ -18,7 +18,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -32,7 +33,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -46,7 +48,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 3,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -60,7 +63,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -74,7 +78,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 5,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -88,7 +93,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -102,7 +108,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 7,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -116,7 +123,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 8,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -130,7 +138,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 9,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -144,7 +153,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 10,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -158,7 +168,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 11,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -172,7 +183,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 12,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -186,7 +198,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 13,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -200,7 +213,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 14,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -214,7 +228,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 15,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -228,7 +243,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 16,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -242,7 +258,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 17,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -256,7 +273,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -270,7 +288,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 19,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -284,7 +303,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -298,7 +318,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -312,7 +333,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -326,7 +348,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -340,7 +363,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -354,7 +378,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -368,7 +393,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -383,7 +409,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 27,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_27"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_27",
+            questionLevel = 1
         },
         new Question
         {
@@ -397,7 +424,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 28,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -411,7 +439,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 29,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 1
         },
         new Question
         {
@@ -425,7 +454,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -439,7 +469,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 31,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -453,7 +484,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 32,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -468,7 +500,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 33,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_33"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_33",
+            questionLevel = 2
         },
         new Question
         {
@@ -483,7 +516,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 34,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_34"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_34",
+            questionLevel = 2
         },
         new Question
         {
@@ -498,7 +532,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 35,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_35"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_35",
+            questionLevel = 2
         },
          new Question
         {
@@ -513,7 +548,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 36,
             isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/LipidDB/lipids_question_36"
+            questionImagePath =  "AnswerImages/LipidDB/lipids_question_36",
+            questionLevel = 2
         },
         new Question
         {
@@ -527,7 +563,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 37,
-            isImageAnswer = true
+            isImageAnswer = true,
+            questionLevel = 2
         },
         new Question
         {
@@ -541,7 +578,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 38,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -555,7 +593,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -569,7 +608,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 2
         },
         new Question
         {
@@ -583,7 +623,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 41,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -597,7 +638,8 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 42,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
         },
         new Question
         {
@@ -611,7 +653,503 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 43,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são, em sua maioria, compostos por:",
+            answers = new string[] {
+                "Nitrogênio e fósforo",
+                "Carbono e enxofre",
+                "Carbono, hidrogênio e oxigênio",
+                "Oxigênio e cloro"
+            },
+            correctIndex = 2,
+            questionNumber = 44,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual das funções abaixo é típica dos lipídeos?",
+            answers = new string[] {
+                "Transportar oxigênio",
+                "Carregar informações genéticas",
+                "Catalisar reações químicas",
+                "Armazenar energia"
+            },
+            correctIndex = 3,
+            questionNumber = 45,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos insolúveis em água são considerados:",
+            answers = new string[] {
+                "Hidrofílicos",
+                "Hidrofóbicos",
+                "Anfipáticos",
+                "Polares"
+            },
+            correctIndex = 1,
+            questionNumber = 46,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual lipídeo é o principal componente das membranas celulares?",
+            answers = new string[] {
+                "Fosfolipídios",
+                "Triglicerídeos",
+                "Cerídeos",
+                "Esteroides"
+            },
+            correctIndex = 0,
+            questionNumber = 47,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os triglicerídeos são formados por:",
+            answers = new string[] {
+                "Ácidos graxos e glicerol",
+                "Triglicerídeos",
+                "Nucleotídeos e açúcar",
+                "Glicerol e bases nitrogenadas"
+            },
+            correctIndex = 0,
+            questionNumber = 48,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os triglicerídeos são formados por:",
+            answers = new string[] {
+                "Ácidos graxos e glicerol",
+                "Triglicerídeos",
+                "Nucleotídeos e açúcar",
+                "Glicerol e bases nitrogenadas"
+            },
+            correctIndex = 0,
+            questionNumber = 49,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual lipídeo atua como precursor dos hormônios esteroides?",
+            answers = new string[] {
+                "Lecitina",
+                "Colesterol",
+                "Ácido oleico",
+                "Cerídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 50,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados por:",
+            answers = new string[] {
+                "Terem oxigênio extra",
+                "Colesterol",
+                "Ácido oleico",
+                "Não possuírem carbono"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados por:",
+            answers = new string[] {
+                "Terem oxigênio extra",
+                "Colesterol",
+                "Ácido oleico",
+                "Não possuírem carbono"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados por:",
+            answers = new string[] {
+                "Terem oxigênio extra",
+                "Colesterol",
+                "Estarem sempre sólidos à temperatura ambiente",
+                "Apresentarem ligações duplas na cadeia carbônica"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false,
+            questionLevel = 3
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Um exemplo de lipídeo de reserva energética encontrado em animais é:",
+            answers = new string[] {
+                "Glicogênio",
+                "Colesterol",
+                "Triglicerídeo",
+                "Fosfolipídio"
+            },
+            correctIndex = 2,
+            questionNumber = 54,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos que apresentam regiões polares e apolares são chamados de:",
+            answers = new string[] {
+                "Hidrofílicos",
+                "Hidrofóbicos",
+                "Aromáticos",
+                "Anfipáticos"
+            },
+            correctIndex = 3,
+            questionNumber = 55,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A função dos fosfolipídios na membrana celular é principalmente:",
+            answers = new string[] {
+                "Produzir energia imediata",
+                "Armazenar glicose",
+                "Formar a bicamada lipídica",
+                "Catalisar reações químicas"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são principalmente compostos por:",
+            answers = new string[] {
+                "Aminoácidos e nucleotídeos",
+                "Glicerol e ácidos graxos",
+                "Monossacarídeos e polissacarídeos",
+                "Peptídeos e cofatores"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual é a principal função dos lipídeos de reserva nos animais?",
+            answers = new string[] {
+                "Armazenar informações genéticas",
+                "Catalisar reações químicas",
+                "Armazenar energia a longo prazo",
+                "Transportar oxigênio"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "O colesterol é classificado como:",
+            answers = new string[] {
+                "Esteroide",
+                "Fosfolipídeo",
+                "Glicerídeo",
+                "Terpeno"
+            },
+            correctIndex = 0,
+            questionNumber = 59,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os fosfolipídeos são fundamentais porque:",
+            answers = new string[] {
+                "Atuam como catalisadores",
+                "Formam a bicamada das membranas celulares",
+                "São hormônios sexuais",
+                "Fornecem energia imediata"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "O que diferencia ácidos graxos saturados de insaturados?",
+            answers = new string[] {
+                "Presença ou ausência de grupo carboxila",
+                "Quantidade de átomos de oxigênio",
+                "Presença de ligações duplas entre carbonos",
+                "Presença de fósforo na cadeia"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os óleos vegetais, em temperatura ambiente, geralmente são:",
+            answers = new string[] {
+                "Sólidos, pois são saturados",
+                "Líquidos, pois são insaturados",
+                "Gasosos, pois são voláteis",
+                "Sólidos, pois contêm esteroides"
+            },
+            correctIndex = 1,
+            questionNumber = 62,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são moléculas:",
+            answers = new string[] {
+                "Hidrossolúveis",
+                "Insolúveis em água e solúveis em solventes orgânicos",
+                "Sempre solúveis em água",
+                "Exclusivamente polares"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídeos são moléculas:",
+            answers = new string[] {
+                "Hidrossolúveis",
+                "Insolúveis em água e solúveis em solventes orgânicos",
+                "Sempre solúveis em água",
+                "Exclusivamente polares"
+            },
+            correctIndex = 1,
+            questionNumber = 64,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os hormônios sexuais (como testosterona e estrógeno) derivam de qual lipídeo?",
+            answers = new string[] {
+                "Fosfolipídeos",
+                "Colesterol",
+                "Glicerídeos",
+                "Carotenoides"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A principal função dos lipídeos na membrana plasmática é:",
+            answers = new string[] {
+                "Armazenar glicose",
+                "Regular a temperatura do corpo",
+                "Garantir a barreira seletiva e a fluidez da membrana",
+                "Fornecer aminoácidos essenciais"
+            },
+            correctIndex = 2,
+            questionNumber = 66,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A manteiga é rica em ácidos graxos:",
+            answers = new string[] {
+                "Insaturados, geralmente líquidos à temperatura ambiente",
+                "Saturados, geralmente sólidos à temperatura ambiente",
+                "Aromáticos, voláteis",
+                "Fosforilados, presentes em membranas"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídios são compostos orgânicos caracterizados principalmente por:",
+            answers = new string[] {
+                "Alta solubilidade em água",
+                "Baixa solubilidade em água e solubilidade em solventes orgânicos",
+                "Estrutura formada por nucleotídeos",
+                "Sempre possuírem função enzimática"
+            },
+            correctIndex = 1,
+            questionNumber = 68,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os principais componentes de óleos e gorduras são:",
+            answers = new string[] {
+                "Fosfolipídios",
+                "Glicídios",
+                "Triglicerídeos",
+                "Esteroides"
+            },
+            correctIndex = 2,
+            questionNumber = 69,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Um lipídio formado por glicerol + 3 ácidos graxos é denominado:",
+            answers = new string[] {
+                "Fosfolipídio",
+                "Esteroide",
+                "Triglicerídeo",
+                "Cerídeo"
+            },
+            correctIndex = 2,
+            questionNumber = 70,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os fosfolipídios são importantes porque:",
+            answers = new string[] {
+                "Formam a parede celular dos vegetais",
+                "Atuam como catalisadores",
+                "Compõem a membrana plasmática das células",
+                "São responsáveis pelo transporte de oxigênio"
+            },
+            correctIndex = 2,
+            questionNumber = 71,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Qual dos lipídios abaixo possui função hormonal?",
+            answers = new string[] {
+                "Triglicerídeos",
+                "Esteroides",
+                "Fosfolipídios",
+                "Cerídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 72,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "A principal função dos lipídios de reserva é:",
+            answers = new string[] {
+                "Fornecer energia de curto prazo",
+                "Armazenar energia de longo prazo",
+                "Atuar como cofatores enzimáticos",
+                "Regular o pH celular"
+            },
+            correctIndex = 1,
+            questionNumber = 73,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os lipídios que atuam como isolantes térmicos em animais são principalmente:",
+            answers = new string[] {
+                "Fosfolipídios",
+                "Esteroides",
+                "Glicídios",
+                "Triglicerídeos"
+            },
+            correctIndex = 3,
+            questionNumber = 74,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Um exemplo de cera (cerídeo) é:",
+            answers = new string[] {
+                "Colesterol",
+                "Cutina das folhas",
+                "Fosfatidilcolina",
+                "Amido"
+            },
+            correctIndex = 1,
+            questionNumber = 75,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "LipidsQuestionDatabase",
+            questionText = "Os ácidos graxos insaturados diferem dos saturados porque:",
+            answers = new string[] {
+                "Possuem cadeias ramificadas",
+                "Apresentam uma ou mais duplas ligações na cadeia carbônica",
+                "Não contêm hidrogênio em sua estrutura",
+                "São encontrados apenas em animais"
+            },
+            correctIndex = 1,
+            questionNumber = 76,
+            isImageAnswer = false,
+            questionLevel = 1
         }
     };
 

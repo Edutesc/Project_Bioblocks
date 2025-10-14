@@ -18,7 +18,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -32,7 +33,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -46,7 +48,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 3,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -60,7 +63,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -74,7 +78,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 5,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -88,7 +93,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -102,7 +108,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 7,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -116,7 +123,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 8,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -130,7 +138,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 9,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -144,7 +153,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 10,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -158,7 +168,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 11,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -172,7 +183,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 12,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -186,7 +198,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 13,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -200,7 +213,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 14,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -214,7 +228,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 15,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -228,7 +243,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 16,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -242,7 +258,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 17,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -256,7 +273,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -270,7 +288,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 19,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -284,7 +303,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -298,7 +318,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -312,7 +333,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -326,7 +348,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -340,7 +363,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -354,7 +378,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -368,7 +393,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -382,7 +408,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 27,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -396,7 +423,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 28,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -410,7 +438,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 29,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -424,7 +453,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -438,7 +468,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 31,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -452,7 +483,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 32,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -466,7 +498,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 33,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -480,7 +513,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 34,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -494,7 +528,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 35,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -508,7 +543,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 36,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -522,7 +558,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 37,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -536,7 +573,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 38,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -550,7 +588,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -564,7 +603,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -578,7 +618,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 41,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -592,7 +633,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 42,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -606,7 +648,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 43,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -620,7 +663,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 44,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -634,7 +678,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 45,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -648,7 +693,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -662,7 +708,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 47,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -676,7 +723,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 48,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -690,7 +738,8 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 49,
-            isImageAnswer = false
+            isImageAnswer = false,
+            questionLevel = 1
         },
         new Question
         {
@@ -704,8 +753,279 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 50,
-            isImageAnswer = false
-        } 
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A molécula de água é formada por:",
+            answers = new string[] {
+                "Dois átomos de hidrogênio e um de oxigênio",
+                "Dois átomos de oxigênio e um de hidrogênio",
+                "Três átomos de oxigênio",
+                "Dois átomos de hidrogênio apenas"
+            },
+            correctIndex = 0,
+            questionNumber = 51,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A água é considerada uma molécula:",
+            answers = new string[] {
+                "Apolar",
+                "Polar",
+                "Neutra sem polaridade",
+                "Somente iônica"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A ligação que mantém os átomos de hidrogênio e oxigênio dentro da molécula de água é:",
+            answers = new string[] {
+                "Ligação de hidrogênio",
+                "Ligação iônica",
+                "Ligação covalente",
+                "Ligação metálica"
+            },
+            correctIndex = 2,
+            questionNumber = 53,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "As interações entre moléculas de água, responsáveis por suas propriedades especiais, são chamadas de:",
+            answers = new string[] {
+                "Ligações dissulfeto",
+                "Ligações de hidrogênio",
+                "Ligações peptídicas",
+                "Ligações covalentes duplas"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "Qual das funções abaixo é desempenhada pela água no organismo?",
+            answers = new string[] {
+                "Fonte primária de energia",
+                "Solvente universal e transporte de substâncias",
+                "Armazenamento de informação genética",
+                "Estrutura básica das proteínas"
+            },
+            correctIndex = 1,
+            questionNumber = 55,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A capacidade da água de dissolver muitas substâncias faz com que seja chamada de:",
+            answers = new string[] {
+                "Soluto universal",
+                "Solvente universal",
+                "Cofator biológico",
+                "Enzima natural"
+            },
+            correctIndex = 1,
+            questionNumber = 56,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A alta capacidade térmica da água permite que:",
+            answers = new string[] {
+                "O corpo humano mantenha a temperatura estável",
+                "As proteínas sejam formadas mais rapidamente",
+                "Os lipídeos se dissolvam facilmente",
+                "O oxigênio seja transportado sem hemoglobina"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O processo em que moléculas de água interagem entre si devido às ligações de hidrogênio é chamado de:",
+            answers = new string[] {
+                "Adesão",
+                "Coesão",
+                "Capilaridade",
+                "Dissociação"
+            },
+            correctIndex = 1,
+            questionNumber = 58,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O fenômeno da capilaridade ocorre porque a água apresenta:",
+            answers = new string[] {
+                "Apenas coesão",
+                "Apenas adesão",
+                "Coesão e adesão",
+                "Nem coesão nem adesão"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A densidade da água é maior em qual estado físico?",
+            answers = new string[] {
+                "Sólido (gelo)",
+                "Líquido",
+                "Gasoso",
+                "Plasma"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A importância da água na reação de hidrólise está relacionada a:",
+            answers = new string[] {
+                "Sua função como fonte de energia",
+                "Sua participação na quebra de moléculas",
+                "Sua capacidade de armazenar DNA",
+                "Sua atuação como catalisador enzimático"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false,
+            questionLevel = 1
+        }, 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "Qual é a porcentagem aproximada de água no corpo humano adulto?",
+            answers = new string[] {
+                "20%",
+                "40%",
+                "60%",
+                "80%"
+            },
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false,
+            questionLevel = 1
+        }, 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A atração entre moléculas de água, que explica fenômenos como a tensão superficial, é devida a:",
+            answers = new string[] {
+                "Ligações covalentes",
+                "Ligações de hidrogênio",
+                "Ligações peptídicas",
+                "Ligações glicosídicas"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false,
+            questionLevel = 1
+        }, 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O calor específico elevado da água é importante porque:",
+            answers = new string[] {
+                "Permite que organismos mantenham a temperatura estável",
+                "Reduz a evaporação nos rios",
+                "Facilita o transporte de gases no sangue",
+                "Torna a água uma boa fonte de energia"
+            },
+            correctIndex = 0,
+            questionNumber = 64,
+            isImageAnswer = false,
+            questionLevel = 1
+        }, 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O movimento da água através de uma membrana semipermeável é chamado:",
+            answers = new string[] {
+                "Difusão",
+                "Osmose",
+                "Transporte ativo",
+                "Exocitose"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false,
+            questionLevel = 1
+        }, 
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A densidade da água no estado sólido é menor que no líquido. Isso explica:",
+            answers = new string[] {
+                "A evaporação da água em baixas temperaturas",
+                "O gelo flutuar na água",
+                "A água ser polar",
+                "O pH neutro da água"
+            },
+            correctIndex = 1,
+            questionNumber = 66,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A função da água como reagente é observada em processos como:",
+            answers = new string[] {
+                "Respiração celular",
+                "Hidrólise",
+                "Fotossíntese",
+                "Todas as alternativas anteriores"
+            },
+            correctIndex = 3,
+            questionNumber = 67,
+            isImageAnswer = false,
+            questionLevel = 1
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "A propriedade da água que permite a subida da seiva nas plantas pelo xilema é chamada:",
+            answers = new string[] {
+                "Difusão",
+                "Evaporação",
+                "Adesão e coesão",
+                "Ionização"
+            },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false,
+            questionLevel = 1
+        }
     };
 
     public List<Question> GetQuestions()

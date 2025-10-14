@@ -61,9 +61,42 @@ public class RegisterManager : MonoBehaviour
                 throw new Exception("Este nickname já está em uso. Por favor, escolha outro.");
             }
 
+            Debug.Log("=== LIMPEZA ANTES DE REGISTRAR NOVO USUÁRIO ===");
+
+            UserDataStore.CurrentUserData = null;
+            Debug.Log("✓ UserDataStore limpo");
+
+            if (AnsweredQuestionsManager.Instance != null)
+            {
+                AnsweredQuestionsManager.Instance.ResetManager();
+                Debug.Log("✓ AnsweredQuestionsManager resetado");
+            }
+
+            AnsweredQuestionsListStore.ClearAll();
+
+            Debug.Log("=== LIMPEZA CONCLUÍDA, INICIANDO REGISTRO ===");
+
             await AuthenticationRepository.Instance.RegisterUserAsync(nameInput.text, nickNameInput.text, emailInput.text, passwordInput.text);
-            
-            // Usa o spinner global até que a próxima cena seja carregada
+            await Task.Delay(300);
+
+            // Recarrega os dados do usuário recém-criado
+            var user = AuthenticationRepository.Instance.Auth.CurrentUser;
+            if (user != null)
+            {
+                var userData = await FirestoreRepository.Instance.GetUserData(user.UserId);
+                if (userData != null)
+                {
+                    UserDataStore.CurrentUserData = userData;
+                    await Task.Delay(300);
+                    await AnsweredQuestionsManager.Instance.ForceUpdate();
+                    await Task.Delay(400);
+                }
+                else
+                {
+                    throw new Exception("Erro ao carregar dados do usuário recém-criado.");
+                }
+            }
+
             LoadingSpinnerComponent.Instance.ShowSpinnerUntilSceneLoaded("PathwayScene");
             SceneManager.LoadScene("PathwayScene");
         }
@@ -93,12 +126,6 @@ public class RegisterManager : MonoBehaviour
         if (backButton != null)
         {
             backButton.interactable = interactable;
-        }
-
-        Button[] allButtons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (Button button in allButtons)
-        {
-            button.interactable = interactable;
         }
         
         nameInput.interactable = interactable;

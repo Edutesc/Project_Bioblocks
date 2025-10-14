@@ -10,17 +10,13 @@ public class DeleteAccountPanel : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
         {
-            Debug.LogError($"CanvasGroup não encontrado em {gameObject.name}");
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
-        Debug.Log($"DeleteAccountPanel Awake - CanvasGroup encontrado: {canvasGroup != null}");
     }
 
     private void Start()
     {
-        // Garantir que comece oculto
         HidePanel();
-        Debug.Log($"DeleteAccountPanel Start - Panel hidden. Alpha: {canvasGroup.alpha}");
     }
 
     public void ShowPanel()
@@ -48,7 +44,6 @@ public class DeleteAccountPanel : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
-        Debug.Log($"Painel ocultado - Alpha: {canvasGroup.alpha}");
     }
 
     private void OnEnable()

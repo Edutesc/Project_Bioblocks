@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <projectSettings>
-  <projectSetting name="com.google.external-dependency-managerAnalyticsCookie" value="d2eced77a1a34c6a999e07a6b1453d1e" />
-  <projectSetting name="com.google.external-dependency-managerAnalyticsEnabled" value="True" />
-  <projectSetting name="com.google.firebaseAnalyticsCookie" value="865186ca47f74e1eb5ab70e69b25dbc5" />
-  <projectSetting name="com.google.firebaseAnalyticsEnabled" value="True" />
+  <projectSetting name="com.google.external-dependency-managerAnalyticsEnabled" value="False" />
+  <projectSetting name="com.google.firebaseAnalyticsEnabled" value="False" />
   <projectSetting name="Google.PackageManagerResolver.Enable" value="True" />
   <projectSetting name="Google.PackageManagerResolver.PromptToAddRegistries" value="True" />
   <projectSetting name="Google.PackageManagerResolver.PromptToMigratePackages" value="True" />

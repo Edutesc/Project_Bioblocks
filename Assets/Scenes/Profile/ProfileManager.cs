@@ -394,7 +394,15 @@ public class ProfileManager : MonoBehaviour
                 // Desativar overlays
                 if (deleteAccountDarkOverlay != null)
                 {
+                    Canvas overlayCanvas = deleteAccountDarkOverlay.GetComponent<Canvas>();
+                    if (overlayCanvas != null)
+                    {
+                        Destroy(overlayCanvas);
+                        Debug.Log("✓ Canvas do DeleteAccountDarkOverlay destruído");
+                    }
+
                     deleteAccountDarkOverlay.SetActive(false);
+                    Debug.Log("✓ DeleteAccountDarkOverlay desativado");
                 }
 
                 GameObject halfViewOverlay = GameObject.Find("HalfViewDarkOverlay");
@@ -403,7 +411,71 @@ public class ProfileManager : MonoBehaviour
                     halfViewOverlay.SetActive(false);
                 }
 
+                // Procura e desabilita canvas e overlays por nome
+                string[] overlayNames = new string[] {
+                    "DarkOverlay",
+                    "DeleteAccountDarkOverlay",
+                    "HalfViewDarkOverlay",
+                    "Overlay",
+                    "BlockerPanel"
+                };
+
+                foreach (string overlayName in overlayNames)
+                {
+                    GameObject overlay = GameObject.Find(overlayName);
+                    if (overlay != null && overlay.activeSelf)
+                    {
+                        Debug.LogWarning($"Overlay ativo encontrado: {overlayName}");
+                        Canvas canvas = overlay.GetComponent<Canvas>();
+                        if (canvas != null)
+                        {
+                            canvas.enabled = false;
+                            Debug.Log($"canvas de {overlayName} desabilitado");
+                        }
+
+                        overlay.SetActive(false);
+                        Debug.Log($"{overlayName} desativado");
+                    }
+                }
+
+                Canvas[] allCanvases = FindObjectsOfType<Canvas>(true);
+                foreach (Canvas canvas in allCanvases)
+                {
+                    if (canvas.sortingOrder >= 100 && canvas.gameObject.name.Contains("Dark"))
+                    {
+                        Debug.LogWarning($"⚠️ Canvas suspeito encontrado: {canvas.gameObject.name} (sortingOrder: {canvas.sortingOrder})");
+                        canvas.gameObject.SetActive(false);
+                        Debug.Log($"  └─> Desativado");
+                    }
+                }
+
                 ReenableSceneInteractions();
+
+                // Limpa UserDataStore
+                UserDataStore.CurrentUserData = null;
+                Debug.Log("✓ UserDataStore limpo");
+
+                // Limpa AnsweredQuestionsManager
+                if (AnsweredQuestionsManager.Instance != null)
+                {
+                    AnsweredQuestionsManager.Instance.ResetManager();
+                    Debug.Log("✓ AnsweredQuestionsManager resetado");
+                }
+
+                // ⭐ Limpa TODOS os dados do AnsweredQuestionsListStore
+                AnsweredQuestionsListStore.ClearAll();
+                Debug.Log("✓ AnsweredQuestionsListStore completamente limpo");
+
+                // ⭐ Força reinicialização da BottomBar se existir
+                if (NavigationBottomBarManager.Instance != null)
+                {
+                    Debug.Log("✓ Preparando BottomBar para próximo usuário");
+                }
+
+                Debug.Log("=== LIMPEZA COMPLETA FINALIZADA ===");
+
+                await Task.Delay(300);
+
                 LoadingSpinnerComponent.Instance.ShowSpinnerUntilSceneLoaded("LoginView");
                 Navigate("LoginView");
             }
