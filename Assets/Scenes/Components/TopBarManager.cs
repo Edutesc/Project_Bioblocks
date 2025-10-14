@@ -165,7 +165,7 @@ public class TopBarManager : BarsManager
     {
         allButtons.Clear();
         buttonsByName.Clear();
-        InitializeButton(hubButton);
+        //InitializeButton(hubButton);
         InitializeButton(engineButton);
         SetupButtonListeners();
     }
@@ -184,6 +184,7 @@ public class TopBarManager : BarsManager
 
     private void SetupButtonListeners()
     {
+        /*
         if (hubButton.button != null)
         {
             hubButton.button.onClick.RemoveAllListeners();
@@ -195,6 +196,7 @@ public class TopBarManager : BarsManager
                 }
             });
         }
+        */
 
         if (engineButton.button != null)
         {
@@ -264,6 +266,15 @@ public class TopBarManager : BarsManager
         {
             if (button != null && button.button != null && button.buttonImage != null)
             {
+                // Desabilita o hubButton
+                if (button == hubButton)
+                {
+                    button.button.interactable = false;
+                    Color hubButtonColor = button.buttonImage.color;
+                    button.buttonImage.color = new Color(hubButtonColor.r, hubButtonColor.g, hubButtonColor.b, 0);
+                    continue;
+                }
+
                 bool isActive = button.visibleInScenes.Contains(sceneName);
                 button.button.interactable = isActive;
                 Color buttonColor = button.buttonImage.color;
