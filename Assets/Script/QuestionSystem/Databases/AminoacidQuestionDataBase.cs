@@ -720,6 +720,21 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 50,
             isImageAnswer = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            answers = new string[] {
+                "3,47",
+                "4,97",
+                "5,97",
+                "6,97"
+            },
+            correctIndex = 2,
+            questionNumber = 51,
+            isImageQuestion = true,
+            isImageAnswer = false,
+            questionImagePath =  "AnswerImages/AminoacidsDB/ImageQuestionContainerTESTE1"
         }
     };
 
