@@ -146,13 +146,16 @@ public class ProfileManager : MonoBehaviour
         AnsweredQuestionsManager.OnAnsweredQuestionsUpdated -= HandleAnsweredQuestionsUpdated;
         DatabaseStatisticsManager.OnStatisticsReady -= OnDatabaseStatisticsReady;
 
-        GameObject darkOverlay = GameObject.Find("DarkOverlay");
-        if (darkOverlay != null)
+        // Tentar encontrar DarkOverlay apenas se o objeto ainda existe
+        if (this != null && gameObject != null && gameObject.scene.isLoaded)
         {
-            darkOverlay.SetActive(false);
-            Debug.Log("DarkOverlay desativado via OnDisable");
+            GameObject darkOverlay = GameObject.Find("DarkOverlay");
+            if (darkOverlay != null && darkOverlay.activeInHierarchy)
+            {
+                darkOverlay.SetActive(false);
+                Debug.Log("DarkOverlay desativado via OnDisable");
+            }
         }
-
     }
 
     private void OnUserDataChanged(UserData userData)

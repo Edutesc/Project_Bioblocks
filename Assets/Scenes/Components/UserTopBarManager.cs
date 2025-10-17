@@ -8,7 +8,9 @@ using TMPro;
 public class UserTopBarManager : BarsManager
 {
     [Header("Elementos da User TopBar")]
-    [SerializeField] private Image avatarImage;
+    [SerializeField] private RawImage avatarImage;
+    [SerializeField] private Image avatarImageBackground;
+    [SerializeField] private ProfileImageLoader avatarManager;
     [SerializeField] private TMP_Text userNameText;
     [SerializeField] private Image starImage;
     [SerializeField] private TMP_Text scoreText;
@@ -70,7 +72,39 @@ public class UserTopBarManager : BarsManager
             }
         }
 
+        InitializeAvatarManager();
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void InitializeAvatarManager()
+    {
+        // Auto-encontrar o ProfileImageLoader  se não estiver atribuído
+        if (avatarManager == null)
+        {
+            avatarManager = GetComponentInChildren<ProfileImageLoader>();
+            if (avatarManager == null)
+            {
+                Debug.LogWarning("ProfileImageLoader  não encontrado! Procurando RawImage para criar...");
+
+                if (avatarImage != null)
+                {
+                    // Adicionar o manager no pai do RawImage (onde fica a máscara)
+                    var avatarParent = avatarImage.transform.parent;
+                    if (avatarParent != null)
+                    {
+                        avatarManager = avatarParent.gameObject.AddComponent<ProfileImageLoader>();
+                        avatarManager.SetImageContent(avatarImage);
+                        Debug.Log("ProfileImageLoader  criado e configurado automaticamente");
+                    }
+                }
+            }
+        }
+
+        // Configurar o RawImage no manager se necessário
+        if (avatarManager != null && avatarImage != null)
+        {
+            avatarManager.SetImageContent(avatarImage);
+        }
     }
 
     protected override void OnStart()
@@ -172,6 +206,16 @@ public class UserTopBarManager : BarsManager
             scoreText.text = $"{userData.WeekScore} pontos";
         }
 
+        // Carregar imagem do perfil usando o AvatarManager
+        if (avatarManager != null)
+        {
+            avatarManager.LoadProfileImage(userData.ProfileImageUrl);
+        }
+        else
+        {
+            Debug.LogWarning("ProfileImageLoader  não está disponível para carregar a imagem");
+        }
+
         // Atualizar XP Bar
         if (xpBarText != null && xpBarFill != null)
         {
@@ -200,13 +244,6 @@ public class UserTopBarManager : BarsManager
             int currentLevel = 1; // Ajustar conforme sua lógica
             levelText.text = currentLevel.ToString();
         }
-
-        // Atualizar Avatar
-        if (avatarImage != null)
-        {
-            // Carregar sprite do avatar do usuário, se disponível
-            // avatarImage.sprite = userData.AvatarSprite;
-        }
     }
 
     private void UpdateFromCurrentUserData()
@@ -221,7 +258,6 @@ public class UserTopBarManager : BarsManager
     protected override void UpdateButtonVisibility(string sceneName)
     {
         // Este método pode ser usado se você adicionar botões na UserTopBar no futuro
-        // Por enquanto, não há botões específicos para gerenciar
     }
 
     public void EnsureUserTopBarVisibilityInScene(string sceneName)
@@ -234,6 +270,8 @@ public class UserTopBarManager : BarsManager
             EnsureBarIntegrity();
         }
     }
+
+    // ========== MÉTODOS PÚBLICOS DE GERENCIAMENTO ==========
 
     public void SetUserName(string name)
     {
@@ -281,11 +319,30 @@ public class UserTopBarManager : BarsManager
         }
     }
 
-    public void SetAvatarSprite(Sprite sprite)
+    /// <summary>
+    /// Atualiza o avatar com uma nova URL
+    /// Chamado quando o usuário troca a foto no perfil
+    /// </summary>
+    public void UpdateAvatarFromUrl(string imageUrl)
     {
-        if (avatarImage != null)
+        if (avatarManager != null)
         {
-            avatarImage.sprite = sprite;
+            avatarManager.LoadProfileImage(imageUrl);
+        }
+        else
+        {
+            Debug.LogWarning("ProfileImageLoader  não está disponível");
+        }
+    }
+
+    /// <summary>
+    /// Força refresh do avatar com os dados atuais do UserData
+    /// </summary>
+    public void RefreshUserAvatar()
+    {
+        if (avatarManager != null)
+        {
+            avatarManager.LoadFromCurrentUser();
         }
     }
 
