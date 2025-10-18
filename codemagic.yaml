@@ -6,10 +6,10 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.haibus.labedu
+        bundle_identifier: com.halbus.labedu
       vars:
         UNITY_VERSION: 2022.3.62f2
-        BUNDLE_ID: com.haibus.labedu
+        BUNDLE_ID: com.halbus.labedu
         APP_NAME: Bioblocks
         UNITY_BIN: /Applications/Unity/Hub/Editor/2022.3.62f2/Unity.app/Contents/MacOS/Unity
       groups:
