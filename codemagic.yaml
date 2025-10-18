@@ -1,24 +1,24 @@
 workflows:
-  unity-ios:
-    name: Unity iOS Build
-    max_build_duration: 60
-    instance_type: mac_mini_m1
-    environment:
-      ios_signing:
+  unity-ios:              # 2 espaços
+    name: Unity iOS Build        # 4 espaços
+    max_build_duration: 60       # 4 espaços
+    instance_type: mac_mini_m1   # 4 espaços
+    environment:                 # 4 espaços (mesmo nível de name, max_build_duration)
+      ios_signing:               # 6 espaços
         distribution_type: app_store
         bundle_identifier: com.halbus.labedu
-      vars:
+      vars:                      # 6 espaços
         UNITY_VERSION: 2022.3.62f2
         BUNDLE_ID: com.halbus.labedu
         APP_NAME: Bioblocks
         UNITY_BIN: /Applications/Unity/Hub/Editor/2022.3.62f2/Unity.app/Contents/MacOS/Unity
-      groups:
+      groups:                    # 6 espaços
         - unity_credentials
         - app_store_credentials
-      xcode: latest
-      node: latest
+      xcode: latest              # 6 espaços
+      node: latest               # 6 espaços
     
-    scripts:
+    scripts:                     # 4 espaços (mesmo nível de environment!)
       - name: Activate Unity License
         script: | 
           $UNITY_HOME/Unity.app/Contents/MacOS/Unity \
@@ -49,10 +49,10 @@ workflows:
             --workspace "ios/${APP_NAME}.xcworkspace" \
             --scheme ${APP_NAME}
     
-    artifacts:
+    artifacts:                   # 4 espaços (mesmo nível de scripts)
       - build/ios/*.ipa
     
-    publishing:
+    publishing:                  # 4 espaços (mesmo nível de artifacts)
       app_store_connect:
         apple_id: ${APPLE_ID}
         password: ${APP_SPECIFIC_PASSWORD}
