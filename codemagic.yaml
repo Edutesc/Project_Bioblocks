@@ -20,7 +20,7 @@ workflows:
     scripts:
       - name: Activate Unity License
         script: | 
-          unity-editor \
+          $UNITY_HOME/Contents/MacOS/Unity \
             -batchmode \
             -quit \
             -logFile \
@@ -33,7 +33,7 @@ workflows:
       
       - name: Build Unity iOS project
         script: | 
-          unity-editor \
+          $UNITY_HOME/Contents/MacOS/Unity \
             -batchmode \
             -quit \
             -logFile \
