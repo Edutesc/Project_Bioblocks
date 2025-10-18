@@ -24,7 +24,6 @@ workflows:
             -batchmode \
             -quit \
             -logFile \
-            -serial ${UNITY_SERIAL} \
             -username ${UNITY_EMAIL} \
             -password ${UNITY_PASSWORD}
       
