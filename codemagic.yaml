@@ -1,41 +1,69 @@
-scripts:
-  - name: Install Unity
-    script: | 
-      echo "Installing Unity ${UNITY_VERSION}"
-      brew install --cask unity-hub
-      /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install --version ${UNITY_VERSION} --changeset c1a37c6a3757 --module ios
+workflows:
+  unity-ios:
+    name: Unity iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.halbus.labedu
+      vars:
+        UNITY_VERSION: 2022.3.62f2
+        BUNDLE_ID: com.halbus.labedu
+        APP_NAME: Bioblocks
+        UNITY_BIN: /Applications/Unity/Hub/Editor/2022.3.62f2/Unity.app/Contents/MacOS/Unity
+      groups:
+        - unity_credentials
+        - app_store_credentials
+      xcode: latest
+      node: latest
+    
+    scripts:
+      - name: Install Unity
+        script: | 
+          echo "Installing Unity ${UNITY_VERSION}"
+          brew install --cask unity-hub
+          /Applications/Unity\ Hub.app/Contents/MacOS/Unity\ Hub -- --headless install --version ${UNITY_VERSION} --changeset c1a37c6a3757 --module ios
       
-  - name: Set Unity path
-    script: |
-      export UNITY_PATH="/Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity"
-      echo "Unity path: $UNITY_PATH"
+      - name: Set Unity path
+        script: |
+          export UNITY_PATH="/Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity"
+          echo "Unity path: $UNITY_PATH"
       
-  - name: Activate Unity License
-    script: | 
-      /Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity \
-        -batchmode \
-        -quit \
-        -logFile \
-        -serial ${UNITY_SERIAL} \
-        -username ${UNITY_EMAIL} \
-        -password ${UNITY_PASSWORD}
-  
-  - name: Set build number
-    script: | 
-      export NEW_BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_ID") + 1))
-  
-  - name: Build Unity iOS project
-    script: | 
-      /Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity \
-        -batchmode \
-        -quit \
-        -logFile \
-        -projectPath . \
-        -executeMethod BuildIos.Build \
-        -buildTarget iOS
-  
-  - name: Build iOS
-    script: | 
-      xcode-project build-ipa \
-        --workspace "ios/${APP_NAME}.xcworkspace" \
-        --scheme ${APP_NAME}
+      - name: Activate Unity License
+        script: | 
+          /Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity \
+            -batchmode \
+            -quit \
+            -logFile \
+            -serial ${UNITY_SERIAL} \
+            -username ${UNITY_EMAIL} \
+            -password ${UNITY_PASSWORD}
+      
+      - name: Set build number
+        script: | 
+          export NEW_BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_ID") + 1))
+      
+      - name: Build Unity iOS project
+        script: | 
+          /Applications/Unity/Hub/Editor/${UNITY_VERSION}/Unity.app/Contents/MacOS/Unity \
+            -batchmode \
+            -quit \
+            -logFile \
+            -projectPath . \
+            -executeMethod BuildIos.Build \
+            -buildTarget iOS
+      
+      - name: Build iOS
+        script: | 
+          xcode-project build-ipa \
+            --workspace "ios/${APP_NAME}.xcworkspace" \
+            --scheme ${APP_NAME}
+    
+    artifacts:
+      - build/ios/*.ipa
+    
+    publishing:
+      app_store_connect:
+        apple_id: ${APPLE_ID}
+        password: ${APP_SPECIFIC_PASSWORD}
