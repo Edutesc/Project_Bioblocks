@@ -18,7 +18,7 @@ workflows:
       xcode: latest
       node: latest
     
-      scripts:
+    scripts:
       - name: Activate Unity License
         script: | 
           $UNITY_HOME/Unity.app/Contents/MacOS/Unity \
@@ -35,13 +35,13 @@ workflows:
       
       - name: Build Unity iOS project
         script: | 
-            $UNITY_HOME/Unity.app/Contents/MacOS/Unity \
-              -batchmode \
-              -quit \
-              -logFile \
-              -projectPath . \
-              -executeMethod BuildIos.Build \
-              -buildTarget iOS
+          $UNITY_HOME/Unity.app/Contents/MacOS/Unity \
+            -batchmode \
+            -quit \
+            -logFile \
+            -projectPath . \
+            -executeMethod BuildIos.Build \
+            -buildTarget iOS
       
       - name: Build iOS
         script: | 
