@@ -23,7 +23,7 @@ workflows:
           $UNITY_HOME/Contents/MacOS/Unity \
             -batchmode \
             -quit \
-            -logFile \
+            -logFile - \
             -username ${UNITY_EMAIL} \
             -password ${UNITY_PASSWORD}
       
@@ -36,7 +36,7 @@ workflows:
           $UNITY_HOME/Contents/MacOS/Unity \
             -batchmode \
             -quit \
-            -logFile \
+            -logFile - \
             -projectPath . \
             -executeMethod BuildIos.Build \
             -buildTarget iOS
