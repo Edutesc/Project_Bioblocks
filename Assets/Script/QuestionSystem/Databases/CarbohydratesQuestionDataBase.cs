@@ -19,7 +19,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 1,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -28,7 +28,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 2,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -42,7 +42,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 3,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -56,7 +56,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 4,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -71,7 +71,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_5",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -84,7 +84,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 6,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -99,7 +99,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_7",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -113,7 +113,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 8,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -128,7 +128,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_9",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -137,7 +137,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 10,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -146,7 +146,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 11,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -155,7 +155,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 12,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -170,7 +170,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_13",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -185,7 +185,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_14",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -194,7 +194,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 15,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -203,7 +203,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 16,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -212,7 +212,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 17,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -221,7 +221,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 18,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -230,7 +230,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 19,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -276,7 +276,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 23,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -290,7 +290,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 24,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -299,7 +299,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 25,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -313,7 +313,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 26,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -327,7 +327,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 27,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -336,7 +336,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 28,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -350,7 +350,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 29,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -374,7 +374,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_31",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -383,7 +383,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 32,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -398,7 +398,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_33",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -413,7 +413,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_34",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -428,7 +428,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_35",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -443,7 +443,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_36",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -458,7 +458,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 37,
             isImageQuestion = false,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -473,7 +473,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_38",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -487,7 +487,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 39,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -500,7 +500,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 40,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -529,7 +529,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 42,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -544,7 +544,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_43",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -559,7 +559,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = true,
             questionImagePath =  "AnswerImages/SugarDB/sugar_question_44",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "Os carboidratos são moléculas formadas, principalmente, por:",

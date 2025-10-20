@@ -49,7 +49,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 3,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -124,7 +124,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 8,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -139,7 +139,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 9,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -154,7 +154,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 10,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -169,7 +169,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 11,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -185,7 +185,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_12",
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -200,7 +200,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 13,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -215,7 +215,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 14,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -230,7 +230,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 15,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -245,7 +245,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 16,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -260,7 +260,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 17,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -275,7 +275,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 18,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -290,7 +290,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 19,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
          new Question
         {
@@ -305,7 +305,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 20,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
        new Question
         {
@@ -321,7 +321,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_21",
-            questionLevel = 1
+            questionLevel = 3
         },
        new Question
         {
@@ -337,7 +337,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_22",
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -352,7 +352,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 23,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -367,7 +367,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 24,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -382,7 +382,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 25,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -397,7 +397,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 26,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -412,7 +412,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 27,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
        new Question
         {
@@ -428,7 +428,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_28",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -443,7 +443,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 29,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -458,7 +458,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 30,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -473,7 +473,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 31,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -488,7 +488,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 32,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -503,7 +503,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 33,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -518,7 +518,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 34,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -533,7 +533,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 35,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -548,7 +548,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 36,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -563,7 +563,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 37,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -578,7 +578,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 38,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -593,7 +593,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 39,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -608,7 +608,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 40,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -623,7 +623,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 41,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -638,7 +638,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 42,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {

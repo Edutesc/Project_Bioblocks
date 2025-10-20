@@ -60,7 +60,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 4,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
        },
         new Question
         {
@@ -74,7 +74,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 5,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
        },
         new Question
         {
@@ -102,7 +102,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 7,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
        },
         new Question
         {
@@ -116,7 +116,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 8,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -130,7 +130,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 9,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -144,7 +144,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 10,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -159,7 +159,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 11,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -173,7 +173,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 12,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -187,7 +187,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 13,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
        new Question
         {
@@ -202,7 +202,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 14,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -216,7 +216,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 15,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -230,7 +230,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 16,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -244,7 +244,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 17,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -258,7 +258,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 18,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -272,7 +272,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 19,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -286,7 +286,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 20,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -300,7 +300,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 21,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -314,7 +314,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 22,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -328,7 +328,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 23,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -344,7 +344,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/LipidDB/lipids_question_40",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -358,7 +358,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 25,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -372,7 +372,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 26,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -387,7 +387,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 27,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -401,7 +401,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 28,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -415,7 +415,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 29,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -429,7 +429,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 30,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -443,7 +443,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 31,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -457,7 +457,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 32,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -471,7 +471,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 33,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -485,7 +485,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 34,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -499,7 +499,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 35,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -513,7 +513,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 36,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -529,7 +529,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/LipidDB/lipids_question_37",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -545,7 +545,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             isImageAnswer = false,
             questionImagePath =  "AnswerImages/LipidDB/lipids_question_38",
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -574,7 +574,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 40,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -588,7 +588,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 41,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -602,7 +602,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 42,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -616,7 +616,7 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 43,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {

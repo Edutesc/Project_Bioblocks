@@ -19,7 +19,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 1,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -109,7 +109,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 7,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -124,7 +124,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 8,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -139,7 +139,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 9,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -169,7 +169,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 11,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -184,7 +184,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 12,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -199,7 +199,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 13,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -214,7 +214,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 14,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -229,7 +229,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 15,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -244,7 +244,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 16,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -259,7 +259,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 17,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -274,7 +274,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 18,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -349,7 +349,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 23,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -364,7 +364,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 24,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -379,7 +379,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 25,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -394,7 +394,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 26,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -409,7 +409,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 27,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -469,7 +469,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 31,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -484,7 +484,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 32,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -499,7 +499,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 33,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -514,7 +514,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 34,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -559,7 +559,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 37,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -574,7 +574,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 38,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -589,7 +589,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 39,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -739,7 +739,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 49,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -754,7 +754,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 50,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
