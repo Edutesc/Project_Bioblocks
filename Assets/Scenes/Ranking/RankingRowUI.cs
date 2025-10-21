@@ -13,7 +13,7 @@ public class RankingRowUI : MonoBehaviour
 
     [Header("Image Components")]
     [SerializeField] private RawImage profileImage;
-    [SerializeField] private RankingImageManager imageManager;
+    [SerializeField] private ProfileImageLoader imageLoader;
 
     [Header("Layout Elements")]
     [SerializeField] private LayoutElement rankLayout;
@@ -29,14 +29,14 @@ public class RankingRowUI : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>();
 
-        // Auto-encontrar o RankingImageManager se não estiver atribuído
-        if (imageManager == null)
+        // Auto-encontrar o ProfileImageLoader se não estiver atribuído
+        if (imageLoader == null)
         {
-            imageManager = GetComponent<RankingImageManager>();
-            if (imageManager == null)
+            imageLoader = GetComponent<ProfileImageLoader>();
+            if (imageLoader == null)
             {
-                Debug.LogError("RankingImageManager não encontrado! Adicionando...");
-                imageManager = gameObject.AddComponent<RankingImageManager>();
+                Debug.LogError("ProfileImageLoader não encontrado! Adicionando...");
+                imageLoader = gameObject.AddComponent<ProfileImageLoader>();
             }
         }
 
@@ -46,7 +46,7 @@ public class RankingRowUI : MonoBehaviour
             profileImage = GetComponentInChildren<RawImage>();
             if (profileImage != null)
             {
-                imageManager.SetImageContent(profileImage);
+                imageLoader.SetImageContent(profileImage);
             }
             else
             {
@@ -128,9 +128,9 @@ public class RankingRowUI : MonoBehaviour
 
     public void Setup(int rank, string userName, int totalScore, int weekScore, string profileImageUrl, bool isCurrentUser)
     {
-        if (imageManager == null)
+        if (imageLoader == null)
         {
-            Debug.LogError("RankingImageManager é null em Setup!");
+            Debug.LogError("ProfileImageLoader é null em Setup!");
             return;
         }
 
@@ -138,8 +138,8 @@ public class RankingRowUI : MonoBehaviour
         nickNameText.text = userName;
         // totalScoreText.text = $"Total de Pontos: {totalScore} XP"; // Formato como na imagem 1
 
-         if (totalScoreText != null)
-        totalScoreText.gameObject.SetActive(false);
+        if (totalScoreText != null)
+            totalScoreText.gameObject.SetActive(false);
 
         if (weekScoreText != null)
             weekScoreText.text = $"{totalScore} XP"; // Formato como na imagem 1
@@ -147,7 +147,7 @@ public class RankingRowUI : MonoBehaviour
         SetupColors(rank, isCurrentUser);
 
         Debug.Log($"Tentando carregar imagem para {userName}: {profileImageUrl}");
-        imageManager.LoadProfileImage(profileImageUrl);
+        imageLoader.LoadProfileImage(profileImageUrl);
     }
 
     public void SetupAsExtraRow(int actualRank, string userName, int score, string profileImageUrl)
