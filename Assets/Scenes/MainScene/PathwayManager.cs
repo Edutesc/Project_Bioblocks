@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
@@ -113,8 +113,6 @@ public class PathwayManager : MonoBehaviour
             int percentageAnswered = totalQuestions > 0 ? (count * 100) / totalQuestions : 0;
             percentageAnswered = Mathf.Min(percentageAnswered, 100);
 
-            // Buscar o componente CircularProgressIndicator diretamente
-            // Assumindo que est· dentro do bot„o correspondente
             string progressObjectName = $"{databankName}Porcentage"; // Sem "Text"
             GameObject progressObject = GameObject.Find(progressObjectName);
 
@@ -127,12 +125,12 @@ public class PathwayManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"CircularProgressIndicator n„o encontrado em {progressObjectName}");
+                    Debug.LogWarning($"CircularProgressIndicator n√£o encontrado em {progressObjectName}");
                 }
             }
             else
             {
-                Debug.LogWarning($"GameObject {progressObjectName} n„o encontrado");
+                Debug.LogWarning($"GameObject {progressObjectName} n√£o encontrado");
             }
         }
     }

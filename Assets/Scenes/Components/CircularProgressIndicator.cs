@@ -6,8 +6,8 @@ using TMPro;
 public class CircularProgressIndicator : MonoBehaviour
 {
     [Header("Configurações de Visual")]
-    [SerializeField] private Image backgroundRing; // circle_mask (anel branco de fundo)
-    [SerializeField] private Image fillImage; // circle_fill (anel colorido que preenche)
+    [SerializeField] private Image backgroundRing; // MaskCircle (anel de fundo)
+    [SerializeField] private Image fillImage; // CircleFill (anel que preenche)
     [SerializeField] private TMP_Text percentageText;
 
     [Header("Animação")]
@@ -57,20 +57,32 @@ public class CircularProgressIndicator : MonoBehaviour
 
         foreach (Image img in images)
         {
-            // Identificar pelo nome do sprite ou do GameObject
-            if (img.sprite != null)
+            string objName = img.gameObject.name.ToLower();
+
+            // Identificar pelo nome do GameObject
+            if (objName.Contains("mask") && backgroundRing == null)
+            {
+                backgroundRing = img;
+                Debug.Log($"Auto-detectado background ring: {img.name}");
+            }
+            else if (objName.Contains("fill") && fillImage == null)
+            {
+                fillImage = img;
+                Debug.Log($"Auto-detectado fill image: {img.name}");
+            }
+            // Fallback: identificar pelo sprite se o nome do GameObject não ajudar
+            else if (img.sprite != null && backgroundRing == null && fillImage == null)
             {
                 string spriteName = img.sprite.name.ToLower();
-
                 if (spriteName.Contains("mask") && backgroundRing == null)
                 {
                     backgroundRing = img;
-                    Debug.Log($"Auto-detectado background ring: {img.name}");
+                    Debug.Log($"Auto-detectado background ring por sprite: {img.name}");
                 }
                 else if (spriteName.Contains("fill") && fillImage == null)
                 {
                     fillImage = img;
-                    Debug.Log($"Auto-detectado fill image: {img.name}");
+                    Debug.Log($"Auto-detectado fill image por sprite: {img.name}");
                 }
             }
         }
@@ -92,32 +104,51 @@ public class CircularProgressIndicator : MonoBehaviour
         fillImage.fillAmount = 0f;
         fillImage.enabled = true;
 
-        // Remover Mask se existir
-        Mask mask = fillImage.GetComponent<Mask>();
-        if (mask != null)
-        {
-            Debug.LogWarning($"Removendo Mask de {fillImage.name} - não é necessário!");
-            DestroyImmediate(mask);
-        }
-
         // Configurar o background ring
         if (backgroundRing != null)
         {
             backgroundRing.type = Image.Type.Simple;
             backgroundRing.enabled = true;
 
-            // Remover Mask do background
-            Mask bgMask = backgroundRing.GetComponent<Mask>();
-            if (bgMask != null)
-            {
-                Debug.LogWarning($"Removendo Mask de {backgroundRing.name}");
-                DestroyImmediate(bgMask);
-            }
-
             // Garantir que o fillImage renderiza por cima
             fillImage.transform.SetAsLastSibling();
         }
+
+        // Limpar componentes Mask desnecessários (só no Editor, não em Play Mode)
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            CleanupMaskComponents();
+        }
+#endif
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Remove componentes Mask desnecessários apenas no Editor
+    /// </summary>
+    private void CleanupMaskComponents()
+    {
+        // Remove Mask do fillImage se existir
+        Mask fillMask = fillImage.GetComponent<Mask>();
+        if (fillMask != null)
+        {
+            Debug.Log($"Removendo Mask de {fillImage.name} - não é necessário!");
+            DestroyImmediate(fillMask);
+        }
+
+        // Remove Mask do background se existir
+        if (backgroundRing != null)
+        {
+            Mask bgMask = backgroundRing.GetComponent<Mask>();
+            if (bgMask != null)
+            {
+                Debug.Log($"Removendo Mask de {backgroundRing.name} - não é necessário!");
+                DestroyImmediate(bgMask);
+            }
+        }
+    }
+#endif
 
     private void Start()
     {
@@ -188,22 +219,22 @@ public class CircularProgressIndicator : MonoBehaviour
 
         targetFillAmount = percentage / 100f;
 
-        Debug.Log($"SetProgress: {percentage}% - FillAmount: {targetFillAmount}");
+        Debug.Log($"SetProgress chamado para {gameObject.name}: {percentage}% - FillAmount: {targetFillAmount}");
     }
 
     private void UpdateVisuals(float fillAmount)
     {
         if (fillImage == null) return;
 
-        // Simplesmente atualizar o preenchimento radial
+        // Atualiza o preenchimento radial
         // A cor permanece a original do sprite (preserva gradiente e efeito 3D)
         fillImage.fillAmount = fillAmount;
     }
 
-    // Método para debug no editor
+    // Método para debug e configuração no editor
     private void OnValidate()
     {
-        if (fillImage != null && Application.isPlaying == false)
+        if (fillImage != null && !Application.isPlaying)
         {
             fillImage.type = Image.Type.Filled;
             fillImage.fillMethod = Image.FillMethod.Radial360;
@@ -211,7 +242,7 @@ public class CircularProgressIndicator : MonoBehaviour
             fillImage.fillClockwise = true;
         }
 
-        if (backgroundRing != null && Application.isPlaying == false)
+        if (backgroundRing != null && !Application.isPlaying)
         {
             backgroundRing.type = Image.Type.Simple;
         }
