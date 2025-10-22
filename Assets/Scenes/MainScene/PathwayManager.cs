@@ -92,16 +92,16 @@ public class PathwayManager : MonoBehaviour
 
         string[] allDatabases = new string[]
         {
-        "AcidBaseBufferQuestionDatabase",
-        "AminoacidQuestionDatabase",
-        "BiochemistryIntroductionQuestionDatabase",
-        "CarbohydratesQuestionDatabase",
-        "EnzymeQuestionDatabase",
-        "LipidsQuestionDatabase",
-        "MembranesQuestionDatabase",
-        "NucleicAcidsQuestionDatabase",
-        "ProteinQuestionDatabase",
-        "WaterQuestionDatabase"
+            "AcidBaseBufferQuestionDatabase",
+            "AminoacidQuestionDatabase",
+            "BiochemistryIntroductionQuestionDatabase",
+            "CarbohydratesQuestionDatabase",
+            "EnzymeQuestionDatabase",
+            "LipidsQuestionDatabase",
+            "MembranesQuestionDatabase",
+            "NucleicAcidsQuestionDatabase",
+            "ProteinQuestionDatabase",
+            "WaterQuestionDatabase"
         };
 
         foreach (string databankName in allDatabases)
@@ -111,25 +111,28 @@ public class PathwayManager : MonoBehaviour
             if (totalQuestions <= 0) totalQuestions = 50;
 
             int percentageAnswered = totalQuestions > 0 ? (count * 100) / totalQuestions : 0;
-
             percentageAnswered = Mathf.Min(percentageAnswered, 100);
 
-            string objectName = $"{databankName}PorcentageText";
-            GameObject textObject = GameObject.Find(objectName);
+            // Buscar o componente CircularProgressIndicator diretamente
+            // Assumindo que está dentro do botão correspondente
+            string progressObjectName = $"{databankName}Porcentage"; // Sem "Text"
+            GameObject progressObject = GameObject.Find(progressObjectName);
 
-            if (textObject != null)
+            if (progressObject != null)
             {
-                TextMeshProUGUI tmpText = textObject.GetComponent<TextMeshProUGUI>();
-                if (tmpText != null)
-                {
-                    tmpText.text = $"{percentageAnswered}%";
-                }
-
-                CircularProgressIndicator progressIndicator = textObject.GetComponentInParent<CircularProgressIndicator>();
+                CircularProgressIndicator progressIndicator = progressObject.GetComponent<CircularProgressIndicator>();
                 if (progressIndicator != null)
                 {
                     progressIndicator.SetProgress(percentageAnswered);
                 }
+                else
+                {
+                    Debug.LogWarning($"CircularProgressIndicator não encontrado em {progressObjectName}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"GameObject {progressObjectName} não encontrado");
             }
         }
     }
