@@ -7,8 +7,13 @@ using QuestionSystem;
 
 public class QuestionUIManager : MonoBehaviour
 {
+    [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private Image questionImage;
+
+    [Header("Theme Management")]
+    [SerializeField] private AnswerButtonThemeManager answerButtonThemeManager;
+    [SerializeField] private QuestionBackgroundThemeManager questionBackgroundThemeManager;
 
     private Sprite preloadedQuestionImage;
     private bool isPreloading = false;
@@ -22,10 +27,16 @@ public class QuestionUIManager : MonoBehaviour
     {
         if (questionText == null) Debug.LogError("QuestionText não atribuído");
         if (questionImage == null) Debug.LogError("QuestionImage não atribuído");
+        if (answerButtonThemeManager == null) Debug.LogWarning("AnswerButtonThemeManager não atribuído");
+        if (questionBackgroundThemeManager == null) Debug.LogWarning("QuestionBackgroundThemeManager não atribuído");
     }
 
     public void ShowQuestion(Question question)
     {
+        // APLICA O TEMA baseado no questionLevel
+        ApplyTheme(question);
+
+        // Depois mostra o conteúdo
         if (question.isImageQuestion)
         {
             ShowImageQuestion(question);
@@ -36,19 +47,31 @@ public class QuestionUIManager : MonoBehaviour
         }
     }
 
+    private void ApplyTheme(Question question)
+    {
+        // Aplica tema nos botões de resposta (só se for texto)
+        if (answerButtonThemeManager != null)
+        {
+            answerButtonThemeManager.ApplyTheme(question.questionLevel, question.isImageAnswer);
+        }
+
+        // Aplica tema no background da questão (só se for texto)
+        if (questionBackgroundThemeManager != null && !question.isImageQuestion)
+        {
+            questionBackgroundThemeManager.ApplyTheme(question.questionLevel);
+        }
+    }
+
     private void ShowImageQuestion(Question question)
     {
-        // Exibe texto da questão (mesmo para questões com imagem)
         questionText.text = question.questionText;
-        
-        // Se a imagem foi pré-carregada, usa ela imediatamente
+
         if (preloadedQuestionImage != null && !string.IsNullOrEmpty(question.questionImagePath))
         {
             questionImage.sprite = preloadedQuestionImage;
             questionImage.gameObject.SetActive(true);
-            preloadedQuestionImage = null; // Limpa a referência
+            preloadedQuestionImage = null;
         }
-        // Caso contrário, carrega normalmente
         else if (!string.IsNullOrEmpty(question.questionImagePath))
         {
             StartCoroutine(LoadQuestionImage(question.questionImagePath));
@@ -58,7 +81,6 @@ public class QuestionUIManager : MonoBehaviour
     private void ShowTextQuestion(Question question)
     {
         questionText.text = question.questionText;
-        // Garante que a imagem está oculta para questões de texto
         questionImage.gameObject.SetActive(false);
     }
 
@@ -79,7 +101,6 @@ public class QuestionUIManager : MonoBehaviour
         }
     }
 
-    // Novo método para pré-carregar a imagem da próxima questão
     public async Task PreloadQuestionImage(Question questionToPreload)
     {
         if (!questionToPreload.isImageQuestion || string.IsNullOrEmpty(questionToPreload.questionImagePath))
@@ -88,15 +109,14 @@ public class QuestionUIManager : MonoBehaviour
             return;
         }
 
-        if (isPreloading)
-            return;
+        if (isPreloading) return;
 
         isPreloading = true;
-        
+
         var tcs = new TaskCompletionSource<bool>();
         StartCoroutine(PreloadImageCoroutine(questionToPreload.questionImagePath, tcs));
         await tcs.Task;
-        
+
         isPreloading = false;
     }
 

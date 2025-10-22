@@ -1,14 +1,23 @@
+using QuestionSystem;
+using System.Drawing;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using QuestionSystem;
-using TMPro;
+using static UnityEditor.Rendering.FilterWindow;
 
 public class QuestionAnswerManager : MonoBehaviour
 {
     [Header("Answer Buttons")]
     [SerializeField] private Button[] textAnswerButtons;
     [SerializeField] private Button[] imageAnswerButtons;
-    
+
+    [Header("Theme Configuration")]
+    [SerializeField] private QuestionLevelConfig levelConfig;
+
+    [Header("Text Button Components (para aplicar tema)")]
+    [SerializeField] private Image[] textButtonBackgrounds; // Backgrounds dos 4 botões de texto
+    [SerializeField] private TextMeshProUGUI[] letterTexts; // A, B, C, D
+
     private TextMeshProUGUI[] buttonTexts;
     private Image[] buttonImages;
 
@@ -76,6 +85,10 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
+        // PRIMEIRO: Aplica o tema baseado no level
+        ApplyTheme(question.questionLevel, question.isImageAnswer);
+
+        // DEPOIS: Configura o conteúdo
         if (question.isImageAnswer)
         {
             SetupImageAnswers(question);
@@ -83,6 +96,67 @@ public class QuestionAnswerManager : MonoBehaviour
         else
         {
             SetupTextAnswers(question);
+        }
+    }
+
+    /// <summary>
+    /// Aplica o tema visual nos botões de resposta baseado no nível da questão
+    /// </summary>
+    private void ApplyTheme(int questionLevel, bool isImageAnswer)
+    {
+        // Só aplica tema se for resposta de TEXTO
+        if (isImageAnswer)
+        {
+            Debug.Log("🔘 Respostas são imagens, não aplica tema nos botões");
+            return;
+        }
+
+        if (levelConfig == null)
+        {
+            Debug.LogError("⚠️ QuestionLevelConfig não está atribuído no QuestionAnswerManager!");
+            return;
+        }
+
+        var theme = levelConfig.GetThemeForLevel(questionLevel);
+
+        if (theme == null)
+        {
+            Debug.LogError($"⚠️ Theme não encontrado para level {questionLevel}");
+            return;
+        }
+
+        Debug.Log($"🔘 Aplicando tema nos botões - Level {questionLevel} ({theme.levelName})");
+
+        // Aplica tema nos backgrounds dos botões de texto
+        for (int i = 0; i < textButtonBackgrounds.Length; i++)
+        {
+            if (textButtonBackgrounds[i] != null)
+            {
+                textButtonBackgrounds[i].sprite = theme.answerButtonBackground;
+                Debug.Log($"✅ Botão {i} background aplicado: {theme.answerButtonBackground.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ Background do botão {i} não está atribuído!");
+            }
+        }
+
+        // Aplica cor nas letras (A, B, C, D)
+        for (int i = 0; i < letterTexts.Length; i++)
+        {
+            if (letterTexts[i] != null)
+            {
+                letterTexts[i].color = theme.letterTextColor;
+            }
+        }
+
+        // Aplica cor nos textos das respostas
+        for (int i = 0; i < buttonTexts.Length; i++)
+        {
+            if (buttonTexts[i] != null)
+            {
+                buttonTexts[i].color = theme.answerTextColor;
+            }
         }
     }
 
@@ -159,6 +233,22 @@ public class QuestionAnswerManager : MonoBehaviour
             if (button != null)
             {
                 button.interactable = true;
+            }
+        }
+    }
+
+    private void OnValidate()
+    {
+        // Auto-preenche as letras A, B, C, D
+        if (letterTexts != null && letterTexts.Length == 4)
+        {
+            string[] letters = { "A", "B", "C", "D" };
+            for (int i = 0; i < letterTexts.Length; i++)
+            {
+                if (letterTexts[i] != null && string.IsNullOrEmpty(letterTexts[i].text))
+                {
+                    letterTexts[i].text = letters[i];
+                }
             }
         }
     }

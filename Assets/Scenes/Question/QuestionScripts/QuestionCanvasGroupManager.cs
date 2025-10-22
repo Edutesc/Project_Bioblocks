@@ -22,6 +22,15 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     [SerializeField] private CanvasGroup loadingCanvasGroup;
     [SerializeField] private CanvasGroup questionBottomBar;
 
+    [Header("Level Configuration")]
+    [SerializeField] private QuestionLevelConfig levelConfig;
+
+    [Header("Background Images")]
+    [SerializeField] private Image questionTextBackgroundImage;
+    [SerializeField] private Image questionImageBackgroundImage;
+
+    private int currentQuestionLevel = 1;
+
     private void Awake()
     {
         if (!AreAllCanvasGroupsAssigned())
@@ -43,8 +52,13 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         SetCanvasGroupState(questionBottomBar, false);
     }
 
-    public void ShowQuestion(bool isImageQuestion, bool isImageAnswer)
+    // ATUALIZADO: Agora recebe o questionLevel
+    public void ShowQuestion(bool isImageQuestion, bool isImageAnswer, int questionLevel)
     {
+        currentQuestionLevel = questionLevel;
+
+        // Aplica o tema ANTES de mostrar
+        ApplyLevelTheme(questionLevel, isImageQuestion, isImageAnswer);
 
         SetCanvasGroupState(loadingCanvasGroup, false);
         SetCanvasGroupState(questionTextContainer, !isImageQuestion);
@@ -52,6 +66,44 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         SetCanvasGroupState(answerTextCanvasGroup, !isImageAnswer);
         SetCanvasGroupState(answerImageCanvasGroup, isImageAnswer);
         SetCanvasGroupState(questionBottomBar, true);
+    }
+
+    private void ApplyLevelTheme(int level, bool isImageQuestion, bool isImageAnswer)
+    {
+        if (levelConfig == null)
+        {
+            Debug.LogError("QuestionLevelConfig não está atribuído!");
+            return;
+        }
+
+        var theme = levelConfig.GetThemeForLevel(level);
+
+        if (theme == null)
+        {
+            Debug.LogError($"Theme não encontrado para level {level}");
+            return;
+        }
+
+        Debug.Log($"Aplicando tema level {level} ({theme.levelName})");
+
+        if (!isImageQuestion)
+        {
+            if (questionTextBackgroundImage != null)
+            {
+                questionTextBackgroundImage.sprite = theme.questionBackground;
+                Debug.Log($"Background da questão aplicado");
+            }
+        }
+    }
+
+    public Color GetFeedbackColorForCurrentLevel(bool isCorrect)
+    {
+        if (levelConfig == null) return isCorrect ? Color.green : Color.red;
+
+        var theme = levelConfig.GetThemeForLevel(currentQuestionLevel);
+        return theme != null
+            ? (isCorrect ? theme.feedbackCorrectColor : theme.feedbackIncorrectColor)
+            : (isCorrect ? Color.green : Color.red);
     }
 
     public void ShowAnswerFeedback(bool isCorrect, Color correctColor, Color incorrectColor)
@@ -119,7 +171,6 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     {
         if (questionBonusUIFeedback != null)
         {
-            // Não usamos SetCanvasGroupState porque queremos tratamento especial
             questionBonusUIFeedback.gameObject.SetActive(show);
             questionBonusUIFeedback.alpha = show ? 1f : 0f;
             questionBonusUIFeedback.interactable = show;
@@ -136,7 +187,6 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         SetCanvasGroupInteractable(answerTextCanvasGroup, false);
         SetCanvasGroupInteractable(answerImageCanvasGroup, false);
     }
-
 
     private void InitializeCanvasGroups()
     {
@@ -217,7 +267,7 @@ public class QuestionCanvasGroupManager : MonoBehaviour
             questionBottomBar,
             questionTextContainer,
             questionImageContainer,
-            questionBonusUIFeedback 
+            questionBonusUIFeedback
         };
     }
 
