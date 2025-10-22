@@ -88,7 +88,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 7,
             isImageAnswer = true,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -133,7 +133,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 12,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -147,7 +147,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 13,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -156,7 +156,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 14,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -188,7 +188,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 17,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -202,7 +202,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 18,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -216,7 +216,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 19,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -230,7 +230,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 20,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -244,7 +244,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 21,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -258,7 +258,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 22,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -272,7 +272,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 23,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
 
         new Question {
@@ -282,7 +282,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 24,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -291,7 +291,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 25,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -300,7 +300,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 26,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -309,7 +309,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 27,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -323,7 +323,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 28,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -337,7 +337,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 29,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -351,7 +351,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 30,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -360,7 +360,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 31,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -369,7 +369,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 32,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -378,7 +378,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 33,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -387,7 +387,7 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 34,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
