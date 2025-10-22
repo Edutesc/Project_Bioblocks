@@ -404,7 +404,8 @@ public class QuestionManager : MonoBehaviour
             answerManager.SetupAnswerButtons(nextQuestionToShow);
             questionCanvasGroupManager.ShowQuestion(
                 isImageQuestion: nextQuestionToShow.isImageQuestion,
-                isImageAnswer: nextQuestionToShow.isImageAnswer
+                isImageAnswer: nextQuestionToShow.isImageAnswer,
+                questionLevel: nextQuestionToShow.questionLevel
             );
             questionUIManager.ShowQuestion(nextQuestionToShow);
 
@@ -432,7 +433,8 @@ public class QuestionManager : MonoBehaviour
             answerManager.SetupAnswerButtons(newQuestion);
             questionCanvasGroupManager.ShowQuestion(
                 isImageQuestion: newQuestion.isImageQuestion,
-                isImageAnswer: newQuestion.isImageAnswer
+                isImageAnswer: newQuestion.isImageAnswer,
+                questionLevel: newQuestion.questionLevel
             );
             questionUIManager.ShowQuestion(newQuestion);
 
@@ -451,7 +453,8 @@ public class QuestionManager : MonoBehaviour
             answerManager.SetupAnswerButtons(currentQuestion);
             questionCanvasGroupManager.ShowQuestion(
                 isImageQuestion: currentQuestion.isImageQuestion,
-                isImageAnswer: currentQuestion.isImageAnswer
+                isImageAnswer: currentQuestion.isImageAnswer,
+                questionLevel: currentQuestion.questionLevel
             );
             questionUIManager.ShowQuestion(currentQuestion);
 
