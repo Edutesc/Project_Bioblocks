@@ -8,10 +8,12 @@ public class ButtonPressEffect : MonoBehaviour, IPointerDownHandler, IPointerUpH
     private Button button;
     private RectTransform rect;
     private Vector3 originalScale;
-    private float pressedScale = 0.98f;
-    private float pressDuration = 0.15f;
-    private float releaseDuration = 0.15f;
     private Coroutine currentAnimation;
+
+    [Header("Animation Settings")]
+    [SerializeField] private float pressedScale = 0.98f;
+    [SerializeField] private float pressDuration = 0.15f;
+    [SerializeField] private float releaseDuration = 0.15f;
 
     [Header("Scroll Protection")]
     [SerializeField] private float dragThreshold = 15f; // Distância em pixels para considerar drag
@@ -21,10 +23,18 @@ public class ButtonPressEffect : MonoBehaviour, IPointerDownHandler, IPointerUpH
     private float pointerDownTime;
     private bool wasDragging = false;
 
-    private void Start()
+    private void Awake()
     {
         button = GetComponent<Button>();
         rect = GetComponent<RectTransform>();
+
+        if (rect == null)
+        {
+            Debug.LogError("ButtonPressEffect precisa de um RectTransform!", this);
+            enabled = false;
+            return;
+        }
+
         originalScale = rect.localScale;
     }
 
