@@ -5,11 +5,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections;
 
-/// <summary>
-/// Gerenciador de upload de imagens de perfil
-/// Estende ProfileImageLoader com funcionalidades de upload (NativeGallery, validação, Storage)
-/// Usado exclusivamente na ProfileScene
-/// </summary>
 [RequireComponent(typeof(ProfileImageLoader))]
 public class ProfileImageUploader : MonoBehaviour
 {
@@ -18,7 +13,7 @@ public class ProfileImageUploader : MonoBehaviour
     [SerializeField] private bool enableUploadOnStart = true;
 
     [Header("Validation")]
-    [SerializeField] private int maxImageSizeBytes = 1024 * 1024; // 1MB
+    [SerializeField] private int maxImageSizeBytes = 1024 * 1024;
 
     private ProfileImageLoader imageLoader;
     private UserData currentUserData;
@@ -26,7 +21,6 @@ public class ProfileImageUploader : MonoBehaviour
 
     private void Awake()
     {
-        // Obter referência ao ProfileImageLoader (sempre presente devido ao RequireComponent)
         imageLoader = GetComponent<ProfileImageLoader>();
 
         if (imageLoader == null)
@@ -35,7 +29,6 @@ public class ProfileImageUploader : MonoBehaviour
             return;
         }
 
-        // Garantir que o loader está inicializado
         imageLoader.Initialize();
     }
 
@@ -48,13 +41,9 @@ public class ProfileImageUploader : MonoBehaviour
             EnableUpload(true);
         }
 
-        // Carregar imagem atual do perfil
         LoadCurrentProfileImage();
     }
 
-    /// <summary>
-    /// Ativa/desativa a funcionalidade de upload
-    /// </summary>
     public void EnableUpload(bool enable)
     {
         if (uploadButton == null)
@@ -76,9 +65,6 @@ public class ProfileImageUploader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Carrega a imagem atual do perfil do usuário
-    /// </summary>
     private void LoadCurrentProfileImage()
     {
         if (currentUserData != null && !string.IsNullOrEmpty(currentUserData.ProfileImageUrl))
@@ -91,9 +77,6 @@ public class ProfileImageUploader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Callback do botão de upload
-    /// </summary>
     private void OnUploadButtonClick()
     {
         if (isProcessing || NativeGallery.IsMediaPickerBusy())
@@ -105,9 +88,6 @@ public class ProfileImageUploader : MonoBehaviour
         RequestGalleryPermission();
     }
 
-    /// <summary>
-    /// Solicita permissão para acessar a galeria
-    /// </summary>
     private void RequestGalleryPermission()
     {
         bool granted = true;
@@ -121,7 +101,6 @@ public class ProfileImageUploader : MonoBehaviour
         }
         catch
         {
-            // Se não houver CheckPermission nessa plataforma/versão, seguimos adiante
             granted = true;
         }
 
@@ -141,9 +120,6 @@ public class ProfileImageUploader : MonoBehaviour
         OpenGallery();
     }
 
-    /// <summary>
-    /// Abre a galeria para selecionar uma imagem
-    /// </summary>
     private void OpenGallery()
     {
         NativeGallery.GetImageFromGallery((path) =>
@@ -160,9 +136,6 @@ public class ProfileImageUploader : MonoBehaviour
         "image/*");
     }
 
-    /// <summary>
-    /// Processa a imagem selecionada: valida, carrega e faz upload
-    /// </summary>
     private IEnumerator ProcessSelectedImage(string imagePath)
     {
         isProcessing = true;
@@ -172,7 +145,6 @@ public class ProfileImageUploader : MonoBehaviour
             uploadButton.interactable = false;
         }
 
-        // 1. Validar tamanho do arquivo
         FileInfo fileInfo = null;
         try
         {
@@ -194,7 +166,6 @@ public class ProfileImageUploader : MonoBehaviour
             yield break;
         }
 
-        // 2. Carregar imagem
         byte[] imageBytes = null;
         Texture2D texture = null;
 
@@ -204,7 +175,6 @@ public class ProfileImageUploader : MonoBehaviour
             texture = new Texture2D(2, 2);
             texture.LoadImage(imageBytes);
 
-            // Exibir preview imediatamente
             imageLoader.SetTexture(texture);
         }
         catch (Exception e)
@@ -215,7 +185,6 @@ public class ProfileImageUploader : MonoBehaviour
             yield break;
         }
 
-        // 3. Deletar imagem antiga se existir
         if (!string.IsNullOrEmpty(currentUserData.ProfileImageUrl))
         {
             Debug.Log($"[ProfileImageUploader] ===== PASSO 3: Deletando imagem antiga =====");
@@ -247,7 +216,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         Debug.Log($"[ProfileImageUploader] ===== PASSO 4: Iniciando upload da nova imagem =====");
 
-        // 4. Upload da nova imagem
         string userId = currentUserData.UserId;
         string fileName = $"profile_images/{userId}_{DateTime.UtcNow.Ticks}.jpg";
 
@@ -272,7 +240,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         Debug.Log($"[ProfileImageUploader] Upload bem-sucedido! URL: {imageUrl}");
 
-        // 5. Atualizar URL no Firestore e UserData
         Debug.Log($"[ProfileImageUploader] Atualizando URL no Firestore: {imageUrl}");
 
         bool updateSuccess = false;
@@ -291,14 +258,11 @@ public class ProfileImageUploader : MonoBehaviour
 
         Debug.Log("[ProfileImageUploader] URL atualizada no Firestore com sucesso!");
 
-        // 6. Notificar outros componentes sobre a mudança
         UserAvatarSyncHelper.NotifyAvatarChanged(imageUrl);
 
         Debug.Log("[ProfileImageUploader] ✅ Upload concluído com sucesso!");
         FinishProcessing();
     }
-
-    // ========== COROUTINES DE OPERAÇÕES ASSÍNCRONAS ==========
 
     private IEnumerator DeleteOldProfileImage(string imageUrl, Action<bool> callback)
     {
@@ -322,7 +286,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         if (taskStarted && task != null)
         {
-            // Aguardar a task completar
             while (!task.IsCompleted)
             {
                 yield return null;
@@ -333,7 +296,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         if (task != null && task.IsFaulted)
         {
-            // 404 é esperado quando a imagem não existe
             string errorMessage = task.Exception?.GetBaseException().Message ?? "";
             if (errorMessage.Contains("404") || errorMessage.Contains("Not Found"))
             {
@@ -378,7 +340,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         if (taskStarted && task != null)
         {
-            // Aguardar a task completar
             while (!task.IsCompleted)
             {
                 yield return null;
@@ -428,7 +389,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         if (taskStarted && task != null)
         {
-            // Aguardar a task completar
             while (!task.IsCompleted)
             {
                 yield return null;
@@ -450,8 +410,6 @@ public class ProfileImageUploader : MonoBehaviour
 
         Debug.Log($"[ProfileImageUploader] UpdateProfileUrl - FIM");
     }
-
-    // ========== MÉTODOS ASSÍNCRONOS ==========
 
     private async Task<string> UploadImageAsync(string fileName, byte[] imageBytes)
     {
@@ -480,8 +438,6 @@ public class ProfileImageUploader : MonoBehaviour
             throw;
         }
     }
-
-    // ========== HELPERS ==========
 
     private void ShowAlert(string message)
     {
@@ -512,8 +468,6 @@ public class ProfileImageUploader : MonoBehaviour
             uploadButton.onClick.RemoveAllListeners();
         }
     }
-
-    // ========== GETTERS PÚBLICOS ==========
 
     public ProfileImageLoader ImageLoader => imageLoader;
     public bool IsProcessing => isProcessing;
