@@ -43,6 +43,7 @@ public class UserTopBarManager : BarsManager
 
     private static UserTopBarManager _instance;
     private float lastVerificationTime = 0f;
+    private string pendingAvatarUrl = null;
 
     protected override string BarName => "PersistentUserTopBar";
     protected override string BarChildName => "TopBar";
@@ -78,29 +79,26 @@ public class UserTopBarManager : BarsManager
 
     private void InitializeAvatarManager()
     {
-        // Auto-encontrar o ProfileImageLoader  se não estiver atribuído
         if (avatarManager == null)
         {
             avatarManager = GetComponentInChildren<ProfileImageLoader>();
             if (avatarManager == null)
             {
-                Debug.LogWarning("ProfileImageLoader  não encontrado! Procurando RawImage para criar...");
+                Debug.LogWarning("ProfileImageLoader não encontrado! Procurando RawImage para criar...");
 
                 if (avatarImage != null)
                 {
-                    // Adicionar o manager no pai do RawImage (onde fica a máscara)
                     var avatarParent = avatarImage.transform.parent;
                     if (avatarParent != null)
                     {
                         avatarManager = avatarParent.gameObject.AddComponent<ProfileImageLoader>();
                         avatarManager.SetImageContent(avatarImage);
-                        Debug.Log("ProfileImageLoader  criado e configurado automaticamente");
+                        Debug.Log("ProfileImageLoader criado e configurado automaticamente");
                     }
                 }
             }
         }
 
-        // Configurar o RawImage no manager se necessário
         if (avatarManager != null && avatarImage != null)
         {
             avatarManager.SetImageContent(avatarImage);
@@ -150,11 +148,11 @@ public class UserTopBarManager : BarsManager
     {
         UpdateBarState(currentScene);
         isSceneBeingLoaded = false;
+        RefreshPendingAvatar();
     }
 
     protected override void OnSceneChangedSpecific(string sceneName)
     {
-        // Lógica específica para cada cena, se necessário
         if (scenesWithUserTopBar.Contains(sceneName))
         {
             EnsureUserTopBarVisibilityInScene(sceneName);
@@ -166,6 +164,7 @@ public class UserTopBarManager : BarsManager
         if (Time.time - lastVerificationTime < 0.5f) return;
         lastVerificationTime = Time.time;
         UpdateBarState(sceneName);
+        RefreshPendingAvatar();
     }
 
     protected override void OnEnable()
@@ -176,6 +175,8 @@ public class UserTopBarManager : BarsManager
         {
             NavigationManager.Instance.OnNavigationComplete += OnNavigationComplete;
         }
+
+        RefreshPendingAvatar();
     }
 
     private void OnDisable()
@@ -206,23 +207,29 @@ public class UserTopBarManager : BarsManager
             scoreText.text = $"{userData.WeekScore} pontos";
         }
 
-        // Carregar imagem do perfil usando o AvatarManager
         if (avatarManager != null)
         {
-            avatarManager.LoadProfileImage(userData.ProfileImageUrl);
+            if (avatarManager.gameObject.activeInHierarchy)
+            {
+                avatarManager.LoadProfileImage(userData.ProfileImageUrl);
+                pendingAvatarUrl = null;
+            }
+            else
+            {
+                Debug.Log($"[UserTopBarManager] AvatarManager inativo. Armazenando URL para carregar quando ativado: {userData.ProfileImageUrl}");
+                pendingAvatarUrl = userData.ProfileImageUrl;
+            }
         }
         else
         {
-            Debug.LogWarning("ProfileImageLoader  não está disponível para carregar a imagem");
+            Debug.LogWarning("ProfileImageLoader não está disponível para carregar a imagem");
         }
 
-        // Atualizar XP Bar
         if (xpBarText != null && xpBarFill != null)
         {
-            // Exemplo: 60 de 100 até o Nível 2
-            int currentXP = userData.WeekScore; // Ajustar conforme sua lógica
-            int maxXP = 100; // Ajustar conforme sua lógica
-            int nextLevel = 2; // Ajustar conforme sua lógica
+            int currentXP = userData.WeekScore;
+            int maxXP = 100;
+            int nextLevel = 2;
 
             xpBarText.text = $"{currentXP} de {maxXP} até o Nível {nextLevel}";
 
@@ -230,20 +237,37 @@ public class UserTopBarManager : BarsManager
             xpBarFill.fillAmount = fillAmount;
         }
 
-        // Atualizar Bonus (Fire icon)
         if (bonusText != null)
         {
-            // Exemplo: x5 streak
-            int streak = 5; // Ajustar conforme sua lógica
+            int streak = 5;
             bonusText.text = $"x{streak}";
         }
 
-        // Atualizar Level
         if (levelText != null)
         {
-            int currentLevel = 1; // Ajustar conforme sua lógica
+            int currentLevel = 1;
             levelText.text = currentLevel.ToString();
         }
+    }
+
+    private void RefreshPendingAvatar()
+    {
+        if (!string.IsNullOrEmpty(pendingAvatarUrl) && avatarManager != null)
+        {
+            if (avatarManager.gameObject.activeInHierarchy)
+            {
+                Debug.Log($"[UserTopBarManager] Carregando avatar pendente: {pendingAvatarUrl}");
+                string urlToLoad = pendingAvatarUrl;
+                pendingAvatarUrl = null;
+                avatarManager.LoadProfileImage(urlToLoad);
+            }
+        }
+    }
+
+    protected override void UpdateBarState(string sceneName)
+    {
+        base.UpdateBarState(sceneName);
+        RefreshPendingAvatar();
     }
 
     private void UpdateFromCurrentUserData()
@@ -257,7 +281,6 @@ public class UserTopBarManager : BarsManager
 
     protected override void UpdateButtonVisibility(string sceneName)
     {
-        // Este método pode ser usado se você adicionar botões na UserTopBar no futuro
     }
 
     public void EnsureUserTopBarVisibilityInScene(string sceneName)
@@ -268,10 +291,9 @@ public class UserTopBarManager : BarsManager
         {
             gameObject.SetActive(true);
             EnsureBarIntegrity();
+            RefreshPendingAvatar();
         }
     }
-
-    // ========== MÉTODOS PÚBLICOS DE GERENCIAMENTO ==========
 
     public void SetUserName(string name)
     {
@@ -319,25 +341,26 @@ public class UserTopBarManager : BarsManager
         }
     }
 
-    /// <summary>
-    /// Atualiza o avatar com uma nova URL
-    /// Chamado quando o usuário troca a foto no perfil
-    /// </summary>
     public void UpdateAvatarFromUrl(string imageUrl)
     {
         if (avatarManager != null)
         {
-            avatarManager.LoadProfileImage(imageUrl);
+            if (avatarManager.gameObject.activeInHierarchy)
+            {
+                avatarManager.LoadProfileImage(imageUrl);
+            }
+            else
+            {
+                Debug.Log($"[UserTopBarManager] Armazenando URL para carregar quando ativado: {imageUrl}");
+                pendingAvatarUrl = imageUrl;
+            }
         }
         else
         {
-            Debug.LogWarning("ProfileImageLoader  não está disponível");
+            Debug.LogWarning("ProfileImageLoader não está disponível");
         }
     }
 
-    /// <summary>
-    /// Força refresh do avatar com os dados atuais do UserData
-    /// </summary>
     public void RefreshUserAvatar()
     {
         if (avatarManager != null)
