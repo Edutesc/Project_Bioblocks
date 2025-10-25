@@ -8,14 +8,12 @@ public class QuestionScoreManager : MonoBehaviour
     private UserData currentUserData;
     private AnsweredQuestionsManager answeredQuestionsManager;
     private QuestionBonusManager questionBonusManager;
-    private BonusApplicationManager bonusApplicationManager;
 
     private void Start()
     {
         currentUserData = UserDataStore.CurrentUserData;
         answeredQuestionsManager = AnsweredQuestionsManager.Instance;
         questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
-        bonusApplicationManager = FindFirstObjectByType<BonusApplicationManager>();
 
         if (currentUserData == null)
         {
@@ -27,9 +25,9 @@ public class QuestionScoreManager : MonoBehaviour
             Debug.LogError("AnsweredQuestionsManager não encontrado");
         }
 
-        if (questionBonusManager == null && bonusApplicationManager == null)
+        if (questionBonusManager == null)
         {
-            Debug.LogWarning("Nem BonusManager nem BonusApplicationManager foram encontrados. O sistema de bônus não estará disponível.");
+            Debug.LogWarning("QuestionBonusManager não encontrado. O sistema de bônus não estará disponível.");
         }
     }
 
@@ -54,11 +52,10 @@ public class QuestionScoreManager : MonoBehaviour
 
             int actualScoreChange = scoreChange;
             
-            if (isCorrect && bonusApplicationManager != null && bonusApplicationManager.IsAnyBonusActive())
+            if (isCorrect && UserTopBarManager.Instance != null && UserTopBarManager.Instance.IsAnyBonusActive())
             {
-                actualScoreChange = bonusApplicationManager.ApplyTotalBonus(scoreChange);
+                actualScoreChange = UserTopBarManager.Instance.ApplyTotalBonus(scoreChange);
             }
-            
             else if (isCorrect && questionBonusManager != null && questionBonusManager.IsBonusActive())
             {
                 actualScoreChange = questionBonusManager.ApplyBonusToScore(scoreChange);
@@ -147,9 +144,9 @@ public class QuestionScoreManager : MonoBehaviour
 
     public bool HasBonusActive()
     {
-        if (bonusApplicationManager != null)
+        if (UserTopBarManager.Instance != null && UserTopBarManager.Instance.IsAnyBonusActive())
         {
-            return bonusApplicationManager.IsAnyBonusActive();
+            return true;
         }
 
         return questionBonusManager != null && questionBonusManager.IsBonusActive();
@@ -157,9 +154,9 @@ public class QuestionScoreManager : MonoBehaviour
 
     public int CalculateBonusScore(int baseScore)
     {
-        if (bonusApplicationManager != null && bonusApplicationManager.IsAnyBonusActive())
+        if (UserTopBarManager.Instance != null && UserTopBarManager.Instance.IsAnyBonusActive())
         {
-            return bonusApplicationManager.ApplyTotalBonus(baseScore);
+            return UserTopBarManager.Instance.ApplyTotalBonus(baseScore);
         }
 
         if (questionBonusManager != null && questionBonusManager.IsBonusActive())

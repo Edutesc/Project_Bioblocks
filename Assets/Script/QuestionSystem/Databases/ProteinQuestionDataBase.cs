@@ -528,7 +528,7 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Aminoácidos",
                 "Lipídios"
             },
-            correctIndex = 0,
+            correctIndex = 2,
             questionNumber = 34,
             isImageAnswer = false,
             isImageQuestion = false,
