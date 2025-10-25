@@ -1,9 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static AnswerButtonThemeManager;
-using static UnityEditor.Rendering.FilterWindow;
-using static UnityEngine.UIElements.VisualElement;
 
 public class AnswerButtonThemeManager : MonoBehaviour
 {

@@ -3,7 +3,6 @@ using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Rendering.FilterWindow;
 
 public class QuestionAnswerManager : MonoBehaviour
 {
