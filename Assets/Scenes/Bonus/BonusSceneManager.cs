@@ -135,7 +135,6 @@ public class BonusSceneManager : MonoBehaviour
                 bonusTitle = "Ativar Bonus Incansável Pro",
                 bonusMessage = "Você terá xp duplicada por 10 min.\nPoderá ser cumulativo se já existir um bonus em uso.\nDeseja ativar o bonus agora?"
             }
-            // Outros mapeamentos...
         };
     }
 
@@ -232,99 +231,51 @@ public class BonusSceneManager : MonoBehaviour
                 }
             }
 
-            UpdateButtonState(bonusUIMapping, isButtonInteractable);
-
-            if (isButtonInteractable)
+            if (bonusUIMapping.bonusButton != null)
             {
-                SetupButtonAction(bonusUIMapping, matchingBonus);
+                bonusUIMapping.bonusButton.interactable = isButtonInteractable;
             }
+
+            UpdateBonusVisualState(bonusUIMapping.bonusContainer, isButtonInteractable);
         }
     }
 
-    private void UpdateSpecialBonusesStatus(List<BonusType> bonuses)
+    private void UpdateBonusVisualState(GameObject container, bool isActive)
     {
-        bool needsUpdate = false;
+        if (container == null) return;
 
-        foreach (var bonusConfig in bonusConfigs)
+        CanvasGroup canvasGroup = container.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
         {
-            var bonusName = bonusConfig.Key;
-            var config = bonusConfig.Value;
-
-            var bonus = bonuses.FirstOrDefault(b => b.BonusName == bonusName);
-            if (bonus != null && bonus.BonusCount >= config.thresholdCount && !bonus.IsBonusActive)
-            {
-                bonus.IsBonusActive = true;
-                needsUpdate = true;
-            }
+            canvasGroup = container.AddComponent<CanvasGroup>();
         }
 
-        if (needsUpdate)
-        {
-            _ = userBonusManager.SaveBonusList(userId, bonuses);
-        }
-    }
+        canvasGroup.alpha = isActive ? 1f : inactiveAlpha;
 
-    private void UpdateButtonState(BonusUIElements bonusUI, bool isActive)
-    {
-        if (bonusUI.bonusButton != null)
+        if (useGrayscaleWhenInactive)
         {
-            bonusUI.bonusButton.interactable = isActive;
-            Image buttonImage = bonusUI.bonusButton.GetComponent<Image>();
-
-            if (buttonImage != null)
+            Image[] images = container.GetComponentsInChildren<Image>();
+            foreach (var img in images)
             {
-                if (isActive)
+                if (img != null)
                 {
-                    if (bonusUI.useCustomColors)
-                    {
-                        Color customColor = bonusUI.customColors.normalColor;
-                        customColor.a = 1.0f;
-                        buttonImage.color = customColor;
-                    }
-                    else
-                    {
-                        Color color = buttonImage.color;
-                        color.a = 1.0f;
-                        buttonImage.color = color;
-                    }
-                }
-                else
-                {
-                    if (useGrayscaleWhenInactive)
-                    {
-                        Color originalColor = buttonImage.color;
-                        float grayValue = originalColor.r * 0.3f + originalColor.g * 0.59f + originalColor.b * 0.11f;
-                        buttonImage.color = new Color(grayValue, grayValue, grayValue, originalColor.a * inactiveAlpha);
-                    }
-                    else
-                    {
-                        Color color = buttonImage.color;
-                        color.a = inactiveAlpha;
-                        buttonImage.color = color;
-                    }
+                    img.color = isActive ? Color.white : Color.gray;
                 }
             }
-
-            if (bonusUI.bonusCountText != null)
-            {
-                Color textColor = bonusUI.bonusCountText.color;
-                textColor.a = isActive ? 1f : 0.8f;
-                bonusUI.bonusCountText.color = textColor;
-            }
-
-            if (bonusUI.isBonusActiveText != null)
-            {
-                Color statusColor = bonusUI.isBonusActiveText.color;
-                statusColor.a = isActive ? 1f : 0.8f;
-                bonusUI.isBonusActiveText.color = statusColor;
-            }
         }
     }
 
-    private void SetupButtonAction(BonusUIElements bonusUI, BonusType bonus)
+    private void Start()
     {
-        if (bonusUI.bonusButton != null)
+        SetupButtonListeners();
+    }
+
+    private void SetupButtonListeners()
+    {
+        foreach (var bonusUI in bonusUIMappings)
         {
+            if (bonusUI.bonusButton == null) continue;
+
             bonusUI.bonusButton.onClick.RemoveAllListeners();
             bonusUI.bonusButton.onClick.AddListener(() =>
             {
@@ -414,11 +365,10 @@ public class BonusSceneManager : MonoBehaviour
 
             await userBonusManager.ConsumeBonusAndActivate(userId, bonusName, config.duration, config.multiplier);
             await FetchBonuses();
-            BonusApplicationManager bonusAppManager = FindFirstObjectByType<BonusApplicationManager>();
             
-            if (bonusAppManager != null)
+            if (UserTopBarManager.Instance != null)
             {
-                bonusAppManager.RefreshActiveBonuses();
+                UserTopBarManager.Instance.RefreshActiveBonuses();
             }
         }
         catch (Exception e)
@@ -445,10 +395,10 @@ public class BonusSceneManager : MonoBehaviour
             }
 
             await userBonusManager.ConsumeBonusAndActivate(userId, bonusName, config.duration, config.multiplier);
-            BonusApplicationManager bonusAppManager = FindFirstObjectByType<BonusApplicationManager>();
-            if (bonusAppManager != null)
+            
+            if (UserTopBarManager.Instance != null)
             {
-                bonusAppManager.RefreshActiveBonuses();
+                UserTopBarManager.Instance.RefreshActiveBonuses();
             }
         }
         catch (Exception e)
