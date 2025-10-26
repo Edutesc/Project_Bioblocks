@@ -225,11 +225,7 @@ public class QuestionManager : MonoBehaviour
                     actualScore = scoreManager.CalculateBonusScore(baseScore);
                 }
 
-                string feedbackMessage = bonusActive
-                    ? $"Resposta correta!\n+{actualScore} pontos (bônus ativo!)"
-                    : "Resposta correta!\n+5 pontos";
-
-                ShowAnswerFeedback(feedbackMessage, true);
+                feedbackElements.ShowCorrectAnswer(bonusActive);
                 await scoreManager.UpdateScore(baseScore, true, currentQuestion);
 
                 if (counterManager != null)
@@ -244,7 +240,7 @@ public class QuestionManager : MonoBehaviour
             else
             {
                 Debug.Log($"Q{currentQuestion.questionNumber} (Nível {currentQuestion.questionLevel}) - ERRADA");
-                ShowAnswerFeedback("Resposta errada!\n-2 Pontos.", false);
+                feedbackElements.ShowWrongAnswer();
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
 
@@ -348,26 +344,18 @@ public class QuestionManager : MonoBehaviour
     }
 
     private void ShowAnswerFeedback(string message, bool isCorrect, bool isCompleted = false)
+{
+    // Este método agora só é usado para feedback de conclusão
+    if (isCompleted)
     {
-        if (isCompleted)
-        {
-            feedbackElements.QuestionsCompletedFeedbackText.text = message;
-            questionCanvasGroupManager.ShowCompletionFeedback();
-            questionBottomBarManager.SetupNavigationButtons(
-                () =>
-                {
-                    NavigationManager.Instance.NavigateTo("PathwayScene");
-                },
-                null
-            );
-
-            return;
-        }
-
-        feedbackElements.FeedbackText.text = message;
-        Color backgroundColor = isCorrect ? HexToColor("#D4EDDA") : HexToColor("#F8D7DA");
-        questionCanvasGroupManager.ShowAnswerFeedback(isCorrect, HexToColor("#D4EDDA"), HexToColor("#F8D7DA"));
+        feedbackElements.QuestionsCompletedFeedbackText.text = message;
+        questionCanvasGroupManager.ShowCompletionFeedback();
+        questionBottomBarManager.SetupNavigationButtons(
+            () => NavigationManager.Instance.NavigateTo("PathwayScene"),
+            null
+        );
     }
+}
 
     private async void PrepareNextQuestion()
     {
@@ -475,7 +463,7 @@ public class QuestionManager : MonoBehaviour
     private async void HandleTimeUp()
     {
         answerManager.DisableAllButtons();
-        ShowAnswerFeedback("Tempo Esgotado!\n-1 ponto", false);
+        feedbackElements.ShowTimeout();
         await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();

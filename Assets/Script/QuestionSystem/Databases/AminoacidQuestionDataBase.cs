@@ -255,7 +255,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-             questionText = "Identifique abaixo o aminoácido cuja cadeixa lateral apresenta um grupo funcional álcool.",
+             questionText = "Identifique abaixo o aminoácido cuja cadeia lateral apresenta um grupo funcional álcool.",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/tirosina",
                 "AnswerImages/AminoacidsDB/prolina",
