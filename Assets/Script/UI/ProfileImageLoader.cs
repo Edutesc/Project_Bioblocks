@@ -30,7 +30,7 @@ public class ProfileImageLoader : MonoBehaviour
             imageContent = GetComponentInChildren<RawImage>();
             if (imageContent == null)
             {
-                Debug.LogWarning($"[ProfileImageLoader] ImageContent não encontrado em {gameObject.name}");
+                Debug.LogWarning($"[ProfileImageLoader] ImageContent nï¿½o encontrado em {gameObject.name}");
                 return;
             }
         }
@@ -59,14 +59,14 @@ public class ProfileImageLoader : MonoBehaviour
     {
         if (imageContent == null)
         {
-            Debug.LogWarning("[ProfileImageLoader] ImageContent é null, não é possível configurar máscara");
+            Debug.LogWarning("[ProfileImageLoader] ImageContent ï¿½ null, nï¿½o ï¿½ possï¿½vel configurar mï¿½scara");
             return;
         }
 
         var maskObject = imageContent.transform.parent?.gameObject;
         if (maskObject == null)
         {
-            Debug.LogWarning($"[ProfileImageLoader] MaskObject (pai do RawImage) não encontrado em {gameObject.name}");
+            Debug.LogWarning($"[ProfileImageLoader] MaskObject (pai do RawImage) nï¿½o encontrado em {gameObject.name}");
             return;
         }
 
@@ -96,7 +96,7 @@ public class ProfileImageLoader : MonoBehaviour
             imageRect.anchoredPosition = Vector2.zero;
         }
 
-        Debug.Log($"[ProfileImageLoader] Máscara circular configurada em {gameObject.name}");
+        Debug.Log($"[ProfileImageLoader] Mï¿½scara circular configurada em {gameObject.name}");
     }
 
     private Sprite CreateCircleSprite(int resolution)
@@ -135,13 +135,13 @@ public class ProfileImageLoader : MonoBehaviour
 
         if (imageContent == null)
         {
-            Debug.LogError($"[ProfileImageLoader] ImageContent é null em {gameObject.name}");
+            Debug.LogError($"[ProfileImageLoader] ImageContent ï¿½ null em {gameObject.name}");
             return;
         }
 
         if (!gameObject.activeInHierarchy)
         {
-            Debug.Log($"[ProfileImageLoader] GameObject '{gameObject.name}' está inativo. Armazenando URL para carregar quando ativado.");
+            Debug.Log($"[ProfileImageLoader] GameObject '{gameObject.name}' estï¿½ inativo. Armazenando URL para carregar quando ativado.");
             pendingImageUrl = imageUrl;
             return;
         }
@@ -193,7 +193,7 @@ public class ProfileImageLoader : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"[ProfileImageLoader] Erro ao carregar imagem: {www.error}. Usando imagem padrão.");
+                Debug.LogWarning($"[ProfileImageLoader] Erro ao carregar imagem: {www.error}. Usando imagem padrï¿½o.");
                 LoadStandardProfileImage();
             }
         }
@@ -208,27 +208,27 @@ public class ProfileImageLoader : MonoBehaviour
 
         if (imageContent == null)
         {
-            Debug.LogError($"[ProfileImageLoader] ImageContent é null em {gameObject.name}");
+            Debug.LogError($"[ProfileImageLoader] ImageContent ï¿½ null em {gameObject.name}");
             return;
         }
 
         if (standardProfileImage == null)
         {
-            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage não atribuída em {gameObject.name}. Criando placeholder...");
+            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage nï¿½o atribuï¿½da em {gameObject.name}. Criando placeholder...");
             CreateAndSetPlaceholderTexture();
             return;
         }
 
         if (standardProfileImage.texture == null)
         {
-            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage não tem textura em {gameObject.name}");
+            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage nï¿½o tem textura em {gameObject.name}");
             CreateAndSetPlaceholderTexture();
             return;
         }
 
         imageContent.texture = standardProfileImage.texture;
         imageContent.color = Color.white;
-        Debug.Log($"[ProfileImageLoader] Imagem padrão configurada em {gameObject.name}");
+        Debug.Log($"[ProfileImageLoader] Imagem padrï¿½o configurada em {gameObject.name}");
     }
 
     private void CreateAndSetPlaceholderTexture()
@@ -250,7 +250,7 @@ public class ProfileImageLoader : MonoBehaviour
     {
         if (imageContent == null)
         {
-            Debug.LogError($"[ProfileImageLoader] ImageContent é null em {gameObject.name}");
+            Debug.LogError($"[ProfileImageLoader] ImageContent ï¿½ null em {gameObject.name}");
             return;
         }
 
@@ -263,6 +263,39 @@ public class ProfileImageLoader : MonoBehaviour
 
         imageContent.texture = texture;
         imageContent.color = Color.white;
+        AdjustImageAspectRatio(texture);
+    }
+
+    private void AdjustImageAspectRatio(Texture2D texture)
+    {
+        if (texture == null || imageContent == null) return;
+
+        float textureAspect = (float)texture.width / texture.height;
+        
+        if (Mathf.Approximately(textureAspect, 1f))
+        {
+            imageContent.uvRect = new Rect(0, 0, 1, 1);
+            return;
+        }
+
+        Rect uvRect;
+        
+        if (textureAspect > 1f) 
+        {
+            float scale = 1f / textureAspect;
+            float offset = (1f - scale) / 2f;
+            uvRect = new Rect(offset, 0, scale, 1);
+        }
+        else 
+        {
+            float scale = textureAspect;
+            float offset = (1f - scale) / 2f;
+            uvRect = new Rect(0, offset, 1, scale);
+        }
+        
+        imageContent.uvRect = uvRect;
+        
+        Debug.Log($"[ProfileImageLoader] Aspect ratio ajustado: {textureAspect:F2} - UV: {uvRect}");
     }
 
     private void OnDestroy()

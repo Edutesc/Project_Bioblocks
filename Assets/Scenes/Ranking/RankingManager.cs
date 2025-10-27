@@ -85,7 +85,7 @@ public class RankingManager : MonoBehaviour
     protected virtual void OnUserDataChanged(UserData userData)
     {
         currentUserData = userData;
-        _ = FetchRankings(); // Recarregar os rankings quando os dados do usuário mudarem
+        _ = FetchRankings();
     }
 
     public virtual async Task FetchRankings()
@@ -98,19 +98,12 @@ public class RankingManager : MonoBehaviour
 
             if (rankings.Count > 0)
             {
-                // Ordenar primariamente pelo WeekScore e usar TotalScore como critério de desempate
                 rankings = rankings
                     .OrderByDescending(r => r.userScore)   
                     .ThenByDescending(r => r.userWeekScore) 
                     .ToList();
 
                 Debug.Log("Rankings ordenados por WeekScore com desempate pelo TotalScore");
-
-                // Log dos top 5 para verificar
-                // for (int i = 0; i < Math.Min(5, rankings.Count); i++)
-                // {
-                //     Debug.Log($"Top {i + 1}: {rankings[i].userName} - WeekScore: {rankings[i].userWeekScore}XP, TotalScore: {rankings[i].userScore}XP");
-                // }
 
                 UpdateRankingTable();
             }
@@ -134,19 +127,8 @@ public class RankingManager : MonoBehaviour
             return;
         }
 
-        var verticalLayout = rankingTableContent.GetComponent<VerticalLayoutGroup>();
-        if (verticalLayout == null)
-            verticalLayout = rankingTableContent.gameObject.AddComponent<VerticalLayoutGroup>();
-
-        verticalLayout.spacing = 5;
-        verticalLayout.childAlignment = TextAnchor.UpperCenter;
-        verticalLayout.childControlHeight = false;
-        verticalLayout.childControlWidth = true;
-        verticalLayout.childForceExpandHeight = false;
-        verticalLayout.childForceExpandWidth = true;
-        verticalLayout.padding = new RectOffset(10, 10, 10, 10); 
-
         Debug.Log($"Atualizando ranking table com {rankings.Count} rankings");
+        
         // Limpar linhas existentes
         foreach (Transform child in rankingTableContent)
         {
@@ -163,6 +145,7 @@ public class RankingManager : MonoBehaviour
             CreateRankingRow(i + 1, ranking, applyCurrentUserStyle);
         }
 
+        // Adicionar linha extra se o usuário atual não estiver no top 20
         if (!top20Rankings.Any(r => r.userName == currentUserData.NickName))
         {
             int currentUserRank = rankings.FindIndex(r => r.userName == currentUserData.NickName) + 1;
