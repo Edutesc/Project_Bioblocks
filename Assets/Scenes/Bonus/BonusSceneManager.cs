@@ -366,9 +366,9 @@ public class BonusSceneManager : MonoBehaviour
             await userBonusManager.ConsumeBonusAndActivate(userId, bonusName, config.duration, config.multiplier);
             await FetchBonuses();
             
-            if (UserTopBarManager.Instance != null)
+            if (UserHeaderManager.Instance != null)
             {
-                UserTopBarManager.Instance.RefreshActiveBonuses();
+                UserHeaderManager.Instance.RefreshActiveBonuses();
             }
         }
         catch (Exception e)
@@ -396,9 +396,9 @@ public class BonusSceneManager : MonoBehaviour
 
             await userBonusManager.ConsumeBonusAndActivate(userId, bonusName, config.duration, config.multiplier);
             
-            if (UserTopBarManager.Instance != null)
+            if (UserHeaderManager.Instance != null)
             {
-                UserTopBarManager.Instance.RefreshActiveBonuses();
+                UserHeaderManager.Instance.RefreshActiveBonuses();
             }
         }
         catch (Exception e)

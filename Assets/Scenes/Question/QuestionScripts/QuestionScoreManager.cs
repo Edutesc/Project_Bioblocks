@@ -52,9 +52,9 @@ public class QuestionScoreManager : MonoBehaviour
 
             int actualScoreChange = scoreChange;
             
-            if (isCorrect && UserTopBarManager.Instance != null && UserTopBarManager.Instance.IsAnyBonusActive())
+            if (isCorrect && UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
             {
-                actualScoreChange = UserTopBarManager.Instance.ApplyTotalBonus(scoreChange);
+                actualScoreChange = UserHeaderManager.Instance.ApplyTotalBonus(scoreChange);
             }
             else if (isCorrect && questionBonusManager != null && questionBonusManager.IsBonusActive())
             {
@@ -144,7 +144,7 @@ public class QuestionScoreManager : MonoBehaviour
 
     public bool HasBonusActive()
     {
-        if (UserTopBarManager.Instance != null && UserTopBarManager.Instance.IsAnyBonusActive())
+        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
         {
             return true;
         }
@@ -154,9 +154,9 @@ public class QuestionScoreManager : MonoBehaviour
 
     public int CalculateBonusScore(int baseScore)
     {
-        if (UserTopBarManager.Instance != null && UserTopBarManager.Instance.IsAnyBonusActive())
+        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
         {
-            return UserTopBarManager.Instance.ApplyTotalBonus(baseScore);
+            return UserHeaderManager.Instance.ApplyTotalBonus(baseScore);
         }
 
         if (questionBonusManager != null && questionBonusManager.IsBonusActive())

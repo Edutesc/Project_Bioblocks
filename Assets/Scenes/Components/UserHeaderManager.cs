@@ -8,7 +8,7 @@ using TMPro;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class UserTopBarManager : BarsManager
+public class UserHeaderManager : BarsManager
 {
     [Header("Elementos da User TopBar")]
     [SerializeField] private RawImage avatarImage;
@@ -75,14 +75,14 @@ public class UserTopBarManager : BarsManager
     };
 
     // Singleton
-    private static UserTopBarManager _instance;
+    private static UserHeaderManager _instance;
     private float lastVerificationTime = 0f;
     private string pendingAvatarUrl = null;
 
     protected override string BarName => "PersistentUserTopBar";
     protected override string BarChildName => "TopBar";
 
-    public static UserTopBarManager Instance => _instance;
+    public static UserHeaderManager Instance => _instance;
 
     // Events
     public event Action<int> OnBonusMultiplierUpdated;
