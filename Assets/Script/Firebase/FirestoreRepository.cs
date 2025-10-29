@@ -76,7 +76,7 @@ public class FirestoreRepository : MonoBehaviour
                     Score = Convert.ToInt32(userData["Score"]),
                     // Adicionar WeekScore, com valor padrão 0 se não existir
                     WeekScore = userData.ContainsKey("WeekScore") ? Convert.ToInt32(userData["WeekScore"]) : 0,
-                    Progress = Convert.ToInt32(userData["Progress"]),
+                    QuestionTypeProgress = Convert.ToInt32(userData["Progress"]),
                     ProfileImageUrl = userData["ProfileImageUrl"]?.ToString() ?? "",
                     CreatedTime = createdTime,
                     IsUserRegistered = Convert.ToBoolean(userData["IsUserRegistered"])
@@ -127,7 +127,7 @@ public class FirestoreRepository : MonoBehaviour
         // Adicionar WeekScore com verificação de existência
         userData.WeekScore = data.ContainsKey("WeekScore") ? Convert.ToInt32(data["WeekScore"]) : 0;
 
-        userData.Progress = Convert.ToInt32(data["Progress"]);
+        userData.QuestionTypeProgress = Convert.ToInt32(data["Progress"]);
         userData.IsUserRegistered = Convert.ToBoolean(data["IsUserRegistered"]);
 
         if (data["CreatedTime"] is Timestamp timestamp)
@@ -168,7 +168,7 @@ public class FirestoreRepository : MonoBehaviour
             { "Email", userData.Email },
             { "Score", userData.Score },
             { "WeekScore", userData.WeekScore }, // Adicionar WeekScore
-            { "Progress", userData.Progress },
+            { "Progress", userData.QuestionTypeProgress },
             { "IsUserRegistered", userData.IsUserRegistered },
             { "CreatedTime", userData.CreatedTime }
         };

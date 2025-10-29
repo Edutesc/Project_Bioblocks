@@ -29,7 +29,7 @@ public class UserData
     public int WeekScore { get; set; }
 
     [FirestoreProperty]
-    public int Progress { get; set; }
+    public int QuestionTypeProgress { get; set; }
 
     [FirestoreProperty]
     public Timestamp CreatedTime { get; set; }
@@ -57,7 +57,7 @@ public class UserData
         ProfileImageUrl = profileImageUrl;
         Score = score;
         WeekScore = weekScore;
-        Progress = progress;
+        QuestionTypeProgress = progress;
         CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow);
         IsUserRegistered = isRegistered;
         AnsweredQuestions = new Dictionary<string, List<int>>();
@@ -75,7 +75,7 @@ public class UserData
             { "ProfileImageUrl", ProfileImageUrl },
             { "Score", Score },
             { "WeekScore", WeekScore },
-            { "Progress", Progress },
+            { "Progress", QuestionTypeProgress },
             { "CreatedTime", CreatedTime },
             { "IsUserRegistered", IsUserRegistered }
         };
