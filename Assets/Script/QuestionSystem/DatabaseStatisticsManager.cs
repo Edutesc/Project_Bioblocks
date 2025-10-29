@@ -124,19 +124,19 @@ public class DatabaseStatisticsManager : MonoBehaviour
                     // Cria uma instância temporária do banco
                     GameObject tempGO = new GameObject($"Temp_{databankName}");
                     var database = tempGO.AddComponent(databaseType) as IQuestionDatabase;
-                    
+
                     if (database != null)
                     {
                         var questions = database.GetQuestions();
                         int count = questions != null ? questions.Count : 0;
-                        
+
                         // Registra a contagem de questões
                         QuestionBankStatistics.SetTotalQuestions(databankName, count);
                         questionCounts[databankName] = count;
-                        
+
                         Debug.Log($"Carregado banco {databankName}: {count} questões");
                     }
-                    
+
                     // Limpa o GameObject temporário
                     Destroy(tempGO);
                 }
@@ -159,11 +159,52 @@ public class DatabaseStatisticsManager : MonoBehaviour
 
         // Aguarda um pouco para garantir que as estatísticas sejam salvas
         await Task.Delay(100);
-        
-        // Log das estatísticas carregadas
+
+        int totalQuestions = 0;
         foreach (var kvp in questionCounts)
         {
+            totalQuestions += kvp.Value;
             Debug.Log($"Estatísticas: {kvp.Key} tem {kvp.Value} questões");
         }
+
+        Debug.Log($"[DatabaseStatisticsManager] Total geral: {totalQuestions} questões");
+
+        if (totalQuestions > 0 && UserDataStore.CurrentUserData != null)
+        {
+            UserDataStore.UpdateTotalQuestionsInAllDatabanks(totalQuestions);
+            
+            await FirestoreRepository.Instance.UpdateUserField(
+                UserDataStore.CurrentUserData.UserId,
+                "TotalQuestionsInAllDatabanks",
+                totalQuestions
+            );
+            
+            Debug.Log($"[DatabaseStatisticsManager] Total salvo no UserData e Firebase");
+        }
+    }
+    
+    public int GetTotalQuestionsCount()
+    {
+        string[] allDatabases = new string[]
+        {
+            "AcidBaseBufferQuestionDatabase",
+            "AminoacidQuestionDatabase",
+            "BiochemistryIntroductionQuestionDatabase",
+            "CarbohydratesQuestionDatabase",
+            "EnzymeQuestionDatabase",
+            "LipidsQuestionDatabase",
+            "MembranesQuestionDatabase",
+            "NucleicAcidsQuestionDatabase",
+            "ProteinQuestionDatabase",
+            "WaterQuestionDatabase"
+        };
+
+        int total = 0;
+        foreach (string databankName in allDatabases)
+        {
+            total += QuestionBankStatistics.GetTotalQuestions(databankName);
+        }
+
+        return total;
     }
 }

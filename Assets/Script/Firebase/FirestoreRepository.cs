@@ -725,6 +725,28 @@ public class FirestoreRepository : MonoBehaviour
         }
     }
 
+    public async Task UpdateUserField(string userId, string fieldName, object value)
+    {
+        try
+        {
+            if (!isInitialized) throw new System.Exception("Firestore não inicializado");
+
+            DocumentReference docRef = db.Collection("Users").Document(userId);
+            Dictionary<string, object> updates = new Dictionary<string, object>
+            {
+                { fieldName, value }
+            };
+
+            await docRef.UpdateAsync(updates);
+            Debug.Log($"{fieldName} atualizado para {value}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Erro ao atualizar {fieldName}: {e.Message}");
+            throw;
+        }
+    }
+
 }
 
 
