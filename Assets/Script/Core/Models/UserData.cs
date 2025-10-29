@@ -180,4 +180,56 @@ public static class UserDataStore
         }
     }
 
+    public static void UpdatePlayerLevel(int newLevel)
+    {
+        if (_currentUserData != null)
+        {
+            _currentUserData.PlayerLevel = newLevel;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"PlayerLevel atualizado para: {newLevel}");
+        }
+    }
+
+    public static void UpdateTotalValidQuestionsAnswered(int newTotal)
+    {
+        if (_currentUserData != null)
+        {
+            _currentUserData.TotalValidQuestionsAnswered = newTotal;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"TotalValidQuestionsAnswered atualizado para: {newTotal}");
+        }
+    }
+
+    public static void UpdateTotalQuestionsInAllDatabanks(int newTotal)
+    {
+        if (_currentUserData != null)
+        {
+            _currentUserData.TotalQuestionsInAllDatabanks = newTotal;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"TotalQuestionsInAllDatabanks atualizado para: {newTotal}");
+        }
+    }
+
+    public static void MarkDatabankAsReset(string databankName, bool isReset)
+    {
+        if (_currentUserData != null)
+        {
+            if (_currentUserData.ResetDatabankFlags == null)
+            {
+                _currentUserData.ResetDatabankFlags = new Dictionary<string, bool>();
+            }
+            
+            _currentUserData.ResetDatabankFlags[databankName] = isReset;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"Databank {databankName} marcado como resetado: {isReset}");
+        }
+    }
+
+    public static bool IsDatabankReset(string databankName)
+    {
+        if (_currentUserData?.ResetDatabankFlags == null) return false;
+        return _currentUserData.ResetDatabankFlags.ContainsKey(databankName) 
+            && _currentUserData.ResetDatabankFlags[databankName];
+    }
+
 }
