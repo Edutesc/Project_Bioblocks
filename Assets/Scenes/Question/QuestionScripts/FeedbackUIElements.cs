@@ -15,15 +15,18 @@ public class FeedbackUIElements : MonoBehaviour
     [Header("Sprites de Feedback")]
     [SerializeField] private Sprite feedbackCorrect5Points;
     [Tooltip("Imagem: 'Resposta correta! +5 pontos'")]
-    
     [SerializeField] private Sprite feedbackCorrect10PointsBonus;
     [Tooltip("Imagem: 'Resposta correta! +10 pontos (Bônus ativo!)'")]
-    
     [SerializeField] private Sprite feedbackWrong;
     [Tooltip("Imagem: 'Resposta errada! -2 pontos'")]
-    
     [SerializeField] private Sprite feedbackTimeout;
     [Tooltip("Imagem: 'Tempo Esgotado! -1 ponto'")]
+
+    [Header("Novos Sprites - RETRY SYSTEM")]
+    [SerializeField] private Sprite feedbackWrongRetry;        
+    [SerializeField] private Sprite feedbackCorrect3Points;    
+    [SerializeField] private Sprite feedbackWrongFinal;        
+    [SerializeField] private Sprite feedbackTimeoutRetry; 
 
     [Header("Feedback Completo (Conclusão de Nível)")]
     [SerializeField] private CanvasGroup levelCompletionFeedbackGroup;
@@ -111,6 +114,35 @@ public class FeedbackUIElements : MonoBehaviour
     public void ShowTimeout()
     {
         ShowFeedbackSprite(feedbackTimeout);
+    }
+
+    public void ShowCorrectAnswerSecondAttempt()
+    {
+        ShowFeedbackSprite(feedbackCorrect3Points);
+    }
+
+    /// <summary>
+    /// Mostra feedback de resposta errada COM retry disponível
+    /// </summary>
+    public void ShowWrongAnswerWithRetry()
+    {
+        ShowFeedbackSprite(feedbackWrongRetry);
+    }
+
+    /// <summary>
+    /// Mostra feedback de resposta errada SEM mais retry (última tentativa)
+    /// </summary>
+    public void ShowWrongAnswerFinal()
+    {
+        ShowFeedbackSprite(feedbackWrongFinal);
+    }
+
+    /// <summary>
+    /// Mostra feedback de timeout COM retry disponível
+    /// </summary>
+    public void ShowTimeoutWithRetry()
+    {
+        ShowFeedbackSprite(feedbackTimeoutRetry);
     }
 
     /// <summary>

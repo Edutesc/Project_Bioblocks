@@ -5,12 +5,17 @@ using System.Collections;
 public class QuestionTimerManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timerText;
-    [SerializeField] private GameObject timePanel; // Referência ao TimePanel
+    [SerializeField] private GameObject timePanel;
     [SerializeField] private float initialTime = 30f;
+
     private float currentTime;
     private bool isRunning;
-    
+    private Coroutine timerCoroutine;
+
     public event System.Action OnTimerComplete;
+
+    // Propriedade pública para ler o tempo restante
+    public float TimeRemaining => currentTime;
 
     private void Start()
     {
@@ -50,14 +55,44 @@ public class QuestionTimerManager : MonoBehaviour
         currentTime = initialTime;
         isRunning = true;
         UpdateTimerDisplay();
-        StartCoroutine(TimerCoroutine());
+        
+        // Para coroutine anterior se existir
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+        }
+        
+        timerCoroutine = StartCoroutine(TimerCoroutine());
         Debug.Log("Timer iniciado com sucesso");
+    }
+
+    /// <summary>
+    /// Reseta o timer para o tempo inicial (usado em retry)
+    /// </summary>
+    public void ResetTimer()
+    {
+        // Para o timer atual
+        StopTimer();
+        
+        // Reseta para tempo inicial
+        currentTime = initialTime;
+        
+        // Atualiza display
+        UpdateTimerDisplay();
+        
+        Debug.Log($"[QuestionTimerManager] Timer resetado para {initialTime}s");
     }
 
     public void StopTimer()
     {
         isRunning = false;
-        StopAllCoroutines();
+        
+        // Para a coroutine específica
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
     }
 
     private void UpdateTimerDisplay()
@@ -76,6 +111,7 @@ public class QuestionTimerManager : MonoBehaviour
     private IEnumerator TimerCoroutine()
     {
         Debug.Log("TimerCoroutine iniciada");
+        
         while (isRunning && currentTime > 0)
         {
             yield return new WaitForSeconds(1f);
@@ -85,6 +121,7 @@ public class QuestionTimerManager : MonoBehaviour
 
         if (currentTime <= 0)
         {
+            Debug.Log("[QuestionTimerManager] Timer zerado - disparando OnTimerComplete");
             OnTimerComplete?.Invoke();
         }
     }

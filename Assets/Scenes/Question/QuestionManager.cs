@@ -23,6 +23,11 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionScoreManager scoreManager;
     [SerializeField] private QuestionCounterManager counterManager;
 
+    [Header("Retry & Navigation System")]
+    [SerializeField] private QuestionNavigationManager navigationManager;
+    [SerializeField] private QuestionRetryManager retryManager;
+    [SerializeField] private QuestionManagerRetryIntegration retryIntegration;
+
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
     private List<Question> allDatabaseQuestions;
@@ -46,6 +51,7 @@ public class QuestionManager : MonoBehaviour
 
         if (currentSession != null)
         {
+            InitializeRetryAndNavigation();
             SetupEventHandlers();
             StartQuestion();
         }
@@ -87,6 +93,15 @@ public class QuestionManager : MonoBehaviour
         if (counterManager == null)
             Debug.LogWarning("QuestionManager: counterManager é null (opcional, mas recomendado)");
 
+        if (navigationManager == null)
+            Debug.LogError("QuestionManager: navigationManager é null");
+
+        if (retryManager == null)
+            Debug.LogError("QuestionManager: retryManager é null");
+
+        if (retryIntegration == null)
+            Debug.LogError("QuestionManager: retryIntegration é null");
+
         bool isValid = questionBottomBarManager != null &&
                questionUIManager != null &&
                questionCanvasGroupManager != null &&
@@ -96,11 +111,35 @@ public class QuestionManager : MonoBehaviour
                scoreManager != null &&
                feedbackElements != null &&
                transitionManager != null &&
-               counterManager != null;
-            
+               counterManager != null &&
+               navigationManager != null &&
+               retryManager != null &&
+               retryIntegration != null;
 
         return isValid;
     }
+
+    private void InitializeRetryAndNavigation()
+    {
+        // Inicializa sistema de retry
+        if (retryIntegration != null)
+        {
+            retryIntegration.Initialize(this);
+            Debug.Log("[QuestionManager] RetryIntegration inicializado");
+        }
+
+        // Inicializa navegação com lista de questões
+        if (navigationManager != null && currentSession != null && currentSession.Questions != null)
+        {
+            navigationManager.Initialize(currentSession.Questions, 0);
+            Debug.Log($"[QuestionManager] NavigationManager inicializado com {currentSession.Questions.Count} questões");
+        }
+        else
+        {
+            Debug.LogError("[QuestionManager] Não foi possível inicializar NavigationManager - currentSession ou Questions é null");
+        }
+    }
+
     private async Task InitializeSession()
     {
         try
@@ -199,57 +238,129 @@ public class QuestionManager : MonoBehaviour
 
     private void SetupEventHandlers()
     {
-        timerManager.OnTimerComplete += HandleTimeUp;
-        answerManager.OnAnswerSelected += CheckAnswer;
-        transitionManager.OnBeforeTransitionStart += PrepareNextQuestion;
-        transitionManager.OnTransitionMidpoint += ApplyPreparedQuestion;
+        // Remove listeners antigos para prevenir duplicação
+        if (timerManager != null)
+        {
+            timerManager.OnTimerComplete -= HandleTimeUp;
+            timerManager.OnTimerComplete += HandleTimeUp;
+        }
+
+        if (answerManager != null)
+        {
+            answerManager.OnAnswerSelected -= CheckAnswer;
+            answerManager.OnAnswerSelected += CheckAnswer;
+        }
+
+        if (transitionManager != null)
+        {
+            transitionManager.OnBeforeTransitionStart -= PrepareNextQuestion;
+            transitionManager.OnTransitionMidpoint -= ApplyPreparedQuestion;
+            transitionManager.OnBeforeTransitionStart += PrepareNextQuestion;
+            transitionManager.OnTransitionMidpoint += ApplyPreparedQuestion;
+        }
+
+        if (navigationManager != null)
+        {
+            navigationManager.OnQuestionChanged -= OnNavigatedToQuestion;
+            navigationManager.OnQuestionChanged += OnNavigatedToQuestion;
+        }
     }
+
+    private void OnNavigatedToQuestion(Question question)
+    {
+        Debug.Log($"[QuestionManager] Navegado para Q#{question.questionNumber}");
+        ShowQuestion(question);
+    }
+
+    private void ShowQuestion(Question question)
+    {
+        answerManager.SetupAnswerButtons(question);
+        questionCanvasGroupManager.ShowQuestion(
+            isImageQuestion: question.isImageQuestion,
+            isImageAnswer: question.isImageAnswer,
+            questionLevel: question.questionLevel
+        );
+        questionUIManager.ShowQuestion(question);
+
+        if (counterManager != null)
+        {
+            counterManager.UpdateCounter(question);
+        }
+
+        // Inicializa retry para esta questão
+        if (retryIntegration != null)
+        {
+            retryIntegration.InitializeQuestion(question);
+        }
+    }
+
     private async void CheckAnswer(int selectedAnswerIndex)
     {
-        timerManager.StopTimer();
         answerManager.DisableAllButtons();
         var currentQuestion = currentSession.GetCurrentQuestion();
-        bool isCorrect = selectedAnswerIndex == currentQuestion.correctIndex;
 
         try
         {
-            if (isCorrect)
+            // USA O SISTEMA DE RETRY
+            if (retryIntegration != null)
             {
-                int baseScore = 5;
-                int actualScore = baseScore;
-                bool bonusActive = false;
+                bool isCorrect = await retryIntegration.ProcessAnswer(
+                    selectedAnswerIndex, 
+                    currentQuestion, 
+                    isTimeout: false
+                );
 
-                if (scoreManager.HasBonusActive())
+                // Verifica conclusão de nível apenas se acertou
+                if (isCorrect)
                 {
-                    bonusActive = true;
-                    actualScore = scoreManager.CalculateBonusScore(baseScore);
+                    if (counterManager != null)
+                    {
+                        counterManager.MarkQuestionAsAnswered(currentQuestion.questionNumber);
+                        counterManager.UpdateCounter(currentQuestion);
+                    }
+
+                    await CheckLevelCompletionAfterCorrectAnswer(currentQuestion);
                 }
 
-                feedbackElements.ShowCorrectAnswer(bonusActive);
-                await scoreManager.UpdateScore(baseScore, true, currentQuestion);
-
-                if (counterManager != null)
-                {
-                    counterManager.MarkQuestionAsAnswered(currentQuestion.questionNumber);
-                    counterManager.UpdateCounter(currentQuestion);
-                    Debug.Log($"Questão {currentQuestion.questionNumber} marcada no contador");
-                }
-
-                await CheckLevelCompletionAfterCorrectAnswer(currentQuestion);
+                // Setup dos botões de navegação
+                SetupNavigationButtons();
             }
             else
             {
-                Debug.Log($"Q{currentQuestion.questionNumber} (Nível {currentQuestion.questionLevel}) - ERRADA");
-                feedbackElements.ShowWrongAnswer();
-                await scoreManager.UpdateScore(-2, false, currentQuestion);
-            }
+                // Fallback para sistema antigo (se retry não configurado)
+                Debug.LogWarning("RetryIntegration não configurado, usando sistema antigo");
+                
+                bool isCorrect = selectedAnswerIndex == currentQuestion.correctIndex;
 
-            questionBottomBarManager.EnableNavigationButtons();
-            SetupNavigationButtons();
+                if (isCorrect)
+                {
+                    bool bonusActive = scoreManager.HasBonusActive();
+                    feedbackElements.ShowCorrectAnswer(bonusActive);
+                    await scoreManager.UpdateScore(5, true, currentQuestion);
+
+                    if (counterManager != null)
+                    {
+                        counterManager.MarkQuestionAsAnswered(currentQuestion.questionNumber);
+                        counterManager.UpdateCounter(currentQuestion);
+                    }
+
+                    await CheckLevelCompletionAfterCorrectAnswer(currentQuestion);
+                }
+                else
+                {
+                    feedbackElements.ShowWrongAnswer();
+                    await scoreManager.UpdateScore(-2, false, currentQuestion);
+                }
+
+                questionBottomBarManager.EnableNavigationButtons();
+                SetupNavigationButtons();
+            }
         }
         catch (Exception e)
         {
             Debug.LogError($"Erro ao processar resposta: {e.Message}");
+            questionBottomBarManager.EnableNavigationButtons();
+            SetupNavigationButtons();
         }
     }
 
@@ -265,18 +376,14 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            // Aguarda para garantir que Firebase atualizou
             await Task.Delay(1000);
 
             int questionLevel = answeredQuestion.questionLevel > 0 ? answeredQuestion.questionLevel : 1;
-
             Debug.Log($"\n Verificando se nível {questionLevel} foi completado...");
 
-            // Obtém questões respondidas do Firebase
             List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
                 .FetchUserAnsweredQuestionsInTargetDatabase(databankName);
 
-            // Verifica se o nível está completo
             bool isComplete = LevelCalculator.IsLevelComplete(
                 allDatabaseQuestions,
                 answeredQuestions,
@@ -306,6 +413,7 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError($"Erro ao verificar conclusão de nível: {e.Message}");
         }
     }
+
     private void ShowLevelCompletionFeedback(int completedLevel, bool isLastLevel)
     {
         string levelName = GetLevelName(completedLevel);
@@ -326,7 +434,6 @@ public class QuestionManager : MonoBehaviour
             bodyText = $"Você completou o Nível {levelName}. O Nível {nextLevelName} foi desbloqueado.";
         }
 
-        // Usa o novo sistema de feedback
         feedbackElements.ShowLevelCompletionFeedback(title, bodyText, true);
     }
 
@@ -344,18 +451,17 @@ public class QuestionManager : MonoBehaviour
     }
 
     private void ShowAnswerFeedback(string message, bool isCorrect, bool isCompleted = false)
-{
-    // Este método agora só é usado para feedback de conclusão
-    if (isCompleted)
     {
-        feedbackElements.QuestionsCompletedFeedbackText.text = message;
-        questionCanvasGroupManager.ShowCompletionFeedback();
-        questionBottomBarManager.SetupNavigationButtons(
-            () => NavigationManager.Instance.NavigateTo("PathwayScene"),
-            null
-        );
+        if (isCompleted)
+        {
+            feedbackElements.QuestionsCompletedFeedbackText.text = message;
+            questionCanvasGroupManager.ShowCompletionFeedback();
+            questionBottomBarManager.SetupNavigationButtons(
+                () => NavigationManager.Instance.NavigateTo("PathwayScene"),
+                null
+            );
+        }
     }
-}
 
     private async void PrepareNextQuestion()
     {
@@ -377,31 +483,13 @@ public class QuestionManager : MonoBehaviour
         {
             await questionUIManager.PreloadQuestionImage(question);
         }
-
-        if (question.isImageAnswer)
-        {
-            // Se houver imagens nas respostas, você pode pré-carregá-las aqui
-            // Por exemplo: await answerManager.PreloadAnswerImages(question);
-        }
     }
 
     private void ApplyPreparedQuestion()
     {
         if (nextQuestionToShow != null)
         {
-            answerManager.SetupAnswerButtons(nextQuestionToShow);
-            questionCanvasGroupManager.ShowQuestion(
-                isImageQuestion: nextQuestionToShow.isImageQuestion,
-                isImageAnswer: nextQuestionToShow.isImageAnswer,
-                questionLevel: nextQuestionToShow.questionLevel
-            );
-            questionUIManager.ShowQuestion(nextQuestionToShow);
-
-            if (counterManager != null)
-            {
-                counterManager.UpdateCounter(nextQuestionToShow);
-            }
-
+            ShowQuestion(nextQuestionToShow);
             nextQuestionToShow = null;
         }
         else
@@ -418,18 +506,7 @@ public class QuestionManager : MonoBehaviour
         if (currentSession != null && currentSession.GetCurrentQuestion() != null)
         {
             var newQuestion = currentSession.GetCurrentQuestion();
-            answerManager.SetupAnswerButtons(newQuestion);
-            questionCanvasGroupManager.ShowQuestion(
-                isImageQuestion: newQuestion.isImageQuestion,
-                isImageAnswer: newQuestion.isImageAnswer,
-                questionLevel: newQuestion.questionLevel
-            );
-            questionUIManager.ShowQuestion(newQuestion);
-
-            if (counterManager != null)
-            {
-                counterManager.UpdateCounter(newQuestion);
-            }
+            ShowQuestion(newQuestion);
         }
     }
 
@@ -438,18 +515,12 @@ public class QuestionManager : MonoBehaviour
         try
         {
             var currentQuestion = currentSession.GetCurrentQuestion();
-            answerManager.SetupAnswerButtons(currentQuestion);
-            questionCanvasGroupManager.ShowQuestion(
-                isImageQuestion: currentQuestion.isImageQuestion,
-                isImageAnswer: currentQuestion.isImageAnswer,
-                questionLevel: currentQuestion.questionLevel
-            );
-            questionUIManager.ShowQuestion(currentQuestion);
+            ShowQuestion(currentQuestion);
 
-            if (counterManager != null)
+            // Inicializa retry para a primeira questão
+            if (retryIntegration != null)
             {
-                counterManager.UpdateCounter(currentQuestion);
-                Debug.Log($"Contador atualizado para questão {currentQuestion.questionNumber}");
+                retryIntegration.InitializeQuestion(currentQuestion);
             }
 
             timerManager.StartTimer();
@@ -462,11 +533,39 @@ public class QuestionManager : MonoBehaviour
 
     private async void HandleTimeUp()
     {
+        Debug.Log("[QuestionManager] HandleTimeUp chamado");
+        
         answerManager.DisableAllButtons();
-        feedbackElements.ShowTimeout();
-        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
-        questionBottomBarManager.EnableNavigationButtons();
-        SetupNavigationButtons();
+        var currentQuestion = currentSession.GetCurrentQuestion();
+
+        try
+        {
+            // USA O SISTEMA DE RETRY para timeout
+            if (retryIntegration != null)
+            {
+                await retryIntegration.ProcessAnswer(
+                    selectedIndex: -1,
+                    currentQuestion,
+                    isTimeout: true
+                );
+
+                SetupNavigationButtons();
+            }
+            else
+            {
+                // Fallback para sistema antigo
+                feedbackElements.ShowTimeout();
+                await scoreManager.UpdateScore(-1, false, currentQuestion);
+                questionBottomBarManager.EnableNavigationButtons();
+                SetupNavigationButtons();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Erro ao processar timeout: {e.Message}");
+            questionBottomBarManager.EnableNavigationButtons();
+            SetupNavigationButtons();
+        }
     }
 
     private void SetupNavigationButtons()
@@ -494,7 +593,8 @@ public class QuestionManager : MonoBehaviour
     {
         questionCanvasGroupManager.HideAnswerFeedback();
     }
-        private async Task HandleNextQuestion()
+
+    private async Task HandleNextQuestion()
     {
         questionBottomBarManager.DisableNavigationButtons();
 
@@ -509,29 +609,24 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            // Obtém questões respondidas do Firebase
             List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
 
-            // Calcula nível atual
             int currentLevel = LevelCalculator.CalculateCurrentLevel(
                 allDatabaseQuestions,
                 answeredQuestions
             );
 
-            // Obtém estatísticas
             var stats = LevelCalculator.GetLevelStats(
                 allDatabaseQuestions,
                 answeredQuestions
             );
 
-            // Verifica se o nível atual está completo
             bool currentLevelComplete = stats.ContainsKey(currentLevel) &&
                                        stats[currentLevel].IsComplete;
 
             if (currentLevelComplete)
             {
-                // Verifica se há mais níveis
                 if (currentLevel < maxLevelInDatabase)
                 {
                     string message = $"Nível {GetLevelName(currentLevel)} Completo!\n" +
@@ -542,7 +637,6 @@ public class QuestionManager : MonoBehaviour
                 }
                 else
                 {
-                    // Todos os níveis completos
                     int totalAnswered = stats.Values.Sum(s => s.AnsweredQuestions);
                     int totalQuestions = stats.Values.Sum(s => s.TotalQuestions);
 
@@ -587,6 +681,11 @@ public class QuestionManager : MonoBehaviour
         {
             transitionManager.OnBeforeTransitionStart -= PrepareNextQuestion;
             transitionManager.OnTransitionMidpoint -= ApplyPreparedQuestion;
+        }
+
+        if (navigationManager != null)
+        {
+            navigationManager.OnQuestionChanged -= OnNavigatedToQuestion;
         }
     }
 
@@ -718,9 +817,9 @@ public class QuestionManager : MonoBehaviour
             {
                 completedDatabanks.Add(databankName);
                 Dictionary<string, object> updateData = new Dictionary<string, object>
-            {
-                { "CompletedDatabanks", completedDatabanks }
-            };
+                {
+                    { "CompletedDatabanks", completedDatabanks }
+                };
 
                 await docRef.UpdateAsync(updateData);
             }
@@ -729,12 +828,5 @@ public class QuestionManager : MonoBehaviour
         {
             Debug.LogError($"Erro ao marcar databank como completo: {e.Message}");
         }
-    }
-
-    private Color HexToColor(string hex)
-    {
-        Color color = new Color();
-        ColorUtility.TryParseHtmlString(hex, out color);
-        return color;
     }
 }
