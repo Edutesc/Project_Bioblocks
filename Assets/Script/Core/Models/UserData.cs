@@ -40,6 +40,18 @@ public class UserData
     [FirestoreProperty]
     public bool IsUserRegistered { get; set; }
 
+    [FirestoreProperty]
+    public int PlayerLevel { get; set; } = 1;
+
+    [FirestoreProperty]
+    public int TotalValidQuestionsAnswered { get; set; } = 0;
+
+    [FirestoreProperty]
+    public int TotalQuestionsInAllDatabanks { get; set; } = 0;
+
+    [FirestoreProperty]
+    public Dictionary<string, bool> ResetDatabankFlags { get; set; } = new Dictionary<string, bool>();
+
     public UserData()
     {
         AnsweredQuestions = new Dictionary<string, List<int>>();
@@ -47,8 +59,8 @@ public class UserData
     }
 
     public UserData(string userId, string nickName, string name, string email,
-               string profileImageUrl = null, int score = 0, int weekScore = 0, int progress = 0,
-               bool isRegistered = false)
+           string profileImageUrl = null, int score = 0, int weekScore = 0, int questionTypeProgress = 0,
+           bool isRegistered = false)
     {
         UserId = userId;
         NickName = nickName;
@@ -57,10 +69,14 @@ public class UserData
         ProfileImageUrl = profileImageUrl;
         Score = score;
         WeekScore = weekScore;
-        QuestionTypeProgress = progress;
+        QuestionTypeProgress = questionTypeProgress;
         CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow);
         IsUserRegistered = isRegistered;
         AnsweredQuestions = new Dictionary<string, List<int>>();
+        PlayerLevel = 1;
+        TotalValidQuestionsAnswered = 0;
+        TotalQuestionsInAllDatabanks = 0;
+        ResetDatabankFlags = new Dictionary<string, bool>();
     }
 
     public Dictionary<string, object> ToDictionary()
@@ -75,9 +91,13 @@ public class UserData
             { "ProfileImageUrl", ProfileImageUrl },
             { "Score", Score },
             { "WeekScore", WeekScore },
-            { "Progress", QuestionTypeProgress },
+            { "QuestionTypeProgress", QuestionTypeProgress },
             { "CreatedTime", CreatedTime },
-            { "IsUserRegistered", IsUserRegistered }
+            { "IsUserRegistered", IsUserRegistered },
+            { "PlayerLevel", PlayerLevel },
+            { "TotalValidQuestionsAnswered", TotalValidQuestionsAnswered },
+            { "TotalQuestionsInAllDatabanks", TotalQuestionsInAllDatabanks },
+            { "ResetDatabankFlags", ResetDatabankFlags }
         };
     }
 
