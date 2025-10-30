@@ -125,7 +125,7 @@ public class AuthenticationRepository : MonoBehaviour
                 Email = email,
                 ProfileImageUrl = "",
                 Score = 0,
-                Progress = 0,
+                QuestionTypeProgress = 0,
                 CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow),
                 IsUserRegistered = true,
                 AnsweredQuestions = new Dictionary<string, List<int>>()

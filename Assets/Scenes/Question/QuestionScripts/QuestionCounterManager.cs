@@ -67,7 +67,15 @@ public class QuestionCounterManager : MonoBehaviour
 
         if (progressBarManager != null)
         {
-            progressBarManager.UpdateProgress(answeredInLevel, totalInLevel, levelName);
+            string progressTextValue = $"{answeredInLevel} de {totalInLevel}";
+            string labelTextValue = levelName;
+            
+            progressBarManager.UpdateProgress(
+                answeredInLevel,        // current
+                totalInLevel,           // total
+                progressTextValue,      // progressText: "25 de 68"
+                labelTextValue          // labelText: "Nível Básico"
+            );
         }
 
         if (questionCounterText != null)

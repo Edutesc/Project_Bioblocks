@@ -102,8 +102,8 @@ public class InitializationManager : MonoBehaviour
             UpdateStatus("Verificando autenticação...");
             bool isAuthenticated = await CheckAuthentication();
             UpdateProgress(0.5f);
-
             bool userDataLoaded = false;
+
             if (isAuthenticated)
             {
                 UpdateStatus("Carregando dados do usuário...");
@@ -114,6 +114,10 @@ public class InitializationManager : MonoBehaviour
                 {
                     UpdateStatus("Carregando bancos de questões...");
                     await DatabaseStatisticsManager.Instance.Initialize();
+                    UpdateProgress(0.85f);
+
+                    UpdateStatus("Configurando sistema de níveis...");
+                    InitializePlayerLevelManager();
                     UpdateProgress(0.9f);
                 }
             }
@@ -198,6 +202,14 @@ public class InitializationManager : MonoBehaviour
                 else
                 {
                     UserDataStore.CurrentUserData = userData;
+                    Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
+                    await Task.Yield();
+
+                    if (PlayerLevelManager.Instance != null)
+                    {
+                        Debug.Log("[InitializationManager] Notificando PlayerLevelManager sobre dados carregados");
+                        PlayerLevelManager.Instance.OnUserDataLoaded(userData);
+                    }
                     return true;
                 }
             }
@@ -251,11 +263,80 @@ public class InitializationManager : MonoBehaviour
         if (retryPanel != null)
         {
             retryPanel.SetActive(true);
-            
+
             if (errorText != null)
             {
                 errorText.text = message;
             }
+        }
+    }
+
+    private void InitializePlayerLevelManager()
+    {
+        try
+        {
+            if (PlayerLevelManager.Instance == null)
+            {
+                Debug.LogError("[InitializationManager] PlayerLevelManager não encontrado na cena!");
+                return;
+            }
+            
+            Debug.Log("[InitializationManager] PlayerLevelManager encontrado. Aguardando verificação...");
+            
+            // Aguardar para garantir que tudo foi carregado
+            StartCoroutine(WaitAndCheckPlayerLevel());
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InitializationManager] Erro ao inicializar PlayerLevelManager: {e.Message}");
+        }
+    }
+
+    private System.Collections.IEnumerator WaitAndCheckPlayerLevel()
+    {
+        // Aguardar 2 segundos para garantir que TUDO foi inicializado
+        yield return new WaitForSeconds(2f);
+        
+        Debug.Log("[InitializationManager] Verificando estado do PlayerLevelManager...");
+        
+        if (UserDataStore.CurrentUserData != null)
+        {
+            Debug.Log($"[InitializationManager] UserData disponível. UserId: {UserDataStore.CurrentUserData.UserId}, Level: {UserDataStore.CurrentUserData.PlayerLevel}");
+            
+            if (UserDataStore.CurrentUserData.PlayerLevel == 0)
+            {
+                Debug.LogWarning("[InitializationManager] Level ainda está em 0 após 2 segundos. Forçando recálculo...");
+                
+                if (PlayerLevelManager.Instance != null)
+                {
+                    _ = ForceRecalculatePlayerLevel();
+                }
+            }
+            else
+            {
+                Debug.Log($"[InitializationManager] Level carregado corretamente: {UserDataStore.CurrentUserData.PlayerLevel}");
+            }
+        }
+        else
+        {
+            Debug.LogError("[InitializationManager] UserData ainda é null após 2 segundos!");
+        }
+    }
+
+    private async Task ForceRecalculatePlayerLevel()
+    {
+        try
+        {
+            if (PlayerLevelManager.Instance != null)
+            {
+                await PlayerLevelManager.Instance.RecalculateTotalAnswered();
+                await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
+                Debug.Log("[InitializationManager] Recálculo de level forçado completado");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[InitializationManager] Erro ao forçar recálculo: {e.Message}");
         }
     }
 }

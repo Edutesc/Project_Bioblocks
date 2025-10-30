@@ -80,6 +80,19 @@ public class QuestionScoreManager : MonoBehaviour
                     {
                         await answeredQuestionsManager.ForceUpdate();
                     }
+
+                    bool isDatabankReset = UserDataStore.IsDatabankReset(databankName);
+                            
+                    if (!isDatabankReset && PlayerLevelManager.Instance != null)
+                    {
+                        await PlayerLevelManager.Instance.IncrementTotalAnswered();
+                        await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
+                    }
+                    else if (isDatabankReset)
+                    {
+                        Debug.Log($"[QuestionScoreManager] Banco {databankName} foi resetado. Questão não conta para level.");
+                    }
+
                 }
                 catch (Exception ex)
                 {

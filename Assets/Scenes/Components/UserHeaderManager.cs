@@ -17,14 +17,32 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private TMP_Text userNameText;
     [SerializeField] private Image starImage;
     [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private Image xpBar;
-    [SerializeField] private Image xpBarFill;
-    [SerializeField] private TMP_Text xpBarText;
     [SerializeField] private Image bonusBarImage;
     [SerializeField] private Image fireIcon;
     [SerializeField] private TMP_Text bonusText;
-    [SerializeField] private Image levelBarImage;
-    [SerializeField] private TMP_Text levelText;
+
+    [Header("Player Level UI")]
+    [SerializeField] private Image playerLevelContainer;
+    [SerializeField] private TextMeshProUGUI playerLevelText;
+    [SerializeField] private Image playerLevelBackground;
+    [SerializeField] private Image playerLevelProgressBar;
+    [SerializeField] private TextMeshProUGUI playerLevelProgressText;
+    [SerializeField] private ProgressBarManager playerLevelProgressBarManager;
+
+    [Header("Level Colors (opcional)")]
+    [SerializeField] private Color[] levelColors = new Color[]
+    {
+        new Color(0.85f, 0.75f, 0.95f),  // Level 1 - Roxo claro (como na imagem)
+        new Color(0.4f, 0.8f, 1.0f),     // Level 2 - Azul ciano vibrante
+        new Color(0.2f, 0.9f, 0.95f),    // Level 3 - Azul turquesa brilhante
+        new Color(0.3f, 1.0f, 0.4f),     // Level 4 - Verde limão
+        new Color(1.0f, 0.95f, 0.3f),    // Level 5 - Amarelo brilhante
+        new Color(1.0f, 0.75f, 0.2f),    // Level 6 - Laranja vibrante
+        new Color(1.0f, 0.5f, 0.2f),     // Level 7 - Laranja forte
+        new Color(1.0f, 0.3f, 0.3f),     // Level 8 - Vermelho coral
+        new Color(1.0f, 0.2f, 0.6f),     // Level 9 - Rosa pink
+        new Color(1.0f, 0.85f, 0.0f)     // Level 10 - Dourado brilhante
+    };
 
     [Header("Elementos de Bônus Timer")]
     [SerializeField] private GameObject bonusTimerContainer;
@@ -122,6 +140,13 @@ public class UserHeaderManager : BarsManager
         UserDataStore.OnUserDataChanged += OnUserDataChanged;
         UpdateFromCurrentUserData();
         InitializeBonusManagement();
+
+        if (PlayerLevelManager.Instance != null)
+        {
+            PlayerLevelManager.OnLevelChanged += OnPlayerLevelChanged;
+            PlayerLevelManager.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
+            UpdatePlayerLevelUI();
+        }
     }
 
     protected override void OnCleanup()
@@ -137,6 +162,12 @@ public class UserHeaderManager : BarsManager
         StopBonusTimer();
         SaveBonusStateToFirestore();
 
+        if (PlayerLevelManager.Instance != null)
+        {
+            PlayerLevelManager.OnLevelChanged -= OnPlayerLevelChanged;
+            PlayerLevelManager.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
+        }
+        
         if (_instance == this)
         {
             _instance = null;
@@ -631,29 +662,13 @@ public class UserHeaderManager : BarsManager
             Debug.LogWarning("ProfileImageLoader não está disponível para carregar a imagem");
         }
 
-        if (xpBarText != null && xpBarFill != null)
-        {
-            int currentXP = userData.WeekScore;
-            int maxXP = 100;
-            int nextLevel = 2;
-
-            xpBarText.text = $"{currentXP} de {maxXP} até o Nível {nextLevel}";
-
-            float fillAmount = (float)currentXP / maxXP;
-            xpBarFill.fillAmount = fillAmount;
-        }
-
         if (bonusText != null)
         {
             int streak = 2;
             bonusText.text = $"x{streak}";
         }
 
-        if (levelText != null)
-        {
-            int currentLevel = 1;
-            levelText.text = currentLevel.ToString();
-        }
+        UpdatePlayerLevelUI();
     }
 
     private void RefreshPendingAvatar()
@@ -721,33 +736,11 @@ public class UserHeaderManager : BarsManager
         }
     }
 
-    public void SetXPProgress(int current, int max, int nextLevel)
-    {
-        if (xpBarText != null)
-        {
-            xpBarText.text = $"{current} de {max} até o Nível {nextLevel}";
-        }
-
-        if (xpBarFill != null)
-        {
-            float fillAmount = (float)current / max;
-            xpBarFill.fillAmount = fillAmount;
-        }
-    }
-
     public void SetStreak(int streak)
     {
         if (bonusText != null)
         {
             bonusText.text = $"x{streak}";
-        }
-    }
-
-    public void SetLevel(int level)
-    {
-        if (levelText != null)
-        {
-            levelText.text = level.ToString();
         }
     }
 
@@ -809,6 +802,74 @@ public class UserHeaderManager : BarsManager
     public void RemoveSceneWithoutUserTopBar(string sceneName)
     {
         RemoveSceneWithoutBar(sceneName);
+    }
+
+    private void OnPlayerLevelChanged(int oldLevel, int newLevel)
+    {
+        Debug.Log($"[UserHeaderManager] Level mudou: {oldLevel} → {newLevel}");
+        UpdatePlayerLevelUI();
+    }
+
+    private void OnPlayerLevelProgressUpdated(int questionsAnswered)
+    {
+        UpdatePlayerLevelUI();
+    }
+
+    private void UpdatePlayerLevelUI()
+    {
+        if (PlayerLevelManager.Instance == null) return;
+
+        int currentLevel = PlayerLevelManager.Instance.GetCurrentLevel();
+        int questionsAnswered = PlayerLevelManager.Instance.GetTotalValidAnswered();
+        int questionsUntilNext = PlayerLevelManager.Instance.GetQuestionsUntilNextLevel();
+        
+        if (playerLevelText != null)
+        {
+            playerLevelText.text = currentLevel.ToString();
+        }
+        
+        if (playerLevelBackground != null && levelColors != null && levelColors.Length >= 10)
+        {
+            int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
+            playerLevelBackground.color = levelColors[colorIndex];
+        }
+        
+        if (currentLevel >= 10)
+        {
+            if (playerLevelProgressBarManager != null)
+            {
+                int maxQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
+                playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
+            }
+            
+            if (playerLevelProgressText != null)
+            {
+                playerLevelProgressText.text = "MÁXIMO!";
+            }
+        }
+        else
+        {
+            int nextLevelTotal = questionsAnswered + questionsUntilNext;
+            int nextLevel = currentLevel + 1;
+            
+            if (playerLevelProgressBarManager != null)
+            {
+                playerLevelProgressBarManager.UpdateProgress(
+                    questionsAnswered, 
+                    nextLevelTotal, 
+                    $"Level {currentLevel}"
+                );
+                
+                Debug.Log($"[UserHeaderManager] Barra animada: {questionsAnswered}/{nextLevelTotal}");
+            }
+            
+            if (playerLevelProgressText != null)
+            {
+                float percentageToNext = (questionsUntilNext / (float)nextLevelTotal) * 100f;
+                int roundedPercentage = Mathf.RoundToInt(percentageToNext);
+                playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
+            }
+        }
     }
 
     #endregion

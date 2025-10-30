@@ -1,22 +1,32 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
 /// <summary>
-/// Controla a barra de progresso de respostas corretas
-/// Substitui o texto "Respostas corretas: X de Y" por uma visualização gráfica
+/// Componente genérico para animar barras de progresso
+/// Pode ser usado em qualquer lugar da UI com qualquer dimensão
 /// </summary>
 public class ProgressBarManager : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private Image fillImage; // A imagem azul que vai preencher
-    [SerializeField] private TextMeshProUGUI progressText; // "25 de 68"
-    [SerializeField] private TextMeshProUGUI levelNameText; // "Nível Básico"
+    [Tooltip("A Image que será preenchida (pode ter qualquer cor/tamanho)")]
+    [SerializeField] private Image fillImage;
+    
+    [Tooltip("Texto opcional 1 - Geralmente usado para mostrar valores (ex: '359 de 492', '75%')")]
+    [SerializeField] private TextMeshProUGUI progressText;
+
+    [Tooltip("Texto opcional 2 - Geralmente usado para mostrar labels/títulos (ex: 'Nível Básico', 'Level 6')")]
+    [SerializeField] private TextMeshProUGUI labelText;
 
     [Header("Animation Settings")]
+    [Tooltip("Duração da animação em segundos")]
     [SerializeField] private float animationDuration = 0.8f;
+    
+    [Tooltip("Curva de animação (suave, linear, etc)")]
     [SerializeField] private AnimationCurve animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    
+    [Tooltip("Animar automaticamente quando UpdateProgress for chamado")]
     [SerializeField] private bool animateOnUpdate = true;
 
     private float currentFillAmount = 0f;
@@ -26,46 +36,35 @@ public class ProgressBarManager : MonoBehaviour
     {
         if (fillImage == null)
         {
-            Debug.LogError("ProgressBarController: fillImage não está atribuído!");
+            Debug.LogError($"[ProgressBarManager] {gameObject.name}: fillImage não está atribuído!");
         }
 
-        // Inicializa com fill zerado
         if (fillImage != null)
         {
             fillImage.fillAmount = 0f;
         }
     }
 
-    /// <summary>
-    /// Atualiza a barra de progresso com os valores atuais
-    /// </summary>
-    /// <param name="answeredCount">Número de questões respondidas corretamente</param>
-    /// <param name="totalCount">Total de questões no nível</param>
-    /// <param name="levelName">Nome do nível (ex: "Nível Básico")</param>
-    public void UpdateProgress(int answeredCount, int totalCount, string levelName)
+    public void UpdateProgress(int current, int total, string customProgressText = null, string customLabelText = null)
     {
         if (fillImage == null)
         {
-            Debug.LogWarning("ProgressBarController: fillImage não está configurado!");
+            Debug.LogWarning($"[ProgressBarManager] {gameObject.name}: fillImage não está configurado!");
             return;
         }
 
-        // Calcula o progresso (0 a 1)
-        float targetProgress = totalCount > 0 ? (float)answeredCount / totalCount : 0f;
+        float targetProgress = total > 0 ? (float)current / total : 0f;
 
-        // Atualiza o texto de progresso
-        if (progressText != null)
+        if (progressText != null && !string.IsNullOrEmpty(customProgressText))
         {
-            progressText.text = $"{answeredCount} de {totalCount}";
+            progressText.text = customProgressText;
         }
 
-        // Atualiza o texto do nível
-        if (levelNameText != null)
+        if (labelText != null && !string.IsNullOrEmpty(customLabelText))
         {
-            levelNameText.text = levelName;
+            labelText.text = customLabelText;
         }
 
-        // Anima ou atualiza diretamente
         if (animateOnUpdate && gameObject.activeInHierarchy)
         {
             AnimateToProgress(targetProgress);
@@ -76,15 +75,101 @@ public class ProgressBarManager : MonoBehaviour
             currentFillAmount = targetProgress;
         }
 
-        Debug.Log($"📊 ProgressBar atualizada: {answeredCount}/{totalCount} ({targetProgress:P0}) - {levelName}");
+        Debug.Log($"[ProgressBarManager] {gameObject.name} atualizado: {current}/{total} ({targetProgress:P1}) - ProgressText: '{customProgressText}', LabelText: '{customLabelText}'");
     }
 
-    /// <summary>
-    /// Anima a barra de progresso até o valor alvo
-    /// </summary>
+
+    public void UpdateProgressPercentage(float percentage, string customProgressText = null, string customLabelText = null)
+    {
+        float targetProgress = Mathf.Clamp01(percentage / 100f);
+
+        if (progressText != null && !string.IsNullOrEmpty(customProgressText))
+        {
+            progressText.text = customProgressText;
+        }
+
+        if (labelText != null && !string.IsNullOrEmpty(customLabelText))
+        {
+            labelText.text = customLabelText;
+        }
+
+        if (animateOnUpdate && gameObject.activeInHierarchy)
+        {
+            AnimateToProgress(targetProgress);
+        }
+        else
+        {
+            if (fillImage != null)
+            {
+                fillImage.fillAmount = targetProgress;
+            }
+            currentFillAmount = targetProgress;
+        }
+
+        Debug.Log($"[ProgressBarManager] {gameObject.name} atualizado: {percentage}% - ProgressText: '{customProgressText}', LabelText: '{customLabelText}'");
+    }
+
+    public void UpdateProgressNormalized(float normalizedValue, string customProgressText = null, string customLabelText = null)
+    {
+        float targetProgress = Mathf.Clamp01(normalizedValue);
+
+        if (progressText != null && !string.IsNullOrEmpty(customProgressText))
+        {
+            progressText.text = customProgressText;
+        }
+
+        if (labelText != null && !string.IsNullOrEmpty(customLabelText))
+        {
+            labelText.text = customLabelText;
+        }
+
+        if (animateOnUpdate && gameObject.activeInHierarchy)
+        {
+            AnimateToProgress(targetProgress);
+        }
+        else
+        {
+            if (fillImage != null)
+            {
+                fillImage.fillAmount = targetProgress;
+            }
+            currentFillAmount = targetProgress;
+        }
+
+        Debug.Log($"[ProgressBarManager] {gameObject.name} atualizado: {normalizedValue:F2} - ProgressText: '{customProgressText}', LabelText: '{customLabelText}'");
+    }
+
+    public void UpdateProgressTextOnly(string text)
+    {
+        if (progressText != null)
+        {
+            progressText.text = text;
+        }
+    }
+
+    public void UpdateLabelTextOnly(string text)
+    {
+        if (labelText != null)
+        {
+            labelText.text = text;
+        }
+    }
+
+    public void UpdateBothTexts(string progressTextValue, string labelTextValue)
+    {
+        if (progressText != null)
+        {
+            progressText.text = progressTextValue;
+        }
+
+        if (labelText != null)
+        {
+            labelText.text = labelTextValue;
+        }
+    }
+
     private void AnimateToProgress(float targetProgress)
     {
-        // Para animação anterior se existir
         if (animationCoroutine != null)
         {
             StopCoroutine(animationCoroutine);
@@ -93,9 +178,6 @@ public class ProgressBarManager : MonoBehaviour
         animationCoroutine = StartCoroutine(AnimateProgressCoroutine(targetProgress));
     }
 
-    /// <summary>
-    /// Corrotina para animar o progresso suavemente
-    /// </summary>
     private IEnumerator AnimateProgressCoroutine(float targetProgress)
     {
         float startProgress = currentFillAmount;
@@ -105,40 +187,46 @@ public class ProgressBarManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float normalizedTime = Mathf.Clamp01(elapsedTime / animationDuration);
-
-            // Aplica a curva de animação
             float curveValue = animationCurve.Evaluate(normalizedTime);
-
-            // Interpola entre o valor inicial e o alvo
             currentFillAmount = Mathf.Lerp(startProgress, targetProgress, curveValue);
-            fillImage.fillAmount = currentFillAmount;
+            
+            if (fillImage != null)
+            {
+                fillImage.fillAmount = currentFillAmount;
+            }
 
             yield return null;
         }
 
-        // Garante que o valor final seja exato
-        fillImage.fillAmount = targetProgress;
+        if (fillImage != null)
+        {
+            fillImage.fillAmount = targetProgress;
+        }
         currentFillAmount = targetProgress;
 
         animationCoroutine = null;
     }
 
-    /// <summary>
-    /// Define o progresso instantaneamente sem animação
-    /// </summary>
-    public void SetProgressImmediate(int answeredCount, int totalCount, string levelName)
+    public void SetProgressImmediate(int current, int total, string customProgressText = null, string customLabelText = null)
     {
         bool previousAnimateState = animateOnUpdate;
         animateOnUpdate = false;
 
-        UpdateProgress(answeredCount, totalCount, levelName);
+        UpdateProgress(current, total, customProgressText, customLabelText);
 
         animateOnUpdate = previousAnimateState;
     }
 
-    /// <summary>
-    /// Reseta a barra para 0
-    /// </summary>
+    public void SetProgressImmediatePercentage(float percentage, string customProgressText = null, string customLabelText = null)
+    {
+        bool previousAnimateState = animateOnUpdate;
+        animateOnUpdate = false;
+
+        UpdateProgressPercentage(percentage, customProgressText, customLabelText);
+
+        animateOnUpdate = previousAnimateState;
+    }
+
     public void ResetProgress()
     {
         if (animationCoroutine != null)
@@ -156,35 +244,35 @@ public class ProgressBarManager : MonoBehaviour
 
         if (progressText != null)
         {
-            progressText.text = "0 de 0";
+            progressText.text = "";
         }
 
-        if (levelNameText != null)
+        if (labelText != null)
         {
-            levelNameText.text = "";
+            labelText.text = "";
         }
+
+        Debug.Log($"[ProgressBarManager] {gameObject.name} resetado");
     }
 
-    /// <summary>
-    /// Retorna o progresso atual (0 a 1)
-    /// </summary>
     public float GetCurrentProgress()
     {
         return currentFillAmount;
     }
 
-    /// <summary>
-    /// Retorna o progresso atual em percentual (0 a 100)
-    /// </summary>
     public float GetCurrentProgressPercentage()
     {
         return currentFillAmount * 100f;
     }
 
+    public void SetAnimationEnabled(bool enabled)
+    {
+        animateOnUpdate = enabled;
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        // Garante que a duração seja positiva
         if (animationDuration < 0.1f)
         {
             animationDuration = 0.1f;
