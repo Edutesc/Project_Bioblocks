@@ -17,14 +17,9 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private TMP_Text userNameText;
     [SerializeField] private Image starImage;
     [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private Image xpBar;
-    [SerializeField] private Image xpBarFill;
-    [SerializeField] private TMP_Text xpBarText;
     [SerializeField] private Image bonusBarImage;
     [SerializeField] private Image fireIcon;
     [SerializeField] private TMP_Text bonusText;
-    [SerializeField] private Image levelBarImage;
-    [SerializeField] private TMP_Text levelText;
 
     [Header("Player Level UI")]
     [SerializeField] private Image playerLevelContainer;
@@ -666,29 +661,13 @@ public class UserHeaderManager : BarsManager
             Debug.LogWarning("ProfileImageLoader não está disponível para carregar a imagem");
         }
 
-        if (xpBarText != null && xpBarFill != null)
-        {
-            int currentXP = userData.WeekScore;
-            int maxXP = 100;
-            int nextLevel = 2;
-
-            xpBarText.text = $"{currentXP} de {maxXP} até o Nível {nextLevel}";
-
-            float fillAmount = (float)currentXP / maxXP;
-            xpBarFill.fillAmount = fillAmount;
-        }
-
         if (bonusText != null)
         {
             int streak = 2;
             bonusText.text = $"x{streak}";
         }
 
-        if (levelText != null)
-        {
-            int currentLevel = 1;
-            levelText.text = currentLevel.ToString();
-        }
+        UpdatePlayerLevelUI();
     }
 
     private void RefreshPendingAvatar()
@@ -756,33 +735,11 @@ public class UserHeaderManager : BarsManager
         }
     }
 
-    public void SetXPProgress(int current, int max, int nextLevel)
-    {
-        if (xpBarText != null)
-        {
-            xpBarText.text = $"{current} de {max} até o Nível {nextLevel}";
-        }
-
-        if (xpBarFill != null)
-        {
-            float fillAmount = (float)current / max;
-            xpBarFill.fillAmount = fillAmount;
-        }
-    }
-
     public void SetStreak(int streak)
     {
         if (bonusText != null)
         {
             bonusText.text = $"x{streak}";
-        }
-    }
-
-    public void SetLevel(int level)
-    {
-        if (levelText != null)
-        {
-            levelText.text = level.ToString();
         }
     }
 
