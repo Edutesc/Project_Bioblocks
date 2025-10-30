@@ -12,6 +12,7 @@ public class QuestionAnswerManager : MonoBehaviour
 
     [Header("Theme Configuration")]
     [SerializeField] private QuestionLevelConfig levelConfig;
+    [SerializeField] private AnswerButtonThemeManager answerButtonThemeManager;
 
     [Header("Text Button Components (para aplicar tema)")]
     [SerializeField] private Image[] textButtonBackgrounds; // Backgrounds dos 4 botões de texto
@@ -19,6 +20,7 @@ public class QuestionAnswerManager : MonoBehaviour
 
     private TextMeshProUGUI[] buttonTexts;
     private Image[] buttonImages;
+    private int currentQuestionLevel = 1;
 
     public event System.Action<int> OnAnswerSelected;
 
@@ -84,10 +86,9 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
-        // PRIMEIRO: Aplica o tema baseado no level
+        currentQuestionLevel = question.questionLevel;
         ApplyTheme(question.questionLevel, question.isImageAnswer);
 
-        // DEPOIS: Configura o conteúdo
         if (question.isImageAnswer)
         {
             SetupImageAnswers(question);
@@ -98,12 +99,30 @@ public class QuestionAnswerManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Aplica o tema visual nos botões de resposta baseado no nível da questão
-    /// </summary>
+    public void MarkSelectedButton(int buttonIndex, bool isCorrect)
+    {
+        if (answerButtonThemeManager == null)
+        {
+            Debug.LogWarning("AnswerButtonThemeManager não está atribuído! Não é possível marcar o botão.");
+            return;
+        }
+
+        answerButtonThemeManager.MarkButtonAsAnswered(buttonIndex, isCorrect, currentQuestionLevel);
+    }
+
+    public void ResetButtonBackgrounds()
+    {
+        if (answerButtonThemeManager == null)
+        {
+            Debug.LogWarning("AnswerButtonThemeManager não está atribuído! Não é possível resetar os botões.");
+            return;
+        }
+
+        answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel);
+    }
+
     private void ApplyTheme(int questionLevel, bool isImageAnswer)
     {
-        // Só aplica tema se for resposta de TEXTO
         if (isImageAnswer)
         {
             Debug.Log("🔘 Respostas são imagens, não aplica tema nos botões");
@@ -126,7 +145,6 @@ public class QuestionAnswerManager : MonoBehaviour
 
         Debug.Log($"🔘 Aplicando tema nos botões - Level {questionLevel} ({theme.levelName})");
 
-        // Aplica tema nos backgrounds dos botões de texto
         for (int i = 0; i < textButtonBackgrounds.Length; i++)
         {
             if (textButtonBackgrounds[i] != null)
@@ -140,7 +158,6 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        // Aplica cor nas letras (A, B, C, D)
         for (int i = 0; i < letterTexts.Length; i++)
         {
             if (letterTexts[i] != null)
@@ -149,7 +166,6 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        // Aplica cor nos textos das respostas
         for (int i = 0; i < buttonTexts.Length; i++)
         {
             if (buttonTexts[i] != null)
@@ -165,7 +181,6 @@ public class QuestionAnswerManager : MonoBehaviour
         {
             if (imageAnswerButtons[i] != null && buttonImages[i] != null)
             {
-                // Carrega a imagem do caminho especificado em answers
                 Sprite sprite = Resources.Load<Sprite>(question.answers[i]);
                 if (sprite != null)
                 {
@@ -196,7 +211,6 @@ public class QuestionAnswerManager : MonoBehaviour
 
     public void DisableAllButtons()
     {
-        // Desativa botões de texto
         foreach (var button in textAnswerButtons)
         {
             if (button != null)
@@ -205,7 +219,6 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        // Desativa botões de imagem
         foreach (var button in imageAnswerButtons)
         {
             if (button != null)
@@ -217,7 +230,6 @@ public class QuestionAnswerManager : MonoBehaviour
 
     public void EnableAllButtons()
     {
-        // Ativa botões de texto
         foreach (var button in textAnswerButtons)
         {
             if (button != null)
@@ -226,7 +238,6 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        // Ativa botões de imagem
         foreach (var button in imageAnswerButtons)
         {
             if (button != null)
@@ -238,7 +249,6 @@ public class QuestionAnswerManager : MonoBehaviour
 
     private void OnValidate()
     {
-        // Auto-preenche as letras A, B, C, D
         if (letterTexts != null && letterTexts.Length == 4)
         {
             string[] letters = { "A", "B", "C", "D" };

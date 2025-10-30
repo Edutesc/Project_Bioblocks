@@ -210,6 +210,7 @@ public class QuestionManager : MonoBehaviour
         answerManager.DisableAllButtons();
         var currentQuestion = currentSession.GetCurrentQuestion();
         bool isCorrect = selectedAnswerIndex == currentQuestion.correctIndex;
+        answerManager.MarkSelectedButton(selectedAnswerIndex, isCorrect);
 
         try
         {
@@ -389,6 +390,7 @@ public class QuestionManager : MonoBehaviour
     {
         if (nextQuestionToShow != null)
         {
+            answerManager.ResetButtonBackgrounds();
             answerManager.SetupAnswerButtons(nextQuestionToShow);
             questionCanvasGroupManager.ShowQuestion(
                 isImageQuestion: nextQuestionToShow.isImageQuestion,
@@ -438,6 +440,7 @@ public class QuestionManager : MonoBehaviour
         try
         {
             var currentQuestion = currentSession.GetCurrentQuestion();
+            answerManager.ResetButtonBackgrounds();
             answerManager.SetupAnswerButtons(currentQuestion);
             questionCanvasGroupManager.ShowQuestion(
                 isImageQuestion: currentQuestion.isImageQuestion,
