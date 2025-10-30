@@ -27,6 +27,7 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private Image playerLevelBackground;
     [SerializeField] private Image playerLevelProgressBar;
     [SerializeField] private TextMeshProUGUI playerLevelProgressText;
+    [SerializeField] private ProgressBarManager playerLevelProgressBarManager;
 
     [Header("Level Colors (opcional)")]
     [SerializeField] private Color[] levelColors = new Color[]
@@ -819,37 +820,54 @@ public class UserHeaderManager : BarsManager
         if (PlayerLevelManager.Instance == null) return;
 
         int currentLevel = PlayerLevelManager.Instance.GetCurrentLevel();
-        float progress = PlayerLevelManager.Instance.GetProgressInCurrentLevel();
         int questionsAnswered = PlayerLevelManager.Instance.GetTotalValidAnswered();
         int questionsUntilNext = PlayerLevelManager.Instance.GetQuestionsUntilNextLevel();
-        int totalQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
-
+        
         if (playerLevelText != null)
         {
             playerLevelText.text = currentLevel.ToString();
         }
-
+        
         if (playerLevelBackground != null && levelColors != null && levelColors.Length >= 10)
         {
             int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
             playerLevelBackground.color = levelColors[colorIndex];
         }
-
-        if (playerLevelProgressBar != null)
+        
+        if (currentLevel >= 10)
         {
-            playerLevelProgressBar.fillAmount = progress;
-        }
-
-        if (playerLevelProgressText != null)
-        {
-            if (currentLevel >= 10)
+            if (playerLevelProgressBarManager != null)
+            {
+                int maxQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
+                playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
+            }
+            
+            if (playerLevelProgressText != null)
             {
                 playerLevelProgressText.text = "MÁXIMO!";
             }
-            else
+        }
+        else
+        {
+            int nextLevelTotal = questionsAnswered + questionsUntilNext;
+            int nextLevel = currentLevel + 1;
+            
+            if (playerLevelProgressBarManager != null)
             {
-                int nextLevelTotal = questionsAnswered + questionsUntilNext;
-                playerLevelProgressText.text = $"{questionsAnswered}/{nextLevelTotal}";
+                playerLevelProgressBarManager.UpdateProgress(
+                    questionsAnswered, 
+                    nextLevelTotal, 
+                    $"Level {currentLevel}"
+                );
+                
+                Debug.Log($"[UserHeaderManager] Barra animada: {questionsAnswered}/{nextLevelTotal}");
+            }
+            
+            if (playerLevelProgressText != null)
+            {
+                float percentageToNext = (questionsUntilNext / (float)nextLevelTotal) * 100f;
+                int roundedPercentage = Mathf.RoundToInt(percentageToNext);
+                playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
             }
         }
     }
