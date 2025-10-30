@@ -52,14 +52,10 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         SetCanvasGroupState(questionBottomBar, false);
     }
 
-    // ATUALIZADO: Agora recebe o questionLevel
     public void ShowQuestion(bool isImageQuestion, bool isImageAnswer, int questionLevel)
     {
         currentQuestionLevel = questionLevel;
-
-        // Aplica o tema ANTES de mostrar
         ApplyLevelTheme(questionLevel, isImageQuestion, isImageAnswer);
-
         SetCanvasGroupState(loadingCanvasGroup, false);
         SetCanvasGroupState(questionTextContainer, !isImageQuestion);
         SetCanvasGroupState(questionImageContainer, isImageQuestion);
@@ -252,8 +248,32 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     {
         if (canvasGroup == null) return;
 
+        if (!interactable)
+        {
+            StopAllButtonAnimations(canvasGroup);
+        }
+
         canvasGroup.interactable = interactable;
         canvasGroup.blocksRaycasts = interactable;
+    }
+
+    private void StopAllButtonAnimations(CanvasGroup canvasGroup)
+    {
+        if (canvasGroup == null) return;
+
+        Button[] buttons = canvasGroup.GetComponentsInChildren<Button>();
+
+        foreach (Button btn in buttons)
+        {
+            ButtonPressEffect pressEffect = btn.GetComponent<ButtonPressEffect>();
+
+            if (pressEffect != null)
+            {
+                pressEffect.ForceStopAnimation();
+            }
+        }
+
+        Debug.Log($"Animações paradas para {buttons.Length} botões no CanvasGroup: {canvasGroup.name}");
     }
 
     private CanvasGroup[] GetAllCanvasGroups()
