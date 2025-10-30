@@ -856,7 +856,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Os lipídeos se dissolvam facilmente",
                 "O oxigênio seja transportado sem hemoglobina"
             },
-            correctIndex = 1,
+            correctIndex = 0,
             questionNumber = 57,
             isImageAnswer = false,
             questionLevel = 1
