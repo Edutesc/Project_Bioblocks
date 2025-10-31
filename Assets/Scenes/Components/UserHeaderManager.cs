@@ -36,8 +36,8 @@ public class UserHeaderManager : BarsManager
         HexToColor("#FF0097"),  // Level 2 - Azul ciano vibrante
         HexToColor("#FF5900"),  // Level 3 - Azul turquesa brilhante
         HexToColor("#E29717"),  // Level 4 - Verde limão
-        HexToColor("#E0FF00"),  // Level 5 - Amarelo brilhante
-        HexToColor("#7CE228"),  // Level 6 - Laranja vibrante (CORRIGIDO)
+        HexToColor("#7CE228"),  // Level 5 - Amarelo brilhante
+        HexToColor("#849509"),  // Level 6 - Laranja vibrante (CORRIGIDO)
         HexToColor("#207E24"),  // Level 7 - Laranja forte
         HexToColor("#0BBB95"),  // Level 8 - Vermelho coral
         HexToColor("#006AFF"),  // Level 9 - Rosa pink
