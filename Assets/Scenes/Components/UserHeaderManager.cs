@@ -32,16 +32,16 @@ public class UserHeaderManager : BarsManager
     [Header("Level Colors (opcional)")]
     [SerializeField] private Color[] levelColors = new Color[]
     {
-        new Color(0.85f, 0.75f, 0.95f),  // Level 1 - Roxo claro (como na imagem)
-        new Color(0.4f, 0.8f, 1.0f),     // Level 2 - Azul ciano vibrante
-        new Color(0.2f, 0.9f, 0.95f),    // Level 3 - Azul turquesa brilhante
-        new Color(0.3f, 1.0f, 0.4f),     // Level 4 - Verde limão
-        new Color(1.0f, 0.95f, 0.3f),    // Level 5 - Amarelo brilhante
-        new Color(1.0f, 0.75f, 0.2f),    // Level 6 - Laranja vibrante
-        new Color(1.0f, 0.5f, 0.2f),     // Level 7 - Laranja forte
-        new Color(1.0f, 0.3f, 0.3f),     // Level 8 - Vermelho coral
-        new Color(1.0f, 0.2f, 0.6f),     // Level 9 - Rosa pink
-        new Color(1.0f, 0.85f, 0.0f)     // Level 10 - Dourado brilhante
+        HexToColor("#B000FF"),  // Level 1 - Roxo claro
+        HexToColor("#FF0097"),  // Level 2 - Azul ciano vibrante
+        HexToColor("#FF5900"),  // Level 3 - Azul turquesa brilhante
+        HexToColor("#E29717"),  // Level 4 - Verde limão
+        HexToColor("#E0FF00"),  // Level 5 - Amarelo brilhante
+        HexToColor("#7CE228"),  // Level 6 - Laranja vibrante (CORRIGIDO)
+        HexToColor("#207E24"),  // Level 7 - Laranja forte
+        HexToColor("#0BBB95"),  // Level 8 - Vermelho coral
+        HexToColor("#006AFF"),  // Level 9 - Rosa pink
+        HexToColor("#2520E5")   // Level 10 - Dourado brilhante
     };
 
     [Header("Elementos de Bônus Timer")]
@@ -199,6 +199,13 @@ public class UserHeaderManager : BarsManager
         }
 
         SaveBonusStateToFirestore();
+    }
+
+    private static Color HexToColor(string hex)
+    {
+        if (ColorUtility.TryParseHtmlString(hex, out Color color))
+            return color;
+        return Color.white;
     }
 
     #endregion
@@ -822,18 +829,18 @@ public class UserHeaderManager : BarsManager
         int currentLevel = PlayerLevelManager.Instance.GetCurrentLevel();
         int questionsAnswered = PlayerLevelManager.Instance.GetTotalValidAnswered();
         int questionsUntilNext = PlayerLevelManager.Instance.GetQuestionsUntilNextLevel();
-        
+
         if (playerLevelText != null)
         {
             playerLevelText.text = currentLevel.ToString();
         }
-        
+
         if (playerLevelBackground != null && levelColors != null && levelColors.Length >= 10)
         {
             int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
             playerLevelBackground.color = levelColors[colorIndex];
         }
-        
+
         if (currentLevel >= 10)
         {
             if (playerLevelProgressBarManager != null)
@@ -841,7 +848,7 @@ public class UserHeaderManager : BarsManager
                 int maxQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
                 playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
             }
-            
+
             if (playerLevelProgressText != null)
             {
                 playerLevelProgressText.text = "MÁXIMO!";
@@ -851,18 +858,18 @@ public class UserHeaderManager : BarsManager
         {
             int nextLevelTotal = questionsAnswered + questionsUntilNext;
             int nextLevel = currentLevel + 1;
-            
+
             if (playerLevelProgressBarManager != null)
             {
                 playerLevelProgressBarManager.UpdateProgress(
-                    questionsAnswered, 
-                    nextLevelTotal, 
+                    questionsAnswered,
+                    nextLevelTotal,
                     $"Level {currentLevel}"
                 );
-                
+
                 Debug.Log($"[UserHeaderManager] Barra animada: {questionsAnswered}/{nextLevelTotal}");
             }
-            
+
             if (playerLevelProgressText != null)
             {
                 float percentageToNext = (questionsUntilNext / (float)nextLevelTotal) * 100f;
