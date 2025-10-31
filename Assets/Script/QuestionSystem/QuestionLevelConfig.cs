@@ -14,6 +14,10 @@ public class QuestionLevelConfig : ScriptableObject
         public Sprite questionBackground;
         public Sprite answerButtonBackground;
 
+        [Header("Answer Feedback Sprites")]
+        public Sprite correctAnswerBackground;
+        public Sprite incorrectAnswerBackground;
+
         [Header("Text Colors")]
         public Color letterTextColor = Color.white;
         public Color answerTextColor = Color.black;
@@ -28,12 +32,10 @@ public class QuestionLevelConfig : ScriptableObject
     public LevelTheme GetThemeForLevel(int level)
     {
         int index = Mathf.Clamp(level, 1, 3) - 1;
-
         if (levelThemes != null && index < levelThemes.Length)
         {
             return levelThemes[index];
         }
-
         Debug.LogError($"Theme not found for level {level}!");
         return null;
     }
