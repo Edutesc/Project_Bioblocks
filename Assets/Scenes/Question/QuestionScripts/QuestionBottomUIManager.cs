@@ -41,20 +41,18 @@ public class QuestionBottomUIManager : MonoBehaviour
     {
         exitButton.onClick.RemoveAllListeners();
         nextQuestionButton.onClick.RemoveAllListeners();
-
+        
         exitButton.onClick.AddListener(() =>
         {
             OnExitButtonClicked?.Invoke();
             var bottomBar = FindFirstObjectByType<NavigationBottomBarManager>();
-
             if (bottomBar != null)
             {
                 bottomBar.ForceRefreshState();
             }
-
             exitAction?.Invoke();
         });
-
+        
         nextQuestionButton.onClick.AddListener(() =>
         {
             OnNextButtonClicked?.Invoke();
