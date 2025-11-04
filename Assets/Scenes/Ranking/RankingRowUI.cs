@@ -9,7 +9,10 @@ public class RankingRowUI : MonoBehaviour
     [SerializeField] private TMP_Text nickNameText;
     [SerializeField] public TMP_Text totalScoreText;
     [SerializeField] public TMP_Text weekScoreText;
+    
+    [Header("Background Images")]
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image rankBadgeImage;
 
     [Header("Profile Image")]
     [SerializeField] private ProfileImageLoader imageLoader;
@@ -33,6 +36,11 @@ public class RankingRowUI : MonoBehaviour
         {
             Debug.LogError($"[RankingRowUI] Componentes de texto obrigatórios não estão atribuídos no prefab '{gameObject.name}'!");
         }
+
+        if (rankBadgeImage == null)
+        {
+            Debug.LogWarning($"[RankingRowUI] rankBadgeImage não está atribuído no prefab '{gameObject.name}'!");
+        }
     }
 
     public void Setup(int rank, string userName, int score, string profileImageUrl, bool isCurrentUser)
@@ -48,18 +56,22 @@ public class RankingRowUI : MonoBehaviour
             return;
         }
 
-        rankText.text = isExtraRow ? "..." : $"{rank}.";
+        rankText.text = isExtraRow ? "..." : $"{rank}";
         nickNameText.text = userName;
 
         if (totalScoreText != null)
+        {
             totalScoreText.gameObject.SetActive(true);
             totalScoreText.text = $"{totalScore}";
+        }
 
         if (weekScoreText != null)
-            weekScoreText.gameObject.SetActive(true); 
+        {
+            weekScoreText.gameObject.SetActive(true);
             weekScoreText.text = $"{weekScore}";
+        }
 
-        SetupColors(rank, isCurrentUser);
+        SetupRankBadge(rank);
         Debug.Log($"[RankingRowUI] Carregando imagem para '{userName}': {profileImageUrl}");
         imageLoader.LoadProfileImage(profileImageUrl);
     }
@@ -76,51 +88,37 @@ public class RankingRowUI : MonoBehaviour
         Setup(actualRank, userName, totalScore, weekScore, profileImageUrl, true);
     }
 
-    private void SetupColors(int rank, bool isCurrentUser)
+    private void SetupRankBadge(int rank)
     {
-        Color textColor;
-        Color backgroundColor;
+        if (rankBadgeImage == null) return;
 
         if (rank <= 3)
         {
+            rankBadgeImage.gameObject.SetActive(true);
+            
+            Color badgeColor;
+            
             switch (rank)
             {
-                case 1: // Primeiro lugar - Verde
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#91FF7D", out backgroundColor);
+                case 1:
+                    ColorUtility.TryParseHtmlString("#91FF7D", out badgeColor);
                     break;
-                case 2: // Segundo lugar - Azul
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#7DF7FF", out backgroundColor);
+                case 2:
+                    ColorUtility.TryParseHtmlString("#7DF7FF", out badgeColor);
                     break;
-                case 3: // Terceiro lugar - Rosa
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#F2D4EC", out backgroundColor);
+                case 3:
+                    ColorUtility.TryParseHtmlString("#F2D4EC", out badgeColor);
                     break;
                 default:
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#ffffff", out backgroundColor);
+                    badgeColor = Color.white;
                     break;
             }
+            
+            rankBadgeImage.color = badgeColor;
         }
         else
         {
-            if (isCurrentUser)
-            {
-                ColorUtility.TryParseHtmlString("#004699", out textColor);
-                ColorUtility.TryParseHtmlString("#E5E5E5", out backgroundColor);
-            }
-            else
-            {
-                ColorUtility.TryParseHtmlString("#004699", out textColor);
-                ColorUtility.TryParseHtmlString("#ffffff", out backgroundColor);
-            }
+            rankBadgeImage.gameObject.SetActive(false);
         }
-
-        if (rankText) rankText.color = textColor;
-        if (nickNameText) nickNameText.color = textColor;
-        if (totalScoreText) totalScoreText.color = textColor;
-        if (weekScoreText) weekScoreText.color = textColor;
-        if (backgroundImage) backgroundImage.color = backgroundColor;
     }
 }

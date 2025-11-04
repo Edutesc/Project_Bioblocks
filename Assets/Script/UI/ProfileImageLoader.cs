@@ -181,6 +181,20 @@ public class ProfileImageLoader : MonoBehaviour
 
     private IEnumerator LoadImageFromUrl(string url)
     {
+        string cachedPath = ImageCacheService.Instance.GetCachedImagePath(url);
+        
+        if (!string.IsNullOrEmpty(cachedPath))
+        {
+            Texture2D cachedTexture = ImageCacheService.Instance.LoadImageFromCache(cachedPath);
+            
+            if (cachedTexture != null)
+            {
+                SetTexture(cachedTexture);
+                Debug.Log($"[ProfileImageLoader] Loaded from cache: {url}");
+                yield break;
+            }
+        }
+
         using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
         {
             yield return www.SendWebRequest();
@@ -189,11 +203,14 @@ public class ProfileImageLoader : MonoBehaviour
             {
                 Texture2D texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
                 SetTexture(texture);
-                Debug.Log($"[ProfileImageLoader] Imagem carregada com sucesso de {url}");
+                
+                ImageCacheService.Instance.SaveImageToCache(url, texture);
+                
+                Debug.Log($"[ProfileImageLoader] Downloaded and cached: {url}");
             }
             else
             {
-                Debug.LogWarning($"[ProfileImageLoader] Erro ao carregar imagem: {www.error}. Usando imagem padr�o.");
+                Debug.LogWarning($"[ProfileImageLoader] Erro ao carregar imagem: {www.error}. Usando imagem padrão.");
                 LoadStandardProfileImage();
             }
         }

@@ -18,9 +18,15 @@ public class RankingManager : MonoBehaviour
     [SerializeField] private TMP_Text weekResetCountdownText;
     private WeekResetCountdown resetCountdown;
 
+    [Header("Sync Status")]
+    [SerializeField] private GameObject syncIndicator;
+    [SerializeField] private TMP_Text lastUpdateText;
+
     protected UserData currentUserData;
     protected List<Ranking> rankings;
     protected IRankingRepository rankingRepository;
+
+    private bool isLoadingFromCache = false;
 
     protected virtual void Start()
     {
@@ -32,6 +38,7 @@ public class RankingManager : MonoBehaviour
 
         InitializeRepository();
         InitializeWeekResetCountdown();
+        SubscribeToSyncEvents();
     }
 
     private void InitializeWeekResetCountdown()
@@ -41,6 +48,12 @@ public class RankingManager : MonoBehaviour
             resetCountdown = gameObject.AddComponent<WeekResetCountdown>();
             resetCountdown.Initialize(weekResetCountdownText);
         }
+    }
+
+    private void SubscribeToSyncEvents()
+    {
+        RankingSyncManager.Instance.OnSyncStarted += OnSyncStarted;
+        RankingSyncManager.Instance.OnSyncCompleted += OnSyncCompleted;
     }
 
     protected virtual void InitializeRepository()
@@ -80,6 +93,8 @@ public class RankingManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         UserDataStore.OnUserDataChanged -= OnUserDataChanged;
+        RankingSyncManager.Instance.OnSyncStarted -= OnSyncStarted;
+        RankingSyncManager.Instance.OnSyncCompleted -= OnSyncCompleted;
     }
 
     protected virtual void OnUserDataChanged(UserData userData)
@@ -92,20 +107,25 @@ public class RankingManager : MonoBehaviour
     {
         try
         {
-            rankings = await rankingRepository.GetRankingsAsync();
+            ShowSyncIndicator(false);
+            
+            isLoadingFromCache = true;
+            rankings = await RankingSyncManager.Instance.GetRankingsWithCache();
+            isLoadingFromCache = false;
 
             Debug.Log($"Total de rankings obtidos: {rankings.Count}");
 
             if (rankings.Count > 0)
             {
                 rankings = rankings
-                    .OrderByDescending(r => r.userScore)   
-                    .ThenByDescending(r => r.userWeekScore) 
+                    .OrderByDescending(r => r.userScore)
+                    .ThenByDescending(r => r.userWeekScore)
                     .ToList();
 
                 Debug.Log("Rankings ordenados por WeekScore com desempate pelo TotalScore");
 
                 UpdateRankingTable();
+                UpdateLastSyncTime();
             }
             else
             {
@@ -116,6 +136,86 @@ public class RankingManager : MonoBehaviour
         {
             Debug.LogError($"Erro ao buscar rankings: {e.Message}");
             rankings = new List<Ranking>();
+        }
+        finally
+        {
+            ShowSyncIndicator(false);
+        }
+    }
+
+    private void OnSyncStarted()
+    {
+        if (!isLoadingFromCache)
+        {
+            ShowSyncIndicator(false);
+        }
+    }
+
+    private void OnSyncCompleted(bool success)
+    {
+        ShowSyncIndicator(false);
+        
+        if (success)
+        {
+            _ = RefreshRankingsFromCache();
+        }
+    }
+
+    private async Task RefreshRankingsFromCache()
+    {
+        var localRepo = new LocalRankingRepository();
+        var cachedRankings = localRepo.GetAllRankings();
+        
+        rankings = cachedRankings.Select(e => RankingDTO.ToRanking(e)).ToList();
+        
+        rankings = rankings
+            .OrderByDescending(r => r.userScore)
+            .ThenByDescending(r => r.userWeekScore)
+            .ToList();
+        
+        UpdateRankingTable();
+        UpdateLastSyncTime();
+    }
+
+    private void ShowSyncIndicator(bool show)
+    {
+        if (syncIndicator != null)
+        {
+            syncIndicator.SetActive(show);
+        }
+    }
+
+    private void UpdateLastSyncTime()
+    {
+        if (lastUpdateText != null)
+        {
+            var lastSync = RankingSyncManager.Instance.GetLastSyncTime();
+            
+            if (lastSync == DateTime.MinValue)
+            {
+                lastUpdateText.text = "Nunca sincronizado";
+            }
+            else
+            {
+                var timeSince = DateTime.UtcNow - lastSync;
+                
+                if (timeSince.TotalMinutes < 1)
+                {
+                    lastUpdateText.text = "Atualizado agora";
+                }
+                else if (timeSince.TotalMinutes < 60)
+                {
+                    lastUpdateText.text = $"Atualizado há {(int)timeSince.TotalMinutes} min";
+                }
+                else if (timeSince.TotalHours < 24)
+                {
+                    lastUpdateText.text = $"Atualizado há {(int)timeSince.TotalHours}h";
+                }
+                else
+                {
+                    lastUpdateText.text = $"Atualizado há {(int)timeSince.TotalDays}d";
+                }
+            }
         }
     }
 
@@ -129,7 +229,6 @@ public class RankingManager : MonoBehaviour
 
         Debug.Log($"Atualizando ranking table com {rankings.Count} rankings");
         
-        // Limpar linhas existentes
         foreach (Transform child in rankingTableContent)
         {
             Destroy(child.gameObject);
@@ -145,7 +244,6 @@ public class RankingManager : MonoBehaviour
             CreateRankingRow(i + 1, ranking, applyCurrentUserStyle);
         }
 
-        // Adicionar linha extra se o usuário atual não estiver no top 20
         if (!top20Rankings.Any(r => r.userName == currentUserData.NickName))
         {
             int currentUserRank = rankings.FindIndex(r => r.userName == currentUserData.NickName) + 1;
@@ -208,5 +306,10 @@ public class RankingManager : MonoBehaviour
     {
         Debug.Log($"Navigating to {sceneName}");
         NavigationManager.Instance.NavigateTo(sceneName);
+    }
+
+    public async void OnRefreshButtonClicked()
+    {
+        await RankingSyncManager.Instance.ForceRefresh();
     }
 }
