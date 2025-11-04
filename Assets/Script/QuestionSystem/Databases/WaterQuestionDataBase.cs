@@ -920,7 +920,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 61,
             isImageAnswer = false,
             questionLevel = 1
-        }, 
+        },
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
@@ -935,7 +935,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 62,
             isImageAnswer = false,
             questionLevel = 1
-        }, 
+        },
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
@@ -950,7 +950,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 63,
             isImageAnswer = false,
             questionLevel = 1
-        }, 
+        },
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
@@ -965,7 +965,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 64,
             isImageAnswer = false,
             questionLevel = 1
-        }, 
+        },
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
@@ -980,7 +980,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 65,
             isImageAnswer = false,
             questionLevel = 1
-        }, 
+        },
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
@@ -1025,7 +1025,37 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 68,
             isImageAnswer = false,
             questionLevel = 1
-        }
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sup><size=150%>2</size></sup>. Qual é a reação que representa o equilíbrio (1)?",
+            answers = new string[] {
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
+                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ NaCl",
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ CO<sub><size=150%>2</size></sub>",
+                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
+            },
+            correctIndex = 3,
+            questionNumber = 69,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sup><size=150%>2</size></sup>. Qual é a reação que representa o equilíbrio (2)?",
+            answers = new string[] {
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
+                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
+                "H<sub><size=150%>2</size></sub>CO<sub><size=150%>3</size></sub> ⇌ H<sup><size=150%>+</size></sup> + HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
+                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
+            },
+            correctIndex = 2,
+            questionNumber = 70,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
     };
 
     public List<Question> GetQuestions()
