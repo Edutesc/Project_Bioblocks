@@ -85,7 +85,28 @@ public class RankingSyncManager : MonoBehaviour
             }
             else
             {
-                return new List<Ranking>();
+                Debug.LogWarning("[RankingSyncManager] Sync failed, falling back to direct Firebase fetch");
+                
+                try
+                {
+                    var firebaseRankings = await _remoteRepo.GetRankingsAsync();
+                    
+                    if (firebaseRankings != null && firebaseRankings.Count > 0)
+                    {
+                        Debug.Log($"[RankingSyncManager] Fallback successful: {firebaseRankings.Count} rankings from Firebase");
+                        return firebaseRankings;
+                    }
+                    else
+                    {
+                        Debug.LogError("[RankingSyncManager] Fallback also failed - no data available");
+                        return new List<Ranking>();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[RankingSyncManager] Fallback fetch failed: {e.Message}");
+                    return new List<Ranking>();
+                }
             }
         }
     }
@@ -117,9 +138,11 @@ public class RankingSyncManager : MonoBehaviour
             return false;
         }
 
+        Debug.Log($"[RankingSyncManager] Connectivity check: {ConnectivityMonitor.Instance.IsOnline}");
+
         if (!ConnectivityMonitor.Instance.IsOnline)
         {
-            Debug.Log("[RankingSyncManager] Cannot sync - device is offline");
+            Debug.LogWarning("[RankingSyncManager] Cannot sync - device is offline");
             return false;
         }
 
@@ -129,8 +152,11 @@ public class RankingSyncManager : MonoBehaviour
         try
         {
             Debug.Log("[RankingSyncManager] Starting sync...");
+            Debug.Log("[RankingSyncManager] Calling GetRankingsAsync...");
             
             var remoteRankings = await _remoteRepo.GetRankingsAsync();
+            
+            Debug.Log($"[RankingSyncManager] Remote rankings received: {remoteRankings?.Count ?? 0}");
             
             if (remoteRankings == null || remoteRankings.Count == 0)
             {
@@ -139,7 +165,9 @@ public class RankingSyncManager : MonoBehaviour
                 return false;
             }
 
+            Debug.Log("[RankingSyncManager] Getting current user data...");
             var currentUser = await _remoteRepo.GetCurrentUserDataAsync();
+            Debug.Log($"[RankingSyncManager] Current user: {currentUser?.NickName ?? "null"}");
             
             var entities = remoteRankings.Select(r => 
             {
@@ -153,6 +181,7 @@ public class RankingSyncManager : MonoBehaviour
                 return RankingDTO.ToEntity(r, userId);
             }).ToList();
 
+            Debug.Log($"[RankingSyncManager] Saving {entities.Count} entities to local DB...");
             _localRepo.SaveRankings(entities);
             
             _syncMetadataRepo.UpdateSyncMetadata(RANKINGS_ENTITY_TYPE, true);
@@ -165,6 +194,7 @@ public class RankingSyncManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"[RankingSyncManager] Sync failed: {e.Message}");
+            Debug.LogError($"[RankingSyncManager] Stack trace: {e.StackTrace}");
             _syncMetadataRepo.UpdateSyncMetadata(RANKINGS_ENTITY_TYPE, false, e.Message);
             
             OnSyncCompleted?.Invoke(false);

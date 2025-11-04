@@ -42,8 +42,8 @@ public class LocalRankingRepository : ILocalRankingRepository
         try
         {
             return _db.Table<RankingEntity>()
-                     .OrderByDescending(r => r.WeekScore)
-                     .ThenByDescending(r => r.TotalScore)
+                     .OrderByDescending(r => r.TotalScore)
+                     .ThenByDescending(r => r.WeekScore)
                      .ToList();
         }
         catch (Exception e)
@@ -58,8 +58,8 @@ public class LocalRankingRepository : ILocalRankingRepository
         try
         {
             return _db.Table<RankingEntity>()
-                     .OrderByDescending(r => r.WeekScore)
-                     .ThenByDescending(r => r.TotalScore)
+                     .OrderByDescending(r => r.TotalScore)
+                     .ThenByDescending(r => r.WeekScore)
                      .Take(20)
                      .ToList();
         }

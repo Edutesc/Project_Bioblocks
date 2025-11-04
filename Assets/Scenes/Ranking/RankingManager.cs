@@ -107,7 +107,7 @@ public class RankingManager : MonoBehaviour
     {
         try
         {
-            ShowSyncIndicator(true);
+            ShowSyncIndicator(false);
             
             isLoadingFromCache = true;
             rankings = await RankingSyncManager.Instance.GetRankingsWithCache();
@@ -118,8 +118,8 @@ public class RankingManager : MonoBehaviour
             if (rankings.Count > 0)
             {
                 rankings = rankings
-                    .OrderByDescending(r => r.userWeekScore)
-                    .ThenByDescending(r => r.userScore)
+                    .OrderByDescending(r => r.userScore)
+                    .ThenByDescending(r => r.userWeekScore)
                     .ToList();
 
                 Debug.Log("Rankings ordenados por WeekScore com desempate pelo TotalScore");
@@ -147,7 +147,7 @@ public class RankingManager : MonoBehaviour
     {
         if (!isLoadingFromCache)
         {
-            ShowSyncIndicator(true);
+            ShowSyncIndicator(false);
         }
     }
 
@@ -169,8 +169,8 @@ public class RankingManager : MonoBehaviour
         rankings = cachedRankings.Select(e => RankingDTO.ToRanking(e)).ToList();
         
         rankings = rankings
-            .OrderByDescending(r => r.userWeekScore)
-            .ThenByDescending(r => r.userScore)
+            .OrderByDescending(r => r.userScore)
+            .ThenByDescending(r => r.userWeekScore)
             .ToList();
         
         UpdateRankingTable();
