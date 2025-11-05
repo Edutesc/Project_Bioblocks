@@ -101,13 +101,13 @@ public class RankingRowUI : MonoBehaviour
             switch (rank)
             {
                 case 1:
-                    ColorUtility.TryParseHtmlString("#91FF7D", out badgeColor);
+                    ColorUtility.TryParseHtmlString("#ece057ff", out badgeColor);
                     break;
                 case 2:
-                    ColorUtility.TryParseHtmlString("#7DF7FF", out badgeColor);
+                    ColorUtility.TryParseHtmlString("#98a1a2ff", out badgeColor);
                     break;
                 case 3:
-                    ColorUtility.TryParseHtmlString("#F2D4EC", out badgeColor);
+                    ColorUtility.TryParseHtmlString("#252325ff", out badgeColor);
                     break;
                 default:
                     badgeColor = Color.white;
