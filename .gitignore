@@ -115,3 +115,4 @@ Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.bundle
 Library/PackageCache/**/*.dylib
 iOS/Libraries/*.a
 iOS/Libraries/libiPhone-lib.a
+Assets/Packages.meta
