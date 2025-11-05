@@ -22,6 +22,7 @@ public class DatabaseManager : MonoBehaviour
 
     private SQLiteConnection _connection;
     private readonly object _lock = new object();
+    private bool _isInitialized = false;
 
     private void Awake()
     {
@@ -33,7 +34,6 @@ public class DatabaseManager : MonoBehaviour
 
         _instance = this;
         DontDestroyOnLoad(gameObject);
-        
         InitializeDatabase();
     }
 
@@ -42,16 +42,15 @@ public class DatabaseManager : MonoBehaviour
         try
         {
             DatabaseConfig.EnsureDatabaseDirectory();
-            
             _connection = new SQLiteConnection(DatabaseConfig.DatabasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
-            
             CreateTables();
-            
+            _isInitialized = true;
             Debug.Log($"[DatabaseManager] Database initialized at: {DatabaseConfig.DatabasePath}");
         }
         catch (Exception e)
         {
             Debug.LogError($"[DatabaseManager] Failed to initialize database: {e.Message}");
+            _isInitialized = false;
             throw;
         }
     }
@@ -63,7 +62,6 @@ public class DatabaseManager : MonoBehaviour
             _connection.CreateTable<RankingEntity>();
             _connection.CreateTable<CachedImageEntity>();
             _connection.CreateTable<SyncMetadataEntity>();
-            
             Debug.Log("[DatabaseManager] Tables created successfully");
         }
     }
@@ -92,7 +90,6 @@ public class DatabaseManager : MonoBehaviour
             _connection.DeleteAll<RankingEntity>();
             _connection.DeleteAll<CachedImageEntity>();
             _connection.DeleteAll<SyncMetadataEntity>();
-            
             Debug.Log("[DatabaseManager] All data cleared");
         }
     }
@@ -106,8 +103,9 @@ public class DatabaseManager : MonoBehaviour
                 _connection.Close();
                 _connection = null;
             }
-            
+
             DatabaseConfig.DeleteDatabase();
+            _isInitialized = false;
             Debug.Log("[DatabaseManager] Database deleted");
         }
     }
@@ -129,4 +127,6 @@ public class DatabaseManager : MonoBehaviour
             _connection = null;
         }
     }
+
+    public bool IsInitialized => _isInitialized;
 }
