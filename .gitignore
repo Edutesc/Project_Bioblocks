@@ -9,6 +9,7 @@ Assets/StreamingAssets/google-services-desktop
 **/GoogleService-Info.plist.meta
 
 # iOS/tvOS Plugins (gerados automaticamente)
+Assets/Plugins/iOS/
 Assets/Plugins/iOS/Firebase/
 Assets/Plugins/tvOS/Firebase.meta
 Assets/Plugins/tvOS/Firebase/*.meta
