@@ -20,8 +20,10 @@ public class SafeAnsweredQuestionsManager
         }
     }
 
-    public async Task<List<string>> FetchUserAnsweredQuestionsInTargetDatabase(string databankName, IQuestionDatabase database)
+    public async Task<List<string>> FetchUserAnsweredQuestionsInTargetDatabase(IQuestionDatabase database)
     {
+        string databankName = database.GetDatabankName();
+
         if (database.IsDatabaseInDevelopment())
         {
             Debug.Log($"[SafeAnsweredQuestionsManager] Database '{databankName}' em modo DEV - usando cache local");
@@ -48,8 +50,10 @@ public class SafeAnsweredQuestionsManager
         return new List<string>();
     }
 
-    public async Task MarkQuestionAsAnswered(string databankName, int questionNumber, IQuestionDatabase database)
+    public async Task MarkQuestionAsAnswered(int questionNumber, IQuestionDatabase database)
     {
+        string databankName = database.GetDatabankName();
+
         if (database.IsDatabaseInDevelopment())
         {
             Debug.LogWarning("=================================================");
@@ -79,13 +83,15 @@ public class SafeAnsweredQuestionsManager
         }
     }
 
-    public async Task<bool> HasRemainingQuestions(string databankName, List<string> currentQuestionList, IQuestionDatabase database)
+    public async Task<bool> HasRemainingQuestions(List<string> currentQuestionList, IQuestionDatabase database)
     {
+        string databankName = database.GetDatabankName();
+
         if (database.IsDatabaseInDevelopment())
         {
             Debug.Log($"[SafeAnsweredQuestionsManager] Verificando questões restantes em modo DEV para '{databankName}'");
             
-            var answeredQuestions = await FetchUserAnsweredQuestionsInTargetDatabase(databankName, database);
+            var answeredQuestions = await FetchUserAnsweredQuestionsInTargetDatabase(database);
             
             bool hasRemaining = currentQuestionList.Count > answeredQuestions.Count;
             

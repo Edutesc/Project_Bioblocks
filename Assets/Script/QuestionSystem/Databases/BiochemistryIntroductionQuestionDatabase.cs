@@ -326,7 +326,8 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             correctIndex = 1,
             questionNumber = 22,
             isImageAnswer = false,
-            questionLevel = 2
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {

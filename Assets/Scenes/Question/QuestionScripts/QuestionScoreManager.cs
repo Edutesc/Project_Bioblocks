@@ -31,7 +31,7 @@ public class QuestionScoreManager : MonoBehaviour
         }
     }
 
-    public async Task UpdateScore(int scoreChange, bool isCorrect, Question answeredQuestion)
+    public async Task UpdateScore(int scoreChange, bool isCorrect, Question answeredQuestion, IQuestionDatabase database = null)
     {
         try
         {
@@ -68,31 +68,39 @@ public class QuestionScoreManager : MonoBehaviour
 
                 try
                 {
-                    await FirestoreRepository.Instance.UpdateUserScores(
-                        userId,
-                        actualScoreChange,
-                        questionNumber,
-                        databankName,
-                        true
-                    );
-
-                    if (answeredQuestionsManager != null && answeredQuestionsManager.IsManagerInitialized)
+                    if (database != null && database.IsDatabaseInDevelopment())
                     {
-                        await answeredQuestionsManager.ForceUpdate();
+                        await SafeAnsweredQuestionsManager.Instance.MarkQuestionAsAnswered(questionNumber, database);
+                        
+                        Debug.Log($"[QuestionScoreManager] Modo DEV - Questão {questionNumber} NÃO salva no Firebase");
                     }
-
-                    bool isDatabankReset = UserDataStore.IsDatabankReset(databankName);
-                            
-                    if (!isDatabankReset && PlayerLevelManager.Instance != null)
+                    else
                     {
-                        await PlayerLevelManager.Instance.IncrementTotalAnswered();
-                        await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
-                    }
-                    else if (isDatabankReset)
-                    {
-                        Debug.Log($"[QuestionScoreManager] Banco {databankName} foi resetado. Questão não conta para level.");
-                    }
+                        await FirestoreRepository.Instance.UpdateUserScores(
+                            userId,
+                            actualScoreChange,
+                            questionNumber,
+                            databankName,
+                            true
+                        );
 
+                        if (answeredQuestionsManager != null && answeredQuestionsManager.IsManagerInitialized)
+                        {
+                            await answeredQuestionsManager.ForceUpdate();
+                        }
+
+                        bool isDatabankReset = UserDataStore.IsDatabankReset(databankName);
+                                
+                        if (!isDatabankReset && PlayerLevelManager.Instance != null)
+                        {
+                            await PlayerLevelManager.Instance.IncrementTotalAnswered();
+                            await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
+                        }
+                        else if (isDatabankReset)
+                        {
+                            Debug.Log($"[QuestionScoreManager] Banco {databankName} foi resetado. Questão não conta para level.");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -103,13 +111,20 @@ public class QuestionScoreManager : MonoBehaviour
             {
                 try
                 {
-                    await FirestoreRepository.Instance.UpdateUserScores(
-                        userId,
-                        actualScoreChange,
-                        0,
-                        "",
-                        false
-                    );
+                    if (database == null || !database.IsDatabaseInDevelopment())
+                    {
+                        await FirestoreRepository.Instance.UpdateUserScores(
+                            userId,
+                            actualScoreChange,
+                            0,
+                            "",
+                            false
+                        );
+                    }
+                    else
+                    {
+                        Debug.Log($"[QuestionScoreManager] Modo DEV - Score negativo NÃO salvo no Firebase");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -117,11 +132,14 @@ public class QuestionScoreManager : MonoBehaviour
                 }
             }
 
-            UserData updatedUserData = await FirestoreRepository.Instance.GetUserData(userId);
-
-            if (updatedUserData != null)
+            if (database == null || !database.IsDatabaseInDevelopment())
             {
-                UserDataStore.CurrentUserData = updatedUserData;
+                UserData updatedUserData = await FirestoreRepository.Instance.GetUserData(userId);
+
+                if (updatedUserData != null)
+                {
+                    UserDataStore.CurrentUserData = updatedUserData;
+                }
             }
         }
         catch (Exception ex)

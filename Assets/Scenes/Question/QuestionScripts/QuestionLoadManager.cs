@@ -123,10 +123,7 @@ public class QuestionLoadManager : MonoBehaviour
                 return new List<Question>();
             }
 
-            // ═══════════════════════════════════════════════════════════
-            // PASSO 1: CARREGAR TODAS AS QUESTÕES DO BANCO LOCAL
-            // ═══════════════════════════════════════════════════════════
-            List<Question> allQuestions = database.GetQuestions();
+            List<Question> allQuestions = QuestionFilterService.FilterQuestions(database);
 
             if (allQuestions == null || allQuestions.Count == 0)
             {
@@ -143,22 +140,17 @@ public class QuestionLoadManager : MonoBehaviour
                 Debug.Log($"  Nome do banco: {databankName}");
             }
 
-            // Registrar estatísticas
             int totalQuestions = allQuestions.Count;
             QuestionBankStatistics.SetTotalQuestions(databankName, totalQuestions);
 
             var questionsByLevel = GetQuestionCountByLevel(allQuestions);
             QuestionBankStatistics.SetQuestionsPerLevel(databankName, questionsByLevel);
 
-            // Mostrar distribuição por nível
             foreach (var kvp in questionsByLevel.OrderBy(x => x.Key))
             {
                 Debug.Log($"    Nível {kvp.Key}: {kvp.Value} questões");
             }
 
-            // ═══════════════════════════════════════════════════════════
-            // PASSO 2: OBTER QUESTÕES RESPONDIDAS DO FIREBASE
-            // ═══════════════════════════════════════════════════════════
             string userId = UserDataStore.CurrentUserData?.UserId;
 
             if (string.IsNullOrEmpty(userId))
@@ -169,8 +161,8 @@ public class QuestionLoadManager : MonoBehaviour
                 return questions;
             }
 
-            List<string> answeredQuestionsFromFirebase = await AnsweredQuestionsManager.Instance
-                .FetchUserAnsweredQuestionsInTargetDatabase(databankName);
+            List<string> answeredQuestionsFromFirebase = await SafeAnsweredQuestionsManager.Instance
+                .FetchUserAnsweredQuestionsInTargetDatabase(database);
 
             Debug.Log($"\n🔥 PASSO 2: FIREBASE (AnsweredQuestions)");
             Debug.Log($"  Questões respondidas corretamente: {answeredQuestionsFromFirebase.Count}");
@@ -179,9 +171,6 @@ public class QuestionLoadManager : MonoBehaviour
                 Debug.Log($"  IDs: [{string.Join(", ", answeredQuestionsFromFirebase)}]");
             }
 
-            // ═══════════════════════════════════════════════════════════
-            // PASSO 3: CALCULAR NÍVEL ATUAL DINAMICAMENTE
-            // ═══════════════════════════════════════════════════════════
             Debug.Log($"\n🔢 PASSO 3: CÁLCULO DO NÍVEL ATUAL");
 
             int currentLevel = LevelCalculator.CalculateCurrentLevel(
@@ -189,9 +178,6 @@ public class QuestionLoadManager : MonoBehaviour
                 answeredQuestionsFromFirebase
             );
 
-            // ═══════════════════════════════════════════════════════════
-            // PASSO 4: REMOVER QUESTÕES JÁ RESPONDIDAS
-            // ═══════════════════════════════════════════════════════════
             HashSet<string> answeredSet = new HashSet<string>(answeredQuestionsFromFirebase);
 
             List<Question> questionsNotAnswered = allQuestions
@@ -201,9 +187,6 @@ public class QuestionLoadManager : MonoBehaviour
             Debug.Log($"\n🗑️ PASSO 4: REMOVER QUESTÕES RESPONDIDAS");
             Debug.Log($"  Questões restantes: {questionsNotAnswered.Count}");
 
-            // ═══════════════════════════════════════════════════════════
-            // PASSO 5: FILTRAR APENAS QUESTÕES DO NÍVEL ATUAL
-            // ═══════════════════════════════════════════════════════════
             List<Question> questionsForCurrentLevel = questionsNotAnswered
                 .Where(q => GetQuestionLevel(q) == currentLevel)
                 .ToList();
@@ -231,7 +214,6 @@ public class QuestionLoadManager : MonoBehaviour
             {
                 Debug.Log($"  ⚠️ NENHUMA questão disponível no nível {currentLevel}!");
 
-                // Mostrar estatísticas para debug
                 var stats = LevelCalculator.GetLevelStats(allQuestions, answeredQuestionsFromFirebase);
                 Debug.Log($"\n📊 ESTATÍSTICAS:");
                 foreach (var stat in stats.Values.OrderBy(s => s.Level))
