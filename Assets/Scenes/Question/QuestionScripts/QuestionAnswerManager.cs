@@ -1,16 +1,26 @@
+using QuestionSystem;
+using System.Drawing;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using QuestionSystem;
-using TMPro;
 
 public class QuestionAnswerManager : MonoBehaviour
 {
     [Header("Answer Buttons")]
     [SerializeField] private Button[] textAnswerButtons;
     [SerializeField] private Button[] imageAnswerButtons;
-    
+
+    [Header("Theme Configuration")]
+    [SerializeField] private QuestionLevelConfig levelConfig;
+    [SerializeField] private AnswerButtonThemeManager answerButtonThemeManager;
+
+    [Header("Text Button Components (para aplicar tema)")]
+    [SerializeField] private Image[] textButtonBackgrounds; // Backgrounds dos 4 botões de texto
+    [SerializeField] private TextMeshProUGUI[] letterTexts; // A, B, C, D
+
     private TextMeshProUGUI[] buttonTexts;
     private Image[] buttonImages;
+    private int currentQuestionLevel = 1;
 
     public event System.Action<int> OnAnswerSelected;
 
@@ -76,6 +86,9 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
+        currentQuestionLevel = question.questionLevel;
+        ApplyTheme(question.questionLevel, question.isImageAnswer);
+
         if (question.isImageAnswer)
         {
             SetupImageAnswers(question);
@@ -86,13 +99,88 @@ public class QuestionAnswerManager : MonoBehaviour
         }
     }
 
+    public void MarkSelectedButton(int buttonIndex, bool isCorrect)
+    {
+        if (answerButtonThemeManager == null)
+        {
+            Debug.LogWarning("AnswerButtonThemeManager não está atribuído! Não é possível marcar o botão.");
+            return;
+        }
+
+        answerButtonThemeManager.MarkButtonAsAnswered(buttonIndex, isCorrect, currentQuestionLevel);
+    }
+
+    public void ResetButtonBackgrounds()
+    {
+        if (answerButtonThemeManager == null)
+        {
+            Debug.LogWarning("AnswerButtonThemeManager não está atribuído! Não é possível resetar os botões.");
+            return;
+        }
+
+        answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel);
+    }
+
+    private void ApplyTheme(int questionLevel, bool isImageAnswer)
+    {
+        if (isImageAnswer)
+        {
+            Debug.Log("🔘 Respostas são imagens, não aplica tema nos botões");
+            return;
+        }
+
+        if (levelConfig == null)
+        {
+            Debug.LogError("⚠️ QuestionLevelConfig não está atribuído no QuestionAnswerManager!");
+            return;
+        }
+
+        var theme = levelConfig.GetThemeForLevel(questionLevel);
+
+        if (theme == null)
+        {
+            Debug.LogError($"⚠️ Theme não encontrado para level {questionLevel}");
+            return;
+        }
+
+        Debug.Log($"🔘 Aplicando tema nos botões - Level {questionLevel} ({theme.levelName})");
+
+        for (int i = 0; i < textButtonBackgrounds.Length; i++)
+        {
+            if (textButtonBackgrounds[i] != null)
+            {
+                textButtonBackgrounds[i].sprite = theme.answerButtonBackground;
+                Debug.Log($"✅ Botão {i} background aplicado: {theme.answerButtonBackground.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"⚠️ Background do botão {i} não está atribuído!");
+            }
+        }
+
+        for (int i = 0; i < letterTexts.Length; i++)
+        {
+            if (letterTexts[i] != null)
+            {
+                letterTexts[i].color = theme.letterTextColor;
+            }
+        }
+
+        for (int i = 0; i < buttonTexts.Length; i++)
+        {
+            if (buttonTexts[i] != null)
+            {
+                buttonTexts[i].color = theme.answerTextColor;
+            }
+        }
+    }
+
     private void SetupImageAnswers(Question question)
     {
         for (int i = 0; i < imageAnswerButtons.Length && i < question.answers.Length; i++)
         {
             if (imageAnswerButtons[i] != null && buttonImages[i] != null)
             {
-                // Carrega a imagem do caminho especificado em answers
                 Sprite sprite = Resources.Load<Sprite>(question.answers[i]);
                 if (sprite != null)
                 {
@@ -123,7 +211,6 @@ public class QuestionAnswerManager : MonoBehaviour
 
     public void DisableAllButtons()
     {
-        // Desativa botões de texto
         foreach (var button in textAnswerButtons)
         {
             if (button != null)
@@ -132,7 +219,6 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        // Desativa botões de imagem
         foreach (var button in imageAnswerButtons)
         {
             if (button != null)
@@ -144,7 +230,6 @@ public class QuestionAnswerManager : MonoBehaviour
 
     public void EnableAllButtons()
     {
-        // Ativa botões de texto
         foreach (var button in textAnswerButtons)
         {
             if (button != null)
@@ -153,12 +238,26 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        // Ativa botões de imagem
         foreach (var button in imageAnswerButtons)
         {
             if (button != null)
             {
                 button.interactable = true;
+            }
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (letterTexts != null && letterTexts.Length == 4)
+        {
+            string[] letters = { "A", "B", "C", "D" };
+            for (int i = 0; i < letterTexts.Length; i++)
+            {
+                if (letterTexts[i] != null && string.IsNullOrEmpty(letterTexts[i].text))
+                {
+                    letterTexts[i].text = letters[i];
+                }
             }
         }
     }

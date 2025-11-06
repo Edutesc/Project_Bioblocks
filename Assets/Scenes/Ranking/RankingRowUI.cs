@@ -9,120 +9,42 @@ public class RankingRowUI : MonoBehaviour
     [SerializeField] private TMP_Text nickNameText;
     [SerializeField] public TMP_Text totalScoreText;
     [SerializeField] public TMP_Text weekScoreText;
+    
+    [Header("Background Images")]
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image rankBadgeImage;
 
-    [Header("Image Components")]
-    [SerializeField] private RawImage profileImage;
+    [Header("Profile Image")]
     [SerializeField] private ProfileImageLoader imageLoader;
 
-    [Header("Layout Elements")]
-    [SerializeField] private LayoutElement rankLayout;
-    [SerializeField] private LayoutElement profileLayout;
-    [SerializeField] private LayoutElement nickNameLayout;
-    [SerializeField] private LayoutElement weekScoreLayout;
-    [SerializeField] private LayoutElement totalScoreLayout;
-
-    private RectTransform rectTransform;
     private bool isExtraRow = false;
 
     private void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
+        ValidateReferences();
+    }
 
-        // Auto-encontrar o ProfileImageLoader se não estiver atribuído
+    private void ValidateReferences()
+    {
         if (imageLoader == null)
         {
-            imageLoader = GetComponent<ProfileImageLoader>();
-            if (imageLoader == null)
-            {
-                Debug.LogError("ProfileImageLoader não encontrado! Adicionando...");
-                imageLoader = gameObject.AddComponent<ProfileImageLoader>();
-            }
+            Debug.LogError($"[RankingRowUI] ProfileImageLoader não está atribuído no prefab '{gameObject.name}'! " +
+                          "Configure no Inspector antes de usar.");
+        }
+        
+        if (rankText == null || nickNameText == null || weekScoreText == null)
+        {
+            Debug.LogError($"[RankingRowUI] Componentes de texto obrigatórios não estão atribuídos no prefab '{gameObject.name}'!");
         }
 
-        // Auto-encontrar o profileImage se não estiver atribuído
-        if (profileImage == null)
+        if (rankBadgeImage == null)
         {
-            profileImage = GetComponentInChildren<RawImage>();
-            if (profileImage != null)
-            {
-                imageLoader.SetImageContent(profileImage);
-            }
-            else
-            {
-                Debug.LogError("ProfileImage (RawImage) não encontrado na hierarquia!");
-            }
-        }
-
-        ConfigureLayout();
-    }
-
-    private void ConfigureLayout()
-    {
-        // Configurar RectTransform para garantir altura adequada
-        if (rectTransform != null)
-        {
-            rectTransform.anchorMin = new Vector2(0, 0);
-            rectTransform.anchorMax = new Vector2(1, 0);
-            rectTransform.pivot = new Vector2(0.5f, 0);
-            rectTransform.sizeDelta = new Vector2(0, 150);
-        }
-
-        // Configurar HorizontalLayoutGroup
-        var horizontalLayout = GetComponent<HorizontalLayoutGroup>();
-        if (horizontalLayout == null)
-            horizontalLayout = gameObject.AddComponent<HorizontalLayoutGroup>();
-
-        horizontalLayout.padding = new RectOffset(15, 15, 5, 5);
-        horizontalLayout.spacing = 12;
-        horizontalLayout.childAlignment = TextAnchor.MiddleLeft;
-        horizontalLayout.childControlWidth = false;
-        horizontalLayout.childControlHeight = false;
-        horizontalLayout.childForceExpandWidth = false;
-        horizontalLayout.childForceExpandHeight = false;
-
-        ConfigureLayoutElements();
-    }
-
-    protected virtual void ConfigureLayoutElements()
-    {
-        if (rankLayout != null)
-        {
-            rankLayout.preferredWidth = 40;
-            rankLayout.minWidth = 40;
-        }
-
-        if (profileLayout != null)
-        {
-            profileLayout.preferredWidth = 50;
-            profileLayout.preferredHeight = 50;
-            profileLayout.minWidth = 50;
-            profileLayout.minHeight = 50;
-        }
-
-        if (nickNameLayout != null)
-        {
-            nickNameLayout.preferredWidth = 300;
-            nickNameLayout.minWidth = 200;
-            nickNameLayout.flexibleWidth = 1; // Permite expandir
-        }
-
-        if (totalScoreLayout != null)
-        {
-            totalScoreLayout.preferredWidth = 200;
-            totalScoreLayout.minWidth = 170;
-        }
-
-        if (weekScoreLayout != null)
-        {
-            weekScoreLayout.preferredWidth = 180;
-            weekScoreLayout.minWidth = 150;
+            Debug.LogWarning($"[RankingRowUI] rankBadgeImage não está atribuído no prefab '{gameObject.name}'!");
         }
     }
 
     public void Setup(int rank, string userName, int score, string profileImageUrl, bool isCurrentUser)
     {
-        // Chama o novo método, passando 0 como weekScore
         Setup(rank, userName, score, 0, profileImageUrl, isCurrentUser);
     }
 
@@ -130,23 +52,27 @@ public class RankingRowUI : MonoBehaviour
     {
         if (imageLoader == null)
         {
-            Debug.LogError("ProfileImageLoader é null em Setup!");
+            Debug.LogError($"[RankingRowUI] Não é possível configurar row para '{userName}' - ProfileImageLoader não encontrado!");
             return;
         }
 
-        rankText.text = isExtraRow ? "..." : $"{rank}.";
+        rankText.text = isExtraRow ? "..." : $"{rank}";
         nickNameText.text = userName;
-        // totalScoreText.text = $"Total de Pontos: {totalScore} XP"; // Formato como na imagem 1
 
         if (totalScoreText != null)
-            totalScoreText.gameObject.SetActive(false);
+        {
+            totalScoreText.gameObject.SetActive(true);
+            totalScoreText.text = $"{totalScore}";
+        }
 
         if (weekScoreText != null)
-            weekScoreText.text = $"{totalScore} XP"; // Formato como na imagem 1
+        {
+            weekScoreText.gameObject.SetActive(true);
+            weekScoreText.text = $"{weekScore}";
+        }
 
-        SetupColors(rank, isCurrentUser);
-
-        Debug.Log($"Tentando carregar imagem para {userName}: {profileImageUrl}");
+        SetupRankBadge(rank);
+        Debug.Log($"[RankingRowUI] Carregando imagem para '{userName}': {profileImageUrl}");
         imageLoader.LoadProfileImage(profileImageUrl);
     }
 
@@ -162,52 +88,37 @@ public class RankingRowUI : MonoBehaviour
         Setup(actualRank, userName, totalScore, weekScore, profileImageUrl, true);
     }
 
-    private void SetupColors(int rank, bool isCurrentUser)
+    private void SetupRankBadge(int rank)
     {
-        Color textColor;
-        Color backgroundColor;
+        if (rankBadgeImage == null) return;
 
         if (rank <= 3)
         {
+            rankBadgeImage.gameObject.SetActive(true);
+            
+            Color badgeColor;
+            
             switch (rank)
             {
-                case 1: // Primeiro lugar - Verde
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#91FF7D", out backgroundColor);
+                case 1:
+                    ColorUtility.TryParseHtmlString("#ece057ff", out badgeColor);
                     break;
-                case 2: // Segundo lugar - Azul
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#7DF7FF", out backgroundColor);
+                case 2:
+                    ColorUtility.TryParseHtmlString("#98a1a2ff", out badgeColor);
                     break;
-                case 3: // Terceiro lugar - Amarelo
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#F2D4EC", out backgroundColor);
+                case 3:
+                    ColorUtility.TryParseHtmlString("#252325ff", out badgeColor);
                     break;
                 default:
-                    ColorUtility.TryParseHtmlString("#004699", out textColor);
-                    ColorUtility.TryParseHtmlString("#FFFEDE", out backgroundColor);
+                    badgeColor = Color.white;
                     break;
             }
+            
+            rankBadgeImage.color = badgeColor;
         }
-
         else
         {
-            if (isCurrentUser)
-            {
-                ColorUtility.TryParseHtmlString("#004699", out textColor);
-                ColorUtility.TryParseHtmlString("#E5E5E5", out backgroundColor);
-            }
-            else
-            {
-                ColorUtility.TryParseHtmlString("#004699", out textColor);
-                ColorUtility.TryParseHtmlString("#FFFEDE", out backgroundColor);
-            }
+            rankBadgeImage.gameObject.SetActive(false);
         }
-
-        if (rankText) rankText.color = textColor;
-        if (nickNameText) nickNameText.color = textColor;
-        if (totalScoreText) totalScoreText.color = textColor;
-        if (weekScoreText) weekScoreText.color = textColor;
-        if (backgroundImage) backgroundImage.color = backgroundColor;
     }
 }

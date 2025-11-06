@@ -811,7 +811,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Básica",
                 "Isotônica"
             },
-            correctIndex = 0,
+            correctIndex = 1,
             questionNumber = 54,
             isImageAnswer = false,
             questionLevel = 1

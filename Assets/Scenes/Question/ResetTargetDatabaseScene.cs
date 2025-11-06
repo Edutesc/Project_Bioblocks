@@ -26,7 +26,7 @@ public class ResetTargetDatabaseScene : MonoBehaviour
             {
                 UpdateDatabankNameText();
                 currentUserData = UserDataStore.CurrentUserData;
-                SceneDataManager.Instance.ClearData(); // Movido para depois de usar o databankName
+                SceneDataManager.Instance.ClearData();
             }
             else
             {
@@ -43,14 +43,12 @@ public class ResetTargetDatabaseScene : MonoBehaviour
 
     private void UpdateDatabankNameText()
     {
-        // Verificar se o campo databankNameText foi atribuído no Inspector
         if (databankNameText == null)
         {
             Debug.LogError("databankNameText não está referenciado no Inspector");
             return;
         }
 
-        // Verificar se databankName tem valor
         if (string.IsNullOrEmpty(databankName))
         {
             Debug.LogError("databankName está vazio ou nulo");
@@ -88,7 +86,6 @@ public class ResetTargetDatabaseScene : MonoBehaviour
             databankNameText.text = $"Tópico: {databankName}";
         }
 
-        // Verificar se o texto foi realmente atualizado
         Debug.Log($"Texto após atualização: {databankNameText.text}");
     }
 
@@ -104,13 +101,20 @@ public class ResetTargetDatabaseScene : MonoBehaviour
 
             await FirestoreRepository.Instance.ResetAnsweredQuestions(userId, databankName);
             Debug.Log("Questões resetadas com sucesso");
+            await FirestoreRepository.Instance.UpdateUserField(userId, $"ResetDatabankFlags.{databankName}", true);
+            UserDataStore.MarkDatabankAsReset(databankName, true);
+            
+            if (PlayerLevelManager.Instance != null)
+            {
+                await PlayerLevelManager.Instance.RecalculateTotalAnswered();
+            }
 
-            // Feedback visual de sucesso (opcional)
+            Debug.Log($"[ResetDatabase] Banco {databankName} marcado como resetado. Level recalculado.");
+
             if (resetButtonText != null) resetButtonText.text = "Sucesso!";
 
             AnsweredQuestionsListStore.UpdateAnsweredQuestionsCount(userId, databankName, 0);
             UpdateUIAfterReset(databankName);
-            // Pequeno delay para mostrar o feedback de sucesso
             await Task.Delay(500);
 
             NavigateToPathway();
@@ -119,7 +123,6 @@ public class ResetTargetDatabaseScene : MonoBehaviour
         {
             Debug.LogError($"Erro ao resetar questões: {e.Message}");
 
-            // Reativa o botão em caso de erro
             if (resetButton != null)
             {
                 resetButton.interactable = true;

@@ -953,7 +953,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 61,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -965,10 +965,10 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Concentração de substrato",
                 "Cor do substrato"
             },
-            correctIndex = 2,
+            correctIndex = 3,
             questionNumber = 62,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -983,7 +983,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 63,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -996,9 +996,9 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Ligase"
             },
             correctIndex = 1,
-            questionNumber = 65,
+            questionNumber = 64,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
         new Question
         {
@@ -1011,24 +1011,24 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "O pH se mantém constante"
             },
             correctIndex = 1,
-            questionNumber = 66,
+            questionNumber = 65,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
             questionDatabankName = "EnzymeQuestionDatabase",
             questionText = "As enzimas reduzem:",
             answers = new string[] {
-                "A concentração de substrato",
+                "A quantidade de solvente",
                 "A energia de ativação da reação",
                 "A quantidade de produtos formados",
                 "A velocidade da reação"
             },
             correctIndex = 1,
-            questionNumber = 67,
+            questionNumber = 66,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 2
         },
         new Question
         {
@@ -1041,9 +1041,9 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Toxicidade"
             },
             correctIndex = 2,
-            questionNumber = 68,
+            questionNumber = 67,
             isImageAnswer = false,
-            questionLevel = 1
+            questionLevel = 3
         },
     };
     

@@ -15,7 +15,7 @@ public class UserFeedbackManager : MonoBehaviour
     [SerializeField] private Button prevButton;
     [SerializeField] private Button submitButton;
     [SerializeField] private Button backButton;
-    [SerializeField] private TopBarUIManager topBarManager;
+    [SerializeField] private UserHeaderManager topBarManager;
 
     [Header("Loading Spinner Configuration")]
     [SerializeField] private float spinnerRotationSpeed = 100f;
@@ -54,6 +54,13 @@ public class UserFeedbackManager : MonoBehaviour
     private void Start()
     {
         logoLoading.SetActive(false);
+
+        topBarManager = UserHeaderManager.Instance;
+        if (topBarManager == null)
+        {
+            Debug.LogError("UserTopBarManager não encontrado!");
+        }
+
         if (questionsContainer == null)
         {
             Debug.LogError("QuestionsContainer não foi atribuído no Inspector!");

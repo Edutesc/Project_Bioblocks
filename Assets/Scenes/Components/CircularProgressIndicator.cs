@@ -6,153 +6,245 @@ using TMPro;
 public class CircularProgressIndicator : MonoBehaviour
 {
     [Header("Configurações de Visual")]
-    [SerializeField] private Image fillImage;
+    [SerializeField] private Image backgroundRing; // MaskCircle (anel de fundo)
+    [SerializeField] private Image fillImage; // CircleFill (anel que preenche)
     [SerializeField] private TMP_Text percentageText;
+
+    [Header("Animação")]
     [SerializeField] private float fillAnimationDuration = 0.5f;
-    [SerializeField] private Color lowProgressColor = new Color(0.5f, 0.5f, 1f); // Azul claro
-    [SerializeField] private Color midProgressColor = new Color(0.3f, 0.3f, 1f); // Azul médio
-    [SerializeField] private Color highProgressColor = new Color(0.1f, 0.1f, 0.8f); // Azul escuro
-    
-    [Header("Detecção Automática (Opcional)")]
+
+    [Header("Detecção Automática")]
     [SerializeField] private string databaseNameSuffix = "PorcentageText";
-    
-    // Removida a referência ao CanvasGroup, não precisamos mais dela
-    // private CanvasGroup canvasGroup;
-    
+    [SerializeField] private bool autoSetupImages = true;
+
     private float targetFillAmount = 0f;
     private float currentFillAmount = 0f;
     private float fillVelocity = 0f;
     private string databaseName;
-    
+
     private void Awake()
     {
-        // Removida a linha que buscava o CanvasGroup
-        
-        // Detectar automaticamente o nome do banco de dados a partir do nome do objeto
+        // Auto-detectar o banco de dados pelo nome do texto
         if (percentageText == null)
         {
             percentageText = GetComponentInChildren<TMP_Text>();
         }
-        
+
         if (percentageText != null)
         {
             string objName = percentageText.gameObject.name;
             if (objName.EndsWith(databaseNameSuffix))
             {
                 databaseName = objName.Substring(0, objName.Length - databaseNameSuffix.Length);
-                Debug.Log($"CircularProgressIndicator detectou banco de dados: {databaseName}");
+                Debug.Log($"CircularProgressIndicator detectou banco: {databaseName}");
             }
         }
-        
-        // Configuração inicial
-        if (fillImage != null)
+
+        // Tentar encontrar as imagens automaticamente se não foram atribuídas
+        if (autoSetupImages)
         {
-            fillImage.type = Image.Type.Filled;
-            fillImage.fillMethod = Image.FillMethod.Radial360;
-            fillImage.fillOrigin = (int)Image.Origin360.Top;
-            fillImage.fillClockwise = true;
-            fillImage.fillAmount = 0f;
+            AutoSetupImages();
+        }
+
+        // Configurar a imagem de preenchimento
+        SetupFillImage();
+    }
+
+    private void AutoSetupImages()
+    {
+        // Buscar todas as imagens filhas
+        Image[] images = GetComponentsInChildren<Image>(true);
+
+        foreach (Image img in images)
+        {
+            string objName = img.gameObject.name.ToLower();
+
+            // Identificar pelo nome do GameObject
+            if (objName.Contains("mask") && backgroundRing == null)
+            {
+                backgroundRing = img;
+                Debug.Log($"Auto-detectado background ring: {img.name}");
+            }
+            else if (objName.Contains("fill") && fillImage == null)
+            {
+                fillImage = img;
+                Debug.Log($"Auto-detectado fill image: {img.name}");
+            }
+            // Fallback: identificar pelo sprite se o nome do GameObject não ajudar
+            else if (img.sprite != null && backgroundRing == null && fillImage == null)
+            {
+                string spriteName = img.sprite.name.ToLower();
+                if (spriteName.Contains("mask") && backgroundRing == null)
+                {
+                    backgroundRing = img;
+                    Debug.Log($"Auto-detectado background ring por sprite: {img.name}");
+                }
+                else if (spriteName.Contains("fill") && fillImage == null)
+                {
+                    fillImage = img;
+                    Debug.Log($"Auto-detectado fill image por sprite: {img.name}");
+                }
+            }
         }
     }
-    
+
+    private void SetupFillImage()
+    {
+        if (fillImage == null)
+        {
+            Debug.LogError($"Fill Image não foi atribuída para {gameObject.name}!");
+            return;
+        }
+
+        // Configurar como preenchimento radial
+        fillImage.type = Image.Type.Filled;
+        fillImage.fillMethod = Image.FillMethod.Radial360;
+        fillImage.fillOrigin = (int)Image.Origin360.Top;
+        fillImage.fillClockwise = true;
+        fillImage.fillAmount = 0f;
+        fillImage.enabled = true;
+
+        // Configurar o background ring
+        if (backgroundRing != null)
+        {
+            backgroundRing.type = Image.Type.Simple;
+            backgroundRing.enabled = true;
+
+            // Garantir que o fillImage renderiza por cima
+            fillImage.transform.SetAsLastSibling();
+        }
+
+        // Limpar componentes Mask desnecessários (só no Editor, não em Play Mode)
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            CleanupMaskComponents();
+        }
+#endif
+    }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Remove componentes Mask desnecessários apenas no Editor
+    /// </summary>
+    private void CleanupMaskComponents()
+    {
+        // Remove Mask do fillImage se existir
+        Mask fillMask = fillImage.GetComponent<Mask>();
+        if (fillMask != null)
+        {
+            Debug.Log($"Removendo Mask de {fillImage.name} - não é necessário!");
+            DestroyImmediate(fillMask);
+        }
+
+        // Remove Mask do background se existir
+        if (backgroundRing != null)
+        {
+            Mask bgMask = backgroundRing.GetComponent<Mask>();
+            if (bgMask != null)
+            {
+                Debug.Log($"Removendo Mask de {backgroundRing.name} - não é necessário!");
+                DestroyImmediate(bgMask);
+            }
+        }
+    }
+#endif
+
     private void Start()
     {
-        // Se o PathwayManager estiver ativo, registrar para o evento
         AnsweredQuestionsManager.OnAnsweredQuestionsUpdated += HandleAnsweredQuestionsUpdated;
-        
-        // Não precisamos mais definir opacidade inicial
+
+        // Inicializar com 0%
+        UpdateVisuals(0f);
     }
-    
+
     private void OnDestroy()
     {
         AnsweredQuestionsManager.OnAnsweredQuestionsUpdated -= HandleAnsweredQuestionsUpdated;
     }
-    
+
     private void Update()
     {
         // Animação suave do preenchimento
-        if (currentFillAmount != targetFillAmount)
+        if (Mathf.Abs(currentFillAmount - targetFillAmount) > 0.001f)
         {
             currentFillAmount = Mathf.SmoothDamp(
-                currentFillAmount, 
-                targetFillAmount, 
-                ref fillVelocity, 
+                currentFillAmount,
+                targetFillAmount,
+                ref fillVelocity,
                 fillAnimationDuration);
-            
+
             if (Mathf.Abs(currentFillAmount - targetFillAmount) < 0.01f)
             {
                 currentFillAmount = targetFillAmount;
             }
-            
-            // Atualizar visual
+
             UpdateVisuals(currentFillAmount);
         }
     }
-    
+
     private void HandleAnsweredQuestionsUpdated(Dictionary<string, int> answeredCounts)
     {
         if (string.IsNullOrEmpty(databaseName) || !answeredCounts.ContainsKey(databaseName))
         {
             return;
         }
-        
+
         int count = answeredCounts[databaseName];
         int totalQuestions = QuestionBankStatistics.GetTotalQuestions(databaseName);
-        
-        if (totalQuestions <= 0) totalQuestions = 50; // Valor padrão
-        
-        // Calcular a porcentagem
+
+        if (totalQuestions <= 0) totalQuestions = 50;
+
         int percentage = totalQuestions > 0 ? (count * 100) / totalQuestions : 0;
-        percentage = Mathf.Min(percentage, 100); // Garantir máximo de 100%
-        
-        // Atualizar texto
+        percentage = Mathf.Min(percentage, 100);
+
         if (percentageText != null)
         {
             percentageText.text = $"{percentage}%";
         }
-        
-        // Definir o alvo para animação
+
         targetFillAmount = percentage / 100f;
-        
-        // Log para debug
-        Debug.Log($"CircularProgress para {databaseName}: {percentage}% ({count}/{totalQuestions})");
+
+        Debug.Log($"CircularProgress {databaseName}: {percentage}% ({count}/{totalQuestions}) - FillAmount: {targetFillAmount}");
     }
-    
+
     public void SetProgress(int percentage)
     {
-        // Método público para definir o progresso diretamente
         percentage = Mathf.Clamp(percentage, 0, 100);
-        
+
         if (percentageText != null)
         {
             percentageText.text = $"{percentage}%";
         }
-        
+
         targetFillAmount = percentage / 100f;
+
+        Debug.Log($"SetProgress chamado para {gameObject.name}: {percentage}% - FillAmount: {targetFillAmount}");
     }
-    
+
     private void UpdateVisuals(float fillAmount)
     {
-        // Atualizar preenchimento
-        if (fillImage != null)
+        if (fillImage == null) return;
+
+        // Atualiza o preenchimento radial
+        // A cor permanece a original do sprite (preserva gradiente e efeito 3D)
+        fillImage.fillAmount = fillAmount;
+    }
+
+    // Método para debug e configuração no editor
+    private void OnValidate()
+    {
+        if (fillImage != null && !Application.isPlaying)
         {
-            fillImage.fillAmount = fillAmount;
-            
-            // Atualizar cor baseado no progresso
-            if (fillAmount < 0.3f)
-            {
-                fillImage.color = lowProgressColor;
-            }
-            else if (fillAmount < 0.7f)
-            {
-                fillImage.color = midProgressColor;
-            }
-            else
-            {
-                fillImage.color = highProgressColor;
-            }
+            fillImage.type = Image.Type.Filled;
+            fillImage.fillMethod = Image.FillMethod.Radial360;
+            fillImage.fillOrigin = (int)Image.Origin360.Top;
+            fillImage.fillClockwise = true;
         }
-        
-        // Removidas todas as linhas relacionadas à opacidade
+
+        if (backgroundRing != null && !Application.isPlaying)
+        {
+            backgroundRing.type = Image.Type.Simple;
+        }
     }
 }

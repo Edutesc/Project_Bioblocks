@@ -26,7 +26,6 @@ public class QuestionBonusManager : MonoBehaviour
     private bool isBonusActive = false;
     private float currentBonusTime = 0f;
     private QuestionSceneBonusManager bonusManager;
-    private BonusApplicationManager bonusApplicationManager;
 
     private void Start()
     {
@@ -59,14 +58,15 @@ public class QuestionBonusManager : MonoBehaviour
             Debug.LogWarning("QuestionManager não encontrado");
         }
 
-        bonusApplicationManager = FindFirstObjectByType<BonusApplicationManager>();
-        if (bonusApplicationManager != null)
+        // Inscreve-se no evento do UserTopBarManager se existir
+        if (UserHeaderManager.Instance != null)
         {
-            bonusApplicationManager.OnBonusMultiplierUpdated += OnBonusMultiplierUpdated;
+            UserHeaderManager.Instance.OnBonusMultiplierUpdated += OnBonusMultiplierUpdated;
+            Debug.Log("QuestionBonusManager: Inscrito no UserTopBarManager");
         }
         else
         {
-            Debug.LogWarning("BonusApplicationManager não encontrado. A visualização de bônus pode não funcionar corretamente.");
+            Debug.LogWarning("UserTopBarManager.Instance não encontrado. A visualização de bônus pode não funcionar corretamente.");
         }
 
         StartCoroutine(InitCheckForBonus());
@@ -165,9 +165,10 @@ public class QuestionBonusManager : MonoBehaviour
                     {
                         isBonusActive = true;
                         
-                        if (bonusApplicationManager != null)
+                        // Atualiza o UserTopBarManager se existir
+                        if (UserHeaderManager.Instance != null)
                         {
-                            bonusApplicationManager.RefreshActiveBonuses();
+                            UserHeaderManager.Instance.RefreshActiveBonuses();
                         }
                     }
                     else
@@ -194,6 +195,7 @@ public class QuestionBonusManager : MonoBehaviour
     private void OnBonusMultiplierUpdated(int newMultiplier)
     {
         combinedMultiplier = newMultiplier;
+        Debug.Log($"QuestionBonusManager: Multiplicador atualizado para {newMultiplier}");
     }
 
     private async void ActivateBonus()
@@ -208,11 +210,13 @@ public class QuestionBonusManager : MonoBehaviour
 
         try
         {
+            // Ativa o bônus no Firestore
             await bonusManager.ActivateBonus(userId, "correctAnswerBonus", bonusDuration, 2);
             await bonusManager.IncrementBonusCounter(userId, "correctAnswerBonusCounter");
             isBonusActive = true;
             currentBonusTime = bonusDuration;
 
+            // Mostra feedback visual
             if (canvasGroupManager != null)
             {
                 canvasGroupManager.ShowBonusFeedback(true);
@@ -235,9 +239,15 @@ public class QuestionBonusManager : MonoBehaviour
                 }
             }
 
-            if (bonusApplicationManager != null)
+            // Notifica o UserTopBarManager para atualizar o timer na TopBar
+            if (UserHeaderManager.Instance != null)
             {
-                bonusApplicationManager.RefreshActiveBonuses();
+                UserHeaderManager.Instance.RefreshActiveBonuses();
+                Debug.Log("QuestionBonusManager: UserTopBarManager notificado sobre novo bônus");
+            }
+            else
+            {
+                Debug.LogWarning("QuestionBonusManager: UserTopBarManager.Instance não encontrado para atualizar timer");
             }
         }
         catch (Exception e)
@@ -274,9 +284,10 @@ public class QuestionBonusManager : MonoBehaviour
             questionBottomUIManager.OnNextButtonClicked -= HideBonusFeedback;
         }
 
-        if (bonusApplicationManager != null)
+        // Desinscreve-se do evento do UserTopBarManager
+        if (UserHeaderManager.Instance != null)
         {
-            bonusApplicationManager.OnBonusMultiplierUpdated -= OnBonusMultiplierUpdated;
+            UserHeaderManager.Instance.OnBonusMultiplierUpdated -= OnBonusMultiplierUpdated;
         }
     }
 
@@ -302,14 +313,21 @@ public class QuestionBonusManager : MonoBehaviour
 
     public bool IsBonusActive()
     {
-        return isBonusActive || (bonusApplicationManager != null && bonusApplicationManager.IsAnyBonusActive());
+        // Verifica tanto no estado local quanto no UserTopBarManager
+        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
+        {
+            return true;
+        }
+        
+        return isBonusActive;
     }
 
     public int GetCurrentScoreMultiplier()
     {
-        if (bonusApplicationManager != null)
+        // Prioriza o multiplicador do UserTopBarManager (fonte da verdade)
+        if (UserHeaderManager.Instance != null)
         {
-            return bonusApplicationManager.GetTotalMultiplier();
+            return UserHeaderManager.Instance.GetTotalMultiplier();
         }
         
         return isBonusActive ? combinedMultiplier : 1;
@@ -317,11 +335,13 @@ public class QuestionBonusManager : MonoBehaviour
 
     public int ApplyBonusToScore(int baseScore)
     {
-        if (bonusApplicationManager != null)
+        // Usa o UserTopBarManager para aplicar o bônus (fonte da verdade)
+        if (UserHeaderManager.Instance != null)
         {
-            return bonusApplicationManager.ApplyTotalBonus(baseScore);
+            return UserHeaderManager.Instance.ApplyTotalBonus(baseScore);
         }
 
+        // Fallback para lógica local caso UserTopBarManager não exista
         if (isBonusActive && baseScore > 0)
         {
             return baseScore * combinedMultiplier;
@@ -371,14 +391,20 @@ public class QuestionBonusManager : MonoBehaviour
         if (isCorrect)
         {
             consecutiveCorrectAnswers++;
+            Debug.Log($"QuestionBonusManager: Respostas consecutivas corretas: {consecutiveCorrectAnswers}/{consecutiveCorrectAnswersNeeded}");
 
             if (consecutiveCorrectAnswers >= consecutiveCorrectAnswersNeeded && !isBonusActive)
             {
+                Debug.Log("QuestionBonusManager: Ativando bônus por respostas consecutivas!");
                 ActivateBonus();
             }
         }
         else
         {
+            if (consecutiveCorrectAnswers > 0)
+            {
+                Debug.Log("QuestionBonusManager: Resposta incorreta. Resetando contador de consecutivas.");
+            }
             consecutiveCorrectAnswers = 0;
         }
     }

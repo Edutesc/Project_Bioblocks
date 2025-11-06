@@ -8,74 +8,95 @@ public class ButtonPressEffect : MonoBehaviour, IPointerDownHandler, IPointerUpH
     private Button button;
     private RectTransform rect;
     private Vector3 originalScale;
-    private float pressedScale = 0.98f;
-    private float pressDuration = 0.15f;
-    private float releaseDuration = 0.15f;
     private Coroutine currentAnimation;
 
+    [Header("Animation Settings")]
+    [SerializeField] private float pressedScale = 0.98f;
+    [SerializeField] private float pressDuration = 0.15f;
+    [SerializeField] private float releaseDuration = 0.15f;
+
     [Header("Scroll Protection")]
-    [SerializeField] private float dragThreshold = 15f; // Distância em pixels para considerar drag
-    [SerializeField] private float maxClickDuration = 0.5f; // Tempo máximo para considerar clique
+    [SerializeField] private float dragThreshold = 15f; 
+    [SerializeField] private float maxClickDuration = 0.5f; 
 
     private Vector2 pointerDownPosition;
     private float pointerDownTime;
     private bool wasDragging = false;
 
-    private void Start()
+    private void Awake()
     {
         button = GetComponent<Button>();
         rect = GetComponent<RectTransform>();
+
+        if (rect == null)
+        {
+            Debug.LogError("ButtonPressEffect precisa de um RectTransform!", this);
+            enabled = false;
+            return;
+        }
+
         originalScale = rect.localScale;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // Guarda a posição inicial e o tempo
+        if (button == null || !button.interactable)
+        {
+            return;
+        }
+
         pointerDownPosition = eventData.position;
         pointerDownTime = Time.time;
         wasDragging = false;
 
-        Debug.Log("Botão pressionado!");
-
-        // Para qualquer animação em andamento
         if (currentAnimation != null)
             StopCoroutine(currentAnimation);
 
-        // Inicia animação de afundamento
         currentAnimation = StartCoroutine(PressDown());
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("Botão solto!");
 
-        // Calcula a distância do arrasto
+        if (button == null || !button.interactable)
+        {
+            return;
+        }
+
         float dragDistance = Vector2.Distance(pointerDownPosition, eventData.position);
         float pressDuration = Time.time - pointerDownTime;
-
-        // Verifica se foi um arrasto (scroll) ou um clique
         wasDragging = dragDistance > dragThreshold || pressDuration > maxClickDuration;
 
         if (wasDragging)
         {
-            Debug.Log($"Scroll detectado! Distância: {dragDistance:F2}px - Não executando clique");
+            Debug.Log($"Scroll detectado! Distï¿½ncia: {dragDistance:F2}px - Nï¿½o executando clique");
         }
         else
         {
-            Debug.Log($"Clique válido! Distância: {dragDistance:F2}px");
+            Debug.Log($"Clique vï¿½lido! Distï¿½ncia: {dragDistance:F2}px");
         }
 
-        // Para a animação de afundamento
         if (currentAnimation != null)
             StopCoroutine(currentAnimation);
-
-        // Inicia animação de retorno
         currentAnimation = StartCoroutine(PressUp());
+    }
+    
+    public void ForceStopAnimation()
+    {
+        if (currentAnimation != null)
+        {
+            StopCoroutine(currentAnimation);
+            currentAnimation = null;
+        }
+
+        if (rect != null)
+        {
+            rect.localScale = originalScale;
+        }
     }
 
     private IEnumerator PressDown()
     {
-        // Afundar
         float elapsed = 0f;
         Vector3 targetScale = new Vector3(pressedScale, pressedScale, pressedScale);
 
@@ -92,7 +113,6 @@ public class ButtonPressEffect : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     private IEnumerator PressUp()
     {
-        // Voltar
         float elapsed = 0f;
         Vector3 targetScale = new Vector3(pressedScale, pressedScale, pressedScale);
 
@@ -106,10 +126,9 @@ public class ButtonPressEffect : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
         rect.localScale = originalScale;
 
-        // Só executa o clique se NÃO foi um arrasto
         if (!wasDragging && button != null && button.interactable)
         {
-            Debug.Log("Executando onClick do botão");
+            Debug.Log("Executando onClick do botï¿½o");
             button.onClick.Invoke();
         }
     }

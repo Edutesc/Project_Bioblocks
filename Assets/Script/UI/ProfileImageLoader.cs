@@ -3,10 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
 
-/// <summary>
-/// Componente genérico e reutilizável para carregar e exibir imagens de perfil
-/// Usado em: RankingRowUI, UserTopBar, ProfileScene, e qualquer outro lugar que precise exibir avatares
-/// </summary>
 public class ProfileImageLoader : MonoBehaviour
 {
     [Header("UI Components")]
@@ -18,26 +14,23 @@ public class ProfileImageLoader : MonoBehaviour
     [SerializeField] private int maskResolution = 256;
 
     private bool isInitialized = false;
+    private string pendingImageUrl = null;
 
     private void Awake()
     {
         Initialize();
     }
 
-    /// <summary>
-    /// Inicializa o loader. Chamado automaticamente no Awake ou manualmente se necessário
-    /// </summary>
     public void Initialize()
     {
         if (isInitialized) return;
 
         if (imageContent == null)
         {
-            // Tenta encontrar RawImage automaticamente
             imageContent = GetComponentInChildren<RawImage>();
             if (imageContent == null)
             {
-                Debug.LogWarning($"[ProfileImageLoader] ImageContent não encontrado em {gameObject.name}");
+                Debug.LogWarning($"[ProfileImageLoader] ImageContent nï¿½o encontrado em {gameObject.name}");
                 return;
             }
         }
@@ -50,9 +43,6 @@ public class ProfileImageLoader : MonoBehaviour
         isInitialized = true;
     }
 
-    /// <summary>
-    /// Define o RawImage a ser usado (útil para configuração dinâmica)
-    /// </summary>
     public void SetImageContent(RawImage rawImage)
     {
         imageContent = rawImage;
@@ -65,26 +55,21 @@ public class ProfileImageLoader : MonoBehaviour
         isInitialized = true;
     }
 
-    /// <summary>
-    /// Configura máscara circular automaticamente
-    /// </summary>
     private void ConfigureImageMask()
     {
         if (imageContent == null)
         {
-            Debug.LogWarning("[ProfileImageLoader] ImageContent é null, não é possível configurar máscara");
+            Debug.LogWarning("[ProfileImageLoader] ImageContent ï¿½ null, nï¿½o ï¿½ possï¿½vel configurar mï¿½scara");
             return;
         }
 
-        // Encontrar ou criar o MaskObject (pai do RawImage)
         var maskObject = imageContent.transform.parent?.gameObject;
         if (maskObject == null)
         {
-            Debug.LogWarning($"[ProfileImageLoader] MaskObject (pai do RawImage) não encontrado em {gameObject.name}");
+            Debug.LogWarning($"[ProfileImageLoader] MaskObject (pai do RawImage) nï¿½o encontrado em {gameObject.name}");
             return;
         }
 
-        // Configurar componente Mask
         var mask = maskObject.GetComponent<Mask>();
         if (mask == null)
         {
@@ -92,7 +77,6 @@ public class ProfileImageLoader : MonoBehaviour
         }
         mask.showMaskGraphic = true;
 
-        // Configurar Image da máscara
         var maskImage = maskObject.GetComponent<Image>();
         if (maskImage == null)
         {
@@ -103,7 +87,6 @@ public class ProfileImageLoader : MonoBehaviour
         maskImage.type = Image.Type.Simple;
         maskImage.color = Color.white;
 
-        // Configurar RawImage para preencher o espaço da máscara
         var imageRect = imageContent.GetComponent<RectTransform>();
         if (imageRect != null)
         {
@@ -113,12 +96,9 @@ public class ProfileImageLoader : MonoBehaviour
             imageRect.anchoredPosition = Vector2.zero;
         }
 
-        Debug.Log($"[ProfileImageLoader] Máscara circular configurada em {gameObject.name}");
+        Debug.Log($"[ProfileImageLoader] Mï¿½scara circular configurada em {gameObject.name}");
     }
 
-    /// <summary>
-    /// Cria sprite circular para a máscara
-    /// </summary>
     private Sprite CreateCircleSprite(int resolution)
     {
         Texture2D texture = new Texture2D(resolution, resolution);
@@ -146,9 +126,6 @@ public class ProfileImageLoader : MonoBehaviour
         );
     }
 
-    /// <summary>
-    /// Carrega imagem de perfil a partir de uma URL ou usa imagem padrão
-    /// </summary>
     public void LoadProfileImage(string imageUrl)
     {
         if (!isInitialized)
@@ -158,7 +135,14 @@ public class ProfileImageLoader : MonoBehaviour
 
         if (imageContent == null)
         {
-            Debug.LogError($"[ProfileImageLoader] ImageContent é null em {gameObject.name}");
+            Debug.LogError($"[ProfileImageLoader] ImageContent ï¿½ null em {gameObject.name}");
+            return;
+        }
+
+        if (!gameObject.activeInHierarchy)
+        {
+            Debug.Log($"[ProfileImageLoader] GameObject '{gameObject.name}' estï¿½ inativo. Armazenando URL para carregar quando ativado.");
+            pendingImageUrl = imageUrl;
             return;
         }
 
@@ -171,9 +155,17 @@ public class ProfileImageLoader : MonoBehaviour
         StartCoroutine(LoadImageFromUrl(imageUrl));
     }
 
-    /// <summary>
-    /// Carrega imagem de perfil do UserData atual
-    /// </summary>
+    private void OnEnable()
+    {
+        if (!string.IsNullOrEmpty(pendingImageUrl))
+        {
+            string urlToLoad = pendingImageUrl;
+            pendingImageUrl = null;
+            Debug.Log($"[ProfileImageLoader] GameObject '{gameObject.name}' ativado. Carregando imagem pendente: {urlToLoad}");
+            LoadProfileImage(urlToLoad);
+        }
+    }
+
     public void LoadFromCurrentUser()
     {
         UserData currentUserData = UserDataStore.CurrentUserData;
@@ -187,11 +179,22 @@ public class ProfileImageLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Coroutine que faz o download da imagem
-    /// </summary>
     private IEnumerator LoadImageFromUrl(string url)
     {
+        string cachedPath = ImageCacheService.Instance.GetCachedImagePath(url);
+        
+        if (!string.IsNullOrEmpty(cachedPath))
+        {
+            Texture2D cachedTexture = ImageCacheService.Instance.LoadImageFromCache(cachedPath);
+            
+            if (cachedTexture != null)
+            {
+                SetTexture(cachedTexture);
+                Debug.Log($"[ProfileImageLoader] Loaded from cache: {url}");
+                yield break;
+            }
+        }
+
         using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
         {
             yield return www.SendWebRequest();
@@ -200,19 +203,19 @@ public class ProfileImageLoader : MonoBehaviour
             {
                 Texture2D texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
                 SetTexture(texture);
-                Debug.Log($"[ProfileImageLoader] Imagem carregada com sucesso de {url}");
+                
+                ImageCacheService.Instance.SaveImageToCache(url, texture);
+                
+                Debug.Log($"[ProfileImageLoader] Downloaded and cached: {url}");
             }
             else
             {
-                Debug.LogWarning($"[ProfileImageLoader] Erro ao carregar imagem: {www.error}. Usando imagem padrão.");
+                Debug.LogWarning($"[ProfileImageLoader] Erro ao carregar imagem: {www.error}. Usando imagem padrÃ£o.");
                 LoadStandardProfileImage();
             }
         }
     }
 
-    /// <summary>
-    /// Carrega a imagem padrão
-    /// </summary>
     public void LoadStandardProfileImage()
     {
         if (!isInitialized)
@@ -222,32 +225,29 @@ public class ProfileImageLoader : MonoBehaviour
 
         if (imageContent == null)
         {
-            Debug.LogError($"[ProfileImageLoader] ImageContent é null em {gameObject.name}");
+            Debug.LogError($"[ProfileImageLoader] ImageContent ï¿½ null em {gameObject.name}");
             return;
         }
 
         if (standardProfileImage == null)
         {
-            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage não atribuída em {gameObject.name}. Criando placeholder...");
+            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage nï¿½o atribuï¿½da em {gameObject.name}. Criando placeholder...");
             CreateAndSetPlaceholderTexture();
             return;
         }
 
         if (standardProfileImage.texture == null)
         {
-            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage não tem textura em {gameObject.name}");
+            Debug.LogWarning($"[ProfileImageLoader] StandardProfileImage nï¿½o tem textura em {gameObject.name}");
             CreateAndSetPlaceholderTexture();
             return;
         }
 
         imageContent.texture = standardProfileImage.texture;
         imageContent.color = Color.white;
-        Debug.Log($"[ProfileImageLoader] Imagem padrão configurada em {gameObject.name}");
+        Debug.Log($"[ProfileImageLoader] Imagem padrï¿½o configurada em {gameObject.name}");
     }
 
-    /// <summary>
-    /// Cria uma textura placeholder cinza quando não há imagem disponível
-    /// </summary>
     private void CreateAndSetPlaceholderTexture()
     {
         Texture2D texture = new Texture2D(128, 128);
@@ -263,18 +263,14 @@ public class ProfileImageLoader : MonoBehaviour
         Debug.Log($"[ProfileImageLoader] Textura placeholder criada em {gameObject.name}");
     }
 
-    /// <summary>
-    /// Define a textura no RawImage, fazendo cleanup da textura anterior
-    /// </summary>
     public void SetTexture(Texture2D texture)
     {
         if (imageContent == null)
         {
-            Debug.LogError($"[ProfileImageLoader] ImageContent é null em {gameObject.name}");
+            Debug.LogError($"[ProfileImageLoader] ImageContent ï¿½ null em {gameObject.name}");
             return;
         }
 
-        // Limpar textura anterior se não for a padrão
         if (imageContent.texture != null &&
             imageContent.texture != standardProfileImage?.texture &&
             imageContent.texture != texture)
@@ -284,11 +280,41 @@ public class ProfileImageLoader : MonoBehaviour
 
         imageContent.texture = texture;
         imageContent.color = Color.white;
+        AdjustImageAspectRatio(texture);
     }
 
-    /// <summary>
-    /// Limpa os recursos ao destruir o componente
-    /// </summary>
+    private void AdjustImageAspectRatio(Texture2D texture)
+    {
+        if (texture == null || imageContent == null) return;
+
+        float textureAspect = (float)texture.width / texture.height;
+        
+        if (Mathf.Approximately(textureAspect, 1f))
+        {
+            imageContent.uvRect = new Rect(0, 0, 1, 1);
+            return;
+        }
+
+        Rect uvRect;
+        
+        if (textureAspect > 1f) 
+        {
+            float scale = 1f / textureAspect;
+            float offset = (1f - scale) / 2f;
+            uvRect = new Rect(offset, 0, scale, 1);
+        }
+        else 
+        {
+            float scale = textureAspect;
+            float offset = (1f - scale) / 2f;
+            uvRect = new Rect(0, offset, 1, scale);
+        }
+        
+        imageContent.uvRect = uvRect;
+        
+        Debug.Log($"[ProfileImageLoader] Aspect ratio ajustado: {textureAspect:F2} - UV: {uvRect}");
+    }
+
     private void OnDestroy()
     {
         if (imageContent != null &&
@@ -299,8 +325,6 @@ public class ProfileImageLoader : MonoBehaviour
         }
     }
 
-    // ========== GETTERS/SETTERS PÚBLICOS ==========
-
     public RawImage ImageContent => imageContent;
     public Sprite StandardProfileImage
     {
@@ -308,4 +332,5 @@ public class ProfileImageLoader : MonoBehaviour
         set => standardProfileImage = value;
     }
     public bool IsInitialized => isInitialized;
+    public string PendingImageUrl => pendingImageUrl;
 }
