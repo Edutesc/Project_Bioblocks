@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+
     private List<Question> questions = new List<Question>
     {
         new Question
@@ -1056,5 +1060,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "AminoacidQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

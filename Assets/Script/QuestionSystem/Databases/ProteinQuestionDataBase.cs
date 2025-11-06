@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+    
     private List<Question> questions = new List<Question>
     {
          new Question
@@ -1141,5 +1145,10 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "ProteinQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

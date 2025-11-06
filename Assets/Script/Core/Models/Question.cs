@@ -1,7 +1,7 @@
-
 using QuestionSystem;
-namespace QuestionSystem{
 
+namespace QuestionSystem
+{
     [System.Serializable]
     public class Question
     {
@@ -14,6 +14,7 @@ namespace QuestionSystem{
         public bool isImageQuestion;
         public string questionImagePath;
         public int questionLevel;
-    } 
+        public bool questionInDevelopment;
+    }
 }
 

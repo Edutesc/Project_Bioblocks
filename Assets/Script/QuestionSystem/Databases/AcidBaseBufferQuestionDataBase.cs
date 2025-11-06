@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+
     private List<Question> questions = new List<Question>
     {
         new Question
@@ -1041,5 +1045,10 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "AcidBaseBufferQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

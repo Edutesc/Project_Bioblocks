@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+    
     private List<Question> questions = new List<Question>
     {
         new Question
@@ -1010,5 +1014,10 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "MembranesQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }
