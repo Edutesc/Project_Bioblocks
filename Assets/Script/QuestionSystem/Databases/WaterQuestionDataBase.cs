@@ -6,6 +6,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
     private List<Question> questions = new List<Question>
     {
+
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
@@ -18,6 +19,21 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 1,
+            isImageAnswer = false,
+            questionLevel = 2
+        },
+        new Question
+        {
+            questionDatabankName = "WaterQuestionDatabase",
+            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sup><size=150%>2</size></sup>. Qual é a reação que representa o equilíbrio (2)?",
+            answers = new string[] {
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
+                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
+                "H<sub><size=150%>2</size></sub>CO<sub><size=150%>3</size></sub> ⇌ H<sup><size=150%>+</size></sup> + HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
+                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
+            },
+            correctIndex = 2,
+            questionNumber = 2,
             isImageAnswer = false,
             questionLevel = 2
         },
@@ -47,7 +63,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Alta densidade"
             },
             correctIndex = 2,
-            questionNumber = 2,
+            questionNumber = 70,
             isImageAnswer = false,
             questionLevel = 1
         },
@@ -1041,37 +1057,9 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageAnswer = false,
             questionLevel = 1
         },
-        
-        new Question
-        {
-            questionDatabankName = "WaterQuestionDatabase",
-            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sup><size=150%>2</size></sup>. Qual é a reação que representa o equilíbrio (2)?",
-            answers = new string[] {
-                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
-                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
-                "H<sub><size=150%>2</size></sub>CO<sub><size=150%>3</size></sub> ⇌ H<sup><size=150%>+</size></sup> + HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
-                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
-            },
-            correctIndex = 2,
-            questionNumber = 70,
-            isImageAnswer = false,
-            questionLevel = 2
-        },
-        new Question
-        {
-            questionDatabankName = "WaterQuestionDatabase",
-            questionText = "",
-            answers = new string[] {
-                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
-                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
-                "H<sub><size=150%>2</size></sub>CO<sub><size=150%>3</size></sub> ⇌ H<sup><size=150%>+</size></sup> + HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
-                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
-            },
-            correctIndex = 2,
-            questionNumber = 71,
-            isImageAnswer = false,
-            questionLevel = 2
-        },
+
+
+
     };
 
     public List<Question> GetQuestions()
