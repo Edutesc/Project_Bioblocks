@@ -4,6 +4,7 @@ using TMPro;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using QuestionSystem;
 
 public class ResetTargetDatabaseScene : MonoBehaviour
 {
@@ -24,9 +25,20 @@ public class ResetTargetDatabaseScene : MonoBehaviour
 
             if (!string.IsNullOrEmpty(databankName))
             {
+                bool isDatabaseInDevelopment = false;
+                if (sceneData.TryGetValue("isDatabaseInDevelopment", out object devModeValue))
+                {
+                    isDatabaseInDevelopment = (bool)devModeValue;
+                }
+
                 UpdateDatabankNameText();
                 currentUserData = UserDataStore.CurrentUserData;
                 SceneDataManager.Instance.ClearData();
+
+                if (isDatabaseInDevelopment)
+                {
+                    ShowDevModeMessage();
+                }
             }
             else
             {
@@ -55,27 +67,22 @@ public class ResetTargetDatabaseScene : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Tentando atualizar texto. databankName atual: {databankName}");
-
         Dictionary<string, string> databankNameMap = new Dictionary<string, string>()
-    {
-        {"AcidBaseBufferQuestionDatabase", "Ácidos, bases e tampões"},
-        {"AminoacidQuestionDatabase", "Aminoácidos e peptídeos"},
-        {"BiochemistryIntroductionQuestionDatabase", "Introdução à Bioquímica"},
-        {"CarbohydratesQuestionDatabase", "Carboidratos"},
-        {"EnzymeQuestionDatabase", "Enzimas"},
-        {"LipidsQuestionDatabase", "Lipídeos"},
-        {"MembranesQuestionDatabase", "Mambranas Biológicas"},
-        {"NucleicAcidsQuestionDatabase", "Ácidos nucleicos"},
-        {"ProteinQuestionDatabase", "Proteínas"},
-        {"WaterQuestionDatabase", "Água"}
-    };
+        {
+            {"AcidBaseBufferQuestionDatabase", "Ácidos, bases e tampões"},
+            {"AminoacidQuestionDatabase", "Aminoácidos e peptídeos"},
+            {"BiochemistryIntroductionQuestionDatabase", "Introdução à Bioquímica"},
+            {"CarbohydratesQuestionDatabase", "Carboidratos"},
+            {"EnzymeQuestionDatabase", "Enzimas"},
+            {"LipidsQuestionDatabase", "Lipídeos"},
+            {"MembranesQuestionDatabase", "Mambranas Biológicas"},
+            {"NucleicAcidsQuestionDatabase", "Ácidos nucleicos"},
+            {"ProteinQuestionDatabase", "Proteínas"},
+            {"WaterQuestionDatabase", "Água"}
+        };
 
         string displayName;
         bool found = databankNameMap.TryGetValue(databankName, out displayName);
-
-        Debug.Log($"Nome encontrado no mapa: {found}");
-        Debug.Log($"Display name: {displayName}");
 
         if (found)
         {
@@ -85,8 +92,6 @@ public class ResetTargetDatabaseScene : MonoBehaviour
         {
             databankNameText.text = $"Tópico: {databankName}";
         }
-
-        Debug.Log($"Texto após atualização: {databankNameText.text}");
     }
 
     public async void ResetAnsweredQuestions()
@@ -153,4 +158,23 @@ public class ResetTargetDatabaseScene : MonoBehaviour
         NavigationManager.Instance.NavigateTo("PathwayScene");
     }
 
+    private void ShowDevModeMessage()
+    {
+        if (databankNameText != null)
+        {
+            databankNameText.text = "Você está em modo de desenvolvimento. Não é possível reiniciar o banco de dados.";
+        }
+        
+        if (resetButton != null)
+        {
+            resetButton.interactable = false;
+        }
+        
+        if (resetButtonText != null)
+        {
+            resetButtonText.text = "Indisponível";
+        }
+        
+        Debug.LogWarning($"[ResetDatabase] Banco '{databankName}' está em modo desenvolvimento - Reset bloqueado");
+    }
 }

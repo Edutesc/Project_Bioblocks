@@ -136,7 +136,12 @@ public class QuestionManager : MonoBehaviour
 
             if (allQuestionsAnswered)
             {
-                SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
+                bool isDevMode = currentDatabase != null && currentDatabase.IsDatabaseInDevelopment();
+                SceneDataManager.Instance.SetData(new Dictionary<string, object> 
+                { 
+                    { "databankName", currentDatabaseName },
+                    { "isDatabaseInDevelopment", isDevMode }
+                });
                 SceneManager.LoadScene("ResetDatabaseView");
                 return;
             }
@@ -144,8 +149,12 @@ public class QuestionManager : MonoBehaviour
             var questions = await loadManager.LoadQuestionsForSet(currentSet);
             if (questions == null || questions.Count == 0)
             {
-                Debug.LogError("QuestionManager: Nenhuma questão disponível");
-                SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
+                bool isDevMode = currentDatabase != null && currentDatabase.IsDatabaseInDevelopment();
+                SceneDataManager.Instance.SetData(new Dictionary<string, object> 
+                { 
+                    { "databankName", currentDatabaseName },
+                    { "isDatabaseInDevelopment", isDevMode }
+                });
                 SceneManager.LoadScene("ResetDatabaseView");
                 return;
             }
