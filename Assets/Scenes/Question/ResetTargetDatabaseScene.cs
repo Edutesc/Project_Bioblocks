@@ -162,7 +162,7 @@ public class ResetTargetDatabaseScene : MonoBehaviour
     {
         if (databankNameText != null)
         {
-            databankNameText.text = "Você está em modo de desenvolvimento. Não é possível reiniciar o banco de dados.";
+            databankNameText.text = "Modo de desenvolvimento. A funcionalidade está indisponível.";
         }
         
         if (resetButton != null)
