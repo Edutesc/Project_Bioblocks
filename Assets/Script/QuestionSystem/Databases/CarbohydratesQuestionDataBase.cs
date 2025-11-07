@@ -5,6 +5,10 @@ using QuestionSystem;
 
 public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+    
     private List<Question> questions = new List<Question>
     {
         new Question {
@@ -953,5 +957,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "CarbohydratesQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

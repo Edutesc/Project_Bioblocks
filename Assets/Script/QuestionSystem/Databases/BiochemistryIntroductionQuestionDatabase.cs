@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+
     private List<Question> questions = new List<Question>
     {
         new Question
@@ -322,7 +326,8 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             correctIndex = 1,
             questionNumber = 22,
             isImageAnswer = false,
-            questionLevel = 2
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -930,5 +935,10 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
     public string GetDatabankName()
     {
         return "BiochemistryIntroductionQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }
