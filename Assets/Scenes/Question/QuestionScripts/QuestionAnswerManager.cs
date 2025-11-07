@@ -14,13 +14,17 @@ public class QuestionAnswerManager : MonoBehaviour
     [SerializeField] private QuestionLevelConfig levelConfig;
     [SerializeField] private AnswerButtonThemeManager answerButtonThemeManager;
 
-    [Header("Text Button Components (para aplicar tema)")]
-    [SerializeField] private Image[] textButtonBackgrounds; // Backgrounds dos 4 botões de texto
-    [SerializeField] private TextMeshProUGUI[] letterTexts; // A, B, C, D
+    [Header("Text Button Components")]
+    [SerializeField] private Image[] textButtonBackgrounds;
+    [SerializeField] private TextMeshProUGUI[] letterTexts;
+
+    [Header("Image Button Components")]
+    [SerializeField] private Image[] imageButtonBackgrounds;
+    [SerializeField] private Image[] imageButtonContents;
 
     private TextMeshProUGUI[] buttonTexts;
-    private Image[] buttonImages;
     private int currentQuestionLevel = 1;
+    private bool currentIsImageAnswer = false;
 
     public event System.Action<int> OnAnswerSelected;
 
@@ -51,19 +55,12 @@ public class QuestionAnswerManager : MonoBehaviour
             }
         }
 
-        buttonImages = new Image[imageAnswerButtons.Length];
         for (int i = 0; i < imageAnswerButtons.Length; i++)
         {
             if (imageAnswerButtons[i] != null)
             {
-                buttonImages[i] = imageAnswerButtons[i].GetComponent<Image>();
                 int index = i;
                 imageAnswerButtons[i].onClick.AddListener(() => HandleAnswerClick(index));
-
-                if (buttonImages[i] == null)
-                {
-                    Debug.LogError($"Image não encontrado no botão {i}");
-                }
             }
             else
             {
@@ -87,6 +84,7 @@ public class QuestionAnswerManager : MonoBehaviour
         }
 
         currentQuestionLevel = question.questionLevel;
+        currentIsImageAnswer = question.isImageAnswer;
         ApplyTheme(question.questionLevel, question.isImageAnswer);
 
         if (question.isImageAnswer)
@@ -107,7 +105,7 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
-        answerButtonThemeManager.MarkButtonAsAnswered(buttonIndex, isCorrect, currentQuestionLevel);
+        answerButtonThemeManager.MarkButtonAsAnswered(buttonIndex, isCorrect, currentQuestionLevel, currentIsImageAnswer);
     }
 
     public void ResetButtonBackgrounds()
@@ -118,20 +116,20 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
-        answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel);
+        answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel, currentIsImageAnswer);
     }
 
     private void ApplyTheme(int questionLevel, bool isImageAnswer)
     {
-        if (isImageAnswer)
+        if (answerButtonThemeManager != null)
         {
-            Debug.Log("🔘 Respostas são imagens, não aplica tema nos botões");
+            answerButtonThemeManager.ApplyTheme(questionLevel, isImageAnswer);
             return;
         }
 
         if (levelConfig == null)
         {
-            Debug.LogError("⚠️ QuestionLevelConfig não está atribuído no QuestionAnswerManager!");
+            Debug.LogError("QuestionLevelConfig não está atribuído no QuestionAnswerManager!");
             return;
         }
 
@@ -139,22 +137,29 @@ public class QuestionAnswerManager : MonoBehaviour
 
         if (theme == null)
         {
-            Debug.LogError($"⚠️ Theme não encontrado para level {questionLevel}");
+            Debug.LogError($"Theme não encontrado para level {questionLevel}");
             return;
         }
 
-        Debug.Log($"🔘 Aplicando tema nos botões - Level {questionLevel} ({theme.levelName})");
+        if (isImageAnswer)
+        {
+            ApplyImageButtonTheme(theme);
+        }
+        else
+        {
+            ApplyTextButtonTheme(theme);
+        }
+    }
+
+    private void ApplyTextButtonTheme(QuestionLevelConfig.LevelTheme theme)
+    {
+        Debug.Log($"Aplicando tema nos botões de texto - Level {theme.level} ({theme.levelName})");
 
         for (int i = 0; i < textButtonBackgrounds.Length; i++)
         {
             if (textButtonBackgrounds[i] != null)
             {
                 textButtonBackgrounds[i].sprite = theme.answerButtonBackground;
-                Debug.Log($"✅ Botão {i} background aplicado: {theme.answerButtonBackground.name}");
-            }
-            else
-            {
-                Debug.LogWarning($"⚠️ Background do botão {i} não está atribuído!");
             }
         }
 
@@ -175,16 +180,34 @@ public class QuestionAnswerManager : MonoBehaviour
         }
     }
 
+    private void ApplyImageButtonTheme(QuestionLevelConfig.LevelTheme theme)
+    {
+        Debug.Log($"Aplicando tema nos botões de imagem - Level {theme.level} ({theme.levelName})");
+
+        for (int i = 0; i < imageButtonBackgrounds.Length; i++)
+        {
+            if (imageButtonBackgrounds[i] != null)
+            {
+                imageButtonBackgrounds[i].sprite = theme.answerImageButtonBackground;
+                Debug.Log($"Background do botão de imagem {i} aplicado");
+            }
+            else
+            {
+                Debug.LogWarning($"imageButtonBackgrounds[{i}] é null!");
+            }
+        }
+    }
+
     private void SetupImageAnswers(Question question)
     {
         for (int i = 0; i < imageAnswerButtons.Length && i < question.answers.Length; i++)
         {
-            if (imageAnswerButtons[i] != null && buttonImages[i] != null)
+            if (imageAnswerButtons[i] != null && imageButtonContents[i] != null)
             {
                 Sprite sprite = Resources.Load<Sprite>(question.answers[i]);
                 if (sprite != null)
                 {
-                    buttonImages[i].sprite = sprite;
+                    imageButtonContents[i].sprite = sprite;
                     imageAnswerButtons[i].interactable = true;
                     Debug.Log($"Imagem carregada para o botão {i}: {question.answers[i]}");
                 }
@@ -192,6 +215,13 @@ public class QuestionAnswerManager : MonoBehaviour
                 {
                     Debug.LogError($"Falha ao carregar imagem: {question.answers[i]}");
                 }
+            }
+            else
+            {
+                if (imageAnswerButtons[i] == null)
+                    Debug.LogError($"imageAnswerButtons[{i}] é null!");
+                if (imageButtonContents[i] == null)
+                    Debug.LogError($"imageButtonContents[{i}] é null!");
             }
         }
     }
