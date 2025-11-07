@@ -14,13 +14,17 @@ public class QuestionAnswerManager : MonoBehaviour
     [SerializeField] private QuestionLevelConfig levelConfig;
     [SerializeField] private AnswerButtonThemeManager answerButtonThemeManager;
 
-    [Header("Text Button Components (para aplicar tema)")]
-    [SerializeField] private Image[] textButtonBackgrounds; // Backgrounds dos 4 botões de texto
-    [SerializeField] private TextMeshProUGUI[] letterTexts; // A, B, C, D
+    [Header("Text Button Components")]
+    [SerializeField] private Image[] textButtonBackgrounds;
+    [SerializeField] private TextMeshProUGUI[] letterTexts;
+
+    [Header("Image Button Components")]
+    [SerializeField] private Image[] imageButtonBackgrounds;
 
     private TextMeshProUGUI[] buttonTexts;
     private Image[] buttonImages;
     private int currentQuestionLevel = 1;
+    private bool currentIsImageAnswer = false;
 
     public event System.Action<int> OnAnswerSelected;
 
@@ -87,6 +91,7 @@ public class QuestionAnswerManager : MonoBehaviour
         }
 
         currentQuestionLevel = question.questionLevel;
+        currentIsImageAnswer = question.isImageAnswer;
         ApplyTheme(question.questionLevel, question.isImageAnswer);
 
         if (question.isImageAnswer)
@@ -107,7 +112,7 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
-        answerButtonThemeManager.MarkButtonAsAnswered(buttonIndex, isCorrect, currentQuestionLevel);
+        answerButtonThemeManager.MarkButtonAsAnswered(buttonIndex, isCorrect, currentQuestionLevel, currentIsImageAnswer);
     }
 
     public void ResetButtonBackgrounds()
@@ -118,20 +123,20 @@ public class QuestionAnswerManager : MonoBehaviour
             return;
         }
 
-        answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel);
+        answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel, currentIsImageAnswer);
     }
 
     private void ApplyTheme(int questionLevel, bool isImageAnswer)
     {
-        if (isImageAnswer)
+        if (answerButtonThemeManager != null)
         {
-            Debug.Log("🔘 Respostas são imagens, não aplica tema nos botões");
+            answerButtonThemeManager.ApplyTheme(questionLevel, isImageAnswer);
             return;
         }
 
         if (levelConfig == null)
         {
-            Debug.LogError("⚠️ QuestionLevelConfig não está atribuído no QuestionAnswerManager!");
+            Debug.LogError("QuestionLevelConfig não está atribuído no QuestionAnswerManager!");
             return;
         }
 
@@ -139,22 +144,29 @@ public class QuestionAnswerManager : MonoBehaviour
 
         if (theme == null)
         {
-            Debug.LogError($"⚠️ Theme não encontrado para level {questionLevel}");
+            Debug.LogError($"Theme não encontrado para level {questionLevel}");
             return;
         }
 
-        Debug.Log($"🔘 Aplicando tema nos botões - Level {questionLevel} ({theme.levelName})");
+        if (isImageAnswer)
+        {
+            ApplyImageButtonTheme(theme);
+        }
+        else
+        {
+            ApplyTextButtonTheme(theme);
+        }
+    }
+
+    private void ApplyTextButtonTheme(QuestionLevelConfig.LevelTheme theme)
+    {
+        Debug.Log($"Aplicando tema nos botões de texto - Level {theme.level} ({theme.levelName})");
 
         for (int i = 0; i < textButtonBackgrounds.Length; i++)
         {
             if (textButtonBackgrounds[i] != null)
             {
                 textButtonBackgrounds[i].sprite = theme.answerButtonBackground;
-                Debug.Log($"✅ Botão {i} background aplicado: {theme.answerButtonBackground.name}");
-            }
-            else
-            {
-                Debug.LogWarning($"⚠️ Background do botão {i} não está atribuído!");
             }
         }
 
@@ -171,6 +183,19 @@ public class QuestionAnswerManager : MonoBehaviour
             if (buttonTexts[i] != null)
             {
                 buttonTexts[i].color = theme.answerTextColor;
+            }
+        }
+    }
+
+    private void ApplyImageButtonTheme(QuestionLevelConfig.LevelTheme theme)
+    {
+        Debug.Log($"Aplicando tema nos botões de imagem - Level {theme.level} ({theme.levelName})");
+
+        for (int i = 0; i < imageButtonBackgrounds.Length; i++)
+        {
+            if (imageButtonBackgrounds[i] != null)
+            {
+                imageButtonBackgrounds[i].sprite = theme.answerImageButtonBackground;
             }
         }
     }

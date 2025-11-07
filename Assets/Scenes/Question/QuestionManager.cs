@@ -97,10 +97,10 @@ public class QuestionManager : MonoBehaviour
                feedbackElements != null &&
                transitionManager != null &&
                counterManager != null;
-            
 
         return isValid;
     }
+
     private async Task InitializeSession()
     {
         try
@@ -204,6 +204,7 @@ public class QuestionManager : MonoBehaviour
         transitionManager.OnBeforeTransitionStart += PrepareNextQuestion;
         transitionManager.OnTransitionMidpoint += ApplyPreparedQuestion;
     }
+
     private async void CheckAnswer(int selectedAnswerIndex)
     {
         timerManager.StopTimer();
@@ -266,18 +267,15 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            // Aguarda para garantir que Firebase atualizou
             await Task.Delay(1000);
 
             int questionLevel = answeredQuestion.questionLevel > 0 ? answeredQuestion.questionLevel : 1;
 
             Debug.Log($"\n Verificando se nível {questionLevel} foi completado...");
 
-            // Obtém questões respondidas do Firebase
             List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
                 .FetchUserAnsweredQuestionsInTargetDatabase(databankName);
 
-            // Verifica se o nível está completo
             bool isComplete = LevelCalculator.IsLevelComplete(
                 allDatabaseQuestions,
                 answeredQuestions,
@@ -307,6 +305,7 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError($"Erro ao verificar conclusão de nível: {e.Message}");
         }
     }
+
     private void ShowLevelCompletionFeedback(int completedLevel, bool isLastLevel)
     {
         string levelName = GetLevelName(completedLevel);
@@ -327,7 +326,6 @@ public class QuestionManager : MonoBehaviour
             bodyText = $"Você completou o Nível {levelName}. O Nível {nextLevelName} foi desbloqueado.";
         }
 
-        // Usa o novo sistema de feedback
         feedbackElements.ShowLevelCompletionFeedback(title, bodyText, true);
     }
 
@@ -345,18 +343,17 @@ public class QuestionManager : MonoBehaviour
     }
 
     private void ShowAnswerFeedback(string message, bool isCorrect, bool isCompleted = false)
-{
-    // Este método agora só é usado para feedback de conclusão
-    if (isCompleted)
     {
-        feedbackElements.QuestionsCompletedFeedbackText.text = message;
-        questionCanvasGroupManager.ShowCompletionFeedback();
-        questionBottomBarManager.SetupNavigationButtons(
-            () => NavigationManager.Instance.NavigateTo("PathwayScene"),
-            null
-        );
+        if (isCompleted)
+        {
+            feedbackElements.QuestionsCompletedFeedbackText.text = message;
+            questionCanvasGroupManager.ShowCompletionFeedback();
+            questionBottomBarManager.SetupNavigationButtons(
+                () => NavigationManager.Instance.NavigateTo("PathwayScene"),
+                null
+            );
+        }
     }
-}
 
     private async void PrepareNextQuestion()
     {
@@ -381,8 +378,6 @@ public class QuestionManager : MonoBehaviour
 
         if (question.isImageAnswer)
         {
-            // Se houver imagens nas respostas, você pode pré-carregá-las aqui
-            // Por exemplo: await answerManager.PreloadAnswerImages(question);
         }
     }
 
@@ -497,7 +492,8 @@ public class QuestionManager : MonoBehaviour
     {
         questionCanvasGroupManager.HideAnswerFeedback();
     }
-        private async Task HandleNextQuestion()
+
+    private async Task HandleNextQuestion()
     {
         questionBottomBarManager.DisableNavigationButtons();
 
@@ -512,29 +508,24 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            // Obtém questões respondidas do Firebase
             List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
 
-            // Calcula nível atual
             int currentLevel = LevelCalculator.CalculateCurrentLevel(
                 allDatabaseQuestions,
                 answeredQuestions
             );
 
-            // Obtém estatísticas
             var stats = LevelCalculator.GetLevelStats(
                 allDatabaseQuestions,
                 answeredQuestions
             );
 
-            // Verifica se o nível atual está completo
             bool currentLevelComplete = stats.ContainsKey(currentLevel) &&
                                        stats[currentLevel].IsComplete;
 
             if (currentLevelComplete)
             {
-                // Verifica se há mais níveis
                 if (currentLevel < maxLevelInDatabase)
                 {
                     string message = $"Nível {GetLevelName(currentLevel)} Completo!\n" +
@@ -545,7 +536,6 @@ public class QuestionManager : MonoBehaviour
                 }
                 else
                 {
-                    // Todos os níveis completos
                     int totalAnswered = stats.Values.Sum(s => s.AnsweredQuestions);
                     int totalQuestions = stats.Values.Sum(s => s.TotalQuestions);
 
@@ -721,9 +711,9 @@ public class QuestionManager : MonoBehaviour
             {
                 completedDatabanks.Add(databankName);
                 Dictionary<string, object> updateData = new Dictionary<string, object>
-            {
-                { "CompletedDatabanks", completedDatabanks }
-            };
+                {
+                    { "CompletedDatabanks", completedDatabanks }
+                };
 
                 await docRef.UpdateAsync(updateData);
             }

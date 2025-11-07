@@ -13,10 +13,13 @@ public class QuestionLevelConfig : ScriptableObject
         [Header("Sprites")]
         public Sprite questionBackground;
         public Sprite answerButtonBackground;
+        public Sprite answerImageButtonBackground;
 
         [Header("Answer Feedback Sprites")]
         public Sprite correctAnswerBackground;
         public Sprite incorrectAnswerBackground;
+        public Sprite correctAnswerImageBackground;
+        public Sprite incorrectAnswerImageBackground;
 
         [Header("Text Colors")]
         public Color letterTextColor = Color.white;

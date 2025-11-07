@@ -7,35 +7,48 @@ public class AnswerButtonThemeManager : MonoBehaviour
     [System.Serializable]
     public class AnswerButton
     {
-        [Tooltip("Background do botão (imagem com círculo embutido)")]
         public Image buttonBackground;
-        [Tooltip("Texto da letra (A, B, C, D)")]
         public TextMeshProUGUI letterText;
-        [Tooltip("Texto da resposta")]
         public TextMeshProUGUI answerText;
+    }
+
+    [System.Serializable]
+    public class ImageAnswerButton
+    {
+        public Image buttonBackground;
     }
 
     [Header("Configuration")]
     [SerializeField] private QuestionLevelConfig levelConfig;
 
-    [Header("Text Answer Buttons (apenas para respostas de texto)")]
+    [Header("Text Answer Buttons")]
     [SerializeField] private AnswerButton[] textAnswerButtons = new AnswerButton[4];
     private Sprite[] originalButtonBackgrounds = new Sprite[4];
 
+    [Header("Image Answer Buttons")]
+    [SerializeField] private ImageAnswerButton[] imageAnswerButtons = new ImageAnswerButton[4];
+    private Sprite[] originalImageButtonBackgrounds = new Sprite[4];
+
     public void ApplyTheme(int questionLevel, bool isImageAnswer)
     {
-        if (isImageAnswer)
-        {
-            Debug.Log("Respostas são imagens, não aplica tema nos botões");
-            return;
-        }
-
         if (levelConfig == null)
         {
             Debug.LogError("QuestionLevelConfig não está atribuído no AnswerButtonThemeManager!");
             return;
         }
 
+        if (isImageAnswer)
+        {
+            ApplyImageButtonTheme(questionLevel);
+        }
+        else
+        {
+            ApplyTextButtonTheme(questionLevel);
+        }
+    }
+
+    private void ApplyTextButtonTheme(int questionLevel)
+    {
         var theme = levelConfig.GetThemeForLevel(questionLevel);
 
         if (theme == null)
@@ -44,7 +57,7 @@ public class AnswerButtonThemeManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Aplicando tema nos botões - Level {questionLevel} ({theme.levelName})");
+        Debug.Log($"Aplicando tema nos botões de texto - Level {questionLevel} ({theme.levelName})");
 
         for (int i = 0; i < textAnswerButtons.Length; i++)
         {
@@ -54,11 +67,6 @@ public class AnswerButtonThemeManager : MonoBehaviour
             {
                 button.buttonBackground.sprite = theme.answerButtonBackground;
                 originalButtonBackgrounds[i] = theme.answerButtonBackground;
-                Debug.Log($"Botão {i} background aplicado: {theme.answerButtonBackground.name}");
-            }
-            else
-            {
-                Debug.LogWarning($"Button {i} - buttonBackground não está atribuído!");
             }
 
             if (button.letterText != null)
@@ -73,7 +81,29 @@ public class AnswerButtonThemeManager : MonoBehaviour
         }
     }
 
-    public void MarkButtonAsAnswered(int buttonIndex, bool isCorrect, int questionLevel)
+    private void ApplyImageButtonTheme(int questionLevel)
+    {
+        var theme = levelConfig.GetThemeForLevel(questionLevel);
+
+        if (theme == null)
+        {
+            Debug.LogError($"Theme não encontrado para level {questionLevel}");
+            return;
+        }
+
+        Debug.Log($"Aplicando tema nos botões de imagem - Level {questionLevel} ({theme.levelName})");
+
+        for (int i = 0; i < imageAnswerButtons.Length; i++)
+        {
+            if (imageAnswerButtons[i].buttonBackground != null)
+            {
+                imageAnswerButtons[i].buttonBackground.sprite = theme.answerImageButtonBackground;
+                originalImageButtonBackgrounds[i] = theme.answerImageButtonBackground;
+            }
+        }
+    }
+
+    public void MarkButtonAsAnswered(int buttonIndex, bool isCorrect, int questionLevel, bool isImageAnswer)
     {
         if (levelConfig == null)
         {
@@ -81,7 +111,7 @@ public class AnswerButtonThemeManager : MonoBehaviour
             return;
         }
 
-        if (buttonIndex < 0 || buttonIndex >= textAnswerButtons.Length)
+        if (buttonIndex < 0 || buttonIndex >= 4)
         {
             Debug.LogError($"Índice de botão inválido: {buttonIndex}");
             return;
@@ -95,6 +125,18 @@ public class AnswerButtonThemeManager : MonoBehaviour
             return;
         }
 
+        if (isImageAnswer)
+        {
+            MarkImageButtonAsAnswered(buttonIndex, isCorrect, theme);
+        }
+        else
+        {
+            MarkTextButtonAsAnswered(buttonIndex, isCorrect, theme);
+        }
+    }
+
+    private void MarkTextButtonAsAnswered(int buttonIndex, bool isCorrect, QuestionLevelConfig.LevelTheme theme)
+    {
         var button = textAnswerButtons[buttonIndex];
 
         if (button.buttonBackground != null)
@@ -104,20 +146,36 @@ public class AnswerButtonThemeManager : MonoBehaviour
             if (feedbackSprite != null)
             {
                 button.buttonBackground.sprite = feedbackSprite;
-                Debug.Log($"Botão {buttonIndex} marcado como {(isCorrect ? "CORRETO" : "INCORRETO")}");
+                Debug.Log($"Botão de texto {buttonIndex} marcado como {(isCorrect ? "CORRETO" : "INCORRETO")}");
             }
             else
             {
-                Debug.LogWarning($"Sprite de feedback {(isCorrect ? "correto" : "incorreto")} não está atribuído no level {questionLevel}!");
+                Debug.LogWarning($"Sprite de feedback {(isCorrect ? "correto" : "incorreto")} não está atribuído no level {theme.level}!");
             }
-        }
-        else
-        {
-            Debug.LogWarning($"Button {buttonIndex} - buttonBackground não está atribuído!");
         }
     }
 
-    public void ResetAllButtonBackgrounds(int questionLevel)
+    private void MarkImageButtonAsAnswered(int buttonIndex, bool isCorrect, QuestionLevelConfig.LevelTheme theme)
+    {
+        var button = imageAnswerButtons[buttonIndex];
+
+        if (button.buttonBackground != null)
+        {
+            Sprite feedbackSprite = isCorrect ? theme.correctAnswerImageBackground : theme.incorrectAnswerImageBackground;
+
+            if (feedbackSprite != null)
+            {
+                button.buttonBackground.sprite = feedbackSprite;
+                Debug.Log($"Botão de imagem {buttonIndex} marcado como {(isCorrect ? "CORRETO" : "INCORRETO")}");
+            }
+            else
+            {
+                Debug.LogWarning($"Sprite de feedback de imagem {(isCorrect ? "correto" : "incorreto")} não está atribuído no level {theme.level}!");
+            }
+        }
+    }
+
+    public void ResetAllButtonBackgrounds(int questionLevel, bool isImageAnswer)
     {
         if (levelConfig == null)
         {
@@ -133,7 +191,19 @@ public class AnswerButtonThemeManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Resetando backgrounds dos botões para o tema do level {questionLevel}");
+        if (isImageAnswer)
+        {
+            ResetImageButtonBackgrounds(theme);
+        }
+        else
+        {
+            ResetTextButtonBackgrounds(theme);
+        }
+    }
+
+    private void ResetTextButtonBackgrounds(QuestionLevelConfig.LevelTheme theme)
+    {
+        Debug.Log($"Resetando backgrounds dos botões de texto para o tema do level {theme.level}");
 
         for (int i = 0; i < textAnswerButtons.Length; i++)
         {
@@ -141,12 +211,28 @@ public class AnswerButtonThemeManager : MonoBehaviour
 
             if (button.buttonBackground != null)
             {
-                // Usa o sprite original guardado, ou o do tema se não tiver guardado
                 Sprite spriteToUse = originalButtonBackgrounds[i] != null 
                     ? originalButtonBackgrounds[i] 
                     : theme.answerButtonBackground;
 
                 button.buttonBackground.sprite = spriteToUse;
+            }
+        }
+    }
+
+    private void ResetImageButtonBackgrounds(QuestionLevelConfig.LevelTheme theme)
+    {
+        Debug.Log($"Resetando backgrounds dos botões de imagem para o tema do level {theme.level}");
+
+        for (int i = 0; i < imageAnswerButtons.Length; i++)
+        {
+            if (imageAnswerButtons[i].buttonBackground != null)
+            {
+                Sprite spriteToUse = originalImageButtonBackgrounds[i] != null 
+                    ? originalImageButtonBackgrounds[i] 
+                    : theme.answerImageButtonBackground;
+
+                imageAnswerButtons[i].buttonBackground.sprite = spriteToUse;
             }
         }
     }
@@ -158,7 +244,11 @@ public class AnswerButtonThemeManager : MonoBehaviour
             Debug.LogWarning("TextAnswerButtons deve ter exatamente 4 elementos (A, B, C, D)!");
         }
 
-        // Auto-preenche as letras
+        if (imageAnswerButtons.Length != 4)
+        {
+            Debug.LogWarning("ImageAnswerButtons deve ter exatamente 4 elementos!");
+        }
+
         string[] letters = { "A", "B", "C", "D" };
         for (int i = 0; i < Mathf.Min(textAnswerButtons.Length, 4); i++)
         {
