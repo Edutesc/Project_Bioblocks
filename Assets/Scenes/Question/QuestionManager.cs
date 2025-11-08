@@ -28,7 +28,6 @@ public class QuestionManager : MonoBehaviour
     private List<Question> allDatabaseQuestions;
     private int maxLevelInDatabase = 1;
     private bool isCheckingLevelCompletion = false;
-    private IQuestionDatabase currentDatabase;
 
     private void Start()
     {
@@ -98,31 +97,31 @@ public class QuestionManager : MonoBehaviour
                feedbackElements != null &&
                transitionManager != null &&
                counterManager != null;
-            
 
         return isValid;
     }
+
     private async Task InitializeSession()
     {
         try
         {
             QuestionSet currentSet = QuestionSetManager.GetCurrentQuestionSet();
-            currentDatabase = FindQuestionDatabase(currentSet);
-            if (currentDatabase == null)
+            IQuestionDatabase database = FindQuestionDatabase(currentSet);
+            if (database == null)
             {
                 Debug.LogError($"Nenhum database encontrado para o QuestionSet: {currentSet}");
                 return;
             }
 
-            string currentDatabaseName = currentDatabase.GetDatabankName();
+            string currentDatabaseName = database.GetDatabankName();
             loadManager.databankName = currentDatabaseName;
 
-            allDatabaseQuestions = QuestionFilterService.FilterQuestions(currentDatabase);
+            allDatabaseQuestions = database.GetQuestions();
             maxLevelInDatabase = LevelCalculator.GetMaxLevel(allDatabaseQuestions);
             Debug.Log($"📚 Banco {currentDatabaseName} possui {maxLevelInDatabase} níveis");
 
-            List<string> answeredQuestions = await SafeAnsweredQuestionsManager.Instance
-                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabase);
+            List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
+                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
             int answeredCount = answeredQuestions.Count;
             int totalQuestions = QuestionBankStatistics.GetTotalQuestions(currentDatabaseName);
 
@@ -136,12 +135,7 @@ public class QuestionManager : MonoBehaviour
 
             if (allQuestionsAnswered)
             {
-                bool isDevMode = currentDatabase != null && currentDatabase.IsDatabaseInDevelopment();
-                SceneDataManager.Instance.SetData(new Dictionary<string, object> 
-                { 
-                    { "databankName", currentDatabaseName },
-                    { "isDatabaseInDevelopment", isDevMode }
-                });
+                SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
                 SceneManager.LoadScene("ResetDatabaseView");
                 return;
             }
@@ -149,12 +143,8 @@ public class QuestionManager : MonoBehaviour
             var questions = await loadManager.LoadQuestionsForSet(currentSet);
             if (questions == null || questions.Count == 0)
             {
-                bool isDevMode = currentDatabase != null && currentDatabase.IsDatabaseInDevelopment();
-                SceneDataManager.Instance.SetData(new Dictionary<string, object> 
-                { 
-                    { "databankName", currentDatabaseName },
-                    { "isDatabaseInDevelopment", isDevMode }
-                });
+                Debug.LogError("QuestionManager: Nenhuma questão disponível");
+                SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
                 SceneManager.LoadScene("ResetDatabaseView");
                 return;
             }
@@ -214,6 +204,7 @@ public class QuestionManager : MonoBehaviour
         transitionManager.OnBeforeTransitionStart += PrepareNextQuestion;
         transitionManager.OnTransitionMidpoint += ApplyPreparedQuestion;
     }
+
     private async void CheckAnswer(int selectedAnswerIndex)
     {
         timerManager.StopTimer();
@@ -237,7 +228,7 @@ public class QuestionManager : MonoBehaviour
                 }
 
                 feedbackElements.ShowCorrectAnswer(bonusActive);
-                await scoreManager.UpdateScore(baseScore, true, currentQuestion, currentDatabase);
+                await scoreManager.UpdateScore(baseScore, true, currentQuestion);
 
                 if (counterManager != null)
                 {
@@ -252,7 +243,7 @@ public class QuestionManager : MonoBehaviour
             {
                 Debug.Log($"Q{currentQuestion.questionNumber} (Nível {currentQuestion.questionLevel}) - ERRADA");
                 feedbackElements.ShowWrongAnswer();
-                await scoreManager.UpdateScore(-2, false, currentQuestion, currentDatabase);
+                await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
 
             questionBottomBarManager.EnableNavigationButtons();
@@ -282,8 +273,8 @@ public class QuestionManager : MonoBehaviour
 
             Debug.Log($"\n Verificando se nível {questionLevel} foi completado...");
 
-            List<string> answeredQuestions = await SafeAnsweredQuestionsManager.Instance
-                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabase);
+            List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
+                .FetchUserAnsweredQuestionsInTargetDatabase(databankName);
 
             bool isComplete = LevelCalculator.IsLevelComplete(
                 allDatabaseQuestions,
@@ -314,6 +305,7 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError($"Erro ao verificar conclusão de nível: {e.Message}");
         }
     }
+
     private void ShowLevelCompletionFeedback(int completedLevel, bool isLastLevel)
     {
         string levelName = GetLevelName(completedLevel);
@@ -351,17 +343,17 @@ public class QuestionManager : MonoBehaviour
     }
 
     private void ShowAnswerFeedback(string message, bool isCorrect, bool isCompleted = false)
-{
-    if (isCompleted)
     {
-        feedbackElements.QuestionsCompletedFeedbackText.text = message;
-        questionCanvasGroupManager.ShowCompletionFeedback();
-        questionBottomBarManager.SetupNavigationButtons(
-            () => NavigationManager.Instance.NavigateTo("PathwayScene"),
-            null
-        );
+        if (isCompleted)
+        {
+            feedbackElements.QuestionsCompletedFeedbackText.text = message;
+            questionCanvasGroupManager.ShowCompletionFeedback();
+            questionBottomBarManager.SetupNavigationButtons(
+                () => NavigationManager.Instance.NavigateTo("PathwayScene"),
+                null
+            );
+        }
     }
-}
 
     private async void PrepareNextQuestion()
     {
@@ -470,7 +462,7 @@ public class QuestionManager : MonoBehaviour
     {
         answerManager.DisableAllButtons();
         feedbackElements.ShowTimeout();
-        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion(), currentDatabase);
+        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();
     }
@@ -500,7 +492,8 @@ public class QuestionManager : MonoBehaviour
     {
         questionCanvasGroupManager.HideAnswerFeedback();
     }
-        private async Task HandleNextQuestion()
+
+    private async Task HandleNextQuestion()
     {
         questionBottomBarManager.DisableNavigationButtons();
 
@@ -515,8 +508,8 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            List<string> answeredQuestions = await SafeAnsweredQuestionsManager.Instance
-                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabase);
+            List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
+                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
 
             int currentLevel = LevelCalculator.CalculateCurrentLevel(
                 allDatabaseQuestions,
@@ -604,8 +597,7 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            List<string> answeredQuestionsIds = await SafeAnsweredQuestionsManager.Instance
-                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabase);
+            List<string> answeredQuestionsIds = await AnsweredQuestionsManager.Instance.FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
             var unansweredQuestions = newQuestions
                 .Where(q => !answeredQuestionsIds.Contains(q.questionNumber.ToString()))
                 .ToList();
@@ -719,9 +711,9 @@ public class QuestionManager : MonoBehaviour
             {
                 completedDatabanks.Add(databankName);
                 Dictionary<string, object> updateData = new Dictionary<string, object>
-            {
-                { "CompletedDatabanks", completedDatabanks }
-            };
+                {
+                    { "CompletedDatabanks", completedDatabanks }
+                };
 
                 await docRef.UpdateAsync(updateData);
             }
