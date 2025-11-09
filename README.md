@@ -7,4 +7,10 @@
 
 <!-- Badges de licença -->
 Este projeto está licenciado sob os termos da [![Licença: Uso Educacional](https://img.shields.io/badge/Licença-Uso%20Educacional-blue.svg)](./LICENSE.md)
+<br>
 This project is licensed under the terms of the [![License: Educational Use](https://img.shields.io/badge/License-Educational%20Use-blue.svg)](./LICENSE.md)
+
+<!-- Política de Privacidade -->
+Leia nossa [Política de Privacidade](./privacyPolice.md).
+<br>
+Read the [Privacy Police](./privacyPolice.md).

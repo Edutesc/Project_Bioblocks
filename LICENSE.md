@@ -5,6 +5,7 @@
 # Licença de Uso Educacional
 
 Copyright (c) 2025 - Luciano Puzer - Laboratório de Tecnologias Educacionais para o Ensino de Ciências. 
+<br>
 Universidade Federal do ABC
 
 ## 1. Permissão de uso
@@ -38,6 +39,7 @@ Esta licença tem o objetivo de **promover o aprendizado e a colaboração**, pr
 # Educational Use License (English version)
 
 Copyright (c) 2025 - Luciano Puzer - Educational Technologies Laboratory for Science Teaching  
+<br>
 Federal University of ABC (Universidade Federal do ABC)
 
 ## 1. Permission of Use
