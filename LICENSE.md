@@ -4,7 +4,7 @@
 
 # Licença de Uso Educacional
 
-Copyright (c) 2025 - Luciano Puzer - Laboratório de Tecnologias Educacionais para o Ensino de Ciências 
+Copyright (c) 2025 - Luciano Puzer - Laboratório de Tecnologias Educacionais para o Ensino de Ciências. 
 Universidade Federal do ABC
 
 ## 1. Permissão de uso
