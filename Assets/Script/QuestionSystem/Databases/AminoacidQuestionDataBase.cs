@@ -51,10 +51,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique o aminoácido cuja cadeia lateral apresenta característica polar não carregada.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/glicina",
-                "AnswerImages/AminoacidsDB/histidina",
-                "AnswerImages/AminoacidsDB/alanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/glicina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/histidina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina"
             },
             correctIndex = 0,
             questionNumber = 3,
@@ -62,7 +62,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -87,10 +87,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique o alfa-aminoácido abaixo",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/3-amino-2-butanona",
-                "AnswerImages/AminoacidsDB/beta-alanina",
-                "AnswerImages/AminoacidsDB/2-amino-propanoato-de-metila"
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/3-amino-2-butanona",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/beta-alanina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/2-amino-propanoato_de_metila"
             },
             correctIndex = 0,
             questionNumber = 5,
@@ -98,7 +98,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -123,10 +123,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique o aminoácido que absorve o comprimento de onda de 280 nm.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/cisteina",
-                "AnswerImages/AminoacidsDB/fenilalanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/cisteina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/fenilalanina"
             },
             correctIndex = 3,
             questionNumber = 7,
@@ -134,17 +134,17 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/cisteina",
-                "AnswerImages/AminoacidsDB/d-alanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/cisteina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/d-alanina"
             },
             correctIndex = 3,
             questionNumber = 8,
@@ -152,7 +152,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/ImageQuestionContainer8",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -177,7 +177,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/isoleucina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
                 "AnswerImages/AminoacidsDB/isoleucina_carga0",
                 "AnswerImages/AminoacidsDB/isoleucina_cargaPlus",
                 "AnswerImages/AminoacidsDB/isoleucina_cargaMinus"
@@ -188,14 +188,14 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer10",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
          new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/prolina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
                 "AnswerImages/AminoacidsDB/prolina_carga0",
                 "AnswerImages/AminoacidsDB/prolina_cargaPlus",
                 "AnswerImages/AminoacidsDB/prolina_cargaMinus"
@@ -206,7 +206,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer11",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -267,10 +267,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique abaixo o aminoácido cuja cadeia lateral é considerada básica",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/prolina",
-                "AnswerImages/AminoacidsDB/isoleucina",
-                "AnswerImages/AminoacidsDB/acido_aspartico",
-                "AnswerImages/AminoacidsDB/arginina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/acido_aspartico",
+                "AnswerImages/AminoacidsDB/aminoacid_images/arginina"
             },
             correctIndex = 3,
             questionNumber = 15,
@@ -278,17 +278,17 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique abaixo o aminoácido cuja cadeia lateral é considerada ácida",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/fenilalanina",
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/acido_aspartico",
-                "AnswerImages/AminoacidsDB/arginina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/fenilalanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/acido_aspartico",
+                "AnswerImages/AminoacidsDB/aminoacid_images/arginina"
             },
             correctIndex = 2,
             questionNumber = 16,
@@ -296,17 +296,17 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique abaixo o aminoácido cuja cadeia lateral apresenta um grupo funcional álcool.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/tirosina",
-                "AnswerImages/AminoacidsDB/prolina",
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/leucina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/tirosina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/leucina"
             },
             correctIndex = 2,
             questionNumber = 17,
@@ -314,7 +314,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -339,10 +339,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique abaixo o aminoácido que absorve luz de comprimento de onda 280 nm.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/triptofano",
-                "AnswerImages/AminoacidsDB/glutamina",
-                "AnswerImages/AminoacidsDB/glicina",
-                "AnswerImages/AminoacidsDB/alanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/triptofano",
+                "AnswerImages/AminoacidsDB/aminoacid_images/glutamina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/glicina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina"
             },
             correctIndex = 0,
             questionNumber = 19,
@@ -350,7 +350,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
