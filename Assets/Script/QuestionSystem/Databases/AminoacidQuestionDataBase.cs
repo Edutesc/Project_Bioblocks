@@ -141,7 +141,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/d-alanina",
                 "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
                 "AnswerImages/AminoacidsDB/aminoacid_images/cisteina",
                 "AnswerImages/AminoacidsDB/moleculas_organicas/d-alanina"
@@ -150,7 +150,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 8,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/AminoacidsDB/ImageQuestionContainer8",
+            questionImagePath = "AnswerImages/AminoacidsDB/Aminoacid_QuestionContainer/aminoacidDB_ImageQuestionContainer8",
             questionLevel = 2,
             questionInDevelopment = true
         },
@@ -178,9 +178,9 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionText = "",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
-                "AnswerImages/AminoacidsDB/isoleucina_carga0",
-                "AnswerImages/AminoacidsDB/isoleucina_cargaPlus",
-                "AnswerImages/AminoacidsDB/isoleucina_cargaMinus"
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_zw",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_positiva",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_negativa"
             },
             correctIndex = 2,
             questionNumber = 10,
@@ -196,9 +196,9 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionText = "",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
-                "AnswerImages/AminoacidsDB/prolina_carga0",
-                "AnswerImages/AminoacidsDB/prolina_cargaPlus",
-                "AnswerImages/AminoacidsDB/prolina_cargaMinus"
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina_zw",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina_positiva",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina_negativa"
             },
             correctIndex = 1,
             questionNumber = 11,
