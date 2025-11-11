@@ -62,7 +62,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -98,7 +98,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -134,7 +134,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -152,7 +152,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer8",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -160,22 +160,22 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionText = "",
             answers = new string[] {
                 "pH = 2,3",
-                "pH = 9,7",
-                "pH = 6",
-                "pH = 0"
+                "pH = 6,0",
+                "pH = 7,0",
+                "pH = 9,7"
             },
-            correctIndex = 2,
+            correctIndex = 1,
             questionNumber = 9,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer9",
+            questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer9",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-            questionText = "",
+            questionText = "A Isoleucina é um aminoácido alifático com pK1 = 2,3 e pK2, = 9,8. Qual é o estado de protonação predominante da isoleucina em pH = 1.",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
                 "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_zw",
@@ -185,7 +185,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 10,
             isImageAnswer = true,
-            isImageQuestion = true,
+            isImageQuestion = false,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer10",
             questionLevel = 2,
             questionInDevelopment = true
