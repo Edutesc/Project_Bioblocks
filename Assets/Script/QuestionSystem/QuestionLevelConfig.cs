@@ -10,8 +10,11 @@ public class QuestionLevelConfig : ScriptableObject
         public int level;
         public string levelName;
 
-        [Header("Sprites")]
+        [Header("Question Sprites")]
         public Sprite questionBackground;
+        public Sprite questionImageBackground;
+
+        [Header("Answer Sprites")]
         public Sprite answerButtonBackground;
         public Sprite answerImageButtonBackground;
 

@@ -6,29 +6,46 @@ public class QuestionBackgroundThemeManager : MonoBehaviour
     [Header("Configuration")]
     [SerializeField] private QuestionLevelConfig levelConfig;
 
-    [Header("Question Text Background (apenas para questıes de texto)")]
+    [Header("Question Backgrounds")]
     [SerializeField] private Image questionTextBackground;
+    [SerializeField] private Image questionImageBackground;
 
-    // N√O precisa de questionImageBackground porque a imagem j· vem com background
-
-    public void ApplyTheme(int questionLevel)
+    public void ApplyTheme(int questionLevel, bool isImageQuestion)
     {
-        var theme = levelConfig.GetThemeForLevel(questionLevel);
-
-        if (theme == null)
+        if (levelConfig == null)
         {
-            Debug.LogError("Theme n„o encontrado para o level: " + questionLevel);
+            Debug.LogError("QuestionLevelConfig n√£o est√° atribu√≠do!");
             return;
         }
 
-        // SÛ aplica no container de TEXTO
-        if (questionTextBackground != null)
+        var theme = levelConfig.GetThemeForLevel(questionLevel);
+        if (theme == null)
         {
-            questionTextBackground.sprite = theme.questionBackground;
+            Debug.LogError($"Theme n√£o encontrado para o level: {questionLevel}");
+            return;
+        }
+
+        if (isImageQuestion)
+        {
+            if (questionImageBackground != null)
+            {
+                questionImageBackground.sprite = theme.questionImageBackground;
+            }
+            else
+            {
+                Debug.LogWarning("questionImageBackground n√£o est√° atribu√≠do!");
+            }
         }
         else
         {
-            Debug.LogWarning("questionTextBackground n„o est· atribuÌdo!");
+            if (questionTextBackground != null)
+            {
+                questionTextBackground.sprite = theme.questionBackground;
+            }
+            else
+            {
+                Debug.LogWarning("questionTextBackground n√£o est√° atribu√≠do!");
+            }
         }
     }
 }

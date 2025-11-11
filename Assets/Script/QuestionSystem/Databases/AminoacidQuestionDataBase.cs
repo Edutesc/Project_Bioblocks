@@ -150,7 +150,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 8,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/AminoacidsDB/Aminoacid_QuestionContainer/aminoacidDB_ImageQuestionContainer8",
+            questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer8",
             questionLevel = 2,
             questionInDevelopment = true
         },
