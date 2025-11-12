@@ -55,41 +55,12 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     public void ShowQuestion(bool isImageQuestion, bool isImageAnswer, int questionLevel)
     {
         currentQuestionLevel = questionLevel;
-        ApplyLevelTheme(questionLevel, isImageQuestion, isImageAnswer);
         SetCanvasGroupState(loadingCanvasGroup, false);
         SetCanvasGroupState(questionTextContainer, !isImageQuestion);
         SetCanvasGroupState(questionImageContainer, isImageQuestion);
         SetCanvasGroupState(answerTextCanvasGroup, !isImageAnswer);
         SetCanvasGroupState(answerImageCanvasGroup, isImageAnswer);
         SetCanvasGroupState(questionBottomBar, true);
-    }
-
-    private void ApplyLevelTheme(int level, bool isImageQuestion, bool isImageAnswer)
-    {
-        if (levelConfig == null)
-        {
-            Debug.LogError("QuestionLevelConfig não está atribuído!");
-            return;
-        }
-
-        var theme = levelConfig.GetThemeForLevel(level);
-
-        if (theme == null)
-        {
-            Debug.LogError($"Theme não encontrado para level {level}");
-            return;
-        }
-
-        Debug.Log($"Aplicando tema level {level} ({theme.levelName})");
-
-        if (!isImageQuestion)
-        {
-            if (questionTextBackgroundImage != null)
-            {
-                questionTextBackgroundImage.sprite = theme.questionBackground;
-                Debug.Log($"Background da questão aplicado");
-            }
-        }
     }
 
     public Color GetFeedbackColorForCurrentLevel(bool isCorrect)

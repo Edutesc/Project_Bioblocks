@@ -33,10 +33,8 @@ public class QuestionUIManager : MonoBehaviour
 
     public void ShowQuestion(Question question)
     {
-        // APLICA O TEMA baseado no questionLevel
         ApplyTheme(question);
 
-        // Depois mostra o conteúdo
         if (question.isImageQuestion)
         {
             ShowImageQuestion(question);
@@ -49,16 +47,14 @@ public class QuestionUIManager : MonoBehaviour
 
     private void ApplyTheme(Question question)
     {
-        // Aplica tema nos botões de resposta (só se for texto)
         if (answerButtonThemeManager != null)
         {
             answerButtonThemeManager.ApplyTheme(question.questionLevel, question.isImageAnswer);
         }
 
-        // Aplica tema no background da questão (só se for texto)
-        if (questionBackgroundThemeManager != null && !question.isImageQuestion)
+        if (questionBackgroundThemeManager != null)
         {
-            questionBackgroundThemeManager.ApplyTheme(question.questionLevel);
+            questionBackgroundThemeManager.ApplyTheme(question.questionLevel, question.isImageQuestion);
         }
     }
 
