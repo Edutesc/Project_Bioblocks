@@ -170,12 +170,12 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer9",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-            questionText = "A Isoleucina é um aminoácido alifático com pK1 = 2,3 e pK2, = 9,8. Qual é o estado de protonação predominante da isoleucina em pH = 1.",
+            questionText = "A Isoleucina é um aminoácido alifático com pK1 = 2,3 e pK2, = 9,8. Qual é o estado de protonação predominante da Isoleucina em pH = 1.",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
                 "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_zw",
@@ -186,14 +186,14 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 10,
             isImageAnswer = true,
             isImageQuestion = false,
-            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer10",
+            questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
          new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-            questionText = "",
+            questionText = "A Prolina é um aminoácido cíclico com pK1 = 2,0 e pK2, = 10,6. Qual é o estado de protonação predominante da Prolina em pH = 6,3.",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
                 "AnswerImages/AminoacidsDB/aminoacid_images/prolina_zw",
@@ -203,10 +203,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 11,
             isImageAnswer = true,
-            isImageQuestion = true,
-            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer11",
+            isImageQuestion = false,
+            questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -224,7 +224,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer12",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -242,7 +242,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer13",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -278,7 +278,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -296,7 +296,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -314,7 +314,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
