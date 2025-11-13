@@ -10,12 +10,12 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
-            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sup><size=150%>2</size></sup>. Qual é a reação que representa o equilíbrio (1)?",
+            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sub><size=150%>2</size></sub>. Qual é a reação que representa o equilíbrio (1)?",
             answers = new string[] {
-                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
-                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ NaCl",
-                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ CO<sub><size=150%>2</size></sub>",
-                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O \u21CC H<sub><size=150%>2</size></sub> O",
+                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> \u21CC NaCl",
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O \u21CC CO<sub><size=150%>2</size></sub>",
+                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> \u21CC H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
             },
             correctIndex = 3,
             questionNumber = 1,
@@ -25,12 +25,12 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "WaterQuestionDatabase",
-            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sup><size=150%>2</size></sup>. Qual é a reação que representa o equilíbrio (2)?",
+            questionText = "O bicarbonato é o tampão mais importante no sangue humano. Logo, a capacidade tamponante do sangue depende de dois equilíbrios (1) entre o dióxido de carbono e ácido carbônico formado pela reação e (2) entre o ácido carbônico e o bicarbonato produzido pela dissociação de H<sub><size=150%>2</size></sub>. Qual é a reação que representa o equilíbrio (2)?",
             answers = new string[] {
-                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O ⇌ H<sub><size=150%>2</size></sub> O",
-                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> ⇌ HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
-                "H<sub><size=150%>2</size></sub>CO<sub><size=150%>3</size></sub> ⇌ H<sup><size=150%>+</size></sup> + HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
-                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> ⇌ H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
+                "CO<sub><size=150%>2</size></sub> + H<sub><size=150%>2</size></sub> O \u21CC H<sub><size=150%>2</size></sub> O",
+                "H<sub><size=150%>2</size></sub> O + CO<sub><size=150%>2</size></sub> \u2192 HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
+                "H<sub><size=150%>2</size></sub>CO<sub><size=150%>3</size></sub> \u2192 H<sup><size=150%>+</size></sup> + HCO<sub><size=150%>3</sub><size=150%><sup><size=150%>-</sup><size=150%>",
+                "H<sub><size=150%>2</size></sub> O<sub><size=150%>2</size></sub> + CO<sub><size=150%>2</size></sub> \u2192 H<sub><size=150%>2</size></sub> CO<sub><size=150%>2</size></sub>"
             },
             correctIndex = 2,
             questionNumber = 2,
