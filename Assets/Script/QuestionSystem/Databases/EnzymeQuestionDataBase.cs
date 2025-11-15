@@ -222,7 +222,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 12,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_12",
+            questionImagePath = "QuestionImages/EnzymeDB/enzymeDB_ImageQuestionContainer12",
             questionLevel = 3,
             questionInDevelopment = false
         },
@@ -384,7 +384,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 21,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_21",
+            questionImagePath = "QuestionImages/EnzymeDB/enzymeDB_ImageQuestionContainer21",
             questionLevel = 3,
             questionInDevelopment = false
         },
@@ -402,7 +402,7 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 22,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_22",
+            questionImagePath = "QuestionImages/EnzymeDB/enzymeDB_ImageQuestionContainer22",
             questionLevel = 3,
             questionInDevelopment = false
         },
@@ -503,14 +503,14 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {
                 "Gráfico de Michaelis-Menten",
                 "Gráfico Enzimático",
-                "Gaáfico de Lineweaver-Burk",
+                "Gráfico de Lineweaver-Burk",
                 "Gráfico Competitivo"
             },
             correctIndex = 2,
             questionNumber = 28,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/EnzymeDB/enzymeQuestion_28",
+            questionImagePath = "QuestionImages/EnzymeDB/enzymeDB_ImageQuestionContainer28",
             questionLevel = 2,
             questionInDevelopment = false
         },
