@@ -31,10 +31,14 @@ namespace QuestionSystem
             }
             else
             {
+                var prodQuestions = allQuestions
+                    .Where(q => !q.questionInDevelopment)
+                    .ToList();
+
                 Debug.Log($"[QuestionFilterService] Database '{database.GetDatabankName()}' is in PRODUCTION mode");
-                Debug.Log($"[QuestionFilterService] Showing all {allQuestions.Count} questions");
+                Debug.Log($"[QuestionFilterService] Showing {prodQuestions.Count} production questions (filtered out {allQuestions.Count - prodQuestions.Count} dev questions)");
                 
-                return allQuestions;
+                return prodQuestions;
             }
         }
 
