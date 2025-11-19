@@ -1,10 +1,13 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 using QuestionSystem;
 
 public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+    
     private List<Question> questions = new List<Question>
     {
         new Question {
@@ -18,7 +21,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -26,47 +33,62 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Grupo funcional aldeído vs. cetona", "Número de átomos de carbono", "Presença de oxigênio", "Solubilidade em água"},
             correctIndex = 0,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual das estruturas representa uma cetose?",
             answers = new string[] {
-                "AnswerImages/SugarDB/aldotriose",
-                "AnswerImages/SugarDB/aldotetrose",
-                "AnswerImages/SugarDB/cetotetrose",
-                "AnswerImages/SugarDB/aldopentose"
+                "AnswerImages/CarbohydrateDB/D-aldotriose",
+                "AnswerImages/CarbohydrateDB/D-aldotetrose",
+                "AnswerImages/CarbohydrateDB/D-cetotetrose",
+                "AnswerImages/CarbohydrateDB/D-aldopentose"
             },
             correctIndex = 2,
             questionNumber = 3,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual estrutura representa uma aldotetrose",
             answers = new string[] {
-                "AnswerImages/SugarDB/aldotriose",
-                "AnswerImages/SugarDB/aldotetrose",
-                "AnswerImages/SugarDB/cetotetrose",
-                "AnswerImages/SugarDB/aldopentose"
+                "AnswerImages/CarbohydrateDB/D-aldotriose",
+                "AnswerImages/CarbohydrateDB/D-aldotetrose",
+                "AnswerImages/CarbohydrateDB/D-cetotetrose",
+                "AnswerImages/CarbohydrateDB/D-aldopentose"
             },
             correctIndex = 1,
             questionNumber = 4,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_glicose",
-                "AnswerImages/SugarDB/d_galactose",
-                "AnswerImages/SugarDB/d_frutose"
+            questionText = "",
+            answers = new string[] {
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-glicose",
+                "AnswerImages/CarbohydrateDB/D-galactose",
+                "AnswerImages/CarbohydrateDB/D-frutose"
             },
             correctIndex = 0,
             questionNumber = 5,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_5"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer5",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -78,21 +100,28 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Isômeros que diferem no tipo de ligação"},
             correctIndex = 0,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_frutose",
-                "AnswerImages/SugarDB/l_frutose",
-                "AnswerImages/SugarDB/d_tagatose"
+            questionText = "",
+            answers = new string[] {
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-glicose",
+                "AnswerImages/CarbohydrateDB/L-frutose",
+                "AnswerImages/CarbohydrateDB/D-tagatose"
             },
             correctIndex = 3,
             questionNumber = 7,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_7"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer7",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -105,21 +134,28 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 8,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/beta-d-n-galactosamina",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/beta-galactosamina",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose"
             },
             correctIndex = 3,
             questionNumber = 9,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_9"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer9",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -127,7 +163,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Maltose", "Lactose", "Sacarose", "Celobiose"},
             correctIndex = 2,
             questionNumber = 10,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -135,7 +175,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Maltose", "Lactose", "Sacarose", "Celobiose"},
             correctIndex = 1,
             questionNumber = 11,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -143,10 +187,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Ligação peptídica", "Ligação glicosídica", "Ligação éster", "Ligação fosfodiéster"},
             correctIndex = 1,
             questionNumber = 12,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "monossacarídeo",
                 "dissacarídeo",
@@ -155,12 +204,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 13,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_13"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer13",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "1-beta-4",
                 "1-alfa-4",
@@ -169,9 +221,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 14,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_14"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer14",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -179,7 +233,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Celulose", "Quitina", "Amido", "Glicogênio"},
             correctIndex = 2,
             questionNumber = 15,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -187,7 +245,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Celulose", "Quitina", "Amido", "Glicogênio"},
             correctIndex = 3,
             questionNumber = 16,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -195,7 +257,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Ramificação", "Tipo de ligação glicosídica", "Tipo de monossacarídeo", "Peso molecular"},
             correctIndex = 0,
             questionNumber = 17,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -203,7 +269,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"alfa(1 -> 4)", "alfa(1 -> 6)", "beta(1 -> 4)", "beta(1 -> 6)"},
             correctIndex = 2,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -211,7 +281,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"alfa(1 -> 4)", "alfa(1 -> 6)", "beta(1 -> 4)", "beta(1 -> 6)"},
             correctIndex = 0,
             questionNumber = 19,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -219,7 +293,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Celulase", "Quitina", "Amilase", "Lactase"},
             correctIndex = 2,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -227,7 +305,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Celulase", "Quitina", "Amilase", "Lactase"},
             correctIndex = 0,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -240,7 +322,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -253,7 +339,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -266,7 +356,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -274,33 +368,45 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Matriz extracelular", "Membrana celular", "Citoplasma", "Todas as alternativas acima"},
             correctIndex = 0,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Identifique abaixo um componente estrutural dos glicosaminoglicanos.",
             answers = new string[] {
-                "AnswerImages/SugarDB/alfa_d_glicopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose",
-                "AnswerImages/SugarDB/beta-d-n-galactosamina",
-                "AnswerImages/SugarDB/aldopentose"
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-galactosamina",
+                "AnswerImages/CarbohydrateDB/D-aldopentose"
             },
             correctIndex = 2,
             questionNumber = 26,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Indique abaixo a estrutura do ácido hialurônico, que é um glicosaminoglicano cujo monômero é formado pelo ácido glicurônico e pelo ácido N-acetil-glicosamina.",
             answers = new string[] {
-                "AnswerImages/SugarDB/dermatan",
-                "AnswerImages/SugarDB/condroitin",
-                "AnswerImages/SugarDB/queratan",
-                "AnswerImages/SugarDB/hialuronico"
+                "AnswerImages/CarbohydrateDB/dermatan",
+                "AnswerImages/CarbohydrateDB/condroitin",
+                "AnswerImages/CarbohydrateDB/queratan",
+                "AnswerImages/CarbohydrateDB/hialuronico"
             },
             correctIndex = 3,
             questionNumber = 27,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -308,20 +414,28 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Lubrificação", "Suporte estrutural", "Viscosidade", "Todas as alternativas acima"},
             correctIndex = 3,
             questionNumber = 28,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "A heparina é um glicosaminoglicano com uma das maiores densidades de carga negativa dentre todas as biomoléculas dos organismos vivos. Indique abaixo o monômero que forma a heparina.",
             answers = new string[] {
-                "AnswerImages/SugarDB/dermatan",
-                "AnswerImages/SugarDB/condroitin",
-                "AnswerImages/SugarDB/heparina",
-                "AnswerImages/SugarDB/hialuronico"
+                "AnswerImages/CarbohydrateDB/dermatan",
+                "AnswerImages/CarbohydrateDB/condroitin",
+                "AnswerImages/CarbohydrateDB/heparina",
+                "AnswerImages/CarbohydrateDB/hialuronico"
             },
             correctIndex = 2,
             questionNumber = 29,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -329,10 +443,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Anticoagulante", "Lubrificante", "Suporte estrutural", "Hormônio"},
             correctIndex = 0,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "1-beta-4",
                 "1-alfa-4",
@@ -341,9 +460,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 31,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_31"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer31",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -351,91 +472,113 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             answers = new string[] {"Suporte estrutural em cartilagens", "hormônio", "Neurotransmissor", "Todas as alternativas acima"},
             correctIndex = 0,
             questionNumber = 32,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "1-beta-4",
                 "1-alfa-4",
                 "1-beta-3",
                 "1-alfa-3"
             },
-            correctIndex = 2,
+            correctIndex = 0,
             questionNumber = 33,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_33"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer33",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_frutose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/d_galactose"
+            questionText = "",
+            answers = new string[] {
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-frutose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/D-galactose"
             },
             correctIndex = 1,
             questionNumber = 34,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_34"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer34",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_frutose",
-                "AnswerImages/SugarDB/d_tagatose",
-                "AnswerImages/SugarDB/d_glicose"
+            questionText = "",
+            answers = new string[] {
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-frutose",
+                "AnswerImages/CarbohydrateDB/D-tagatose",
+                "AnswerImages/CarbohydrateDB/D-glicose"
             },
             correctIndex = 3,
             questionNumber = 35,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_35"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer35",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/beta_d_galactopiranose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose"
             },
             correctIndex = 2,
             questionNumber = 36,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_36"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer36",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Identifique abaixo a estrutura da glicose, que também pode ser nomeada como beta-D-glicopiranose",
             answers = new string[] {
-                "AnswerImages/SugarDB/beta_d_galactopiranose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose"
             },
             correctIndex = 3,
             questionNumber = 37,
-            isImageQuestion = false,
             isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/beta_d_galactopiranose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose"
             },
             correctIndex = 2,
             questionNumber = 38,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_38"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer38",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -444,10 +587,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Um homopolissacarídeo contém apenas um tipo de monossacarídeo, um heteropolissacarídeo contém múltiplos tipos",
                 "Um homopolissacarídeo é linear, um heteropolissacarídeo é ramificado",
                 "Um homopolissacarídeo é solúvel em água, um heteropolissacarídeo é insolúvel",
-                "Um homopolissacarídeo é um polímero, um heteropolissacarídeo é um monômero"},
+                "Um homopolissacarídeo é um polímero, um heteropolissacarídeo é um monômero"
+            },
             correctIndex = 0,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -459,7 +607,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Todos os polissacarídeos são homopolissacarídeos"},
             correctIndex = 0,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -468,10 +620,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "Amido, glicogênio, celulose",
                 "Sacarose, lactose, maltose",
                 "Peptídeoglicano, glicosaminoglicanos",
-                "Glicose, frutose, galactose"},
+                "Glicose, frutose, galactose"
+            },
             correctIndex = 2,
             questionNumber = 41,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -481,13 +638,19 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "A amilose é ramificada, a celulose é linear.",
                 "A amilose possui ligações alfa(1 -> 4), a celulose possui ligações beta(1 -> 4).",
                 "A amilose é um polímero de frutose, a celulose é um polímero de glicose.",
-                "A amilose é insolúvel em água, a celulose é solúvel em água."},
+                "A amilose é insolúvel em água, a celulose é solúvel em água."
+            },
             correctIndex = 1,
             questionNumber = 42,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/leucina",
                 "AnswerImages/AminoacidsDB/prolina",
@@ -496,12 +659,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 43,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_43"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/SugarDB/sugar_question_43",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "AnswerImages/AminoacidsDB/leucina",
                 "AnswerImages/AminoacidsDB/serina",
@@ -510,12 +676,15 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 44,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/SugarDB/sugar_question_44"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/SugarDB/sugar_question_44",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
-            questionDatabankName = "Os carboidratos são moléculas formadas, principalmente, por:",
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Os carboidratos são moléculas formadas, principalmente, por:",
             answers = new string[] {
                 "Hidrogênio, enxofre e oxigênio",
                 "Carbono, hidrogênio e oxigênio",
@@ -525,6 +694,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 45,
             isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -537,7 +710,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -550,7 +727,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 47,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -563,7 +744,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 48,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -576,7 +761,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 49,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -589,9 +778,353 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 50,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A glicose, a frutose e a galactose são exemplos de:",
+            answers = new string[] {
+                "Oligossacarídeos",
+                "Monossacarídeos",
+                "Dissacarídeos",
+                "Polissacarídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 51,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A celulose difere do amido principalmente porque:",
+            answers = new string[] {
+                "É solúvel em água, enquanto o amido não é",
+                "Possui ligações β(1→4), enquanto o amido possui α(1→4)",
+                "É formada por frutose, enquanto o amido é formado por glicose",
+                "É composta por galactose, e não glicosedeos"
+            },
+            correctIndex = 1,
+            questionNumber = 52,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual das funções abaixo NÃO está relacionada aos carboidratos?",
+            answers = new string[] {
+                "Estrutura celular",
+                "Fornecimento de energia",
+                "Armazenamento de energia",
+                "Catálise enzimática direta"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Os carboidratos também são conhecidos como:",
+            answers = new string[] {
+                "Lípidos",
+                "Glicídios",
+                "Aminoácidos",
+                "Nucleotídeos"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A fórmula geral mais comum dos monossacarídeos é:",
+            answers = new string[] {
+                "Cn(H₂O)n",
+                "CnH₂nOn",
+                "Cn(H₂O)2n",
+                "CnHnOn"
+            },
+            correctIndex = 1,
+            questionNumber = 55,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual dos seguintes é um monossacarídeo?",
+            answers = new string[] {
+                "Sacarose",
+                "Maltose",
+                "Glicose",
+                "Amido"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A sacarose, encontrada no açúcar de mesa, é formada por:",
+            answers = new string[] {
+                "Glicose + Frutose",
+                "Glicose + Galactose",
+                "Frutose + Galactose",
+                "Glicose + Glicose"
+            },
+            correctIndex = 0,
+            questionNumber = 57,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "O amido é o principal polissacarídeo de reserva:",
+            answers = new string[] {
+                "Animal",
+                "Fúngico",
+                "Vegetal",
+                "Bacteriano"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "O glicogênio é o polissacarídeo de reserva característico de:",
+            answers = new string[] {
+                "Plantas",
+                "Fungos e animais",
+                "Bactérias",
+                "Protozoários"
+            },
+            correctIndex = 1,
+            questionNumber = 59,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A celulose tem como função principal nos vegetais:",
+            answers = new string[] {
+                "Armazenar energia",
+                "Dar resistência à parede celular",
+                "Servir como reserva osmótica",
+                "Participar da respiração celular"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A lactose, presente no leite, é formada por:",
+            answers = new string[] {
+                "Glicose + Glicose",
+                "Glicose + Galactose",
+                "Glicose + Frutose",
+                "Galactose + Frutose"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
+            answers = new string[] {
+                "Amido",
+                "Glicogênio",
+                "Celulose",
+                "Maltose"
+            },
+            correctIndex = 2,
+            questionNumber = 62,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A fórmula geral mais comum dos carboidratos é:",
+            answers = new string[] {
+                "Cn(H₂O)n",
+                "CnH₂nOn",
+                "CnH₂n+₂On",
+                "CnHnOn"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A glicose é classificada como:",
+            answers = new string[] {
+                "Dissacarídeo",
+                "Monossacarídeo",
+                "Polissacarídeo",
+                "Oligossacarídeo"
+            },
+            correctIndex = 1,
+            questionNumber = 64,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "A sacarose é formada pela união de:",
+            answers = new string[] {
+                "Glicose + Glicose",
+                "Glicose + Galactose",
+                "Glicose + Frutose",
+                "Glicose + Manose"
+            },
+            correctIndex = 2,
+            questionNumber = 65,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+         new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual destes carboidratos é considerado um polissacarídeo de armazenamento em animais?",
+            answers = new string[] {
+                "Amido",
+                "Celulose",
+                "Glicogênio",
+                "Quitina"
+            },
+            correctIndex = 2,
+            questionNumber = 66,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual destes carboidratos é um polissacarídeo estrutural presente na parede celular de vegetais?",
+            answers = new string[] {
+                "Amido",
+                "Celulose",
+                "Maltose",
+                "Lactose"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual destes carboidratos está presente no leite?",
+            answers = new string[] {
+                "Sacarose",
+                "Lactose",
+                "Maltose",
+                "Glicogênio"
+            },
+            correctIndex = 1,
+            questionNumber = 68,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Os carboidratos podem ser classificados de acordo com:",
+            answers = new string[] {
+                "O número de radicais R",
+                "O número de átomos de carbono e grupos funcionais",
+                "A presença de ácidos graxos",
+                "O número de ligações peptídicas"
+            },
+            correctIndex = 1,
+            questionNumber = 69,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual das opções representa uma função principal dos carboidratos nos organismos vivos?",
+            answers = new string[] {
+                "Atuar como catalisadores biológicos",
+                "Armazenar informações genéticas",
+                "Fornecer energia e servir como reserva energética",
+                "Compor membranas celulares"
+            },
+            correctIndex = 2,
+            questionNumber = 70,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         }
-    }; 
+    };
 
     public List<Question> GetQuestions()
     {
@@ -606,5 +1139,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "CarbohydratesQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

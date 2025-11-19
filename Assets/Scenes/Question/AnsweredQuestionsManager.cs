@@ -213,14 +213,9 @@ public class AnsweredQuestionsManager : MonoBehaviour
                         }
 
                         int count = distinctQuestions.Count;
-
-                        // Validar se o count não excede o limite
-                        if (count > 50)
-                        {
-                            Debug.LogError($"ERRO: Número de questões ({count}) excede o limite de 50 para {databankName}");
-                            count = 50; // Forçar limite máximo
-                        }
-
+                        int totalQuestions = QuestionBankStatistics.GetTotalQuestions(databankName);
+                        // Garantir que a contagem não exceda o total real
+                        count = Mathf.Min(count, totalQuestions);
                         answeredCounts[databankName] = count;
                         AnsweredQuestionsListStore.UpdateAnsweredQuestionsCount(userId, databankName, count);
                         Debug.Log($"Atualizado {databankName}: {count} questões respondidas (Lista: {string.Join(", ", distinctQuestions)})");
@@ -323,93 +318,6 @@ public class AnsweredQuestionsManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"Erro em ForceUpdate: {e.Message}");
-        }
-    }
-
-    private void UpdateUI(Dictionary<string, int> answeredCounts)
-    {
-        if (SceneManager.GetActiveScene().name != "PathwayScene")
-        {
-            return;
-        }
-
-        var userCounts = AnsweredQuestionsListStore.GetAnsweredQuestionsCountForUser(userId);
-
-        foreach (var kvp in userCounts)
-        {
-            string databankName = kvp.Key;
-            int count = kvp.Value;
-
-            // Obter o número total de questões neste banco de dados
-            int totalQuestions = QuestionBankStatistics.GetTotalQuestions(databankName);
-
-            // Se não tiver informações do banco de dados, usar o valor padrão (para compatibilidade com bancos de dados antigos)
-            if (totalQuestions <= 0)
-            {
-                totalQuestions = 50; // Valor padrão
-                Debug.LogWarning($"Número total de questões para {databankName} não encontrado. Usando valor padrão: {totalQuestions}");
-            }
-
-            // Garantir que a contagem não exceda o total
-            count = Mathf.Min(count, totalQuestions);
-
-            int percentageAnswered = (int)Math.Floor((count * 100.0) / totalQuestions);
-
-            // Garantir que a porcentagem não exceda 100%
-            percentageAnswered = Math.Min(percentageAnswered, 100);
-
-            string objectName = $"{databankName}PorcentageText";
-            GameObject textObject = GameObject.Find(objectName);
-
-            if (textObject == null)
-            {
-                Debug.LogError($"Não foi possível encontrar o GameObject: {objectName}");
-                continue;
-            }
-
-            TextMeshProUGUI tmpText = textObject.GetComponent<TextMeshProUGUI>();
-            if (tmpText == null)
-            {
-                Debug.LogError($"Componente TextMeshProUGUI não encontrado no GameObject: {objectName}");
-                continue;
-            }
-
-            tmpText.text = $"{percentageAnswered}%";
-            Debug.Log($"DatabankName: {databankName}, Count: {count}/{totalQuestions}, Percentage: {percentageAnswered}%");
-        }
-
-        // Verificar e atualizar bancos de dados sem respostas
-        string[] allDatabases = new string[]
-        {
-        "AcidBaseBufferQuestionDatabase",
-        "AminoacidQuestionDatabase",
-        "BiochemistryIntroductionQuestionDatabase",
-        "CarbohydratesQuestionDatabase",
-        "EnzymeQuestionDatabase",
-        "LipidsQuestionDatabase",
-        "MembranesQuestionDatabase",
-        "NucleicAcidsQuestionDatabase",
-        "ProteinQuestionDatabase",
-        "WaterQuestionDatabase"
-        };
-
-        foreach (string databankName in allDatabases)
-        {
-            if (!userCounts.ContainsKey(databankName))
-            {
-                string objectName = $"{databankName}PorcentageText";
-                GameObject textObject = GameObject.Find(objectName);
-
-                if (textObject != null)
-                {
-                    TextMeshProUGUI tmpText = textObject.GetComponent<TextMeshProUGUI>();
-                    if (tmpText != null)
-                    {
-                        tmpText.text = "0%";
-                        Debug.Log($"{databankName}PorcentageText definido como 0%");
-                    }
-                }
-            }
         }
     }
 

@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+
     private List<Question> questions = new List<Question>
     {
         new Question
@@ -16,9 +20,13 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 "Capacidade de se autoreplicar",
                 "Não respondem as alterações do ambiente"
             },
-                correctIndex = 3,
-                questionNumber = 1,
-                isImageAnswer = false
+            correctIndex = 3,
+            questionNumber = 1,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -30,9 +38,13 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 "Vitalismo",
                 "Teoria celular"
             },
-                correctIndex = 2,
-                questionNumber = 2,
-                isImageAnswer = false
+            correctIndex = 2,
+            questionNumber = 2,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -44,9 +56,13 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 "O desenvolvimento da teoria atómica dos elementos",
                 "A lei da conservação das massas"
             },
-                correctIndex = 1,
-                questionNumber = 3,
-                isImageAnswer = false
+            correctIndex = 1,
+            questionNumber = 3,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -59,7 +75,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -72,7 +92,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 0,
             questionNumber = 5,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -85,7 +109,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -98,7 +126,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 7,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -111,7 +143,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 8,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -124,7 +160,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 3,
             questionNumber = 9,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -137,7 +177,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 10,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -150,7 +194,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 11,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -163,7 +211,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 12,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -176,7 +228,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 13,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -189,7 +245,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 14,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -203,7 +263,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 0,
             questionNumber = 15,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -217,7 +281,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 16,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -231,7 +299,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 2,
             questionNumber = 17,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -245,7 +317,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 18,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -259,7 +335,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 3,
             questionNumber = 19,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -272,7 +352,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 20,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -286,7 +370,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 0,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -300,7 +388,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -314,7 +406,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 2,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -328,7 +424,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -342,7 +442,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 0,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -355,7 +459,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -368,7 +476,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 27,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -381,7 +493,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 28,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -394,7 +510,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 29,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -407,7 +527,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 0,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -420,7 +544,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 31,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -433,7 +561,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 32,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -446,7 +578,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 33,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -459,7 +595,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 34,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -472,7 +612,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 35,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -485,7 +629,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 2,
             questionNumber = 36,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -498,7 +646,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 37,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -511,7 +663,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 38,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -524,7 +680,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -537,7 +697,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 2,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -550,7 +714,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 41,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -563,7 +731,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 3,
             questionNumber = 42,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -576,7 +748,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 0,
             questionNumber = 43,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -589,7 +765,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 44,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -602,7 +782,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 0,
             questionNumber = 45,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -615,7 +799,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -628,7 +816,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 47,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -641,7 +833,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 48,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
          new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -654,7 +850,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
                 },
             correctIndex = 1,
             questionNumber = 49,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -667,7 +867,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 50,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -680,7 +884,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 3,
             questionNumber = 51,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -693,7 +901,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 1,
             questionNumber = 52,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -706,8 +918,182 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             },
             correctIndex = 2,
             questionNumber = 53,
-            isImageAnswer = false
-        }
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal solvente dos sistemas biológicos?",
+            answers = new string[] {
+                "Etanol",
+                "Água",
+                "Metano",
+                "Glicerol"
+            },
+            correctIndex = 1,
+            questionNumber = 54,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "As macromoléculas biológicas incluem:",
+            answers = new string[] {
+                "Proteínas, lipídios, carboidratos e ácidos nucleicos",
+                "Vitaminas, sais minerais e proteínas",
+                "Gases, água, lipídios e enzimas",
+                "Açúcares simples, ATP e DNA"
+            },
+            correctIndex = 0,
+            questionNumber = 55,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A molécula de DNA é responsável principalmente por:",
+            answers = new string[] {
+                "Produzir energia imediata",
+                "Transportar oxigênio",
+                "Armazenar e transmitir informações genéticas",
+                "Formar membranas celulares"
+            },
+            correctIndex = 2,
+            questionNumber = 56,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Por que o a ATP é considerado a moeda energética da célula?",
+            answers = new string[] {
+                "É um lipídio armazenado em grandes quantidades",
+                "Armazena energia em suas ligações fosfato",
+                "É uma proteína que atua como enzima",
+                "Faz parte da estrutura dos ácidos nucleicos"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Qual é o principal carboidrato utilizado como fonte imediata de energia pelas células?",
+            answers = new string[] {
+                "Amido",
+                "Glicogênio",
+                "Glicose",
+                "Frutose"
+            },
+            correctIndex = 2,
+            questionNumber = 58,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "As enzimas são:",
+            answers = new string[] {
+                "Vitaminas essenciais à vida",
+                "Moléculas de DNA que controlam a divisão celular",
+                "Catalisadores biológicos, geralmente proteínas",
+                "Lipídios que fornecem energia"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Em organismos vivos, os lipídios têm como função principal:",
+            answers = new string[] {
+                "Formar cadeias polipeptídicas",
+                "Servir como catalisadores",
+                "Armazenar energia e compor membranas celulares",
+                "Atuar como código genético"
+            },
+            correctIndex = 2,
+            questionNumber = 60,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "A bioquímica surgiu como disciplina independente principalmente com:",
+            answers = new string[] {
+                "A descoberta da penicilina",
+                "O isolamento da ureia por Wöhler",
+                "A teoria celular de Schleiden e Schwann",
+                "A descoberta da dupla hélice do DNA"
+            },
+            correctIndex = 1,
+            questionNumber = 61,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Um dos principais objetivos da Bioquímica é:",
+            answers = new string[] {
+                "Entender as interações entre espécies diferentes",
+                "Explicar como as reações químicas sustentam os processos vitais",
+                "Descrever a anatomia dos organismos",
+                "Estudar apenas as doenças humanas"
+            },
+            correctIndex = 1,
+            questionNumber = 62,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },    
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Os principais elementos químicos que constituem os seres vivos são:",
+            answers = new string[] {
+                "C, H, O, N",
+                "Fe, Cu, Zn, Mg",
+                "Na, K, Cl, Ca",
+                "S, P, Cl, Ar"
+            },
+            correctIndex = 0,
+            questionNumber = 63,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        }   
     };
 
     public List<Question> GetQuestions()
@@ -723,5 +1109,10 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
     public string GetDatabankName()
     {
         return "BiochemistryIntroductionQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

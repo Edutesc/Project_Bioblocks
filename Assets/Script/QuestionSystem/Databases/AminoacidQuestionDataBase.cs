@@ -4,6 +4,10 @@ using QuestionSystem;
 
 public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
 {
+
+    [Header("Development Settings")]
+    [SerializeField] private bool databaseInDevelopment = false;
+
     private List<Question> questions = new List<Question>
     {
         new Question
@@ -18,7 +22,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 1,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -32,21 +40,29 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 2,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique o aminoácido cuja cadeia lateral apresenta característica polar não carregada.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/glicina",
-                "AnswerImages/AminoacidsDB/histidina",
-                "AnswerImages/AminoacidsDB/alanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/glicina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/histidina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina"
             },
             correctIndex = 0,
             questionNumber = 3,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -60,21 +76,29 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 4,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique o alfa-aminoácido abaixo",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/3-amino-2-butanona",
-                "AnswerImages/AminoacidsDB/beta-alanina",
-                "AnswerImages/AminoacidsDB/2-amino-propanoato-de-metila"
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/3-amino-2-butanona",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/beta-alanina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/2-amino-propanoato_de_metila"
             },
             correctIndex = 0,
             questionNumber = 5,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -88,85 +112,106 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 6,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique o aminoácido que absorve o comprimento de onda de 280 nm.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/cisteina",
-                "AnswerImages/AminoacidsDB/fenilalanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/cisteina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/fenilalanina"
             },
             correctIndex = 3,
             questionNumber = 7,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/cisteina",
-                "AnswerImages/AminoacidsDB/d-alanina"
+                "AnswerImages/AminoacidsDB/moleculas_organicas/d-alanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/cisteina",
+                "AnswerImages/AminoacidsDB/moleculas_organicas/d-alanina"
             },
             correctIndex = 3,
             questionNumber = 8,
-            isImageQuestion = true,
             isImageAnswer = true,
-            questionImagePath =  "AnswerImages/AminoacidsDB/ImageQuestionContainer8"
+            isImageQuestion = false,
+            questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer8",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "pH = 2,3",
-                "pH = 9,7",
-                "pH = 6",
-                "pH = 0"
+                "pH = 6,0",
+                "pH = 7,0",
+                "pH = 9,7"
             },
-            correctIndex = 2,
+            correctIndex = 1,
             questionNumber = 9,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer9"
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer9",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "A Isoleucina é um aminoácido alifático com pK1 = 2,3 e pK2, = 9,8. Qual é o estado de protonação predominante da Isoleucina em pH = 1.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/isoleucina",
-                "AnswerImages/AminoacidsDB/isoleucina_carga0",
-                "AnswerImages/AminoacidsDB/isoleucina_cargaPlus",
-                "AnswerImages/AminoacidsDB/isoleucina_cargaMinus"
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_zw",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_positiva",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina_negativa"
             },
             correctIndex = 2,
             questionNumber = 10,
             isImageAnswer = true,
-            isImageQuestion = true,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer10"
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
          new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "A Prolina é um aminoácido cíclico com pK1 = 2,0 e pK2, = 10,6. Qual é o estado de protonação predominante da Prolina em pH = 6,3.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/prolina",
-                "AnswerImages/AminoacidsDB/prolina_carga0",
-                "AnswerImages/AminoacidsDB/prolina_cargaPlus",
-                "AnswerImages/AminoacidsDB/prolina_cargaMinus"
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina_zw",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina_positiva",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina_negativa"
             },
             correctIndex = 1,
             questionNumber = 11,
             isImageAnswer = true,
-            isImageQuestion = true,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer11"
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "pH = 5,5",
                 "pH = 9,0",
@@ -175,13 +220,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 12,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer12"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer12",
+            questionLevel = 3,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "pH = 3,0",
                 "pH = 5,5",
@@ -190,9 +238,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 13,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer13"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer13",
+            questionLevel = 3,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -206,49 +256,65 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 14,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique abaixo o aminoácido cuja cadeia lateral é considerada básica",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/prolina",
-                "AnswerImages/AminoacidsDB/isoleucina",
-                "AnswerImages/AminoacidsDB/acido_aspartico",
-                "AnswerImages/AminoacidsDB/arginina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/isoleucina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/acido_aspartico",
+                "AnswerImages/AminoacidsDB/aminoacid_images/arginina"
             },
             correctIndex = 3,
             questionNumber = 15,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Identifique abaixo o aminoácido cuja cadeia lateral é considerada ácida",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/fenilalanina",
-                "AnswerImages/AminoacidsDB/alanina",
-                "AnswerImages/AminoacidsDB/acido_aspartico",
-                "AnswerImages/AminoacidsDB/arginina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/fenilalanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/acido_aspartico",
+                "AnswerImages/AminoacidsDB/aminoacid_images/arginina"
             },
             correctIndex = 2,
             questionNumber = 16,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-             questionText = "Identifique abaixo o aminoácido cuja cadeixa lateral apresenta um grupo funcional álcool.",
+            questionText = "Identifique abaixo o aminoácido cuja cadeia lateral apresenta um grupo funcional álcool.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/tirosina",
-                "AnswerImages/AminoacidsDB/prolina",
-                "AnswerImages/AminoacidsDB/treonina",
-                "AnswerImages/AminoacidsDB/leucina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/tirosina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/prolina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/treonina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/leucina"
             },
             correctIndex = 2,
             questionNumber = 17,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -262,21 +328,29 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 18,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-             questionText = "Identifique abaixo o aminoácido que absorve luz de comprimento de onda 280 nm.",
+            questionText = "Identifique abaixo o aminoácido que absorve luz de comprimento de onda 280 nm.",
             answers = new string[] {
-                "AnswerImages/AminoacidsDB/triptofano",
-                "AnswerImages/AminoacidsDB/glutamina",
-                "AnswerImages/AminoacidsDB/glicina",
-                "AnswerImages/AminoacidsDB/alanina"
+                "AnswerImages/AminoacidsDB/aminoacid_images/triptofano",
+                "AnswerImages/AminoacidsDB/aminoacid_images/glutamina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/glicina",
+                "AnswerImages/AminoacidsDB/aminoacid_images/alanina"
             },
             correctIndex = 0,
             questionNumber = 19,
-            isImageAnswer = true
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -290,7 +364,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 20,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -304,7 +382,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 21,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -318,7 +400,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 22,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -332,7 +418,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 23,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -346,7 +436,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 24,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -360,7 +454,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 25,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -374,7 +472,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 26,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -388,11 +490,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 27,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "Uma amida",
                 "H<sup><size=150%> +</size></sup>",
@@ -401,9 +508,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 28,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer28"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer28",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
        new Question
         {
@@ -417,7 +526,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 29,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -431,11 +544,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 30,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "2 aminoácidos",
                 "3 aminoácidos",
@@ -444,13 +562,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 31,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer31"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer31",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "Aminoácido",
                 "Dipeptídeo",
@@ -459,9 +580,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 32,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer32"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer32",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -475,7 +598,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 33,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -489,7 +616,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 34,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -503,7 +634,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 35,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -517,7 +652,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 36,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -531,7 +670,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 37,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -545,7 +688,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 38,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -559,7 +706,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 39,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -573,11 +724,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 40,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "2 aminoácidos",
                 "3 aminoácidos",
@@ -586,13 +742,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 41,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer41"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer41",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "2 ligações peptídicas",
                 "3 ligações peptídicas",
@@ -601,13 +760,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 42,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer42"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer42",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "Ponte de Hidrogênio",
                 "Ponte Dissulfeto",
@@ -616,13 +778,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 43,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer43"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer43",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "Ponte de Hidrogênio",
                 "Ponte Dissulfeto",
@@ -631,9 +796,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 44,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer44"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer44",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
@@ -647,7 +814,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 45,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -661,11 +832,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 0,
             questionNumber = 46,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "Uma Ponte Dissulfeto",
                 "Duas Pontes Dissulfeto",
@@ -674,13 +850,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 47,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer47"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer47",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "",
             answers = new string[] {
                 "Esturuta Primária",
                 "Esturuta Secundária",
@@ -689,14 +868,16 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 3,
             questionNumber = 48,
-            isImageQuestion = true,
             isImageAnswer = false,
-            questionImagePath =  "AnswerImages/AminoacidsDB/imageQuestionContainer48"
+            isImageQuestion = true,
+            questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer48",
+            questionLevel = 2,
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-            questionText = "O que é a estrutura terciárica de uma proteínas?",
+            questionText = "O que é a estrutura terciária de uma proteína?",
             answers = new string[] {
                 "A sua sequência linear de aminoácidos",
                 "É a estrutura tridimensional da proteína",
@@ -705,7 +886,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 1,
             questionNumber = 49,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
         },
         new Question
         {
@@ -719,10 +904,338 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             },
             correctIndex = 2,
             questionNumber = 50,
-            isImageAnswer = false
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Os aminoácidos são considerados os blocos de construção de qual macromolécula?",
+            answers = new string[] {
+                "Proteínas",
+                "Carboidratos",
+                "Lipídios",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 0,
+            questionNumber = 51,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Os aminoácidos essenciais são aqueles que:",
+            answers = new string[] {
+                "Precisam ser obtidos pela dieta",
+                "Não participam de síntese proteica",
+                "São encontrados apenas em proteínas animais",
+                "Podem ser sintetizados pelo corpo humano em qualquer condição"
+            },
+            correctIndex = 0,
+            questionNumber = 52,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = true
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido é conhecido por ser o mais simples, possuindo apenas um átomo de hidrogênio como cadeia lateral?",
+            answers = new string[] {
+                "Serina",
+                "Alanina",
+                "Prolina",
+                "Glicina"
+            },
+            correctIndex = 3,
+            questionNumber = 53,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual grupo funcional é característico de todos os aminoácidos?",
+            answers = new string[] {
+                "Amino e carboxila",
+                "Aldeído e cetona",
+                "Hidroxila e metila",
+                "Fosfato e sulfato"
+            },
+            correctIndex = 0,
+            questionNumber = 54,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual dos seguintes aminoácidos NÃO é essencial para o ser humano adulto?",
+            answers = new string[] {
+                "Valina",
+                "Leucina",
+                "Hidroxila e metila",
+                "Glicina"
+            },
+            correctIndex = 3,
+            questionNumber = 55,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Quantos aminoácidos proteicos canônicos existem no código genético padrão?",
+            answers = new string[] {
+                "30",
+                "10",
+                "64",
+                "20"
+            },
+            correctIndex = 3,
+            questionNumber = 56,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido possui uma cadeia lateral com enxofre, sendo importante para a formação de pontes dissulfeto?",
+            answers = new string[] {
+                "Treonina",
+                "Cisteína",
+                "Fenilalanina",
+                "Valina"
+            },
+            correctIndex = 1,
+            questionNumber = 57,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "O grupo R de um aminoácido determina:",
+            answers = new string[] {
+                "O número de códons",
+                "A ligação peptídica",
+                "A quantidade de ATP produzido",
+                "As propriedades químicas e estruturais do aminoácido"
+            },
+            correctIndex = 3,
+            questionNumber = 58,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Os aminoácidos são considerados as unidades básicas de qual macromolécula?",
+            answers = new string[] {
+                "Lipídios",
+                "Carboidratos",
+                "Proteínas",
+                "Ácidos nucleicos"
+            },
+            correctIndex = 2,
+            questionNumber = 59,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual grupo funcional está presente em todos os aminoácidos?",
+            answers = new string[] {
+                "Hidroxila (OH) e fosfato (PO<sub><size=150%>4</size></sub><sup><size=150%>3-</size></sup>)",
+                "Amino (NH<sub><size=150%>2</size></sub>) e carboxila (COOH)",
+                "Sulfato (SO<sub><size=150%>4</size></sub><sup><size=150%>2-</size></sup>) e éster (COOR)",
+                "Aldeído (CHO) e cetona (C=O)"
+            },
+            correctIndex = 1,
+            questionNumber = 60,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "O que diferencia os aminoácidos entre si?",
+            answers = new string[] {
+                "O número de carbonos do grupo carboxila",
+                "O tipo de ligação peptídica formada",
+                "A cadeia lateral (radical R)",
+                "A presença de nitrogênio no grupo amino"
+            },
+            correctIndex = 2,
+            questionNumber = 61,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Quantos aminoácidos são considerados essenciais para humanos adultos?",
+            answers = new string[] {
+                "3",
+                "9",
+                "12",
+                "20"
+            },
+            correctIndex = 1,
+            questionNumber = 63,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido contém enxofre em sua estrutura?",
+            answers = new string[] {
+                "Glicina",
+                "Alanina",
+                "Cisteína",
+                "Lisina"
+            },
+            correctIndex = 2,
+            questionNumber = 64,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "A ligação entre dois aminoácidos é chamada de:",
+            answers = new string[] {
+                "Ligação glicosídica",
+                "Ligação peptídica",
+                "Ligação fosfodiéster",
+                "Ligação de hidrogênio"
+            },
+            correctIndex = 1,
+            questionNumber = 65,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual aminoácido é o mais simples, com apenas um átomo de hidrogênio como cadeia lateral?",
+            answers = new string[] {
+                "Alanina",
+                "Glicina",
+                "Serina",
+                "Prolina"
+            },
+            correctIndex = 1,
+            questionNumber = 66,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Qual destes aminoácidos é aromático?",
+            answers = new string[] {
+                "Valina",
+                "Fenilalanina",
+                "Lisina",
+                "Treonina"
+            },
+            correctIndex = 1,
+            questionNumber = 67,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "A prolina é considerada um aminoácido especial porque:",
+            answers = new string[] {
+                "Não participa de ligações peptídicas",
+                "Possui cadeia lateral aromática",
+                "Sua cadeia lateral se liga ao próprio nitrogênio do grupo amino",
+                "Não contém grupo carboxila"
+            },
+            correctIndex = 2,
+            questionNumber = 68,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
+        },
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "Em pH fisiológico (~7,4), um aminoácido geralmente está em qual forma?",
+            answers = new string[] {
+                "Totalmente protonado",
+                "Totalmente desprotonado",
+                "Zwitteriônica (com cargas positivas e negativas)",
+                "Neutra, sem cargas"
+            },
+            correctIndex = 2,
+            questionNumber = 69,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false
         }
     };
-
+      
     public List<Question> GetQuestions()
     {
         return questions;
@@ -736,5 +1249,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
     public string GetDatabankName()
     {
         return "AminoacidQuestionDatabase";
+    }
+
+    public bool IsDatabaseInDevelopment()
+    {
+        return databaseInDevelopment;
     }
 }

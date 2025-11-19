@@ -29,7 +29,7 @@ public class UserData
     public int WeekScore { get; set; }
 
     [FirestoreProperty]
-    public int Progress { get; set; }
+    public int QuestionTypeProgress { get; set; }
 
     [FirestoreProperty]
     public Timestamp CreatedTime { get; set; }
@@ -40,6 +40,18 @@ public class UserData
     [FirestoreProperty]
     public bool IsUserRegistered { get; set; }
 
+    [FirestoreProperty]
+    public int PlayerLevel { get; set; } = 1;
+
+    [FirestoreProperty]
+    public int TotalValidQuestionsAnswered { get; set; } = 0;
+
+    [FirestoreProperty]
+    public int TotalQuestionsInAllDatabanks { get; set; } = 0;
+
+    [FirestoreProperty]
+    public Dictionary<string, bool> ResetDatabankFlags { get; set; } = new Dictionary<string, bool>();
+
     public UserData()
     {
         AnsweredQuestions = new Dictionary<string, List<int>>();
@@ -47,8 +59,8 @@ public class UserData
     }
 
     public UserData(string userId, string nickName, string name, string email,
-               string profileImageUrl = null, int score = 0, int weekScore = 0, int progress = 0,
-               bool isRegistered = false)
+           string profileImageUrl = null, int score = 0, int weekScore = 0, int questionTypeProgress = 0,
+           bool isRegistered = false)
     {
         UserId = userId;
         NickName = nickName;
@@ -57,10 +69,14 @@ public class UserData
         ProfileImageUrl = profileImageUrl;
         Score = score;
         WeekScore = weekScore;
-        Progress = progress;
+        QuestionTypeProgress = questionTypeProgress;
         CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow);
         IsUserRegistered = isRegistered;
         AnsweredQuestions = new Dictionary<string, List<int>>();
+        PlayerLevel = 1;
+        TotalValidQuestionsAnswered = 0;
+        TotalQuestionsInAllDatabanks = 0;
+        ResetDatabankFlags = new Dictionary<string, bool>();
     }
 
     public Dictionary<string, object> ToDictionary()
@@ -75,9 +91,13 @@ public class UserData
             { "ProfileImageUrl", ProfileImageUrl },
             { "Score", Score },
             { "WeekScore", WeekScore },
-            { "Progress", Progress },
+            { "QuestionTypeProgress", QuestionTypeProgress },
             { "CreatedTime", CreatedTime },
-            { "IsUserRegistered", IsUserRegistered }
+            { "IsUserRegistered", IsUserRegistered },
+            { "PlayerLevel", PlayerLevel },
+            { "TotalValidQuestionsAnswered", TotalValidQuestionsAnswered },
+            { "TotalQuestionsInAllDatabanks", TotalQuestionsInAllDatabanks },
+            { "ResetDatabankFlags", ResetDatabankFlags }
         };
     }
 
@@ -158,6 +178,58 @@ public static class UserDataStore
             OnUserDataChanged?.Invoke(_currentUserData);
             Debug.Log($"UserDataStore atualizado para usuário: {_currentUserData?.UserId}, Score: {_currentUserData?.Score}, WeekScore: {_currentUserData?.WeekScore}");
         }
+    }
+
+    public static void UpdatePlayerLevel(int newLevel)
+    {
+        if (_currentUserData != null)
+        {
+            _currentUserData.PlayerLevel = newLevel;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"PlayerLevel atualizado para: {newLevel}");
+        }
+    }
+
+    public static void UpdateTotalValidQuestionsAnswered(int newTotal)
+    {
+        if (_currentUserData != null)
+        {
+            _currentUserData.TotalValidQuestionsAnswered = newTotal;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"TotalValidQuestionsAnswered atualizado para: {newTotal}");
+        }
+    }
+
+    public static void UpdateTotalQuestionsInAllDatabanks(int newTotal)
+    {
+        if (_currentUserData != null)
+        {
+            _currentUserData.TotalQuestionsInAllDatabanks = newTotal;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"TotalQuestionsInAllDatabanks atualizado para: {newTotal}");
+        }
+    }
+
+    public static void MarkDatabankAsReset(string databankName, bool isReset)
+    {
+        if (_currentUserData != null)
+        {
+            if (_currentUserData.ResetDatabankFlags == null)
+            {
+                _currentUserData.ResetDatabankFlags = new Dictionary<string, bool>();
+            }
+            
+            _currentUserData.ResetDatabankFlags[databankName] = isReset;
+            OnUserDataChanged?.Invoke(_currentUserData);
+            Debug.Log($"Databank {databankName} marcado como resetado: {isReset}");
+        }
+    }
+
+    public static bool IsDatabankReset(string databankName)
+    {
+        if (_currentUserData?.ResetDatabankFlags == null) return false;
+        return _currentUserData.ResetDatabankFlags.ContainsKey(databankName) 
+            && _currentUserData.ResetDatabankFlags[databankName];
     }
 
 }

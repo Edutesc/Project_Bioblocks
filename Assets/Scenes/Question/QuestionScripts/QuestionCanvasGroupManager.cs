@@ -22,6 +22,15 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     [SerializeField] private CanvasGroup loadingCanvasGroup;
     [SerializeField] private CanvasGroup questionBottomBar;
 
+    [Header("Level Configuration")]
+    [SerializeField] private QuestionLevelConfig levelConfig;
+
+    [Header("Background Images")]
+    [SerializeField] private Image questionTextBackgroundImage;
+    [SerializeField] private Image questionImageBackgroundImage;
+
+    private int currentQuestionLevel = 1;
+
     private void Awake()
     {
         if (!AreAllCanvasGroupsAssigned())
@@ -43,15 +52,25 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         SetCanvasGroupState(questionBottomBar, false);
     }
 
-    public void ShowQuestion(bool isImageQuestion, bool isImageAnswer)
+    public void ShowQuestion(bool isImageQuestion, bool isImageAnswer, int questionLevel)
     {
-
+        currentQuestionLevel = questionLevel;
         SetCanvasGroupState(loadingCanvasGroup, false);
         SetCanvasGroupState(questionTextContainer, !isImageQuestion);
         SetCanvasGroupState(questionImageContainer, isImageQuestion);
         SetCanvasGroupState(answerTextCanvasGroup, !isImageAnswer);
         SetCanvasGroupState(answerImageCanvasGroup, isImageAnswer);
         SetCanvasGroupState(questionBottomBar, true);
+    }
+
+    public Color GetFeedbackColorForCurrentLevel(bool isCorrect)
+    {
+        if (levelConfig == null) return isCorrect ? Color.green : Color.red;
+
+        var theme = levelConfig.GetThemeForLevel(currentQuestionLevel);
+        return theme != null
+            ? (isCorrect ? theme.feedbackCorrectColor : theme.feedbackIncorrectColor)
+            : (isCorrect ? Color.green : Color.red);
     }
 
     public void ShowAnswerFeedback(bool isCorrect, Color correctColor, Color incorrectColor)
@@ -119,7 +138,6 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     {
         if (questionBonusUIFeedback != null)
         {
-            // Não usamos SetCanvasGroupState porque queremos tratamento especial
             questionBonusUIFeedback.gameObject.SetActive(show);
             questionBonusUIFeedback.alpha = show ? 1f : 0f;
             questionBonusUIFeedback.interactable = show;
@@ -136,7 +154,6 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         SetCanvasGroupInteractable(answerTextCanvasGroup, false);
         SetCanvasGroupInteractable(answerImageCanvasGroup, false);
     }
-
 
     private void InitializeCanvasGroups()
     {
@@ -202,8 +219,32 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     {
         if (canvasGroup == null) return;
 
+        if (!interactable)
+        {
+            StopAllButtonAnimations(canvasGroup);
+        }
+
         canvasGroup.interactable = interactable;
         canvasGroup.blocksRaycasts = interactable;
+    }
+
+    private void StopAllButtonAnimations(CanvasGroup canvasGroup)
+    {
+        if (canvasGroup == null) return;
+
+        Button[] buttons = canvasGroup.GetComponentsInChildren<Button>();
+
+        foreach (Button btn in buttons)
+        {
+            ButtonPressEffect pressEffect = btn.GetComponent<ButtonPressEffect>();
+
+            if (pressEffect != null)
+            {
+                pressEffect.ForceStopAnimation();
+            }
+        }
+
+        Debug.Log($"Animações paradas para {buttons.Length} botões no CanvasGroup: {canvasGroup.name}");
     }
 
     private CanvasGroup[] GetAllCanvasGroups()
@@ -217,7 +258,7 @@ public class QuestionCanvasGroupManager : MonoBehaviour
             questionBottomBar,
             questionTextContainer,
             questionImageContainer,
-            questionBonusUIFeedback 
+            questionBonusUIFeedback
         };
     }
 

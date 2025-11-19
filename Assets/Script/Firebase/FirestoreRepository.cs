@@ -74,12 +74,16 @@ public class FirestoreRepository : MonoBehaviour
                     Name = userData["Name"].ToString(),
                     Email = userData["Email"].ToString(),
                     Score = Convert.ToInt32(userData["Score"]),
-                    // Adicionar WeekScore, com valor padrão 0 se não existir
                     WeekScore = userData.ContainsKey("WeekScore") ? Convert.ToInt32(userData["WeekScore"]) : 0,
-                    Progress = Convert.ToInt32(userData["Progress"]),
+                    QuestionTypeProgress = userData.ContainsKey("QuestionTypeProgress") 
+                        ? Convert.ToInt32(userData["QuestionTypeProgress"]) 
+                        : (userData.ContainsKey("Progress") ? Convert.ToInt32(userData["Progress"]) : 0),
                     ProfileImageUrl = userData["ProfileImageUrl"]?.ToString() ?? "",
                     CreatedTime = createdTime,
-                    IsUserRegistered = Convert.ToBoolean(userData["IsUserRegistered"])
+                    IsUserRegistered = Convert.ToBoolean(userData["IsUserRegistered"]),
+                    PlayerLevel = userData.ContainsKey("PlayerLevel") ? Convert.ToInt32(userData["PlayerLevel"]) : 1,
+                    TotalValidQuestionsAnswered = userData.ContainsKey("TotalValidQuestionsAnswered") ? Convert.ToInt32(userData["TotalValidQuestionsAnswered"]) : 0,
+                    TotalQuestionsInAllDatabanks = userData.ContainsKey("TotalQuestionsInAllDatabanks") ? Convert.ToInt32(userData["TotalQuestionsInAllDatabanks"]) : 0
                 };
 
                 if (userData.ContainsKey("AnsweredQuestions"))
@@ -94,6 +98,19 @@ public class FirestoreRepository : MonoBehaviour
                             {
                                 user.AnsweredQuestions[kvp.Key] = list.Select(x => Convert.ToInt32(x)).ToList();
                             }
+                        }
+                    }
+                }
+
+                if (userData.ContainsKey("ResetDatabankFlags"))
+                {
+                    user.ResetDatabankFlags = new Dictionary<string, bool>();
+                    var resetFlags = userData["ResetDatabankFlags"] as Dictionary<string, object>;
+                    if (resetFlags != null)
+                    {
+                        foreach (var kvp in resetFlags)
+                        {
+                            user.ResetDatabankFlags[kvp.Key] = Convert.ToBoolean(kvp.Value);
                         }
                     }
                 }
@@ -127,7 +144,24 @@ public class FirestoreRepository : MonoBehaviour
         // Adicionar WeekScore com verificação de existência
         userData.WeekScore = data.ContainsKey("WeekScore") ? Convert.ToInt32(data["WeekScore"]) : 0;
 
-        userData.Progress = Convert.ToInt32(data["Progress"]);
+        userData.QuestionTypeProgress = data.ContainsKey("QuestionTypeProgress") 
+    ? Convert.ToInt32(data["QuestionTypeProgress"]) 
+    : (data.ContainsKey("Progress") ? Convert.ToInt32(data["Progress"]) : 0);
+
+
+        userData.PlayerLevel = data.ContainsKey("PlayerLevel") ? Convert.ToInt32(data["PlayerLevel"]) : 1;
+        userData.TotalValidQuestionsAnswered = data.ContainsKey("TotalValidQuestionsAnswered") ? Convert.ToInt32(data["TotalValidQuestionsAnswered"]) : 0;
+        userData.TotalQuestionsInAllDatabanks = data.ContainsKey("TotalQuestionsInAllDatabanks") ? Convert.ToInt32(data["TotalQuestionsInAllDatabanks"]) : 0;
+
+        if (data.ContainsKey("ResetDatabankFlags") && data["ResetDatabankFlags"] is Dictionary<string, object> resetFlagsData)
+        {
+            userData.ResetDatabankFlags = new Dictionary<string, bool>();
+            foreach (var kvp in resetFlagsData)
+            {
+                userData.ResetDatabankFlags[kvp.Key] = Convert.ToBoolean(kvp.Value);
+            }
+        }
+
         userData.IsUserRegistered = Convert.ToBoolean(data["IsUserRegistered"]);
 
         if (data["CreatedTime"] is Timestamp timestamp)
@@ -168,7 +202,7 @@ public class FirestoreRepository : MonoBehaviour
             { "Email", userData.Email },
             { "Score", userData.Score },
             { "WeekScore", userData.WeekScore }, // Adicionar WeekScore
-            { "Progress", userData.Progress },
+            { "QuestionTypeProgress", userData.QuestionTypeProgress },
             { "IsUserRegistered", userData.IsUserRegistered },
             { "CreatedTime", userData.CreatedTime }
         };
@@ -721,6 +755,28 @@ public class FirestoreRepository : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"Erro ao verificar campo WeekScore: {e.Message}");
+            throw;
+        }
+    }
+
+    public async Task UpdateUserField(string userId, string fieldName, object value)
+    {
+        try
+        {
+            if (!isInitialized) throw new System.Exception("Firestore não inicializado");
+
+            DocumentReference docRef = db.Collection("Users").Document(userId);
+            Dictionary<string, object> updates = new Dictionary<string, object>
+            {
+                { fieldName, value }
+            };
+
+            await docRef.UpdateAsync(updates);
+            Debug.Log($"{fieldName} atualizado para {value}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Erro ao atualizar {fieldName}: {e.Message}");
             throw;
         }
     }

@@ -18,9 +18,15 @@ public class RankingManager : MonoBehaviour
     [SerializeField] private TMP_Text weekResetCountdownText;
     private WeekResetCountdown resetCountdown;
 
+    [Header("Sync Status")]
+    [SerializeField] private GameObject syncIndicator;
+    [SerializeField] private TMP_Text lastUpdateText;
+
     protected UserData currentUserData;
     protected List<Ranking> rankings;
     protected IRankingRepository rankingRepository;
+
+    private bool isLoadingFromCache = false;
 
     protected virtual void Start()
     {
@@ -32,6 +38,7 @@ public class RankingManager : MonoBehaviour
 
         InitializeRepository();
         InitializeWeekResetCountdown();
+        SubscribeToSyncEvents();
     }
 
     private void InitializeWeekResetCountdown()
@@ -41,6 +48,12 @@ public class RankingManager : MonoBehaviour
             resetCountdown = gameObject.AddComponent<WeekResetCountdown>();
             resetCountdown.Initialize(weekResetCountdownText);
         }
+    }
+
+    private void SubscribeToSyncEvents()
+    {
+        RankingSyncManager.Instance.OnSyncStarted += OnSyncStarted;
+        RankingSyncManager.Instance.OnSyncCompleted += OnSyncCompleted;
     }
 
     protected virtual void InitializeRepository()
@@ -80,39 +93,39 @@ public class RankingManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         UserDataStore.OnUserDataChanged -= OnUserDataChanged;
+        RankingSyncManager.Instance.OnSyncStarted -= OnSyncStarted;
+        RankingSyncManager.Instance.OnSyncCompleted -= OnSyncCompleted;
     }
 
     protected virtual void OnUserDataChanged(UserData userData)
     {
         currentUserData = userData;
-        _ = FetchRankings(); // Recarregar os rankings quando os dados do usuário mudarem
+        _ = FetchRankings();
     }
 
     public virtual async Task FetchRankings()
     {
         try
         {
-            rankings = await rankingRepository.GetRankingsAsync();
+            ShowSyncIndicator(false);
+            
+            isLoadingFromCache = true;
+            rankings = await RankingSyncManager.Instance.GetRankingsWithCache();
+            isLoadingFromCache = false;
 
             Debug.Log($"Total de rankings obtidos: {rankings.Count}");
 
             if (rankings.Count > 0)
             {
-                // Ordenar primariamente pelo WeekScore e usar TotalScore como critério de desempate
                 rankings = rankings
-                    .OrderByDescending(r => r.userScore)   
-                    .ThenByDescending(r => r.userWeekScore) 
+                    .OrderByDescending(r => r.userScore)
+                    .ThenByDescending(r => r.userWeekScore)
                     .ToList();
 
                 Debug.Log("Rankings ordenados por WeekScore com desempate pelo TotalScore");
 
-                // Log dos top 5 para verificar
-                // for (int i = 0; i < Math.Min(5, rankings.Count); i++)
-                // {
-                //     Debug.Log($"Top {i + 1}: {rankings[i].userName} - WeekScore: {rankings[i].userWeekScore}XP, TotalScore: {rankings[i].userScore}XP");
-                // }
-
                 UpdateRankingTable();
+                UpdateLastSyncTime();
             }
             else
             {
@@ -124,6 +137,86 @@ public class RankingManager : MonoBehaviour
             Debug.LogError($"Erro ao buscar rankings: {e.Message}");
             rankings = new List<Ranking>();
         }
+        finally
+        {
+            ShowSyncIndicator(false);
+        }
+    }
+
+    private void OnSyncStarted()
+    {
+        if (!isLoadingFromCache)
+        {
+            ShowSyncIndicator(false);
+        }
+    }
+
+    private void OnSyncCompleted(bool success)
+    {
+        ShowSyncIndicator(false);
+        
+        if (success)
+        {
+            _ = RefreshRankingsFromCache();
+        }
+    }
+
+    private async Task RefreshRankingsFromCache()
+    {
+        var localRepo = new LocalRankingRepository();
+        var cachedRankings = localRepo.GetAllRankings();
+        
+        rankings = cachedRankings.Select(e => RankingDTO.ToRanking(e)).ToList();
+        
+        rankings = rankings
+            .OrderByDescending(r => r.userScore)
+            .ThenByDescending(r => r.userWeekScore)
+            .ToList();
+        
+        UpdateRankingTable();
+        UpdateLastSyncTime();
+    }
+
+    private void ShowSyncIndicator(bool show)
+    {
+        if (syncIndicator != null)
+        {
+            syncIndicator.SetActive(show);
+        }
+    }
+
+    private void UpdateLastSyncTime()
+    {
+        if (lastUpdateText != null)
+        {
+            var lastSync = RankingSyncManager.Instance.GetLastSyncTime();
+            
+            if (lastSync == DateTime.MinValue)
+            {
+                lastUpdateText.text = "Nunca sincronizado";
+            }
+            else
+            {
+                var timeSince = DateTime.UtcNow - lastSync;
+                
+                if (timeSince.TotalMinutes < 1)
+                {
+                    lastUpdateText.text = "Atualizado agora";
+                }
+                else if (timeSince.TotalMinutes < 60)
+                {
+                    lastUpdateText.text = $"Atualizado há {(int)timeSince.TotalMinutes} min";
+                }
+                else if (timeSince.TotalHours < 24)
+                {
+                    lastUpdateText.text = $"Atualizado há {(int)timeSince.TotalHours}h";
+                }
+                else
+                {
+                    lastUpdateText.text = $"Atualizado há {(int)timeSince.TotalDays}d";
+                }
+            }
+        }
     }
 
     protected virtual void UpdateRankingTable()
@@ -134,20 +227,8 @@ public class RankingManager : MonoBehaviour
             return;
         }
 
-        var verticalLayout = rankingTableContent.GetComponent<VerticalLayoutGroup>();
-        if (verticalLayout == null)
-            verticalLayout = rankingTableContent.gameObject.AddComponent<VerticalLayoutGroup>();
-
-        verticalLayout.spacing = 5;
-        verticalLayout.childAlignment = TextAnchor.UpperCenter;
-        verticalLayout.childControlHeight = false;
-        verticalLayout.childControlWidth = true;
-        verticalLayout.childForceExpandHeight = false;
-        verticalLayout.childForceExpandWidth = true;
-        verticalLayout.padding = new RectOffset(10, 10, 10, 10); 
-
         Debug.Log($"Atualizando ranking table com {rankings.Count} rankings");
-        // Limpar linhas existentes
+        
         foreach (Transform child in rankingTableContent)
         {
             Destroy(child.gameObject);
@@ -225,5 +306,10 @@ public class RankingManager : MonoBehaviour
     {
         Debug.Log($"Navigating to {sceneName}");
         NavigationManager.Instance.NavigateTo(sceneName);
+    }
+
+    public async void OnRefreshButtonClicked()
+    {
+        await RankingSyncManager.Instance.ForceRefresh();
     }
 }
