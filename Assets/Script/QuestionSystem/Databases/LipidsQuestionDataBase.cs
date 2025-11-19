@@ -152,7 +152,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -188,7 +188,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -260,7 +260,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -278,7 +278,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -296,7 +296,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -314,7 +314,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -494,7 +494,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/LipidDB/lipids_question_27",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -530,7 +530,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -602,7 +602,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/LipidDB/lipids_question_33",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -620,7 +620,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/LipidDB/lipids_question_34",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -656,7 +656,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/LipidDB/lipids_question_36",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -674,7 +674,7 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {

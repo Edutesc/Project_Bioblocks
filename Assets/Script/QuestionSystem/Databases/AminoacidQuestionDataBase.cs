@@ -149,10 +149,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 3,
             questionNumber = 8,
             isImageAnswer = true,
-            isImageQuestion = true,
+            isImageQuestion = false,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer8",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -170,7 +170,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer9",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -512,7 +512,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer28",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
        new Question
         {
@@ -566,7 +566,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer31",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -584,7 +584,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer32",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -746,7 +746,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer41",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -764,7 +764,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer42",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -782,7 +782,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer43",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -800,7 +800,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer44",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -854,7 +854,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer47",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -872,12 +872,12 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/AminoacidsDB/imageQuestionContainer48",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
             questionDatabankName = "AminoacidQuestionDatabase",
-            questionText = "O que é a estrutura terciárica de uma proteínas?",
+            questionText = "O que é a estrutura terciária de uma proteína?",
             answers = new string[] {
                 "A sua sequência linear de aminoácidos",
                 "É a estrutura tridimensional da proteína",
@@ -944,7 +944,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -1077,10 +1077,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "AminoacidQuestionDatabase",
             questionText = "Qual grupo funcional está presente em todos os aminoácidos?",
             answers = new string[] {
-                "Hidroxila (-OH) e fosfato (-PO₄³⁻)",
-                "Amino (-NH₂) e carboxila (-COOH)",
-                "Sulfato (-SO₄²⁻) e éster (-COOR)",
-                "Aldeído (-CHO) e cetona (C=O)"
+                "Hidroxila (OH) e fosfato (PO<sub><size=150%>4</size></sub><sup><size=150%>3-</size></sup>)",
+                "Amino (NH<sub><size=150%>2</size></sub>) e carboxila (COOH)",
+                "Sulfato (SO<sub><size=150%>4</size></sub><sup><size=150%>2-</size></sup>) e éster (COOR)",
+                "Aldeído (CHO) e cetona (C=O)"
             },
             correctIndex = 1,
             questionNumber = 60,

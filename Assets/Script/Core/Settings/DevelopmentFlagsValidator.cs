@@ -96,7 +96,7 @@ public class DevelopmentFlagsValidator : IPreprocessBuildWithReport
                 }
             }
 
-            List<Question> allQuestions = database.GetQuestions();
+            List<Question> allQuestions = QuestionFilterService.FilterQuestions(database);
             var devQuestions = allQuestions.Where(q => q.questionInDevelopment).ToList();
 
             if (devQuestions.Any())
@@ -154,7 +154,7 @@ public class DevelopmentFlagsRuntimeValidator
                 Debug.LogWarning($"=================================================");
             }
 
-            List<Question> allQuestions = database.GetQuestions();
+            List<Question> allQuestions = QuestionFilterService.FilterQuestions(database);
             var devQuestions = allQuestions.Where(q => q.questionInDevelopment).ToList();
 
             if (devQuestions.Any())
