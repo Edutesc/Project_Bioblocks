@@ -43,10 +43,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual das estruturas representa uma cetose?",
             answers = new string[] {
-                "AnswerImages/SugarDB/aldotriose",
-                "AnswerImages/SugarDB/aldotetrose",
-                "AnswerImages/SugarDB/cetotetrose",
-                "AnswerImages/SugarDB/aldopentose"
+                "AnswerImages/CarbohydrateDB/D-aldotriose",
+                "AnswerImages/CarbohydrateDB/D-aldotetrose",
+                "AnswerImages/CarbohydrateDB/D-cetotetrose",
+                "AnswerImages/CarbohydrateDB/D-aldopentose"
             },
             correctIndex = 2,
             questionNumber = 3,
@@ -60,10 +60,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual estrutura representa uma aldotetrose",
             answers = new string[] {
-                "AnswerImages/SugarDB/aldotriose",
-                "AnswerImages/SugarDB/aldotetrose",
-                "AnswerImages/SugarDB/cetotetrose",
-                "AnswerImages/SugarDB/aldopentose"
+                "AnswerImages/CarbohydrateDB/D-aldotriose",
+                "AnswerImages/CarbohydrateDB/D-aldotetrose",
+                "AnswerImages/CarbohydrateDB/D-cetotetrose",
+                "AnswerImages/CarbohydrateDB/D-aldopentose"
             },
             correctIndex = 1,
             questionNumber = 4,
@@ -77,16 +77,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_glicose",
-                "AnswerImages/SugarDB/d_galactose",
-                "AnswerImages/SugarDB/d_frutose"
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-glicose",
+                "AnswerImages/CarbohydrateDB/D-galactose",
+                "AnswerImages/CarbohydrateDB/D-frutose"
             },
             correctIndex = 0,
             questionNumber = 5,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_5",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer5",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -110,16 +110,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_frutose",
-                "AnswerImages/SugarDB/l_frutose",
-                "AnswerImages/SugarDB/d_tagatose"
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-glicose",
+                "AnswerImages/CarbohydrateDB/L-frutose",
+                "AnswerImages/CarbohydrateDB/D-tagatose"
             },
             correctIndex = 3,
             questionNumber = 7,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_7",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer7",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -144,16 +144,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/beta-d-n-galactosamina",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/beta-galactosamina",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose"
             },
             correctIndex = 3,
             questionNumber = 9,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_9",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer9",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -206,7 +206,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 13,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_13",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer13",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -223,7 +223,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 14,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_14",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer14",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -378,10 +378,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Identifique abaixo um componente estrutural dos glicosaminoglicanos.",
             answers = new string[] {
-                "AnswerImages/SugarDB/alfa_d_glicopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose",
-                "AnswerImages/SugarDB/beta-d-n-galactosamina",
-                "AnswerImages/SugarDB/aldopentose"
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-galactosamina",
+                "AnswerImages/CarbohydrateDB/D-aldopentose"
             },
             correctIndex = 2,
             questionNumber = 26,
@@ -395,10 +395,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Indique abaixo a estrutura do ácido hialurônico, que é um glicosaminoglicano cujo monômero é formado pelo ácido glicurônico e pelo ácido N-acetil-glicosamina.",
             answers = new string[] {
-                "AnswerImages/SugarDB/dermatan",
-                "AnswerImages/SugarDB/condroitin",
-                "AnswerImages/SugarDB/queratan",
-                "AnswerImages/SugarDB/hialuronico"
+                "AnswerImages/CarbohydrateDB/dermatan",
+                "AnswerImages/CarbohydrateDB/condroitin",
+                "AnswerImages/CarbohydrateDB/queratan",
+                "AnswerImages/CarbohydrateDB/hialuronico"
             },
             correctIndex = 3,
             questionNumber = 27,
@@ -424,10 +424,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "A heparina é um glicosaminoglicano com uma das maiores densidades de carga negativa dentre todas as biomoléculas dos organismos vivos. Indique abaixo o monômero que forma a heparina.",
             answers = new string[] {
-                "AnswerImages/SugarDB/dermatan",
-                "AnswerImages/SugarDB/condroitin",
-                "AnswerImages/SugarDB/heparina",
-                "AnswerImages/SugarDB/hialuronico"
+                "AnswerImages/CarbohydrateDB/dermatan",
+                "AnswerImages/CarbohydrateDB/condroitin",
+                "AnswerImages/CarbohydrateDB/heparina",
+                "AnswerImages/CarbohydrateDB/hialuronico"
             },
             correctIndex = 2,
             questionNumber = 29,
@@ -462,7 +462,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionNumber = 31,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_31",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer31",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -487,11 +487,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "1-beta-3",
                 "1-alfa-3"
             },
-            correctIndex = 2,
+            correctIndex = 0,
             questionNumber = 33,
             isImageAnswer = false,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_33",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer33",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -499,16 +499,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_frutose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/d_galactose"
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-frutose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/D-galactose"
             },
             correctIndex = 1,
             questionNumber = 34,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_34",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer34",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -516,16 +516,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/l_glicose",
-                "AnswerImages/SugarDB/d_frutose",
-                "AnswerImages/SugarDB/d_tagatose",
-                "AnswerImages/SugarDB/d_glicose"
+                "AnswerImages/CarbohydrateDB/L-glicose",
+                "AnswerImages/CarbohydrateDB/D-frutose",
+                "AnswerImages/CarbohydrateDB/D-tagatose",
+                "AnswerImages/CarbohydrateDB/D-glicose"
             },
             correctIndex = 3,
             questionNumber = 35,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_35",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer35",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -533,16 +533,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/beta_d_galactopiranose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose"
             },
             correctIndex = 2,
             questionNumber = 36,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_36",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer36",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -550,10 +550,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Identifique abaixo a estrutura da glicose, que também pode ser nomeada como beta-D-glicopiranose",
             answers = new string[] {
-                "AnswerImages/SugarDB/beta_d_galactopiranose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose"
             },
             correctIndex = 3,
             questionNumber = 37,
@@ -567,16 +567,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/SugarDB/beta_d_galactopiranose",
-                "AnswerImages/SugarDB/alfa-d-galactopiranose",
-                "AnswerImages/SugarDB/alfa_d_glicopiranose",
-                "AnswerImages/SugarDB/beta_d_glicopiranose"
+                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
+                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
+                "AnswerImages/CarbohydrateDB/beta-glicopiranose"
             },
             correctIndex = 2,
             questionNumber = 38,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "AnswerImages/SugarDB/sugar_question_38",
+            questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer38",
             questionLevel = 2,
             questionInDevelopment = false
         },
@@ -663,7 +663,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/SugarDB/sugar_question_43",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
@@ -680,7 +680,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "AnswerImages/SugarDB/sugar_question_44",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
