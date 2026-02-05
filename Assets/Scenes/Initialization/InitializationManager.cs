@@ -37,7 +37,6 @@ public class InitializationManager : MonoBehaviour
             // If we're supposed to use a prefab instead of the singleton instance
             if (globalSpinner == null && globalSpinnerPrefab != null)
             {
-                // Create a parent canvas if needed
                 Canvas mainCanvas = FindObjectOfType<Canvas>();
                 GameObject spinnerObject;
                 
