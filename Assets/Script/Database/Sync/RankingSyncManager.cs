@@ -48,22 +48,31 @@ public class RankingSyncManager : MonoBehaviour
 
     private void Initialize()
     {
-        _localRepo = new LocalRankingRepository();
-        _syncMetadataRepo = new LocalSyncMetadataRepository();
-        
-        if (BioBlocksSettings.Instance.IsDebugMode())
+        try
         {
-            _remoteRepo = new MockRankingRepository();
+            _localRepo = new LocalRankingRepository();
+            _syncMetadataRepo = new LocalSyncMetadataRepository();  
+
+            var settings = BioBlocksSettings.Instance;
+            bool debugMode = settings != null && settings.IsDebugMode();
+
+            _remoteRepo = debugMode ? new MockRankingRepository() : new RankingRepository();
         }
-        else
-        {
-            _remoteRepo = new RankingRepository();
-        }
+        catch (Exception e)
+        {   
+          Debug.LogException(e);
+        }          
     }
 
     public async Task<List<Ranking>> GetRankingsWithCache()
     {
-        var cachedRankings = _localRepo.GetAllRankings();
+        if (_localRepo == null || _syncMetadataRepo == null || _remoteRepo == null)
+        Initialize();
+
+        if (_localRepo == null)
+        return new List<Ranking>();
+
+        var cachedRankings = _localRepo.GetAllRankings() ?? new List<RankingEntity>(); // ajuste o tipo se prec
         
         if (cachedRankings.Count > 0)
         {

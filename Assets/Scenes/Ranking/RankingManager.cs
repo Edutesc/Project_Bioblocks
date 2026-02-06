@@ -112,6 +112,7 @@ public class RankingManager : MonoBehaviour
             isLoadingFromCache = true;
             rankings = await RankingSyncManager.Instance.GetRankingsWithCache();
             isLoadingFromCache = false;
+            if (rankings == null) rankings = new List<Ranking>();
 
             Debug.Log($"Total de rankings obtidos: {rankings.Count}");
 
@@ -139,6 +140,7 @@ public class RankingManager : MonoBehaviour
         }
         finally
         {
+            isLoadingFromCache = false;
             ShowSyncIndicator(false);
         }
     }
