@@ -1,3 +1,5 @@
+using Unity.Burst.CompilerServices;
+using System.Collections.Generic;
 using QuestionSystem;
 
 namespace QuestionSystem
@@ -15,6 +17,7 @@ namespace QuestionSystem
         public string questionImagePath;
         public int questionLevel;
         public bool questionInDevelopment;
+        public List<Hint> hint;
     }
 }
 
