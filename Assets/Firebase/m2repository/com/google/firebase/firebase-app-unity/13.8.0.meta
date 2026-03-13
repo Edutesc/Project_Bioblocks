@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.8.0.meta
 guid: db6d36251052f4fb688d529c284b02d6
+=======
+guid: 798005976a12a4ae8ae2a53989bad600
+>>>>>>> 1885ba27b9fb942af9057d6b3ac1bac4131d4eb2:Assets/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.4.0.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

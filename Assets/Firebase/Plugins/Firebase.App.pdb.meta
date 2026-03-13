@@ -2,7 +2,11 @@ fileFormatVersion: 2
 guid: 44907853a9e64be4a31076a763ae13b3
 labels:
 - gvh
+<<<<<<< HEAD
 - gvh_version-13.8.0
+=======
+- gvh_version-13.4.0
+>>>>>>> 1885ba27b9fb942af9057d6b3ac1bac4131d4eb2
 - gvhp_exportpath-Firebase/Plugins/Firebase.App.pdb
 timeCreated: 1480838400
 PluginImporter:
