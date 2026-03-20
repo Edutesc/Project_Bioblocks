@@ -15,6 +15,8 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionCanvasGroupManager questionCanvasGroupManager;
     [SerializeField] private FeedbackUIElements feedbackElements;
     [SerializeField] private QuestionTransitionManager transitionManager;
+    // novo hintManager
+    [SerializeField] private QuestionHintManager hintManager;
 
     [Header("Game Logic Managers")]
     [SerializeField] private QuestionTimerManager timerManager;
@@ -92,6 +94,10 @@ public class QuestionManager : MonoBehaviour
         if (counterManager == null)
             Debug.LogWarning("QuestionManager: counterManager é null (opcional, mas recomendado)");
 
+        // debuga pra ver se o hintManager não é nulo
+        if (hintManager == null)
+            Debug.LogWarning("QuestionManager: hintManager é null — dicas desativadas.");
+
         bool isValid = questionBottomBarManager != null &&
                questionUIManager != null &&
                questionCanvasGroupManager != null &&
@@ -101,6 +107,8 @@ public class QuestionManager : MonoBehaviour
                scoreManager != null &&
                feedbackElements != null &&
                transitionManager != null &&
+               // valida o hintManager
+               hintManager != null &&
                counterManager != null;
 
         return isValid;
@@ -156,6 +164,12 @@ public class QuestionManager : MonoBehaviour
 
             currentSession = new QuestionSession(questions);
 
+            // passa o nome do banco ativo e todas as questões no banco
+            if (hintManager != null)
+            {
+                hintManager.Initialize(currentDatabaseName, allDatabaseQuestions);
+            }
+
             if (counterManager != null)
             {
                 counterManager.Initialize(allDatabaseQuestions, answeredQuestions);
@@ -180,7 +194,7 @@ public class QuestionManager : MonoBehaviour
         try
         {
             MonoBehaviour[] allBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
-            
+
             foreach (MonoBehaviour behaviour in allBehaviours)
             {
                 if (behaviour is IQuestionDatabase database)
@@ -249,6 +263,12 @@ public class QuestionManager : MonoBehaviour
                 Debug.Log($"Q{currentQuestion.questionNumber} (Nível {currentQuestion.questionLevel}) - ERRADA");
                 feedbackElements.ShowWrongAnswer();
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
+
+                // notifica o erro pro hintManager
+                if (hintManager != null)
+                {
+                    hintManager.OnAnswerWrong(currentQuestion);
+                }  
             }
 
             questionBottomBarManager.EnableNavigationButtons();
@@ -399,6 +419,12 @@ public class QuestionManager : MonoBehaviour
             );
             questionUIManager.ShowQuestion(nextQuestionToShow);
 
+            // notifica a proxima questao que sera mostrada para o hintManager
+            if (hintManager != null)
+            {
+                hintManager.OnQuestionChanged(nextQuestionToShow);
+            }
+
             if (counterManager != null)
             {
                 counterManager.UpdateCounter(nextQuestionToShow);
@@ -428,6 +454,12 @@ public class QuestionManager : MonoBehaviour
             );
             questionUIManager.ShowQuestion(newQuestion);
 
+            // notifica o hintManager de que uma questão ta sendo exibida
+            if (hintManager != null)
+            {
+                hintManager.OnQuestionChanged(newQuestion);
+            }
+
             if (counterManager != null)
             {
                 counterManager.UpdateCounter(newQuestion);
@@ -448,6 +480,12 @@ public class QuestionManager : MonoBehaviour
                 questionLevel: currentQuestion.questionLevel
             );
             questionUIManager.ShowQuestion(currentQuestion);
+
+            // notificar o inicio de uma nova questão
+            if (hintManager != null)
+            {
+                hintManager.OnQuestionChanged(currentQuestion);
+            } 
 
             if (counterManager != null)
             {
