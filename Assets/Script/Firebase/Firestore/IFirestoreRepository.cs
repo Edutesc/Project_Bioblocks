@@ -28,8 +28,6 @@ public interface IFirestoreRepository
 
     Task ResetAnsweredQuestions(string userId, string databankName);
 
-    Task ResetAllWeeklyScores();
-
     Task EnsureWeekScoreField();
 
     Task DeleteDocument(string collection, string documentId);
