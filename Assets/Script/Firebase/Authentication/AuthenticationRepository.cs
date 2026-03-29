@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Firebase.Auth;
 using Firebase.Firestore;
 
-/// <summary>
-/// Implementação real do IAuthRepository usando Firebase Authentication.
-/// </summary>
 public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 {
     private FirebaseAuth _auth;
@@ -15,11 +12,6 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     private bool isInitialized;
 
     public bool IsInitialized => isInitialized;
-
-    /// <summary>
-    /// UserId do usuário logado, ou null se não houver sessão ativa.
-    /// Não expõe FirebaseUser — apenas a string que o resto do app precisa.
-    /// </summary>
     public string CurrentUserId => _auth?.CurrentUser?.UserId;
 
     // -------------------------------------------------------
@@ -137,6 +129,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
         try
         {
             if (!isInitialized) throw new Exception("Firebase não inicializado");
+            AppContext.Firestore?.StopListening();
             _auth.SignOut();
             UserDataStore.CurrentUserData = null;
             await Task.CompletedTask;
