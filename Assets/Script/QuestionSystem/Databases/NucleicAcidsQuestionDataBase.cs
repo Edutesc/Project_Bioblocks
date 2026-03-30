@@ -1004,6 +1004,11 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "NucleicAcidsQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Ácidos Nucleicos";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

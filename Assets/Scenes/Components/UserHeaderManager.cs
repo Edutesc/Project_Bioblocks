@@ -127,10 +127,10 @@ public class UserHeaderManager : BarsManager
         UpdateFromCurrentUserData();
         InitializeBonusManagement();
 
-        if (PlayerLevelManager.Instance != null)
+        if (AppContext.PlayerLevel != null)
         {
-            PlayerLevelManager.OnLevelChanged += OnPlayerLevelChanged;
-            PlayerLevelManager.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
+            AppContext.PlayerLevel.OnLevelChanged += OnPlayerLevelChanged;
+            AppContext.PlayerLevel.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
             UpdatePlayerLevelUI();
         }
     }
@@ -148,10 +148,10 @@ public class UserHeaderManager : BarsManager
         StopBonusTimer();
         SaveBonusStateToFirestore();
 
-        if (PlayerLevelManager.Instance != null)
+        if (AppContext.PlayerLevel != null)
         {
-            PlayerLevelManager.OnLevelChanged -= OnPlayerLevelChanged;
-            PlayerLevelManager.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
+            AppContext.PlayerLevel.OnLevelChanged -= OnPlayerLevelChanged;
+            AppContext.PlayerLevel.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
         }
     }
 
@@ -809,11 +809,10 @@ public class UserHeaderManager : BarsManager
 
     private void UpdatePlayerLevelUI()
     {
-        if (PlayerLevelManager.Instance == null) return;
-
-        int currentLevel = PlayerLevelManager.Instance.GetCurrentLevel();
-        int questionsAnswered = PlayerLevelManager.Instance.GetTotalValidAnswered();
-        int questionsUntilNext = PlayerLevelManager.Instance.GetQuestionsUntilNextLevel();
+        if (AppContext.PlayerLevel == null) return;
+        int currentLevel       = AppContext.PlayerLevel.GetCurrentLevel();
+        int questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
+        int questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
 
         if (playerLevelText != null)
         {
@@ -830,7 +829,7 @@ public class UserHeaderManager : BarsManager
         {
             if (playerLevelProgressBarManager != null)
             {
-                int maxQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
+                int maxQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
                 playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
             }
 
@@ -862,18 +861,6 @@ public class UserHeaderManager : BarsManager
                 playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
             }
         }
-    }
-
-    #endregion
-
-    #region Nested Classes
-
-    private class BonusInfo
-    {
-        public string bonusName;
-        public float remainingTime;
-        public int multiplier;
-        public string displayName;
     }
 
     #endregion

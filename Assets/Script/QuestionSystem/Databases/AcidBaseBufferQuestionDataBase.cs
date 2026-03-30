@@ -1233,6 +1233,11 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "AcidBaseBufferQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Ácidos, Bases e Tampões";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

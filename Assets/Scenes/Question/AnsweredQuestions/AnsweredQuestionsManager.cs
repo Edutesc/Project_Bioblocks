@@ -4,26 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-/// <summary>
-/// Gerencia as questões respondidas corretamente pelo usuário.
-/// </summary>
 public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
 {
-  public delegate void AnsweredQuestionsUpdatedHandler(Dictionary<string, int> answeredCounts);
-    public static event AnsweredQuestionsUpdatedHandler OnAnsweredQuestionsUpdated;
-
-    // -------------------------------------------------------
-    // Dependências — obtidas do AppContext no Start()
-    // -------------------------------------------------------
+    public delegate void AnsweredQuestionsUpdatedHandler(Dictionary<string, int> answeredCounts);
+    public static event AnsweredQuestionsUpdatedHandler OnAnsweredQuestionsUpdated;   
     private IFirestoreRepository _firestore;
     private IAuthRepository _auth;
-
     private string userId;
     private bool isInitialized = false;
-
-    // -------------------------------------------------------
-    // Ciclo de vida
-    // -------------------------------------------------------
 
     private void Awake()
     {
@@ -32,17 +20,34 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
 
     private async void Start()
     {
+        if (AppContext.IsReady)
+        {
+            OnAppContextReady();
+        }
+        else
+        {
+            AppContext.OnReady += OnAppContextReady;
+        }
+    }
+
+    private async void OnAppContextReady()
+    {
+        AppContext.OnReady -= OnAppContextReady;
+
         _firestore = AppContext.Firestore;
         _auth      = AppContext.Auth;
 
         await Initialize();
     }
 
+    private void OnDestroy()
+    {
+        AppContext.OnReady -= OnAppContextReady;
+    }
 
     // -------------------------------------------------------
     // Inicialização
     // -------------------------------------------------------
-
     private async Task Initialize()
     {
         if (isInitialized) return;
@@ -86,7 +91,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     // -------------------------------------------------------
     // Listener de atualizações em tempo real
     // -------------------------------------------------------
-
     private void HandleAnsweredQuestionsUpdate(Dictionary<string, List<int>> answeredQuestions)
     {
         try
@@ -125,7 +129,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     // -------------------------------------------------------
     // Busca de dados
     // -------------------------------------------------------
-
     private async Task FetchUserAnsweredQuestions()
     {
         try
@@ -205,7 +208,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     // -------------------------------------------------------
     // Marcar questão como respondida corretamente
     // -------------------------------------------------------
-
     public async Task MarkQuestionAsAnswered(string databankName, int questionNumber)
     {
         try
@@ -257,7 +259,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     // -------------------------------------------------------
     // Força atualização
     // -------------------------------------------------------
-
     public async Task ForceUpdate()
     {
         try
@@ -293,7 +294,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     // -------------------------------------------------------
     // Questões restantes
     // -------------------------------------------------------
-
     public async Task<bool> HasRemainingQuestions(string currentDatabase, List<string> currentQuestionList)
     {
         try
@@ -328,7 +328,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     // -------------------------------------------------------
     // Reset
     // -------------------------------------------------------
-
     public void ResetManager()
     {
         isInitialized = false;

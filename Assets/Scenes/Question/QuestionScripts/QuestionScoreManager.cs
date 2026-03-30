@@ -11,12 +11,15 @@ public class QuestionScoreManager : MonoBehaviour
     private IAuthRepository _auth;
     private IFirestoreRepository _firestore;
     private UserHeaderManager _userHeaderManager;
+    private IPlayerLevelService _playerLevel;
+
 
     private void Start()
     {
         _auth      = AppContext.Auth;
         _firestore = AppContext.Firestore;
         _userHeaderManager = FindFirstObjectByType<UserHeaderManager>();
+        _playerLevel = AppContext.PlayerLevel;
         currentUserData = UserDataStore.CurrentUserData;
         questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
 
@@ -43,7 +46,7 @@ public class QuestionScoreManager : MonoBehaviour
             }
     
             string userId = _auth.CurrentUserId;
-            UserData userData = await _firestore.GetUserData(userId);
+            UserData userData = UserDataStore.CurrentUserData;
     
             if (userData == null)
             {
@@ -79,7 +82,7 @@ public class QuestionScoreManager : MonoBehaviour
                         );
                     }
                     else
-                    {
+                    {   
                         await _firestore.UpdateUserScores(
                             userId,
                             actualScoreChange,
@@ -95,14 +98,10 @@ public class QuestionScoreManager : MonoBehaviour
     
                         bool isDatabankReset = UserDataStore.IsDatabankReset(databankName);
     
-                        if (!isDatabankReset && PlayerLevelManager.Instance != null)
+                        if (!isDatabankReset && _playerLevel != null)
                         {
-                            await PlayerLevelManager.Instance.IncrementTotalAnswered();
-                            await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
-                        }
-                        else if (isDatabankReset)
-                        {
-                            Debug.Log($"[QuestionScoreManager] Banco {databankName} foi resetado. Questão não conta para level.");
+                            await _playerLevel.IncrementTotalAnswered();
+                            await _playerLevel.CheckAndHandleLevelUp();
                         }
                     }
                 }
@@ -135,28 +134,18 @@ public class QuestionScoreManager : MonoBehaviour
                     Debug.LogError($"Falha ao atualizar o score no Firestore: {ex.Message}");
                 }
             }
-    
-            if (database == null || !database.IsDatabaseInDevelopment())
-            {
-                UserData updatedUserData = await _firestore.GetUserData(userId);
-    
-                if (updatedUserData != null)
-                {
-                    UserDataStore.CurrentUserData = updatedUserData;
-                }
-            }
         }
         catch (Exception ex)
         {
             Debug.LogError($"Erro ao atualizar score: {ex.Message}\n{ex.StackTrace}");
     
-            if (currentUserData != null && scoreChange != 0)
+            if (UserDataStore.CurrentUserData != null && scoreChange != 0)
             {
-                int clientSideScore = Mathf.Max(0, currentUserData.Score + scoreChange);
-                int clientSideWeekScore = Mathf.Max(0, currentUserData.WeekScore + scoreChange);
+                int clientSideScore = Mathf.Max(0, UserDataStore.CurrentUserData.Score + scoreChange);
+                int clientSideWeekScore = Mathf.Max(0, UserDataStore.CurrentUserData.WeekScore + scoreChange);
     
-                currentUserData.Score = clientSideScore;
-                currentUserData.WeekScore = clientSideWeekScore;
+                UserDataStore.CurrentUserData.Score = clientSideScore;
+                UserDataStore.CurrentUserData.WeekScore = clientSideWeekScore;
                 UserDataStore.CurrentUserData = currentUserData;
             }
         }

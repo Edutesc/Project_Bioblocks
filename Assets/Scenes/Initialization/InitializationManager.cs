@@ -21,13 +21,8 @@ public class InitializationManager : MonoBehaviour
 
     [Header("Global Loading Spinner")]
     [SerializeField] private GameObject globalSpinnerPrefab;
-
-    // -------------------------------------------------------
-    // Dependências — obtidas do AppContext, nunca via .Instance
-    // -------------------------------------------------------
     private IFirestoreRepository _firestore;
     private IAuthRepository _auth;
-
     private LoadingSpinnerComponent globalSpinner;
 
     private void Awake()
@@ -36,18 +31,11 @@ public class InitializationManager : MonoBehaviour
     }
 
     private void Start()
-    {
-        // Obtém os serviços do AppContext uma única vez
-        // O AppContext já garantiu que estão inicializados no seu próprio Awake              
+    {         
         SetupUI();
         StartInitialization();
     }
-
-    // -------------------------------------------------------
-    // Spinner
-    // -------------------------------------------------------
-
-    private void InitializeGlobalSpinner()
+   private void InitializeGlobalSpinner()
     {
         try
         {
@@ -71,10 +59,6 @@ public class InitializationManager : MonoBehaviour
             Debug.LogError($"Error initializing spinner: {e.Message}");
         }
     }
-
-    // -------------------------------------------------------
-    // Fluxo principal
-    // -------------------------------------------------------
 
     private void SetupUI()
     {
@@ -116,7 +100,7 @@ public class InitializationManager : MonoBehaviour
                     UpdateProgress(0.85f);
 
                     UpdateStatus("Configurando sistema de níveis...");
-                    InitializePlayerLevelManager();
+                    InitializePlayerLevelService();
                     UpdateProgress(0.9f);
                 }
             }
@@ -141,10 +125,21 @@ public class InitializationManager : MonoBehaviour
         }
     }
 
+    private void InitializePlayerLevelService()
+    {
+        if (AppContext.PlayerLevel == null)
+        {
+            Debug.LogError("[InitializationManager] PlayerLevelService não encontrado no AppContext.");
+            return;
+        }
+
+        Debug.Log("[InitializationManager] PlayerLevelService pronto.");
+    }
+
     /// <summary>
     /// Aguarda o AppContext terminar a inicialização assíncrona.
     /// Em condições normais isso já estará pronto quando o Start() rodar,
-    /// mas esta guarda evita race conditions caso o Firebase demore mais que o esperado.
+    /// isso evita race conditions caso o Firebase demore mais que o esperado.
     /// </summary>
     private async Task WaitForAppContext()
     {
@@ -170,7 +165,6 @@ public class InitializationManager : MonoBehaviour
     // -------------------------------------------------------
     // Autenticação e dados
     // -------------------------------------------------------
-
     private async Task<bool> CheckAuthentication()
     {
         if (!_auth.IsUserLoggedIn()) return false;
@@ -193,19 +187,11 @@ public class InitializationManager : MonoBehaviour
             if (!_auth.IsUserLoggedIn()) return false;
 
             string userId = _auth.CurrentUserId;
-            var userData = await _firestore.GetUserData(userId);
+            var userData  = await _firestore.GetUserData(userId);
             if (userData == null) return false;
 
             UserDataStore.CurrentUserData = userData;
             Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
-
-            await Task.Yield();
-
-            if (PlayerLevelManager.Instance != null)
-            {
-                Debug.Log("[InitializationManager] Notificando PlayerLevelManager sobre dados carregados");
-                PlayerLevelManager.Instance.OnUserDataLoaded(userData);
-            }
 
             return true;
         }
@@ -219,7 +205,6 @@ public class InitializationManager : MonoBehaviour
     // -------------------------------------------------------
     // Navegação
     // -------------------------------------------------------
-
     private void NavigateAfterInit(bool authenticated)
     {
         try
@@ -233,73 +218,6 @@ public class InitializationManager : MonoBehaviour
         {
             string targetScene = authenticated ? "PathwayScene" : "LoginView";
             SceneManager.LoadScene(targetScene);
-        }
-    }
-
-    // -------------------------------------------------------
-    // PlayerLevelManager (ainda singleton — será refatorado)
-    // -------------------------------------------------------
-
-    private void InitializePlayerLevelManager()
-    {
-        try
-        {
-            if (PlayerLevelManager.Instance == null)
-            {
-                Debug.LogError("[InitializationManager] PlayerLevelManager não encontrado na cena!");
-                return;
-            }
-
-            Debug.Log("[InitializationManager] PlayerLevelManager encontrado. Aguardando verificação...");
-            StartCoroutine(WaitAndCheckPlayerLevel());
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InitializationManager] Erro ao inicializar PlayerLevelManager: {e.Message}");
-        }
-    }
-
-    private System.Collections.IEnumerator WaitAndCheckPlayerLevel()
-    {
-        yield return new WaitForSeconds(2f);
-
-        Debug.Log("[InitializationManager] Verificando estado do PlayerLevelManager...");
-
-        if (UserDataStore.CurrentUserData != null)
-        {
-            Debug.Log($"[InitializationManager] UserData disponível. UserId: {UserDataStore.CurrentUserData.UserId}, Level: {UserDataStore.CurrentUserData.PlayerLevel}");
-
-            if (UserDataStore.CurrentUserData.PlayerLevel == 0)
-            {
-                Debug.LogWarning("[InitializationManager] Level ainda está em 0. Forçando recálculo...");
-                if (PlayerLevelManager.Instance != null)
-                    _ = ForceRecalculatePlayerLevel();
-            }
-            else
-            {
-                Debug.Log($"[InitializationManager] Level carregado corretamente: {UserDataStore.CurrentUserData.PlayerLevel}");
-            }
-        }
-        else
-        {
-            Debug.LogError("[InitializationManager] UserData ainda é null após 2 segundos!");
-        }
-    }
-
-    private async Task ForceRecalculatePlayerLevel()
-    {
-        try
-        {
-            if (PlayerLevelManager.Instance != null)
-            {
-                await PlayerLevelManager.Instance.RecalculateTotalAnswered();
-                await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
-                Debug.Log("[InitializationManager] Recálculo de level forçado completado");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InitializationManager] Erro ao forçar recálculo: {e.Message}");
         }
     }
 

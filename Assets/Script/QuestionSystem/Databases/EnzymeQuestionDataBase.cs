@@ -1233,6 +1233,11 @@ public class EnzymeQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "EnzymeQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Enzimas";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

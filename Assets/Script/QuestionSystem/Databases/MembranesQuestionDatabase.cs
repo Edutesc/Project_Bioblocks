@@ -1224,6 +1224,11 @@ public class MembranesQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "MembranesQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Membranas Biológicas";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

@@ -1141,6 +1141,11 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "CarbohydratesQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Carboidratos";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;
