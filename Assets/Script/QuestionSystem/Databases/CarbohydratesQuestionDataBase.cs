@@ -24,7 +24,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageAnswer = false,
             isImageQuestion = false,
             questionImagePath = "",
-            questionLevel = 2,
+            questionLevel = 1,
             questionInDevelopment = false
         },
         new Question {
@@ -703,12 +703,12 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "A fórmula geral mais comum dos monossacarídeos é:",
             answers = new string[] {
-                "CnH2n-2On",
-                "CnHnOn",
-                "CnH2n+2On",
-                "CnH2nOn"
+                "(CH<sub>2</sub> O)<sub>n</sub>",
+                "C<sub>n</sub> H<sub>2n</sub> O<sub>n</sub>",
+                "C<sub>n</sub> H<sub>2n-2</sub> O<sub>n</sub>",
+                "C<sub>n</sub> H<sub>2n+2</sub> O<sub>n</sub>"
             },
-            correctIndex = 3,
+            correctIndex = 0,
             questionNumber = 46,
             isImageAnswer = false,
             isImageQuestion = false,
@@ -854,14 +854,14 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-            questionText = "A fórmula geral mais comum dos monossacarídeos é:",
+            questionText = "Os monossacarídeos podem ser representados por qual relação entre carbono, hidrogênio e oxigênio?",
             answers = new string[] {
-                "Cn(H₂O)n",
-                "CnH₂nOn",
-                "Cn(H₂O)2n",
-                "CnHnOn"
+                "Proporção 1:2:1",
+                "Proporção 1:1:1",
+                "Proporção 2:1:1",
+                "Proporção 1:3:1"
             },
-            correctIndex = 1,
+            correctIndex = 0,
             questionNumber = 55,
             isImageAnswer = false,
             isImageQuestion = false,
@@ -990,12 +990,12 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
-            questionText = "A fórmula geral mais comum dos carboidratos é:",
+            questionText = "Qual das fórmulas abaixo representa corretamente um monossacarídeo típico?",
             answers = new string[] {
-                "Cn(H₂O)n",
-                "CnH₂nOn",
-                "CnH₂n+₂On",
-                "CnHnOn"
+                "C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>",
+                "C<sub>6</sub>H<sub>6</sub>O<sub>6</sub>",
+                "C<sub>6</sub>H<sub>14</sub>O<sub>6</sub>",
+                "C<sub>6</sub>H<sub>10</sub>O<sub>6</sub>"
             },
             correctIndex = 0,
             questionNumber = 63,

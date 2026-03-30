@@ -100,8 +100,22 @@ public class QuestionScoreManager : MonoBehaviour
     
                         if (!isDatabankReset && _playerLevel != null)
                         {
-                            await _playerLevel.IncrementTotalAnswered();
-                            await _playerLevel.CheckAndHandleLevelUp();
+                            try
+                            {
+                                Debug.Log("[QuestionScoreManager] Chamando IncrementTotalAnswered...");
+                                await _playerLevel.IncrementTotalAnswered();
+                                
+                                Debug.Log("[QuestionScoreManager] Chamando CheckAndHandleLevelUp...");
+                                await _playerLevel.CheckAndHandleLevelUp();
+                                
+                                Debug.Log("[QuestionScoreManager] PlayerLevel atualizado com sucesso.");
+                            }
+                            catch (Exception levelEx)
+                            {
+                                Debug.LogError($"[QuestionScoreManager] Erro no PlayerLevel: {levelEx.GetType().Name}: {levelEx.Message}\n{levelEx.StackTrace}");
+                                if (levelEx.InnerException != null)
+                                    Debug.LogError($"[QuestionScoreManager] InnerException: {levelEx.InnerException.Message}");
+                            }
                         }
                     }
                 }
