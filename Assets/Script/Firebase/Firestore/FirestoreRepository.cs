@@ -10,6 +10,7 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
     private FirebaseFirestore db;
     private bool isInitialized;
     public bool IsInitialized => isInitialized;
+    private ListenerRegistration _userDataListener;
 
     public void Initialize()
     {
@@ -34,77 +35,15 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
         {
             DocumentSnapshot snapshot = await db.Collection("Users").Document(userId).GetSnapshotAsync();
 
-            if (snapshot.Exists)
-            {
-                Dictionary<string, object> userData = snapshot.ToDictionary();
-                Debug.Log($"Dados brutos do Firestore: {string.Join(", ", userData.Select(kv => $"{kv.Key}: {kv.Value}"))}");
-
-                Timestamp createdTime = Timestamp.FromDateTime(DateTime.UtcNow);
-                if (userData["CreatedTime"] is Timestamp timestamp)
-                {
-                    createdTime = timestamp;
-                }
-
-                UserData user = new UserData
-                {
-                    UserId = userData.ContainsKey("UserId") ? userData["UserId"].ToString() : "",
-                    NickName = userData.ContainsKey("NickName") ? userData["NickName"].ToString() : "",
-                    Name = userData.ContainsKey("Name") ? userData["Name"].ToString() : "",
-                    Email = userData.ContainsKey("Email") ? userData["Email"].ToString() : "",
-                    Score = userData.ContainsKey("Score") ? Convert.ToInt32(userData["Score"]) : 0,
-                    WeekScore = userData.ContainsKey("WeekScore") ? Convert.ToInt32(userData["WeekScore"]) : 0,
-                    QuestionTypeProgress = userData.ContainsKey("QuestionTypeProgress")
-                        ? Convert.ToInt32(userData["QuestionTypeProgress"])
-                        : (userData.ContainsKey("Progress") ? Convert.ToInt32(userData["Progress"]) : 0),
-                    ProfileImageUrl = userData.ContainsKey("ProfileImageUrl") 
-                        ? userData["ProfileImageUrl"]?.ToString() ?? "" 
-                        : "",
-                    CreatedTime = createdTime,
-                    IsUserRegistered = userData.ContainsKey("IsUserRegistered") 
-                        ? Convert.ToBoolean(userData["IsUserRegistered"]) 
-                        : false,
-                    PlayerLevel = userData.ContainsKey("PlayerLevel") ? Convert.ToInt32(userData["PlayerLevel"]) : 1,
-                    TotalValidQuestionsAnswered = userData.ContainsKey("TotalValidQuestionsAnswered") ? Convert.ToInt32(userData["TotalValidQuestionsAnswered"]) : 0,
-                    TotalQuestionsInAllDatabanks = userData.ContainsKey("TotalQuestionsInAllDatabanks") ? Convert.ToInt32(userData["TotalQuestionsInAllDatabanks"]) : 0
-                };
-
-                if (userData.ContainsKey("AnsweredQuestions"))
-                {
-                    user.AnsweredQuestions = new Dictionary<string, List<int>>();
-                    var answeredQuestions = userData["AnsweredQuestions"] as Dictionary<string, object>;
-                    if (answeredQuestions != null)
-                    {
-                        foreach (var kvp in answeredQuestions)
-                        {
-                            if (kvp.Value is IEnumerable<object> list)
-                            {
-                                user.AnsweredQuestions[kvp.Key] = list.Select(x => Convert.ToInt32(x)).ToList();
-                            }
-                        }
-                    }
-                }
-
-                if (userData.ContainsKey("ResetDatabankFlags"))
-                {
-                    user.ResetDatabankFlags = new Dictionary<string, bool>();
-                    var resetFlags = userData["ResetDatabankFlags"] as Dictionary<string, object>;
-                    if (resetFlags != null)
-                    {
-                        foreach (var kvp in resetFlags)
-                        {
-                            user.ResetDatabankFlags[kvp.Key] = Convert.ToBoolean(kvp.Value);
-                        }
-                    }
-                }
-
-                Debug.Log($"UserData carregado - NickName: {user.NickName}, Email: {user.Email}, Score: {user.Score}, WeekScore: {user.WeekScore}");
-                return user;
-            }
-            else
+            if (!snapshot.Exists)
             {
                 Debug.LogError($"Documento do usuário {userId} não encontrado");
                 return null;
             }
+
+            UserData user = ConvertFromFirestore(snapshot.ToDictionary());
+            Debug.Log($"[FirestoreRepository] UserData carregado - NickName: {user.NickName}, Score: {user.Score}");
+            return user;
         }
         catch (Exception ex)
         {
@@ -116,23 +55,31 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
     private UserData ConvertFromFirestore(Dictionary<string, object> data)
     {
         UserData userData = new UserData();
-        userData.UserId = data.ContainsKey("UserId") ? (string)data["UserId"] : "";
-        userData.NickName = data.ContainsKey("NickName") ? (string)data["NickName"] : "";
-        userData.Name = data.ContainsKey("Name") ? (string)data["Name"] : "";
-        userData.Email = data.ContainsKey("Email") ? (string)data["Email"] : "";
-        userData.ProfileImageUrl = data.ContainsKey("ProfileImageUrl") ? (string)data["ProfileImageUrl"] ?? "" : "";
-        userData.Score = data.ContainsKey("Score") ? Convert.ToInt32(data["Score"]) : 0;
+
+        userData.UserId      = data.ContainsKey("UserId")   ? (string)data["UserId"]   : "";
+        userData.NickName    = data.ContainsKey("NickName")  ? (string)data["NickName"] : "";
+        userData.Name        = data.ContainsKey("Name")      ? (string)data["Name"]     : "";
+        userData.Email       = data.ContainsKey("Email")     ? (string)data["Email"]    : "";
+        userData.ProfileImageUrl = data.ContainsKey("ProfileImageUrl")
+            ? (string)data["ProfileImageUrl"] ?? ""
+            : "";
+        userData.Score     = data.ContainsKey("Score")     ? Convert.ToInt32(data["Score"])     : 0;
         userData.WeekScore = data.ContainsKey("WeekScore") ? Convert.ToInt32(data["WeekScore"]) : 0;
         userData.QuestionTypeProgress = data.ContainsKey("QuestionTypeProgress")
             ? Convert.ToInt32(data["QuestionTypeProgress"])
-            : (data.ContainsKey("Progress") ? Convert.ToInt32(data["Progress"]) : 0);
+            : (data.ContainsKey("Progress") ? Convert.ToInt32(data["Progress"]) : 0); // ← fallback legado, estava só no inline
         userData.PlayerLevel = data.ContainsKey("PlayerLevel") ? Convert.ToInt32(data["PlayerLevel"]) : 1;
-        userData.TotalValidQuestionsAnswered = data.ContainsKey("TotalValidQuestionsAnswered") ? Convert.ToInt32(data["TotalValidQuestionsAnswered"]) : 0;
-        userData.TotalQuestionsInAllDatabanks = data.ContainsKey("TotalQuestionsInAllDatabanks") ? Convert.ToInt32(data["TotalQuestionsInAllDatabanks"]) : 0;
-        userData.IsUserRegistered = data.ContainsKey("IsUserRegistered") ? Convert.ToBoolean(data["IsUserRegistered"]) : false;
+        userData.TotalValidQuestionsAnswered   = data.ContainsKey("TotalValidQuestionsAnswered")
+            ? Convert.ToInt32(data["TotalValidQuestionsAnswered"]) : 0;
+        userData.TotalQuestionsInAllDatabanks  = data.ContainsKey("TotalQuestionsInAllDatabanks")
+            ? Convert.ToInt32(data["TotalQuestionsInAllDatabanks"]) : 0;
+        userData.IsUserRegistered = data.ContainsKey("IsUserRegistered")
+            ? Convert.ToBoolean(data["IsUserRegistered"]) : false;
 
         if (data.ContainsKey("CreatedTime") && data["CreatedTime"] is Timestamp timestamp)
             userData.CreatedTime = timestamp;
+        else
+            userData.CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow); // ← estava só no inline
 
         if (data.ContainsKey("ResetDatabankFlags") && data["ResetDatabankFlags"] is Dictionary<string, object> resetFlagsData)
         {
@@ -146,8 +93,8 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
         {
             foreach (var kvp in answeredQuestionsData)
             {
-                if (kvp.Value is List<object> questionsList)
-                    userData.AnsweredQuestions[kvp.Key] = questionsList.Select(x => Convert.ToInt32(x)).ToList();
+                if (kvp.Value is IEnumerable<object> list)
+                    userData.AnsweredQuestions[kvp.Key] = list.Select(x => Convert.ToInt32(x)).ToList();
             }
         }
 
@@ -268,8 +215,8 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
         Action<int> onWeekScoreChanged = null,
         Action<Dictionary<string, List<int>>> onAnsweredQuestionsChanged = null)
     {
-        db.Collection("Users").Document(userId)
-        .Listen(snapshot =>
+        _userDataListener?.Stop();
+        _userDataListener = db.Collection("Users").Document(userId).Listen(snapshot =>
         {
             if (snapshot.Exists)
             {
@@ -291,7 +238,7 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
                 }
 
                 if (onAnsweredQuestionsChanged != null && data.ContainsKey("AnsweredQuestions"))
-                {
+                {  
                     try
                     {
                         Dictionary<string, List<int>> answeredQuestions = new Dictionary<string, List<int>>();
@@ -328,6 +275,23 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
                 }
             }
         });
+
+        Debug.Log($"[FirestoreRepository] Listener iniciado para userId: {userId}");
+    }
+
+    public void StopListening()
+    {
+        if (_userDataListener != null)
+        {
+            _userDataListener.Stop();
+            _userDataListener = null;
+            Debug.Log("[FirestoreRepository] Listener cancelado.");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        StopListening();
     }
 
     public async Task UpdateUserProgress(string userId, int progress)
@@ -513,34 +477,56 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
         try
         {
             if (!isInitialized) throw new Exception("Firestore não inicializado");
-
             DocumentReference docRef = db.Collection("Users").Document(userId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            int calculatedScore     = 0;
+            int calculatedWeekScore = 0;
 
-            if (snapshot.Exists)
+            await db.RunTransactionAsync(async transaction =>
             {
-                int currentScore = Convert.ToInt32(snapshot.GetValue<object>("Score"));
-                int currentWeekScore = snapshot.ContainsField("WeekScore")
-                    ? Convert.ToInt32(snapshot.GetValue<object>("WeekScore"))
-                    : 0;
+                DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
 
-                int newScore = currentScore + additionalScore;
-                int newWeekScore = currentWeekScore + additionalScore;
+                if (!snapshot.Exists)
+                {
+                    return;
+                }
+
+                int currentScore = snapshot.ContainsField("Score") ? Convert.ToInt32(snapshot.GetValue<object>("Score")) : 0;
+                int currentWeekScore = snapshot.ContainsField("WeekScore") ? Convert.ToInt32(snapshot.GetValue<object>("WeekScore")) : 0;
+                calculatedScore     = Math.Max(0, currentScore     + additionalScore);
+                calculatedWeekScore = Math.Max(0, currentWeekScore + additionalScore);
 
                 Dictionary<string, object> updates = new Dictionary<string, object>
                 {
-                    { "Score", newScore },
-                    { "WeekScore", newWeekScore }
+                    { "Score",     calculatedScore },
+                    { "WeekScore", calculatedWeekScore }
                 };
 
+                // Adiciona questão respondida corretamente
                 if (isCorrect && !string.IsNullOrEmpty(databankName) && questionNumber > 0)
                 {
-                    Dictionary<string, List<int>> answeredQuestions = snapshot.GetValue<Dictionary<string, List<int>>>("AnsweredQuestions")
-                        ?? new Dictionary<string, List<int>>();
+                    var answeredQuestions = new Dictionary<string, List<int>>();
 
+                    if (snapshot.ContainsField("AnsweredQuestions"))
+                    {
+                        var raw = snapshot.GetValue<Dictionary<string, object>>("AnsweredQuestions");
+                        if (raw != null)
+                        {
+                            foreach (var kvp in raw)
+                            {
+                                if (kvp.Value is IEnumerable<object> list)
+                                {
+                                    answeredQuestions[kvp.Key] = list
+                                        .Select(x => Convert.ToInt32(x))
+                                        .ToList();
+                                }
+                            }
+                        }
+                    }
+                   
                     if (!answeredQuestions.ContainsKey(databankName))
                         answeredQuestions[databankName] = new List<int>();
 
+                    // Evita duplicatas
                     if (!answeredQuestions[databankName].Contains(questionNumber))
                     {
                         answeredQuestions[databankName].Add(questionNumber);
@@ -548,73 +534,40 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
                     }
                 }
 
-                await docRef.UpdateAsync(updates);
-
-                if (UserDataStore.CurrentUserData != null && UserDataStore.CurrentUserData.UserId == userId)
-                {
-                    UserDataStore.CurrentUserData.Score = newScore;
-                    UserDataStore.CurrentUserData.WeekScore = newWeekScore;
-                    UserDataStore.UpdateScore(newScore);
-                }
-
-                Debug.Log($"Scores atualizados - Score: {newScore}, WeekScore: {newWeekScore}");
-            }
-            else
-            {
-                Debug.LogError("Usuário não encontrado para atualização de score!");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Erro ao atualizar scores: {e.Message}");
-            throw;
-        }
-    }
-
-    public async Task ResetAllWeeklyScores()
-    {
-        try
-        {
-            if (!isInitialized) throw new Exception("Firestore não inicializado");
-
-            QuerySnapshot querySnapshot = await db.Collection("Users").GetSnapshotAsync();
-
-            if (!querySnapshot.Documents.Any())
-            {
-                Debug.Log("Nenhum usuário encontrado para resetar scores semanais");
-                return;
-            }
-
-            WriteBatch batch = db.StartBatch();
-            int userCount = 0;
-
-            foreach (DocumentSnapshot doc in querySnapshot.Documents)
-            {
-                batch.Update(doc.Reference, "WeekScore", 0);
-                userCount++;
-
-                if (userCount >= 450)
-                {
-                    await batch.CommitAsync();
-                    batch = db.StartBatch();
-                    userCount = 0;
-                }
-            }
-
-            if (userCount > 0)
-                await batch.CommitAsync();
+                transaction.Update(docRef, updates);
+            });
 
             if (UserDataStore.CurrentUserData != null)
             {
-                UserDataStore.CurrentUserData.WeekScore = 0;
-                UserDataStore.UpdateScore(UserDataStore.CurrentUserData.Score);
+                UserDataStore.CurrentUserData.Score = calculatedScore;
+                UserDataStore.CurrentUserData.WeekScore = calculatedWeekScore;
+
+                if (isCorrect && !string.IsNullOrEmpty(databankName) && questionNumber > 0)
+                {
+                    if (UserDataStore.CurrentUserData.AnsweredQuestions == null)
+                        UserDataStore.CurrentUserData.AnsweredQuestions = new Dictionary<string, List<int>>();
+
+                    if (!UserDataStore.CurrentUserData.AnsweredQuestions.ContainsKey(databankName))
+                        UserDataStore.CurrentUserData.AnsweredQuestions[databankName] = new List<int>();
+
+                    if (!UserDataStore.CurrentUserData.AnsweredQuestions[databankName].Contains(questionNumber))
+                        UserDataStore.CurrentUserData.AnsweredQuestions[databankName].Add(questionNumber);
+                }
+
+                UserDataStore.UpdateScore(calculatedScore);
             }
 
-            Debug.Log("Todos os scores semanais foram resetados com sucesso");
+            Debug.Log($"[FirestoreRepository] Após UpdateScore — CurrentUserData é null? {UserDataStore.CurrentUserData == null}");
+            Debug.Log($"[FirestoreRepository] UpdateUserScores concluído. Score: {UserDataStore.CurrentUserData?.Score}");
+            Debug.Log($"[FirestoreRepository] UpdateUserScores concluído via transação. Score: {UserDataStore.CurrentUserData?.Score}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Erro ao resetar scores semanais: {e.Message}");
+            Debug.LogError($"[FirestoreRepository] Erro em UpdateUserScores: {e.GetType().Name}: {e.Message}\n{e.StackTrace}");
+            
+            if (e.InnerException != null)
+                Debug.LogError($"[FirestoreRepository] InnerException: {e.InnerException.GetType().Name}: {e.InnerException.Message}\n{e.InnerException.StackTrace}");
+            
             throw;
         }
     }

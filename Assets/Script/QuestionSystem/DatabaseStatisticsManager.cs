@@ -195,6 +195,7 @@ public class DatabaseStatisticsManager : MonoBehaviour, IStatisticsProvider
             total += QuestionBankStatistics.GetTotalQuestions(databankName);
         }
 
+        Debug.Log($"[PlayerLevelService] Total de questões: {total}, após o int total dentro de DatabaseStatisticsManager");
         return total;
     }
 }

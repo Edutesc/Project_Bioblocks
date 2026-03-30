@@ -1287,6 +1287,11 @@ public class ProteinQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "ProteinQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Proteínas";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

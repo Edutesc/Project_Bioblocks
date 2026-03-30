@@ -1395,6 +1395,11 @@ public class LipidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "LipidsQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Lipídeos";
+    } 
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

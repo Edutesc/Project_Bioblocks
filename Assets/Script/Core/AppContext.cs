@@ -55,6 +55,7 @@ public class AppContext : MonoBehaviour
     public static IImageCacheService   ImageCache     { get; private set; }
     public static IImageUploadService  ImageUpload { get; private set; }
     public static IAnsweredQuestionsManager AnsweredQuestions { get; private set; }
+    public static IPlayerLevelService PlayerLevel { get; private set; }
 
     // -------------------------------------------------------
     // Flag de prontidão — consulte antes de usar os serviços
@@ -105,6 +106,7 @@ public class AppContext : MonoBehaviour
             var imageCacheSvc   = GetComponent<ImageCacheService>();
             var imageUploadSvc = GetComponent<ImageUploadService>();
             var answeredQuestionsMgr = GetComponent<AnsweredQuestionsManager>();
+            var playerLevelSvc = GetComponent<PlayerLevelService>();
 
             if (authRepo == null)
                 throw new System.Exception("[AppContext] AuthenticationRepository não encontrado no GameObject. Adicione o componente.");
@@ -126,6 +128,8 @@ public class AppContext : MonoBehaviour
                 throw new Exception("[AppContext] ImageUploadService não encontrado.");
             if (answeredQuestionsMgr == null)
                 throw new Exception("[AppContext] AnsweredQuestionsManager não encontrado.");
+            if (playerLevelSvc == null)
+                throw new Exception("[AppContext] PlayerLevelService não encontrado no GameObject. Adicione o componente.");
 
             // 3. Inicializa na ordem correta
             await authRepo.InitializeAsync();
@@ -160,6 +164,7 @@ public class AppContext : MonoBehaviour
             SceneData   = sceneDataMgr;
             ImageUpload = imageUploadSvc;
             AnsweredQuestions = answeredQuestionsMgr;
+            PlayerLevel = playerLevelSvc;
 
             IsReady = true;
             OnReady?.Invoke();
@@ -194,7 +199,8 @@ public class AppContext : MonoBehaviour
         INavigationService   navigation  = null,
         ISceneDataService    sceneData      = null,
         IDatabaseManager     localDatabase  = null,
-        IImageCacheService   imageCache     = null)
+        IImageCacheService   imageCache     = null,
+        IPlayerLevelService       playerLevel       = null)
     {
         if (firestore != null) Firestore = firestore;
         if (auth      != null) Auth      = auth;
@@ -204,6 +210,7 @@ public class AppContext : MonoBehaviour
         if (sceneData     != null) SceneData     = sceneData;
         if (localDatabase != null) LocalDatabase = localDatabase;
         if (imageCache    != null) ImageCache    = imageCache;
+        if (playerLevel != null) PlayerLevel = playerLevel;
         IsReady = true;
     }
 }

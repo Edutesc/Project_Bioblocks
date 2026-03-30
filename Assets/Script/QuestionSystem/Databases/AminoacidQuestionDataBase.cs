@@ -1251,6 +1251,11 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "AminoacidQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Aminoácidos e Peptídeos";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;
