@@ -1111,6 +1111,11 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
         return "BiochemistryIntroductionQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Introdução à Bioquímica";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;

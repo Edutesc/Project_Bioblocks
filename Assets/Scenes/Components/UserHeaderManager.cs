@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 public class UserHeaderManager : BarsManager
 {
+    protected INavigationService _navigation;
     [Header("Elementos da User TopBar")]
     [SerializeField] private RawImage avatarImage;
     [SerializeField] private Image avatarImageBackground;
@@ -29,8 +30,7 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private TextMeshProUGUI playerLevelProgressText;
     [SerializeField] private ProgressBarManager playerLevelProgressBarManager;
 
-    [Header("Level Colors (opcional)")]
-    [SerializeField] private Color[] levelColors = new Color[]
+    private readonly Color[] levelColors = new Color[]
     {
         HexToColor("#B000FF"),  // Level 1 - Roxo claro
         HexToColor("#FF0097"),  // Level 2 - Azul ciano vibrante
@@ -43,6 +43,8 @@ public class UserHeaderManager : BarsManager
         HexToColor("#006AFF"),  // Level 9 - Rosa pink
         HexToColor("#2520E5")   // Level 10 - Dourado brilhante
     };
+
+    private Texture2D _progressBarTexture;
 
     [Header("Elementos de Bônus Timer")]
     [SerializeField] private GameObject bonusTimerContainer;
@@ -92,31 +94,15 @@ public class UserHeaderManager : BarsManager
         { "persistenceBonusPro", "Bônus XP Triplicada" }
     };
 
-    // Singleton
-    private static UserHeaderManager _instance;
+
     private float lastVerificationTime = 0f;
     private string pendingAvatarUrl = null;
-
     protected override string BarName => "PersistentUserTopBar";
     protected override string BarChildName => "TopBar";
 
-    public static UserHeaderManager Instance => _instance;
-
     // Events
     public event Action<int> OnBonusMultiplierUpdated;
-
     #region Unity Lifecycle
-
-    protected override void ConfigureSingleton()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-    }
 
     protected override void OnAwake()
     {
@@ -137,23 +123,24 @@ public class UserHeaderManager : BarsManager
 
     protected override void OnStart()
     {
+        _navigation = AppContext.Navigation;
         UserDataStore.OnUserDataChanged += OnUserDataChanged;
         UpdateFromCurrentUserData();
         InitializeBonusManagement();
 
-        if (PlayerLevelManager.Instance != null)
+        if (AppContext.PlayerLevel != null)
         {
-            PlayerLevelManager.OnLevelChanged += OnPlayerLevelChanged;
-            PlayerLevelManager.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
+            AppContext.PlayerLevel.OnLevelChanged += OnPlayerLevelChanged;
+            AppContext.PlayerLevel.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
             UpdatePlayerLevelUI();
         }
     }
 
     protected override void OnCleanup()
     {
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete -= OnNavigationComplete;
+            _navigation.OnNavigationComplete -= OnNavigationComplete;
         }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -162,15 +149,10 @@ public class UserHeaderManager : BarsManager
         StopBonusTimer();
         SaveBonusStateToFirestore();
 
-        if (PlayerLevelManager.Instance != null)
+        if (AppContext.PlayerLevel != null)
         {
-            PlayerLevelManager.OnLevelChanged -= OnPlayerLevelChanged;
-            PlayerLevelManager.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
-        }
-        
-        if (_instance == this)
-        {
-            _instance = null;
+            AppContext.PlayerLevel.OnLevelChanged -= OnPlayerLevelChanged;
+            AppContext.PlayerLevel.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
         }
     }
 
@@ -178,9 +160,9 @@ public class UserHeaderManager : BarsManager
     {
         base.OnEnable();
 
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete += OnNavigationComplete;
+            _navigation.OnNavigationComplete += OnNavigationComplete;
         }
 
         RefreshPendingAvatar();
@@ -193,9 +175,9 @@ public class UserHeaderManager : BarsManager
 
     private void OnDisable()
     {
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete -= OnNavigationComplete;
+            _navigation.OnNavigationComplete -= OnNavigationComplete;
         }
 
         SaveBonusStateToFirestore();
@@ -621,9 +603,9 @@ public class UserHeaderManager : BarsManager
     {
         base.RegisterWithNavigationManager();
 
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete += OnNavigationComplete;
+            _navigation.OnNavigationComplete += OnNavigationComplete;
         }
     }
 
@@ -636,6 +618,10 @@ public class UserHeaderManager : BarsManager
         if (userData != null)
         {
             UpdateUserInfoDisplay(userData);
+            if (!isBonusSystemInitialized || string.IsNullOrEmpty(userId))
+            {
+                InitializeBonusManagement();
+            }
         }
     }
 
@@ -824,71 +810,122 @@ public class UserHeaderManager : BarsManager
 
     private void UpdatePlayerLevelUI()
     {
-        if (PlayerLevelManager.Instance == null) return;
+        if (AppContext.PlayerLevel == null) return;
 
-        int currentLevel = PlayerLevelManager.Instance.GetCurrentLevel();
-        int questionsAnswered = PlayerLevelManager.Instance.GetTotalValidAnswered();
-        int questionsUntilNext = PlayerLevelManager.Instance.GetQuestionsUntilNextLevel();
+        int   currentLevel       = AppContext.PlayerLevel.GetCurrentLevel();
+        int   questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
+        int   questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
+        float progressInLevel    = AppContext.PlayerLevel.GetProgressInCurrentLevel();
+
+        // Cor do level atual e do próximo
+        Color currentLevelColor = GetLevelColor(currentLevel);
+        Color nextLevelColor    = GetLevelColor(currentLevel + 1);
+
+        // Badge do level — cor sólida do level atual
+        if (playerLevelBackground != null)
+            playerLevelBackground.color = currentLevelColor;
 
         if (playerLevelText != null)
-        {
             playerLevelText.text = currentLevel.ToString();
-        }
-
-        if (playerLevelBackground != null && levelColors != null && levelColors.Length >= 10)
-        {
-            int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
-            playerLevelBackground.color = levelColors[colorIndex];
-        }
 
         if (currentLevel >= 10)
         {
+            // Level máximo — barra totalmente preenchida com cor do level 10
+            ApplyGradientToProgressBar(currentLevelColor, currentLevelColor, 1f);
+
             if (playerLevelProgressBarManager != null)
             {
-                int maxQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
+                int maxQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
                 playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
             }
 
             if (playerLevelProgressText != null)
-            {
                 playerLevelProgressText.text = "MÁXIMO!";
-            }
         }
         else
         {
-            int nextLevelTotal = questionsAnswered + questionsUntilNext;
-            int nextLevel = currentLevel + 1;
+            int nextLevel       = currentLevel + 1;
+            int progressPercent = Mathf.RoundToInt(progressInLevel * 100f);
+
+            // Aplica degradê da cor atual para a cor do próximo level
+            ApplyGradientToProgressBar(currentLevelColor, nextLevelColor, progressInLevel);
 
             if (playerLevelProgressBarManager != null)
-            {
-                playerLevelProgressBarManager.UpdateProgress(
-                    questionsAnswered,
-                    nextLevelTotal,
-                    $"Level {currentLevel}"
-                );
-
-                Debug.Log($"[UserHeaderManager] Barra animada: {questionsAnswered}/{nextLevelTotal}");
-            }
+                playerLevelProgressBarManager.UpdateProgress(progressPercent, 100, $"Level {currentLevel}");
 
             if (playerLevelProgressText != null)
-            {
-                float percentageToNext = (questionsUntilNext / (float)nextLevelTotal) * 100f;
-                int roundedPercentage = Mathf.RoundToInt(percentageToNext);
-                playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
-            }
+                playerLevelProgressText.text = $"{progressPercent}% no nível {currentLevel} concluído";
         }
     }
 
-    #endregion
-
-    #region Nested Classes
-
-    private class BonusInfo
+    // Retorna a cor de um level — com proteção para level 10+
+    private Color GetLevelColor(int level)
     {
-        public string bonusName;
-        public float remainingTime;
-        public int multiplier;
-        public string displayName;
+        if (levelColors == null || levelColors.Length == 0) return Color.white;
+        int index = Mathf.Clamp(level - 1, 0, levelColors.Length - 1);
+        return levelColors[index];
+    }
+
+    // Gera e aplica textura de degradê na barra de progresso
+    private void ApplyGradientToProgressBar(Color startColor, Color endColor, float progress)
+    {
+        if (playerLevelProgressBar == null) return;
+
+        // Largura da textura — 64px é suficiente para um degradê suave
+        int textureWidth = 64;
+
+        // Reutiliza a textura se já existir, evita alocação desnecessária
+        if (_progressBarTexture == null)
+        {
+            _progressBarTexture = new Texture2D(textureWidth, 1, TextureFormat.RGBA32, false);
+            _progressBarTexture.wrapMode = TextureWrapMode.Clamp;
+            _progressBarTexture.filterMode = FilterMode.Bilinear;
+        }
+
+        // Preenche os pixels com o degradê
+        Color[] pixels = new Color[textureWidth];
+        for (int i = 0; i < textureWidth; i++)
+        {
+            // t vai de 0 a progress — a parte não preenchida fica transparente
+            float t = (float)i / (textureWidth - 1);
+
+            if (t <= progress)
+            {
+                // Dentro da área preenchida — interpola entre as duas cores
+                float gradientT = progress > 0 ? t / progress : 0f;
+                pixels[i] = Color.Lerp(startColor, endColor, gradientT);
+            }
+            else
+            {
+                // Fora da área preenchida — transparente
+                pixels[i] = Color.clear;
+            }
+        }
+
+        _progressBarTexture.SetPixels(pixels);
+        _progressBarTexture.Apply();
+
+        // Aplica a textura na Image da barra
+        playerLevelProgressBar.sprite = Sprite.Create(
+            _progressBarTexture,
+            new Rect(0, 0, textureWidth, 1),
+            new Vector2(0.5f, 0.5f)
+        );
+
+        // Reseta a cor para branco — deixa a textura controlar as cores
+        playerLevelProgressBar.color = Color.white;
+        playerLevelProgressBar.type  = Image.Type.Simple;
+        playerLevelProgressBar.preserveAspect = false;
+    }
+
+    // Limpa a textura quando o componente é destruído
+    private void OnDestroy()
+    {
+        if (_progressBarTexture != null)
+        {
+            Destroy(_progressBarTexture);
+            _progressBarTexture = null;
+        }
     }
 
     #endregion

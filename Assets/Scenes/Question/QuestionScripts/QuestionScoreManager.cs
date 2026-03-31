@@ -8,21 +8,24 @@ public class QuestionScoreManager : MonoBehaviour
     private UserData currentUserData;
     private AnsweredQuestionsManager answeredQuestionsManager;
     private QuestionBonusManager questionBonusManager;
+    private IAuthRepository _auth;
+    private IFirestoreRepository _firestore;
+    private UserHeaderManager _userHeaderManager;
+    private IPlayerLevelService _playerLevel;
+
 
     private void Start()
     {
+        _auth      = AppContext.Auth;
+        _firestore = AppContext.Firestore;
+        _userHeaderManager = FindFirstObjectByType<UserHeaderManager>();
+        _playerLevel = AppContext.PlayerLevel;
         currentUserData = UserDataStore.CurrentUserData;
-        answeredQuestionsManager = AnsweredQuestionsManager.Instance;
         questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
 
         if (currentUserData == null)
         {
             Debug.LogError("CurrentUserData é null no ScoreManager");
-        }
-
-        if (answeredQuestionsManager == null)
-        {
-            Debug.LogError("AnsweredQuestionsManager não encontrado");
         }
 
         if (questionBonusManager == null)
@@ -36,14 +39,14 @@ public class QuestionScoreManager : MonoBehaviour
     {
         try
         {
-            if (AuthenticationRepository.Instance.Auth.CurrentUser == null)
+            if (!_auth.IsUserLoggedIn())
             {
                 Debug.LogError("Usuário não autenticado");
                 return;
             }
     
-            string userId = AuthenticationRepository.Instance.Auth.CurrentUser.UserId;
-            UserData userData = await FirestoreRepository.Instance.GetUserData(userId);
+            string userId = _auth.CurrentUserId;
+            UserData userData = UserDataStore.CurrentUserData;
     
             if (userData == null)
             {
@@ -53,9 +56,9 @@ public class QuestionScoreManager : MonoBehaviour
     
             int actualScoreChange = scoreChange;
     
-            if (isCorrect && UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
+            if (isCorrect && _userHeaderManager != null && _userHeaderManager.IsAnyBonusActive())
             {
-                actualScoreChange = UserHeaderManager.Instance.ApplyTotalBonus(scoreChange);
+                actualScoreChange = _userHeaderManager.ApplyTotalBonus(scoreChange);
             }
             else if (isCorrect && questionBonusManager != null && questionBonusManager.IsBonusActive())
             {
@@ -73,12 +76,14 @@ public class QuestionScoreManager : MonoBehaviour
                 {
                     if (database != null && database.IsDatabaseInDevelopment())
                     {
-                        await SafeAnsweredQuestionsManager.Instance.MarkQuestionAsAnswered(questionNumber, database);
-                        Debug.Log($"[QuestionScoreManager] Modo DEV - Questão {questionNumber} NÃO salva no Firebase");
+                        await AppContext.AnsweredQuestions.MarkQuestionAsAnswered(
+                            answeredQuestion.questionDatabankName, 
+                            questionNumber
+                        );
                     }
                     else
-                    {
-                        await FirestoreRepository.Instance.UpdateUserScores(
+                    {   
+                        await _firestore.UpdateUserScores(
                             userId,
                             actualScoreChange,
                             questionNumber,
@@ -93,14 +98,24 @@ public class QuestionScoreManager : MonoBehaviour
     
                         bool isDatabankReset = UserDataStore.IsDatabankReset(databankName);
     
-                        if (!isDatabankReset && PlayerLevelManager.Instance != null)
+                        if (!isDatabankReset && _playerLevel != null)
                         {
-                            await PlayerLevelManager.Instance.IncrementTotalAnswered();
-                            await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
-                        }
-                        else if (isDatabankReset)
-                        {
-                            Debug.Log($"[QuestionScoreManager] Banco {databankName} foi resetado. Questão não conta para level.");
+                            try
+                            {
+                                Debug.Log("[QuestionScoreManager] Chamando IncrementTotalAnswered...");
+                                await _playerLevel.IncrementTotalAnswered();
+                                
+                                Debug.Log("[QuestionScoreManager] Chamando CheckAndHandleLevelUp...");
+                                await _playerLevel.CheckAndHandleLevelUp();
+                                
+                                Debug.Log("[QuestionScoreManager] PlayerLevel atualizado com sucesso.");
+                            }
+                            catch (Exception levelEx)
+                            {
+                                Debug.LogError($"[QuestionScoreManager] Erro no PlayerLevel: {levelEx.GetType().Name}: {levelEx.Message}\n{levelEx.StackTrace}");
+                                if (levelEx.InnerException != null)
+                                    Debug.LogError($"[QuestionScoreManager] InnerException: {levelEx.InnerException.Message}");
+                            }
                         }
                     }
                 }
@@ -115,7 +130,7 @@ public class QuestionScoreManager : MonoBehaviour
                 {
                     if (database == null || !database.IsDatabaseInDevelopment())
                     {
-                        await FirestoreRepository.Instance.UpdateUserScores(
+                        await _firestore.UpdateUserScores(
                             userId,
                             actualScoreChange,
                             0,
@@ -133,28 +148,18 @@ public class QuestionScoreManager : MonoBehaviour
                     Debug.LogError($"Falha ao atualizar o score no Firestore: {ex.Message}");
                 }
             }
-    
-            if (database == null || !database.IsDatabaseInDevelopment())
-            {
-                UserData updatedUserData = await FirestoreRepository.Instance.GetUserData(userId);
-    
-                if (updatedUserData != null)
-                {
-                    UserDataStore.CurrentUserData = updatedUserData;
-                }
-            }
         }
         catch (Exception ex)
         {
             Debug.LogError($"Erro ao atualizar score: {ex.Message}\n{ex.StackTrace}");
     
-            if (currentUserData != null && scoreChange != 0)
+            if (UserDataStore.CurrentUserData != null && scoreChange != 0)
             {
-                int clientSideScore = Mathf.Max(0, currentUserData.Score + scoreChange);
-                int clientSideWeekScore = Mathf.Max(0, currentUserData.WeekScore + scoreChange);
+                int clientSideScore = Mathf.Max(0, UserDataStore.CurrentUserData.Score + scoreChange);
+                int clientSideWeekScore = Mathf.Max(0, UserDataStore.CurrentUserData.WeekScore + scoreChange);
     
-                currentUserData.Score = clientSideScore;
-                currentUserData.WeekScore = clientSideWeekScore;
+                UserDataStore.CurrentUserData.Score = clientSideScore;
+                UserDataStore.CurrentUserData.WeekScore = clientSideWeekScore;
                 UserDataStore.CurrentUserData = currentUserData;
             }
         }
@@ -177,7 +182,7 @@ public class QuestionScoreManager : MonoBehaviour
 
     public bool HasBonusActive()
     {
-        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
+        if (_userHeaderManager != null && _userHeaderManager.IsAnyBonusActive())
         {
             return true;
         }
@@ -187,9 +192,9 @@ public class QuestionScoreManager : MonoBehaviour
 
     public int CalculateBonusScore(int baseScore)
     {
-        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
+       if (_userHeaderManager != null && _userHeaderManager.IsAnyBonusActive())
         {
-            return UserHeaderManager.Instance.ApplyTotalBonus(baseScore);
+            return _userHeaderManager.ApplyTotalBonus(baseScore);
         }
 
         if (questionBonusManager != null && questionBonusManager.IsBonusActive())

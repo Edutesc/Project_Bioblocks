@@ -111,12 +111,17 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
+*.pdb.meta
 *.mdb
 *.opendb
 *.VC.db
 sysinfo.txt
 crashlytics-build.properties
 ~UnityDirMonSyncFile~*
+
+# Unity crash dumps
+mono_crash.*
+*.blob
 
 # ===========================
 # Specific Firebase binaries / plugins that can be regenerated

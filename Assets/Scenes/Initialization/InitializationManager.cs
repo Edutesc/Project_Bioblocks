@@ -4,8 +4,10 @@ using TMPro;
 using System;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using Firebase;
 
+/// <summary>
+/// Gerencia o fluxo de inicialização do app.
+///
 public class InitializationManager : MonoBehaviour
 {
     [Header("UI References")]
@@ -19,7 +21,8 @@ public class InitializationManager : MonoBehaviour
 
     [Header("Global Loading Spinner")]
     [SerializeField] private GameObject globalSpinnerPrefab;
-
+    private IFirestoreRepository _firestore;
+    private IAuthRepository _auth;
     private LoadingSpinnerComponent globalSpinner;
 
     private void Awake()
@@ -27,33 +30,29 @@ public class InitializationManager : MonoBehaviour
         InitializeGlobalSpinner();
     }
 
-    private void InitializeGlobalSpinner()
+    private void Start()
+    {         
+        SetupUI();
+        StartInitialization();
+    }
+   private void InitializeGlobalSpinner()
     {
         try
         {
-            // If we already have a spinner instance, use that one
             globalSpinner = LoadingSpinnerComponent.Instance;
-            
-            // If we're supposed to use a prefab instead of the singleton instance
+
             if (globalSpinner == null && globalSpinnerPrefab != null)
             {
                 Canvas mainCanvas = FindObjectOfType<Canvas>();
-                GameObject spinnerObject;
-                
-                if (mainCanvas != null)
-                {
-                    spinnerObject = Instantiate(globalSpinnerPrefab, mainCanvas.transform);
-                }
-                else
-                {
-                    spinnerObject = Instantiate(globalSpinnerPrefab);
-                }
-                
+                GameObject spinnerObject = mainCanvas != null
+                    ? Instantiate(globalSpinnerPrefab, mainCanvas.transform)
+                    : Instantiate(globalSpinnerPrefab);
+
                 spinnerObject.name = "GlobalLoadingSpinner";
                 DontDestroyOnLoad(spinnerObject);
-                
                 globalSpinner = spinnerObject.GetComponent<LoadingSpinnerComponent>();
             }
+            globalSpinner?.ShowSpinner();
         }
         catch (Exception e)
         {
@@ -61,43 +60,28 @@ public class InitializationManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        SetupUI();
-        StartInitialization();
-    }
-
     private void SetupUI()
     {
-        if (retryPanel != null)
-            retryPanel.SetActive(false);
-            
-        if (progressBar != null)
-            progressBar.fillAmount = 0f;
+        if (retryPanel != null) retryPanel.SetActive(false);
+        if (progressBar != null) progressBar.fillAmount = 0f;
     }
 
     private async void StartInitialization()
     {
         float startTime = Time.time;
-
         try
         {
-            try
+            if (!AppContext.IsReady)
             {
-                if (globalSpinner != null)
-                {
-                    globalSpinner.ShowSpinner();
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"Error showing spinner: {e.Message}");
-            }
-
             UpdateStatus("Inicializando Firebase...");
-            await InitializeFirebaseServices();
-            UpdateProgress(0.3f);
+            await WaitForAppContext();
+            }
 
+            // Só busca as dependências DEPOIS que o AppContext está pronto
+            _firestore = AppContext.Firestore;
+            _auth      = AppContext.Auth;
+
+            UpdateProgress(0.3f);
             UpdateStatus("Verificando autenticação...");
             bool isAuthenticated = await CheckAuthentication();
             UpdateProgress(0.5f);
@@ -116,145 +100,139 @@ public class InitializationManager : MonoBehaviour
                     UpdateProgress(0.85f);
 
                     UpdateStatus("Configurando sistema de níveis...");
-                    InitializePlayerLevelManager();
+                    InitializePlayerLevelService();
                     UpdateProgress(0.9f);
                 }
             }
 
+            // Garante tempo mínimo de loading
             float elapsed = Time.time - startTime;
             if (elapsed < minimumLoadingTime)
-            {
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
-            }
 
-            try
-            {
-                if (isAuthenticated && userDataLoaded)
-                {
-                    if (globalSpinner != null)
-                    {
-                        globalSpinner.ShowSpinnerUntilSceneLoaded("PathwayScene");
-                    }
-                    SceneManager.LoadScene("PathwayScene");
-                }
-                else
-                {
-                    if (globalSpinner != null)
-                    {
-                        globalSpinner.ShowSpinnerUntilSceneLoaded("LoginView");
-                    }
-                    SceneManager.LoadScene("LoginView");
-                }
-            }
-            catch (Exception)
-            {
-                if (isAuthenticated && userDataLoaded)
-                {
-                    SceneManager.LoadScene("PathwayScene");
-                }
-                else
-                {
-                    SceneManager.LoadScene("LoginView");
-                }
-            }
+            NavigateAfterInit(isAuthenticated && userDataLoaded);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            try
-            {
-                if (globalSpinner != null)
-                {
-                    globalSpinner.HideSpinner();
-                }
-            }
-            catch { }
-            
-            ShowError("Falha na inicialização. Por favor, verifique sua conexão e tente novamente.");
+            Debug.LogError($"[InitializationManager] INITIALIZATION FAILED: {ex.GetType().Name}: {ex.Message}");
+            Debug.LogError($"[InitializationManager] StackTrace: {ex.StackTrace}");
+            if (ex.InnerException != null)
+                Debug.LogError($"[InitializationManager] InnerException: {ex.InnerException.Message}");
+
+            try { globalSpinner?.HideSpinner(); } catch { }
+
+            ShowError($"Falha na inicialização: {ex.Message}");
         }
     }
 
-    private async Task InitializeFirebaseServices()
+    private void InitializePlayerLevelService()
     {
-        var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
-        if (dependencyStatus != DependencyStatus.Available)
+        if (AppContext.PlayerLevel == null)
         {
-            throw new System.Exception($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+            Debug.LogError("[InitializationManager] PlayerLevelService não encontrado no AppContext.");
+            return;
         }
 
-        await AuthenticationRepository.Instance.InitializeAsync();
-        FirestoreRepository.Instance.Initialize();
-        StorageRepository.Instance.Initialize();
+        Debug.Log("[InitializationManager] PlayerLevelService pronto.");
+    }
+
+    /// <summary>
+    /// Aguarda o AppContext terminar a inicialização assíncrona.
+    /// Em condições normais isso já estará pronto quando o Start() rodar,
+    /// isso evita race conditions caso o Firebase demore mais que o esperado.
+    /// </summary>
+    private async Task WaitForAppContext()
+    {
+        float timeout = 15f;
+        float elapsed = 0f;
+
+        while (!AppContext.IsReady && elapsed < timeout)
+        {
+            await Task.Delay(100);
+            elapsed += 0.1f;
+
+            // Loga a cada 3 segundos para acompanhar o progresso
+            if (Mathf.RoundToInt(elapsed * 10) % 30 == 0)
+            Debug.Log($"[InitializationManager] Aguardando AppContext... {elapsed:F1}s");
+        }
+
+        if (!AppContext.IsReady)
+            throw new Exception("[InitializationManager] AppContext não ficou pronto dentro do timeout.");
+
+        Debug.Log("[InitializationManager] AppContext pronto.");
+    }
+
+    // -------------------------------------------------------
+    // Autenticação e dados
+    // -------------------------------------------------------
+    private async Task<bool> CheckAuthentication()
+    {
+        if (!_auth.IsUserLoggedIn()) return false;
+
+        try
+        {
+            await _auth.ReloadCurrentUserAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     private async Task<bool> LoadUserData()
     {
         try
         {
-            var user = AuthenticationRepository.Instance.Auth.CurrentUser;
-            if (user != null)
-            {
-                var userData = await FirestoreRepository.Instance.GetUserData(user.UserId);
-                if (userData == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    UserDataStore.CurrentUserData = userData;
-                    Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
-                    await Task.Yield();
+            if (!_auth.IsUserLoggedIn()) return false;
 
-                    if (PlayerLevelManager.Instance != null)
-                    {
-                        Debug.Log("[InitializationManager] Notificando PlayerLevelManager sobre dados carregados");
-                        PlayerLevelManager.Instance.OnUserDataLoaded(userData);
-                    }
-                    return true;
-                }
-            }
+            string userId = _auth.CurrentUserId;
+            var userData  = await _firestore.GetUserData(userId);
+            if (userData == null) return false;
 
-            return false;
+            UserDataStore.CurrentUserData = userData;
+            Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
+
+            return true;
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"Erro ao carregar dados: {e.Message}");
             throw;
         }
     }
 
-    private async Task<bool> CheckAuthentication()
+    // -------------------------------------------------------
+    // Navegação
+    // -------------------------------------------------------
+    private void NavigateAfterInit(bool authenticated)
     {
-        var user = AuthenticationRepository.Instance.Auth.CurrentUser;
-        if (user != null)
+        try
         {
-            try
-            {
-                await user.ReloadAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+            string targetScene = authenticated ? "PathwayScene" : "LoginView";
 
-        return false;
+            globalSpinner?.ShowSpinnerUntilSceneLoaded(targetScene);
+            SceneManager.LoadScene(targetScene);
+        }
+        catch (Exception)
+        {
+            string targetScene = authenticated ? "PathwayScene" : "LoginView";
+            SceneManager.LoadScene(targetScene);
+        }
     }
+
+    // -------------------------------------------------------
+    // UI helpers
+    // -------------------------------------------------------
 
     private void UpdateStatus(string message)
     {
-        if (statusText != null)
-        {
-            statusText.text = message;
-        }
+        if (statusText != null) statusText.text = message;
     }
 
     private void UpdateProgress(float progress)
     {
-        if (progressBar != null)
-        {
-            progressBar.fillAmount = progress;
-        }
+        if (progressBar != null) progressBar.fillAmount = progress;
     }
 
     private void ShowError(string message)
@@ -262,80 +240,7 @@ public class InitializationManager : MonoBehaviour
         if (retryPanel != null)
         {
             retryPanel.SetActive(true);
-
-            if (errorText != null)
-            {
-                errorText.text = message;
-            }
-        }
-    }
-
-    private void InitializePlayerLevelManager()
-    {
-        try
-        {
-            if (PlayerLevelManager.Instance == null)
-            {
-                Debug.LogError("[InitializationManager] PlayerLevelManager não encontrado na cena!");
-                return;
-            }
-            
-            Debug.Log("[InitializationManager] PlayerLevelManager encontrado. Aguardando verificação...");
-            
-            // Aguardar para garantir que tudo foi carregado
-            StartCoroutine(WaitAndCheckPlayerLevel());
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InitializationManager] Erro ao inicializar PlayerLevelManager: {e.Message}");
-        }
-    }
-
-    private System.Collections.IEnumerator WaitAndCheckPlayerLevel()
-    {
-        // Aguardar 2 segundos para garantir que TUDO foi inicializado
-        yield return new WaitForSeconds(2f);
-        
-        Debug.Log("[InitializationManager] Verificando estado do PlayerLevelManager...");
-        
-        if (UserDataStore.CurrentUserData != null)
-        {
-            Debug.Log($"[InitializationManager] UserData disponível. UserId: {UserDataStore.CurrentUserData.UserId}, Level: {UserDataStore.CurrentUserData.PlayerLevel}");
-            
-            if (UserDataStore.CurrentUserData.PlayerLevel == 0)
-            {
-                Debug.LogWarning("[InitializationManager] Level ainda está em 0 após 2 segundos. Forçando recálculo...");
-                
-                if (PlayerLevelManager.Instance != null)
-                {
-                    _ = ForceRecalculatePlayerLevel();
-                }
-            }
-            else
-            {
-                Debug.Log($"[InitializationManager] Level carregado corretamente: {UserDataStore.CurrentUserData.PlayerLevel}");
-            }
-        }
-        else
-        {
-            Debug.LogError("[InitializationManager] UserData ainda é null após 2 segundos!");
-        }
-    }
-
-    private async Task ForceRecalculatePlayerLevel()
-    {
-        try
-        {
-            if (PlayerLevelManager.Instance != null)
-            {
-                await PlayerLevelManager.Instance.RecalculateTotalAnswered();
-                await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
-                Debug.Log("[InitializationManager] Recálculo de level forçado completado");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InitializationManager] Erro ao forçar recálculo: {e.Message}");
+            if (errorText != null) errorText.text = message;
         }
     }
 }

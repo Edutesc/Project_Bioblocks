@@ -1251,6 +1251,11 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
         return "WaterQuestionDatabase";
     }
 
+    public string GetDisplayName()
+    {
+        return "Água";
+    }
+
     public bool IsDatabaseInDevelopment()
     {
         return databaseInDevelopment;
