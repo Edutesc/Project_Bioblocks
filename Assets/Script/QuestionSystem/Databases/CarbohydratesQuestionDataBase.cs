@@ -43,10 +43,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual das estruturas representa uma cetose?",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/D-aldotriose",
-                "AnswerImages/CarbohydrateDB/D-aldotetrose",
-                "AnswerImages/CarbohydrateDB/D-cetotetrose",
-                "AnswerImages/CarbohydrateDB/D-aldopentose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer3_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer3_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer3_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer3_4"
             },
             correctIndex = 2,
             questionNumber = 3,
@@ -54,16 +54,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Qual estrutura representa uma aldotetrose",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/D-aldotriose",
-                "AnswerImages/CarbohydrateDB/D-aldotetrose",
-                "AnswerImages/CarbohydrateDB/D-cetotetrose",
-                "AnswerImages/CarbohydrateDB/D-aldopentose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer4_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer4_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer4_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer4_4"
             },
             correctIndex = 1,
             questionNumber = 4,
@@ -71,7 +71,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
