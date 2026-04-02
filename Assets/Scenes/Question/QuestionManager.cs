@@ -167,7 +167,9 @@ public class QuestionManager : MonoBehaviour
             // passa o nome do banco ativo e todas as questões no banco
             if (hintManager != null)
             {
-                hintManager.Initialize(currentDatabaseName, allDatabaseQuestions);
+                // passa o userID para o hintManager
+                string userId = UserDataStore.CurrentUserData?.UserId ?? string.Empty;
+                hintManager.Initialize(currentDatabaseName, allDatabaseQuestions, userId);
             }
 
             if (counterManager != null)
@@ -268,7 +270,7 @@ public class QuestionManager : MonoBehaviour
                 if (hintManager != null)
                 {
                     hintManager.OnAnswerWrong(currentQuestion);
-                }  
+                }
             }
 
             questionBottomBarManager.EnableNavigationButtons();
@@ -485,7 +487,7 @@ public class QuestionManager : MonoBehaviour
             if (hintManager != null)
             {
                 hintManager.OnQuestionChanged(currentQuestion);
-            } 
+            }
 
             if (counterManager != null)
             {
