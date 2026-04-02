@@ -194,7 +194,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "O que é o ácido conjugado da NH<sub><size=150%>3</size></sub>?",
+            questionText = "",
             answers = new string[] {
                 "H<sup><size=150%> +</size></sup>",
                 "OH<sup><size=150%> -</size></sup>",
@@ -204,8 +204,8 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 7,
             isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer7",
             questionLevel = 2,
             questionInDevelopment = false,
 
@@ -314,14 +314,14 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Em uma reação em equilíbrio, se Keq > 1:",
+            questionText = "",
             answers = new string[] {
-                "Os reagentes são favorecidos.",
-                "Os produtos são favorecidos.",
-                "Os reagentes e produtos têm concentrações iguais.",
-                "A reação é irreversível."
+                "No equilíbrio, há mais reagentes do que produtos.",
+                "No equilíbrio, há mais produtos do que reagentes.",
+                "No equilíbrio, reagentes e produtos estão em quantidades iguais.",
+                "A reação ocorre apenas no sentido direto."  
             },
-            correctIndex = 1,
+            correctIndex = 0,
             questionNumber = 11,
             isImageAnswer = false,
             isImageQuestion = false,
@@ -344,12 +344,12 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Em uma reação em equilíbrio, se Keq < 1:",
+            questionText = "",
             answers = new string[] {
-                "Os produtos são favorecidos.",
-                "Os reagentes são favorecidos.",
-                "Os reagentes e produtos têm concentrações iguais.",
-                "A reação é irreversível."
+                "No equilíbrio, há mais reagentes do que produtos.",
+                "No equilíbrio, há mais produtos do que reagentes.",
+                "No equilíbrio, reagentes e produtos estão em quantidades iguais.",
+                "A reação ocorre apenas no sentido direto."  
             },
             correctIndex = 1,
             questionNumber = 12,
@@ -374,12 +374,12 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "A constante de dissociação ácida (Ka) mede:",
+            questionText = "",
             answers = new string[] {
-                "A força de uma base.",
-                "A força de um ácido.",
-                "A velocidade de uma reação.",
-                "O equilíbrio de uma reação."
+                "A força da base.",
+                "A força do ácido.",
+                "A velocidade de uma reação ácida.",
+                "A velocidade de uma reação básica."
             },
             correctIndex = 1,
             questionNumber = 13,
@@ -404,14 +404,14 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Um ácido forte tem um valor de Ka:",
+            questionText = "",
             answers = new string[] {
-                "Baixo",
-                "Alto",
-                "Próximo a 1",
-                "Próximo a 0"
+                "A força da base.",
+                "A força do ácido.",
+                "A velocidade de uma reação ácida.",
+                "A velocidade de uma reação básica."
             },
-            correctIndex = 1,
+            correctIndex = 0,
             questionNumber = 14,
             isImageAnswer = false,
             isImageQuestion = false,
@@ -914,7 +914,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Qual o produto iônico da água (Kw) a 25<sup><size=100%>o</size></sup> C?",
+            questionText = "<sup><size=100%>o</size></sup> C?",
             answers = new string[] {
                 "10<sup><size=150%>-7</size></sup> ",
                 "10<sup><size=150%>-14</size></sup> ",
@@ -944,7 +944,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Em água pura, a concentração de H<sup><size=150%>+</size></sup> é:",
+            questionText = "",
             answers = new string[] {
                 "10<sup><size=150%>-14</size></sup> M",
                 "10<sup><size=150%>-7</size></sup> M",
@@ -954,8 +954,8 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 32,
             isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer32",
             questionLevel = 2,
             questionInDevelopment = false,
 
@@ -974,7 +974,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Em água pura, a concentração de OH<sup><size=150%>-</size></sup>  é:",
+            questionText = "",
             answers = new string[] {
                 "10<sup><size=150%>-14</size></sup> M",
                 "10<sup><size=150%>-7</size></sup> M",
@@ -984,8 +984,8 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 1,
             questionNumber = 33,
             isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer33",
             questionLevel = 2,
             questionInDevelopment = false,
 
@@ -1849,7 +1849,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "O par ácido-base que difere por apenas um próton (H⁺) é chamado de:",
+            questionText = "",
             answers = new string[] {
                 "Par conjugado",
                 "Par isotópico",
@@ -1859,8 +1859,8 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 0,
             questionNumber = 62,
             isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer62",
             questionLevel = 1,
             questionInDevelopment = false,
 
@@ -1909,7 +1909,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         new Question
         {
             questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Se uma solução tem [H⁺] = 1 × 10⁻⁹ mol/L, seu pH é:",
+            questionText = "",
             answers = new string[] {
                 "5",
                 "7",
@@ -1919,8 +1919,8 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             correctIndex = 2,
             questionNumber = 64,
             isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer64",
             questionLevel = 1,
             questionInDevelopment = false,
 
@@ -2028,23 +2028,9 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
         }
     };
 
-    public List<Question> GetQuestions()
-    {
-        return questions;
-    }
-
-    public QuestionSet GetQuestionSetType()
-    {
-        return QuestionSet.acidsBase;
-    }
-
-    public string GetDatabankName()
-    {
-        return "AcidBaseBufferQuestionDatabase";
-    }
-
-    public bool IsDatabaseInDevelopment()
-    {
-        return databaseInDevelopment;
-    }
+    public List<Question> GetQuestions() => questions;
+    public QuestionSet GetQuestionSetType() => QuestionSet.acidsBase;
+    public string GetDatabankName()  => "AcidBaseBufferQuestionDatabase";
+    public string GetDisplayName()   => "Ácidos, Bases e Tampões";
+    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
 }

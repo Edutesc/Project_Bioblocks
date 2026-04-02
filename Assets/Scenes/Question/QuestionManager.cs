@@ -30,9 +30,14 @@ public class QuestionManager : MonoBehaviour
     private List<Question> allDatabaseQuestions;
     private int maxLevelInDatabase = 1;
     private bool isCheckingLevelCompletion = false;
+    private INavigationService _navigation;
+    private ISceneDataService _sceneData;
 
     private void Start()
     {
+        _navigation = AppContext.Navigation;
+        _sceneData  = AppContext.SceneData;
+
         if (!ValidateManagers())
         {
             Debug.LogError("Falha na validação dos managers necessários.");
@@ -128,7 +133,7 @@ public class QuestionManager : MonoBehaviour
             maxLevelInDatabase = LevelCalculator.GetMaxLevel(allDatabaseQuestions);
             Debug.Log($"📚 Banco {currentDatabaseName} possui {maxLevelInDatabase} níveis");
 
-            List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
+            List<string> answeredQuestions = await AppContext.AnsweredQuestions?
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
             int answeredCount = answeredQuestions.Count;
             int totalQuestions = QuestionBankStatistics.GetTotalQuestions(currentDatabaseName);
@@ -143,7 +148,7 @@ public class QuestionManager : MonoBehaviour
 
             if (allQuestionsAnswered)
             {
-                SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
+                _sceneData.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
                 SceneManager.LoadScene("ResetDatabaseView");
                 return;
             }
@@ -152,7 +157,7 @@ public class QuestionManager : MonoBehaviour
             if (questions == null || questions.Count == 0)
             {
                 Debug.LogError("QuestionManager: Nenhuma questão disponível");
-                SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
+                _sceneData.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
                 SceneManager.LoadScene("ResetDatabaseView");
                 return;
             }
@@ -181,7 +186,7 @@ public class QuestionManager : MonoBehaviour
         {
             Debug.LogError($"QuestionManager: Erro em InitializeSession: {e.Message}\n{e.StackTrace}");
             string currentDatabaseName = loadManager.DatabankName;
-            SceneDataManager.Instance.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
+            _sceneData.SetData(new Dictionary<string, object> { { "databankName", currentDatabaseName } });
             SceneManager.LoadScene("ResetDatabaseView");
         }
     }
@@ -295,7 +300,7 @@ public class QuestionManager : MonoBehaviour
 
             Debug.Log($"\n Verificando se nível {questionLevel} foi completado...");
 
-            List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
+            List<string> answeredQuestions = await AppContext.AnsweredQuestions?
                 .FetchUserAnsweredQuestionsInTargetDatabase(databankName);
 
             bool isComplete = LevelCalculator.IsLevelComplete(
@@ -371,7 +376,7 @@ public class QuestionManager : MonoBehaviour
             feedbackElements.QuestionsCompletedFeedbackText.text = message;
             questionCanvasGroupManager.ShowCompletionFeedback();
             questionBottomBarManager.SetupNavigationButtons(
-                () => NavigationManager.Instance.NavigateTo("PathwayScene"),
+                () => _navigation.NavigateTo("PathwayScene"),
                 null
             );
         }
@@ -513,7 +518,7 @@ public class QuestionManager : MonoBehaviour
             () =>
             {
                 HideAnswerFeedback();
-                NavigationManager.Instance.NavigateTo("PathwayScene");
+                _navigation.NavigateTo("PathwayScene");
             },
             async () =>
             {
@@ -525,7 +530,7 @@ public class QuestionManager : MonoBehaviour
 
     public void ReturnToPathway()
     {
-        NavigationManager.Instance.NavigateTo("PathwayScene");
+        _navigation.NavigateTo("PathwayScene");
     }
 
     private void HideAnswerFeedback()
@@ -548,7 +553,7 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            List<string> answeredQuestions = await AnsweredQuestionsManager.Instance
+            List<string> answeredQuestions = await AppContext.AnsweredQuestions?
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
 
             int currentLevel = LevelCalculator.CalculateCurrentLevel(
@@ -637,7 +642,8 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            List<string> answeredQuestionsIds = await AnsweredQuestionsManager.Instance.FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
+            List<string> answeredQuestionsIds = await AppContext.AnsweredQuestions?
+                .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
             var unansweredQuestions = newQuestions
                 .Where(q => !answeredQuestionsIds.Contains(q.questionNumber.ToString()))
                 .ToList();

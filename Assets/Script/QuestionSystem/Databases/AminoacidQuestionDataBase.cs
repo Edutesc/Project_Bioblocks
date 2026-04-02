@@ -170,7 +170,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer9",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question
         {
@@ -188,7 +188,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer10",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
          new Question
         {
@@ -206,7 +206,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/AminoacidsDB/aminoacidDB_ImageQuestionContainer11",
             questionLevel = 2,
-            questionInDevelopment = true
+            questionInDevelopment = false
         },
         new Question
         {
@@ -560,7 +560,7 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
                 "4 aminoácidos",
                 "5 aminoácidos"
             },
-            correctIndex = 3,
+            correctIndex = 2,
             questionNumber = 31,
             isImageAnswer = false,
             isImageQuestion = true,
@@ -1235,24 +1235,10 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionInDevelopment = false
         }
     };
-      
-    public List<Question> GetQuestions()
-    {
-        return questions;
-    }
 
-    public QuestionSet GetQuestionSetType()
-    {
-        return QuestionSet.aminoacids;
-    }
-
-    public string GetDatabankName()
-    {
-        return "AminoacidQuestionDatabase";
-    }
-
-    public bool IsDatabaseInDevelopment()
-    {
-        return databaseInDevelopment;
-    }
+    public List<Question> GetQuestions() => questions;
+    public QuestionSet GetQuestionSetType() => QuestionSet.aminoacids;
+    public string GetDatabankName()  => "AminoacidQuestionDatabase";
+    public string GetDisplayName()   => "Aminoácidos e peptídeos";
+    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
 }
