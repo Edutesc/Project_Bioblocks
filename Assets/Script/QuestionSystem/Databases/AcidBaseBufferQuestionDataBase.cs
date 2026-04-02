@@ -26,7 +26,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 1,
+                    text = "A teoria de Arrhenius define ácidos pelo que eles LIBERAM em água. " +
+                           "Não pelo que recebem. Foque nos íons de hidrogênio (H⁺) — são eles " +
+                           "que caracterizam um ácido de Arrhenius em solução aquosa."
+                }
+            }
         },
         new Question
         {
@@ -44,7 +56,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 2,
+                    text = "Na teoria de Arrhenius, ácido LIBERA H⁺ e base LIBERA OH⁻. " +
+                           "Ambos são definidos pelo que LIBERAM em água — o que os diferencia " +
+                           "é qual íon cada um disponibiliza na solução aquosa."
+                }
+            }
         },
         new Question
         {
@@ -62,7 +86,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 3,
+                    text = "Brønsted-Lowry amplia Arrhenius: em vez de \"liberar H⁺\", " +
+                           "o ácido é definido como aquele que DOTA (doa) prótons à outra espécie. " +
+                           "Quem doa é o ácido; quem recebe é a base."
+                }
+            }
         },
         new Question
         {
@@ -80,7 +116,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 4,
+                    text = "Em Brønsted-Lowry, a reação ácido-base é sempre uma transferência de próton. " +
+                           "Se o ácido DOA o H⁺, a base necessariamente deve fazer o quê com esse próton " +
+                           "— doá-lo também ou aceitá-lo?"
+                }
+            }
         },
         new Question
         {
@@ -98,7 +146,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 5,
+                    text = "A água é anfiprótica — pode DOAR um próton (agindo como ácido) " +
+                           "ou RECEBER um próton (agindo como base), dependendo com quem reage. " +
+                           "Essa característica é chamada de anfotérica, e é por isso que a água " +
+                           "se autoioniza: H₂O + H₂O ⇌ H₃O⁺ + OH⁻."
+                }
+            }
         },
         new Question
         {
@@ -116,7 +177,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 6,
+                    text = "A base conjugada é o que SOBRA do ácido após ele DOAR um próton (H⁺). " +
+                           "HCl doa H⁺ → o que resta do HCl depois dessa doação? " +
+                           "Subtraia mentalmente um H⁺ da fórmula do HCl."
+                }
+            }
         },
         new Question
         {
@@ -134,7 +207,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 7,
+                    text = "O ácido conjugado é formado quando a BASE RECEBE um próton (H⁺). " +
+                           "NH₃ recebe H⁺ → some H⁺ à fórmula do NH₃. " +
+                           "NH₃ + H⁺ = ? (lembre-se de ajustar a carga também)."
+                }
+            }
         },
         new Question
         {
@@ -152,7 +237,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 8,
+                    text = "A \"força\" de um ácido reflete o quanto ele se ioniza em água. " +
+                           "Um ácido FORTE tem Ka muito elevado, o que significa que o equilíbrio " +
+                           "pende totalmente para os produtos — praticamente todas as moléculas cedem H⁺."
+                }
+            }
         },
         new Question
         {
@@ -170,7 +267,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 9,
+                    text = "Um ácido fraco tem Ka pequeno: o equilíbrio favorece os REAGENTES, " +
+                           "ou seja, a maioria das moléculas permanece intacta em solução. " +
+                           "Apenas uma fração delas cede H⁺ — por isso a dissociação é parcial."
+                }
+            }
         },
         new Question
         {
@@ -188,7 +297,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 10,
+                    text = "Keq NÃO informa velocidade nem energia de ativação — isso é domínio da cinética. " +
+                           "Keq é uma razão calculada com as concentrações de produtos e reagentes " +
+                           "quando a reação atinge o equilíbrio: Keq = [produtos] / [reagentes]."
+                }
+            }
         },
         new Question
         {
@@ -206,7 +327,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 11,
+                    text = "Keq = [produtos] / [reagentes]. Se Keq > 1, o numerador (produtos) é " +
+                           "MAIOR que o denominador (reagentes) no equilíbrio. " +
+                           "Logo, há mais produtos que reagentes — os produtos são favorecidos."
+                }
+            }
         },
         new Question
         {
@@ -224,7 +357,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 12,
+                    text = "Se Keq < 1, o numerador (produtos) é MENOR que o denominador (reagentes). " +
+                           "Isso indica que no equilíbrio predominam os reagentes — " +
+                           "a reação não avança muito em direção aos produtos."
+                }
+            }
         },
         new Question
         {
@@ -242,7 +387,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 13,
+                    text = "Ka é o Keq específico para a ionização de um ácido em água. " +
+                           "O subscrito \"a\" vem de \"acid\" (ácido). " +
+                           "Quanto maior o Ka, mais o ácido se ioniza — portanto, mais forte ele é."
+                }
+            }
         },
         new Question
         {
@@ -260,7 +417,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 14,
+                    text = "Ka alto significa que o numerador ([H⁺][A⁻]) é muito maior que o denominador ([HA]) — " +
+                           "ou seja, a ionização é extensa. Ácidos fortes como HCl têm Ka tão elevado " +
+                           "que se considera a dissociação completa."
+                }
+            }
         },
         new Question
         {
@@ -278,7 +447,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 15,
+                    text = "Ka baixo indica que a maioria das moléculas do ácido NÃO se ioniza em água — " +
+                           "o denominador ([HA]) permanece grande em relação ao numerador. " +
+                           "O ácido acético (CH₃COOH), por exemplo, tem Ka ≈ 1,8 × 10⁻⁵."
+                }
+            }
         },
         new Question
         {
@@ -296,7 +477,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 16,
+                    text = "O prefixo \"p\" em química significa SEMPRE \"-log\" (logaritmo negativo na base 10). " +
+                           "Assim como pH = -log[H⁺] e pOH = -log[OH⁻], " +
+                           "pKa = -log(Ka). O sinal negativo inverte a escala: Ka alto → pKa baixo."
+                }
+            }
         },
         new Question
         {
@@ -314,7 +507,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 17,
+                    text = "pKa = -log(Ka). Se pKa é baixo, então Ka é ALTO (relação inversa pelo sinal negativo). " +
+                           "Ka alto → maior ionização → ácido mais forte. " +
+                           "Exemplo: HCl tem pKa ≈ -7 (muito ácido); ácido acético tem pKa ≈ 4,75 (ácido fraco)."
+                }
+            }
         },
         new Question
         {
@@ -332,7 +537,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 18,
+                    text = "pKa alto → Ka baixo (lembre: pKa = -log Ka, relação inversa). " +
+                           "Ka baixo significa pouca ionização em água → ácido fraco. " +
+                           "Quanto maior o pKa, mais fraco é o ácido."
+                }
+            }
         },
         new Question
         {
@@ -350,7 +567,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 19,
+                    text = "A equação de Henderson-Hasselbalch é: pH = pKa + log([A⁻]/[HA]). " +
+                           "Ela conecta três grandezas: o pH da solução, o pKa do ácido fraco, " +
+                           "e a RAZÃO entre a concentração da base conjugada [A⁻] e do ácido [HA]."
+                }
+            }
         },
         new Question
         {
@@ -368,7 +597,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 20,
+                    text = "O tampão funciona como um \"sistema de defesa\" do pH: " +
+                           "se H⁺ é adicionado, a base conjugada o absorve; " +
+                           "se OH⁻ é adicionado, o ácido fraco o neutraliza. " +
+                           "Isso só é possível graças ao equilíbrio dinâmico entre o ácido e sua base conjugada."
+                }
+            }
         },
         new Question
         {
@@ -386,7 +628,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 21,
+                    text = "Pela equação de Henderson-Hasselbalch, o tampão é eficiente enquanto " +
+                           "a razão [A⁻]/[HA] está entre 0,1 e 10 (ou seja, log entre -1 e +1). " +
+                           "Isso define uma faixa de pH = pKa ± 1 unidade ao redor do pKa."
+                }
+            }
         },
         new Question
         {
@@ -404,7 +658,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 22,
+                    text = "O sistema tampão do sangue usa o par H₂CO₃ / HCO₃⁻. " +
+                           "O CO₂ produzido no metabolismo se dissolve em água formando H₂CO₃, " +
+                           "que se converte em HCO₃⁻ (bicarbonato). Esse par mantém o pH sanguíneo em ~7,4."
+                }
+            }
         },
         new Question
         {
@@ -422,7 +688,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 23,
+                    text = "Durante exercício intenso, os músculos produzem ácido lático (lactato + H⁺). " +
+                           "Esse aumento de H⁺ no sangue significa maior acidez — " +
+                           "e maior acidez corresponde a pH mais BAIXO na escala de pH."
+                }
+            }
         },
         new Question
         {
@@ -440,7 +718,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 24,
+                    text = "O excesso de H⁺ no sangue converte-se em H₂CO₃, que se decompõe em CO₂ + H₂O. " +
+                           "Ao expirar mais CO₂, o corpo REMOVE ácido do sangue, elevando o pH de volta. " +
+                           "Por isso a respiração ACELERA durante o exercício — é uma compensação respiratória."
+                }
+            }
         },
         new Question
         {
@@ -458,7 +748,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 25,
+                    text = "\"pH\" vem do latim/alemão \"potentia Hydrogenii\" — potência do hidrogênio. " +
+                           "É definido como pH = -log[H⁺]. Mede indiretamente a concentração de prótons " +
+                           "(íons H⁺) em solução — não OH⁻, não temperatura, não pressão."
+                }
+            }
         },
         new Question
         {
@@ -476,7 +778,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 26,
+                    text = "Na escala de pH: < 7 = ácido, = 7 = neutro, > 7 = básico. " +
+                           "pH 3 está bem abaixo de 7, próximo ao extremo ácido da escala. " +
+                           "Para comparar: suco de limão tem pH ~2; café tem pH ~5."
+                }
+            }
         },
         new Question
         {
@@ -494,7 +808,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 27,
+                    text = "pH 11 está bem acima de 7 — próximo ao extremo básico da escala. " +
+                           "Para comparar: leite de magnésia tem pH ~10; água sanitária tem pH ~12. " +
+                           "Soluções com pH > 7 são básicas (alcalinas)."
+                }
+            }
         },
         new Question
         {
@@ -512,7 +838,18 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 28,
+                    text = "pH 7 é o ponto central da escala — é o pH onde [H⁺] = [OH⁻] = 10⁻⁷ M. " +
+                           "Isso define a NEUTRALIDADE química. A água pura a 25°C possui pH exatamente 7."
+                }
+            }
         },
         new Question
         {
@@ -530,7 +867,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 29,
+                    text = "Assim como pH mede H⁺ (íon hidrogênio), pOH mede OH⁻ (íon hidroxila). " +
+                           "pOH = -log[OH⁻]. A letra \"O\" no pOH faz referência ao íon hidroxila (OH⁻), " +
+                           "não ao íon H⁺."
+                }
+            }
         },
         new Question
         {
@@ -548,7 +897,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 30,
+                    text = "Essa relação deriva do produto iônico da água: Kw = [H⁺][OH⁻] = 10⁻¹⁴. " +
+                           "Aplicando -log em ambos os lados: -log(Kw) = -log[H⁺] + (-log[OH⁻]) " +
+                           "→ 14 = pH + pOH. Em qualquer solução aquosa a 25°C, pH + pOH = 14."
+                }
+            }
         },
         new Question
         {
@@ -566,7 +927,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 31,
+                    text = "Kw = [H⁺] × [OH⁻]. Na água pura, [H⁺] = [OH⁻] = 10⁻⁷ M. " +
+                           "Portanto Kw = 10⁻⁷ × 10⁻⁷ = 10⁻¹⁴. " +
+                           "Cuidado: 10⁻⁷ é a concentração de CADA íon, não o produto deles."
+                }
+            }
         },
         new Question
         {
@@ -584,7 +957,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 32,
+                    text = "A água pura tem pH = 7. Usando a definição: pH = -log[H⁺], " +
+                           "podemos calcular [H⁺]: 7 = -log[H⁺] → [H⁺] = 10⁻⁷ M. " +
+                           "O valor 10⁻¹⁴ é o Kw (produto de H⁺ × OH⁻), não a concentração de cada um."
+                }
+            }
         },
         new Question
         {
@@ -602,7 +987,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 33,
+                    text = "Em água pura, [H⁺] = [OH⁻] por definição de solução neutra. " +
+                           "Como [H⁺] = 10⁻⁷ M (derivado do pH = 7), então [OH⁻] também é 10⁻⁷ M. " +
+                           "Confirmação: [H⁺] × [OH⁻] = 10⁻⁷ × 10⁻⁷ = 10⁻¹⁴ = Kw. ✓"
+                }
+            }
         },
         new Question
         {
@@ -620,7 +1017,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 34,
+                    text = "O sinal negativo é essencial: como [H⁺] é um número muito pequeno (ex: 10⁻⁷), " +
+                           "seu log seria negativo (-7). O sinal \"-\" transforma esse valor em positivo (+7), " +
+                           "resultando na escala de pH familiar (0 a 14) com valores positivos."
+                }
+            }
         },
         new Question
         {
@@ -638,7 +1047,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 35,
+                    text = "pOH segue a mesma lógica do pH: \"p\" sempre significa \"-log\". " +
+                           "E pOH mede OH⁻ (não OH⁺, que não existe). " +
+                           "Portanto: pOH = -log[OH⁻]. Atenção ao sinal e ao íon correto."
+                }
+            }
         },
         new Question
         {
@@ -656,7 +1077,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 36,
+                    text = "A escala convencional de pH vai de 0 a 14 (embora valores negativos sejam " +
+                           "possíveis em ácidos extremamente concentrados). No contexto padrão, " +
+                           "o valor MÍNIMO é 0, que corresponde a [H⁺] = 1 mol/L — solução extremamente ácida."
+                }
+            }
         },
         new Question
         {
@@ -674,7 +1107,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 37,
+                    text = "A escala convencional de pH vai de 0 a 14. O valor MÁXIMO é 14, " +
+                           "que corresponde a [H⁺] = 10⁻¹⁴ mol/L (ou [OH⁻] = 1 mol/L) — " +
+                           "solução extremamente básica, como NaOH 1 mol/L."
+                }
+            }
         },
         new Question
         {
@@ -692,7 +1137,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 38,
+                    text = "Uma solução neutra é aquela em que [H⁺] = [OH⁻]. " +
+                           "Como em água pura [H⁺] = [OH⁻] = 10⁻⁷ M, o pH = -log(10⁻⁷) = 7. " +
+                           "O pH 7 é o ponto de equilíbrio exato entre acidez e basicidade a 25°C."
+                }
+            }
         },
         new Question
         {
@@ -710,7 +1167,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 39,
+                    text = "pH < 7 significa [H⁺] > 10⁻⁷ M — há mais prótons do que em água pura. " +
+                           "Mais H⁺ = mais ácida. A regra é simples: pH menor que 7 → ácida; " +
+                           "pH igual a 7 → neutra; pH maior que 7 → básica."
+                }
+            }
         },
         new Question
         {
@@ -728,7 +1197,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 40,
+                    text = "pH > 7 significa [H⁺] < 10⁻⁷ M — há menos prótons que na água pura, " +
+                           "e consequentemente mais OH⁻. Mais OH⁻ = mais básica. " +
+                           "Exemplos: água do mar tem pH ~8; bicarbonato tem pH ~8,3; NaOH tem pH ~14."
+                }
+            }
         },
         new Question
         {
@@ -746,7 +1227,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 41,
+                    text = "Neutralização é uma reação específica, não apenas misturar ácido com base. " +
+                           "Na reação, H⁺ do ácido + OH⁻ da base → H₂O, e os íons restantes formam um SAL. " +
+                           "Exemplo: HCl + NaOH → NaCl (sal) + H₂O (água)."
+                }
+            }
         },
         new Question
         {
@@ -764,7 +1257,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 42,
+                    text = "Atenção: o ponto de equivalência NÃO é necessariamente pH = 7! " +
+                           "O pH = 7 só ocorre em titulações de ácido forte com base forte. " +
+                           "O verdadeiro critério do ponto de equivalência é que mols de H⁺ = mols de OH⁻ " +
+                           "adicionados — ou seja, [H⁺] = [OH⁻] naquele momento."
+                }
+            }
         },
         new Question
         {
@@ -782,7 +1288,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 43,
+                    text = "Indicadores de pH são ácidos ou bases fracos cujas formas ácida e básica " +
+                           "têm CORES diferentes. A mudança de cor ocorre em uma faixa específica de pH " +
+                           "(geralmente ± 1 do pKa do indicador) — não em qualquer pH."
+                }
+            }
         },
         new Question
         {
@@ -800,7 +1318,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 44,
+                    text = "\"Tampão\" vem da ideia de amortecer/tamponar variações. " +
+                           "Em química, o tampão (buffer) não interfere em temperatura, pressão ou volume — " +
+                           "sua única função é minimizar variações de pH quando ácidos ou bases são adicionados."
+                }
+            }
         },
         new Question
         {
@@ -818,7 +1348,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 45,
+                    text = "Um ácido FORTE se dissocia completamente — não sobra ácido intacto para reagir " +
+                           "com bases adicionadas, então não tampona. O tampão precisa de um ácido FRACO " +
+                           "(para neutralizar bases) E sua base conjugada (para neutralizar ácidos)."
+                }
+            }
         },
         new Question
         {
@@ -836,7 +1378,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 46,
+                    text = "Quando pH = pKa, pela equação de Henderson-Hasselbalch: " +
+                           "pH = pKa + log([A⁻]/[HA]) → log([A⁻]/[HA]) = 0 → [A⁻] = [HA]. " +
+                           "Com concentrações iguais de ácido e base conjugada, o tampão tem " +
+                           "capacidade máxima de absorver tanto H⁺ quanto OH⁻."
+                }
+            }
         },
         new Question
         {
@@ -854,7 +1409,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 47,
+                    text = "O tampão é eficaz quando a razão [A⁻]/[HA] está entre 1:10 e 10:1. " +
+                           "log(1/10) = -1 e log(10/1) = +1. Substituindo em Henderson-Hasselbalch: " +
+                           "pH vai de pKa - 1 a pKa + 1 → faixa de ± 1 unidade ao redor do pKa."
+                }
+            }
         },
         new Question
         {
@@ -872,7 +1439,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 48,
+                    text = "O pH do sangue deve ser mantido entre 7,35 e 7,45. Fora dessa faixa estreita, " +
+                           "proteínas e enzimas perdem função — o que pode ser fatal. " +
+                           "O sistema tampão não regula temperatura nem pressão — essas são funções de outros sistemas."
+                }
+            }
         },
         new Question
         {
@@ -890,7 +1469,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 49,
+                    text = "O fosfato tampona bem em células e urina, mas não é o principal no sangue. " +
+                           "A hemoglobina contribui, mas não é o principal. " +
+                           "O sistema dominante no plasma sanguíneo é o par H₂CO₃ / HCO₃⁻, " +
+                           "pois é regulado simultaneamente pelos rins e pelos pulmões."
+                }
+            }
         },
         new Question
         {
@@ -908,7 +1500,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 3,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 50,
+                    text = "O ácido lático é um ÁCIDO — libera H⁺ ao se dissociar em lactato + H⁺. " +
+                           "Mais H⁺ no sangue = maior acidez = pH menor. " +
+                           "A alternativa C (aumento respiratório) é a CONSEQUÊNCIA, não a causa direta."
+                }
+            }
         },
         new Question
         {
@@ -926,7 +1530,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 51,
+                    text = "Arrhenius definiu ácidos por um único critério: o que eles LIBERAM em água. " +
+                           "OH⁻ é o que as BASES liberam. Na⁺ e Cl⁻ são íons de sais. " +
+                           "O ácido de Arrhenius libera especificamente prótons — íons H⁺."
+                }
+            }
         },
         new Question
         {
@@ -944,7 +1560,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 52,
+                    text = "Na teoria de Arrhenius, o oposto do ácido (libera H⁺) é a base (libera OH⁻). " +
+                           "Exemplo clássico: NaOH → Na⁺ + OH⁻. CO₂ e O₂ não se enquadram — " +
+                           "aliás, CO₂ em água forma H₂CO₃, que é ácido, não base."
+                }
+            }
         },
         new Question
         {
@@ -962,7 +1590,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 53,
+                    text = "pH = -log[H⁺]. A letra \"H\" em pH referencia o íon hidrogênio (H⁺). " +
+                           "Oxigênio dissolvido, sais e densidade são medidos por outros instrumentos e escalas — " +
+                           "o pH é específico para a concentração de prótons."
+                }
+            }
         },
         new Question
         {
@@ -980,7 +1620,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 54,
+                    text = "Lembre a regra de três da escala de pH: " +
+                           "pH < 7 = ácida | pH = 7 = neutra | pH > 7 = básica. " +
+                           "\"Isotônica\" é um termo de osmolaridade, não de pH — cuidado com essa distração."
+                }
+            }
         },
         new Question
         {
@@ -998,7 +1650,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 55,
+                    text = "pH > 7 indica que [H⁺] < 10⁻⁷ M — há poucos prótons e, " +
+                           "consequentemente, mais OH⁻ (lembrando que pH + pOH = 14). " +
+                           "\"Saturada\" se refere à capacidade de dissolução de solutos — não tem relação com pH."
+                }
+            }
         },
         new Question
         {
@@ -1016,7 +1680,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 56,
+                    text = "Solução neutra = [H⁺] = [OH⁻]. Em água pura, ambas as concentrações " +
+                           "são 10⁻⁷ mol/L a 25°C. Aplicando pH = -log(10⁻⁷) = 7. " +
+                           "pH 0 e 14 são os extremos ácido e básico; pH 10 seria básico."
+                }
+            }
         },
         new Question
         {
@@ -1034,7 +1710,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 57,
+                    text = "Temperatura é regulada por mecanismos como sudorese e vasodilatação. " +
+                           "O oxigênio é transportado pela hemoglobina. ATP é a fonte de energia. " +
+                           "Buffers têm uma função exclusiva: resistir a variações de pH, mantendo-o estável."
+                }
+            }
         },
         new Question
         {
@@ -1052,7 +1740,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 58,
+                    text = "Um sistema tampão precisa de um ácido fraco e sua base conjugada. " +
+                           "H₂CO₃ é o ácido fraco e HCO₃⁻ (bicarbonato) é sua base conjugada. " +
+                           "Glicose/Insulina é regulação glicêmica; Hemoglobina/O₂ é transporte de gases — " +
+                           "nenhum desses é um par ácido-base conjugado."
+                }
+            }
         },
         new Question
         {
@@ -1070,7 +1771,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 59,
+                    text = "Alta concentração de OH⁻ significa baixa concentração de H⁺ (pois [H⁺] × [OH⁻] = 10⁻¹⁴). " +
+                           "Menos H⁺ → pH mais alto → solução básica (alcalina). " +
+                           "Ácidas têm mais H⁺; neutras têm [H⁺] = [OH⁻]."
+                }
+            }
         },
         new Question
         {
@@ -1088,7 +1801,20 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 60,
+                    text = "NaCl (sal), glicose (açúcar) e albumina (proteína) não mudam de cor com pH. " +
+                           "Os indicadores de pH são substâncias específicas cujas formas ácida e básica " +
+                           "têm cores diferentes — como a fenolftaleína (incolor em ácido, rosa em base) " +
+                           "e o papel de tornassol (vermelho em ácido, azul em base)."
+                }
+            }
         },
         new Question
         {
@@ -1106,7 +1832,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 61,
+                    text = "HCl libera H⁺ → ácido. H₂SO₄ libera H⁺ → ácido. " +
+                           "CO₂ em água forma H₂CO₃ → ácido. " +
+                           "Apenas o NaOH libera OH⁻ (NaOH → Na⁺ + OH⁻) — portanto, é a base de Arrhenius."
+                }
+            }
         },
         new Question
         {
@@ -1124,7 +1862,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 62,
+                    text = "\"Conjugado\" significa ligado, relacionado. Na teoria de Brønsted-Lowry, " +
+                           "quando um ácido perde H⁺, forma sua base conjugada — elas diferem por apenas 1 próton. " +
+                           "Par redox envolve transferência de elétrons; par isotópico envolve isótopos — nada a ver com ácido-base."
+                }
+            }
         },
         new Question
         {
@@ -1142,7 +1892,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 63,
+                    text = "Uma solução neutra tem [H⁺] = [OH⁻]. Em água pura a 25°C, " +
+                           "essa concentração é exatamente 10⁻⁷ mol/L para ambos os íons. " +
+                           "pH = -log(10⁻⁷) = 7. Os extremos 0 e 14 são ácido máximo e básico máximo."
+                }
+            }
         },
         new Question
         {
@@ -1160,7 +1922,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 64,
+                    text = "Aplique diretamente: pH = -log[H⁺] = -log(1 × 10⁻⁹). " +
+                           "log(10⁻⁹) = -9, então pH = -(-9) = 9. " +
+                           "Como pH 9 > 7, confirma-se que a solução é básica — coerente com [H⁺] baixo."
+                }
+            }
         },
         new Question
         {
@@ -1178,7 +1952,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 65,
+                    text = "HCl libera H⁺ em solução → é um ácido (não uma base). " +
+                           "Ele se dissocia quase completamente em água (Ka muito alto) → é um ácido FORTE. " +
+                           "Os 6 ácidos fortes mais comuns: HCl, HBr, HI, HNO₃, H₂SO₄ e HClO₄."
+                }
+            }
         },
         new Question
         {
@@ -1196,7 +1982,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 66,
+                    text = "Analise cada opção: pH 2 → ácida; pH 6 → ácida (abaixo de 7); " +
+                           "pH 7 → neutra; pH 12 → básica (acima de 7). " +
+                           "Somente o pH 12 está acima do ponto neutro — portanto, apenas ele tem caráter básico."
+                }
+            }
         },
         new Question
         {
@@ -1214,7 +2012,19 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            {
+                new TextHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 67,
+                    text = "Kw = [H⁺] × [OH⁻]. Em água pura, ambas as concentrações são 10⁻⁷ M. " +
+                           "Portanto Kw = 10⁻⁷ × 10⁻⁷ = 10⁻¹⁴. " +
+                           "Cuidado: 10⁻⁷ é a concentração de CADA íon individualmente — não o produto."
+                }
+            }
         }
     };
 
