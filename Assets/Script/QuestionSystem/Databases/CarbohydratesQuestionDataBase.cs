@@ -110,10 +110,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/L-glicose",
-                "AnswerImages/CarbohydrateDB/D-glicose",
-                "AnswerImages/CarbohydrateDB/L-frutose",
-                "AnswerImages/CarbohydrateDB/D-tagatose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer7_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer7_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer7_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer7_4"
             },
             correctIndex = 3,
             questionNumber = 7,
@@ -121,7 +121,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer7",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
