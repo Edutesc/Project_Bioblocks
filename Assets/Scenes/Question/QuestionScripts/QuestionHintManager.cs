@@ -32,8 +32,8 @@ public class QuestionHintManager : MonoBehaviour
     [SerializeField] private GameObject imageHintPrefab;
     [SerializeField] private GameObject linkHintPrefab;
 
-
     private const string KeyPrefix = "HINTS_";
+    private const string UserIdKey = "HINTS_ActiveUserId";
     private Question currentQuestion;
     private string activeDatabankName;
     private HashSet<string> unlockedKeys = new HashSet<string>();
@@ -67,13 +67,12 @@ public class QuestionHintManager : MonoBehaviour
     }
 
     // puxa o banco de dados ativo e a lista de questões para puxar as dicas já desbloqueadas
-    public void Initialize(string databankName, List<Question> allQuestions)
+    public void Initialize(string databankName, List<Question> allQuestions, string userId)
     {
         activeDatabankName = databankName;
-        // puxa as dicas já desbloqueadas
-        LoadCacheFromPlayerPrefs(allQuestions);
-        // unlockedKeys.Clear();
-        Debug.Log($"Hint Manager - Banco atual: {databankName} | " + $"{unlockedKeys.Count} dica(s) existentes.");
+        // passa userId
+        LoadCacheFromPlayerPrefs(allQuestions, userId);
+        Debug.Log($"Hint Manager - Banco atual: {databankName} | {unlockedKeys.Count} dica(s) existentes.");
     }
 
     // o QuestionManager avisa sempre que há uma troca na questão que está sendo exibida
@@ -334,10 +333,31 @@ public class QuestionHintManager : MonoBehaviour
     }
 
     // limpa as dicas registradas e verifica, por meio do playerPrefs, ao comparar com as questões, se ja tem dica registrada
-    // sobre rela
-    private void LoadCacheFromPlayerPrefs(List<Question> questions)
+    // sobre ela
+    private void LoadCacheFromPlayerPrefs(List<Question> questions, string userId)
     {
         unlockedKeys.Clear();
+
+        string savedUserId = PlayerPrefs.GetString(UserIdKey, string.Empty);
+
+        // se for usuarios diferente, apaga as dicas e reseta
+        if (savedUserId != userId)
+        {
+            Debug.Log($"Hint Manager - Usuário mudou ({savedUserId} → {userId}). Resetando dicas.");
+
+            foreach (var q in questions)
+            {
+                string key = BuildKey(q.questionDatabankName, q.questionNumber);
+                PlayerPrefs.DeleteKey(key);
+            }
+
+            PlayerPrefs.SetString(UserIdKey, userId);
+            PlayerPrefs.Save();
+            // unlockedKeys permanece vazio — nenhuma dica desbloqueada
+            return; 
+        }
+
+        // se for o mesmo usuario, so roda normalmente
         foreach (var q in questions)
         {
             string key = BuildKey(q.questionDatabankName, q.questionNumber);
