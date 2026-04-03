@@ -30,11 +30,7 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private TextMeshProUGUI playerLevelProgressText;
     [SerializeField] private ProgressBarManager playerLevelProgressBarManager;
 
-<<<<<<< HEAD
-    private readonly Color[] levelColors = new Color[]
-=======
     public static readonly Color[] LevelColors = new Color[]
->>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
     {
         HexToColor("#B000FF"),  // Level 1 - Roxo claro
         HexToColor("#FF0097"),  // Level 2 - Azul ciano vibrante
@@ -47,8 +43,6 @@ public class UserHeaderManager : BarsManager
         HexToColor("#006AFF"),  // Level 9 - Rosa pink
         HexToColor("#2520E5")   // Level 10 - Dourado brilhante
     };
-
-    private Texture2D _progressBarTexture;
 
     [Header("Elementos de Bônus Timer")]
     [SerializeField] private GameObject bonusTimerContainer;
@@ -816,23 +810,6 @@ public class UserHeaderManager : BarsManager
     {
         if (AppContext.PlayerLevel == null) return;
 
-<<<<<<< HEAD
-        int   currentLevel       = AppContext.PlayerLevel.GetCurrentLevel();
-        int   questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
-        int   questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
-        float progressInLevel    = AppContext.PlayerLevel.GetProgressInCurrentLevel();
-
-        // Cor do level atual e do próximo
-        Color currentLevelColor = GetLevelColor(currentLevel);
-        Color nextLevelColor    = GetLevelColor(currentLevel + 1);
-
-        // Badge do level — cor sólida do level atual
-        if (playerLevelBackground != null)
-            playerLevelBackground.color = currentLevelColor;
-
-        if (playerLevelText != null)
-            playerLevelText.text = currentLevel.ToString();
-=======
         int currentLevel = AppContext.PlayerLevel.GetCurrentLevel();
         int questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
         int questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
@@ -846,13 +823,9 @@ public class UserHeaderManager : BarsManager
             int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
             playerLevelBackground.color = LevelColors[colorIndex];
         }
->>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
 
         if (currentLevel >= 10)
         {
-            // Level máximo — barra totalmente preenchida com cor do level 10
-            ApplyGradientToProgressBar(currentLevelColor, currentLevelColor, 1f);
-
             if (playerLevelProgressBarManager != null)
             {
                 int maxQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
@@ -864,92 +837,6 @@ public class UserHeaderManager : BarsManager
         }
         else
         {
-<<<<<<< HEAD
-            int nextLevel       = currentLevel + 1;
-            int progressPercent = Mathf.RoundToInt(progressInLevel * 100f);
-
-            // Aplica degradê da cor atual para a cor do próximo level
-            ApplyGradientToProgressBar(currentLevelColor, nextLevelColor, progressInLevel);
-
-            if (playerLevelProgressBarManager != null)
-                playerLevelProgressBarManager.UpdateProgress(progressPercent, 100, $"Level {currentLevel}");
-
-            if (playerLevelProgressText != null)
-                playerLevelProgressText.text = $"{progressPercent}% no nível {currentLevel} concluído";
-        }
-    }
-
-    // Retorna a cor de um level — com proteção para level 10+
-    private Color GetLevelColor(int level)
-    {
-        if (levelColors == null || levelColors.Length == 0) return Color.white;
-        int index = Mathf.Clamp(level - 1, 0, levelColors.Length - 1);
-        return levelColors[index];
-    }
-
-    // Gera e aplica textura de degradê na barra de progresso
-    private void ApplyGradientToProgressBar(Color startColor, Color endColor, float progress)
-    {
-        if (playerLevelProgressBar == null) return;
-
-        // Largura da textura — 64px é suficiente para um degradê suave
-        int textureWidth = 64;
-
-        // Reutiliza a textura se já existir, evita alocação desnecessária
-        if (_progressBarTexture == null)
-        {
-            _progressBarTexture = new Texture2D(textureWidth, 1, TextureFormat.RGBA32, false);
-            _progressBarTexture.wrapMode = TextureWrapMode.Clamp;
-            _progressBarTexture.filterMode = FilterMode.Bilinear;
-        }
-
-        // Preenche os pixels com o degradê
-        Color[] pixels = new Color[textureWidth];
-        for (int i = 0; i < textureWidth; i++)
-        {
-            // t vai de 0 a progress — a parte não preenchida fica transparente
-            float t = (float)i / (textureWidth - 1);
-
-            if (t <= progress)
-            {
-                // Dentro da área preenchida — interpola entre as duas cores
-                float gradientT = progress > 0 ? t / progress : 0f;
-                pixels[i] = Color.Lerp(startColor, endColor, gradientT);
-            }
-            else
-            {
-                // Fora da área preenchida — transparente
-                pixels[i] = Color.clear;
-            }
-        }
-
-        _progressBarTexture.SetPixels(pixels);
-        _progressBarTexture.Apply();
-
-        // Aplica a textura na Image da barra
-        playerLevelProgressBar.sprite = Sprite.Create(
-            _progressBarTexture,
-            new Rect(0, 0, textureWidth, 1),
-            new Vector2(0.5f, 0.5f)
-        );
-
-        // Reseta a cor para branco — deixa a textura controlar as cores
-        playerLevelProgressBar.color = Color.white;
-        playerLevelProgressBar.type  = Image.Type.Simple;
-        playerLevelProgressBar.preserveAspect = false;
-    }
-
-    // Limpa a textura quando o componente é destruído
-    private void OnDestroy()
-    {
-        if (_progressBarTexture != null)
-        {
-            Destroy(_progressBarTexture);
-            _progressBarTexture = null;
-        }
-    }
-
-=======
             int nextLevel = currentLevel + 1;
             int progressInLevel = questionsAnswered - questionsAtStart;
             int intervalSize = questionsUntilNext + progressInLevel;
@@ -995,6 +882,5 @@ public class UserHeaderManager : BarsManager
         }
     }
 
->>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
     #endregion
 }
