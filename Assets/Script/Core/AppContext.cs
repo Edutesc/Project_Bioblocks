@@ -175,4 +175,10 @@ public class AppContext : MonoBehaviour
         if (playerLevel       != null) PlayerLevel       = playerLevel;
         IsReady = true;
     }
+
+    private void OnDestroy()
+    {
+        if (LocalDB is IDisposable disposable)
+            disposable.Dispose();
+    }
 }
