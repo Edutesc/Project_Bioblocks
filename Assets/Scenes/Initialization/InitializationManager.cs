@@ -8,6 +8,10 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Gerencia o fluxo de inicialização do app.
 ///
+/// A carga de dados do usuário agora passa pelo UserSyncService (offline-first):
+///   - Online  → busca no Firestore → salva LiteDB → popula UserDataStore
+///   - Offline → lê do LiteDB → popula UserDataStore
+/// </summary>
 public class InitializationManager : MonoBehaviour
 {
     [Header("UI References")]
@@ -25,8 +29,8 @@ public class InitializationManager : MonoBehaviour
     // -------------------------------------------------------
     // Dependências — obtidas do AppContext, nunca via .Instance
     // -------------------------------------------------------
-    private IFirestoreRepository _firestore;
-    private IAuthRepository _auth;
+    private IAuthRepository  _auth;
+    private IUserSyncService _userSync;
 
     private LoadingSpinnerComponent globalSpinner;
 
@@ -37,8 +41,6 @@ public class InitializationManager : MonoBehaviour
 
     private void Start()
     {
-        // Obtém os serviços do AppContext uma única vez
-        // O AppContext já garantiu que estão inicializados no seu próprio Awake              
         SetupUI();
         StartInitialization();
     }
@@ -87,13 +89,13 @@ public class InitializationManager : MonoBehaviour
         {
             if (!AppContext.IsReady)
             {
-            UpdateStatus("Inicializando Firebase...");
-            await WaitForAppContext();
+                UpdateStatus("Inicializando Firebase...");
+                await WaitForAppContext();
             }
 
             // Só busca as dependências DEPOIS que o AppContext está pronto
-            _firestore = AppContext.Firestore;
-            _auth      = AppContext.Auth;
+            _auth     = AppContext.Auth;
+            _userSync = AppContext.UserSync;
 
             UpdateProgress(0.3f);
             UpdateStatus("Verificando autenticação...");
@@ -119,7 +121,6 @@ public class InitializationManager : MonoBehaviour
                 }
             }
 
-            // Garante tempo mínimo de loading
             float elapsed = Time.time - startTime;
             if (elapsed < minimumLoadingTime)
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
@@ -139,11 +140,6 @@ public class InitializationManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Aguarda o AppContext terminar a inicialização assíncrona.
-    /// Em condições normais isso já estará pronto quando o Start() rodar,
-    /// mas esta guarda evita race conditions caso o Firebase demore mais que o esperado.
-    /// </summary>
     private async Task WaitForAppContext()
     {
         float timeout = 15f;
@@ -154,9 +150,8 @@ public class InitializationManager : MonoBehaviour
             await Task.Delay(100);
             elapsed += 0.1f;
 
-            // Loga a cada 3 segundos para acompanhar o progresso
             if (Mathf.RoundToInt(elapsed * 10) % 30 == 0)
-            Debug.Log($"[InitializationManager] Aguardando AppContext... {elapsed:F1}s");
+                Debug.Log($"[InitializationManager] Aguardando AppContext... {elapsed:F1}s");
         }
 
         if (!AppContext.IsReady)
@@ -183,21 +178,36 @@ public class InitializationManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Carrega os dados do usuário via UserSyncService (offline-first).
+    /// Online  → Firestore → salva LiteDB → UserDataStore
+    /// Offline → LiteDB → UserDataStore
+    /// </summary>
     private async Task<bool> LoadUserData()
     {
         try
         {
             if (!_auth.IsUserLoggedIn()) return false;
+
             string userId = _auth.CurrentUserId;
-            var userData  = await _firestore.GetUserData(userId);
-            if (userData == null) return false;
-            UserDataStore.CurrentUserData = userData;
-            Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
+
+            // UserSyncService cuida de tudo: fonte correta + popula UserDataStore
+            await _userSync.LoadUserAsync(userId);
+
+            if (UserDataStore.CurrentUserData == null)
+            {
+                Debug.LogError("[InitializationManager] UserData não carregado após LoadUserAsync.");
+                return false;
+            }
+
+            Debug.Log($"[InitializationManager] UserData carregado. " +
+                      $"UserId: {UserDataStore.CurrentUserData.UserId}, " +
+                      $"Level: {UserDataStore.CurrentUserData.PlayerLevel}");
             return true;
         }
         catch (Exception e)
         {
-            Debug.LogError($"Erro ao carregar dados: {e.Message}");
+            Debug.LogError($"[InitializationManager] Erro ao carregar dados: {e.Message}");
             throw;
         }
     }
@@ -210,7 +220,6 @@ public class InitializationManager : MonoBehaviour
         try
         {
             string targetScene = authenticated ? "PathwayScene" : "LoginView";
-
             globalSpinner?.ShowSpinnerUntilSceneLoaded(targetScene);
             SceneManager.LoadScene(targetScene);
         }
@@ -222,7 +231,7 @@ public class InitializationManager : MonoBehaviour
     }
 
     // -------------------------------------------------------
-    // PlayerLevelManager (ainda singleton — será refatorado)
+    // PlayerLevelService
     // -------------------------------------------------------
     private void InitializePlayerLevelService()
     {
@@ -232,7 +241,7 @@ public class InitializationManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("[InitializationManager] PlayerLevelService pronto.");    
+        Debug.Log("[InitializationManager] PlayerLevelService pronto.");
     }
 
     // -------------------------------------------------------

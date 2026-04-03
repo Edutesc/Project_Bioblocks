@@ -14,58 +14,32 @@ using System;
 /// SETUP NO UNITY:
 ///   1. Crie um GameObject vazio chamado "App" na InitializationScene
 ///   2. Adicione este script ao GameObject "App"
-///   3. Adicione também FirestoreRepository, AuthenticationRepository
-///      e StorageRepository como componentes do mesmo GameObject "App"
+///   3. Adicione também FirestoreRepository, AuthenticationRepository,
+///      StorageRepository e UserSyncService como componentes do mesmo GameObject "App"
 ///   4. O AppContext encontra todos eles via GetComponent no Awake
-///
-/// USO NAS CLASSES CONSUMIDORAS:
-///   private IFirestoreRepository _firestore;
-///
-///   private void Start()
-///   {
-///       _firestore = AppContext.Firestore;
-///   }
-///
-/// USO EM TESTES:
-///   AppContext.OverrideForTests(
-///       firestore: new FakeFirestoreRepository(),
-///       auth:      new FakeAuthRepository()
-///   );
 /// </summary>
-/// 
 public class AppContext : MonoBehaviour
 {
-    // -------------------------------------------------------
-    // Singleton do AppContext em si
-    // (este é o ÚNICO singleton que permanece — ele é o
-    //  container, não um serviço de negócio)
-    // -------------------------------------------------------
     private static AppContext _instance;
     public static event Action OnReady;
 
-    // -------------------------------------------------------
-    // Serviços expostos como interfaces
-    // -------------------------------------------------------
-    public static IFirestoreRepository Firestore { get; private set; }
-    public static IAuthRepository      Auth      { get; private set; }
-    public static IStorageRepository   Storage     { get; private set; }
-    public static IStatisticsProvider  Statistics  { get; private set; }
-    public static INavigationService   Navigation  { get; private set; }
-    public static ISceneDataService    SceneData      { get; private set; }
-    public static IDatabaseManager     LocalDatabase  { get; private set; }
-    public static IImageCacheService   ImageCache     { get; private set; }
-    public static IImageUploadService  ImageUpload { get; private set; }
+    // ─── Serviços expostos como interfaces ───────────────
+    public static IFirestoreRepository      Firestore         { get; private set; }
+    public static IAuthRepository           Auth              { get; private set; }
+    public static IStorageRepository        Storage           { get; private set; }
+    public static IStatisticsProvider       Statistics        { get; private set; }
+    public static INavigationService        Navigation        { get; private set; }
+    public static ISceneDataService         SceneData         { get; private set; }
+    public static IDatabaseManager          LocalDatabase     { get; private set; }  // SQLite — remover após migração LiteDB
+    public static ILiteDBService            LocalDB           { get; private set; }  // LiteDB — novo
+    public static IUserSyncService          UserSync          { get; private set; }  // novo
+    public static IImageCacheService        ImageCache        { get; private set; }
+    public static IImageUploadService       ImageUpload       { get; private set; }
     public static IAnsweredQuestionsManager AnsweredQuestions { get; private set; }
-    public static IPlayerLevelService PlayerLevel { get; private set; }
+    public static IPlayerLevelService       PlayerLevel       { get; private set; }
 
-    // -------------------------------------------------------
-    // Flag de prontidão — consulte antes de usar os serviços
-    // -------------------------------------------------------
     public static bool IsReady { get; private set; }
 
-    // -------------------------------------------------------
-    // Awake: monta tudo a partir dos componentes no mesmo GameObject
-    // -------------------------------------------------------
     private async void Awake()
     {
         Debug.Log("[AppContext] Awake() chamado");
@@ -87,135 +61,118 @@ public class AppContext : MonoBehaviour
 
         try
         {
-            // 1. Verifica e corrige dependências do Firebase
+            // 1. Firebase
             Debug.Log("[AppContext] Verificando dependências do Firebase...");
             var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
             if (dependencyStatus != DependencyStatus.Available)
-            {
-                throw new System.Exception($"[AppContext] Firebase dependencies unavailable: {dependencyStatus}");
-            }
+                throw new Exception($"[AppContext] Firebase dependencies unavailable: {dependencyStatus}");
             Debug.Log("[AppContext] Firebase disponível.");
 
-            // 2. Busca os componentes no mesmo GameObject — sem arrastar no Inspector
-            var authRepo      = GetComponent<AuthenticationRepository>();
-            var firestoreRepo = GetComponent<FirestoreRepository>();
-            var storageRepo   = GetComponent<StorageRepository>();
-            var statsManager    = GetComponent<DatabaseStatisticsManager>();
-            var navigationMgr   = GetComponent<NavigationManager>();
-            var sceneDataMgr    = GetComponent<SceneDataManager>();
-            var databaseMgr     = GetComponent<DatabaseManager>();
-            var imageCacheSvc   = GetComponent<ImageCacheService>();
-            var imageUploadSvc = GetComponent<ImageUploadService>();
+            // 2. GetComponents
+            var authRepo             = GetComponent<AuthenticationRepository>();
+            var firestoreRepo        = GetComponent<FirestoreRepository>();
+            var storageRepo          = GetComponent<StorageRepository>();
+            var statsManager         = GetComponent<DatabaseStatisticsManager>();
+            var navigationMgr        = GetComponent<NavigationManager>();
+            var sceneDataMgr         = GetComponent<SceneDataManager>();
+            var databaseMgr          = GetComponent<DatabaseManager>();         // SQLite — remover após migração
+            var imageCacheSvc        = GetComponent<ImageCacheService>();
+            var imageUploadSvc       = GetComponent<ImageUploadService>();
             var answeredQuestionsMgr = GetComponent<AnsweredQuestionsManager>();
-            var playerLevelMgr = GetComponent<PlayerLevelService>();
+            var playerLevelMgr       = GetComponent<PlayerLevelService>();
+            var userSyncSvc          = GetComponent<UserSyncService>();
 
-            if (authRepo == null)
-                throw new System.Exception("[AppContext] AuthenticationRepository não encontrado no GameObject. Adicione o componente.");
-            if (firestoreRepo == null)
-                throw new System.Exception("[AppContext] FirestoreRepository não encontrado no GameObject. Adicione o componente.");
-            if (databaseMgr == null)
-                throw new System.Exception("[AppContext] DatabaseManager não encontrado no GameObject. Adicione o componente.");
-            if (imageCacheSvc == null)
-                throw new System.Exception("[AppContext] ImageCacheService não encontrado no GameObject. Adicione o componente.");
-            if (navigationMgr == null)
-                throw new System.Exception("[AppContext] NavigationManager não encontrado no GameObject. Adicione o componente.");
-            if (sceneDataMgr == null)
-                throw new System.Exception("[AppContext] SceneDataManager não encontrado no GameObject. Adicione o componente.");
-            if (statsManager == null)
-                throw new System.Exception("[AppContext] DatabaseStatisticsManager não encontrado no GameObject. Adicione o componente.");
-            if (storageRepo == null)
-                throw new System.Exception("[AppContext] StorageRepository não encontrado no GameObject. Adicione o componente.");
-            if (imageUploadSvc == null)
-                throw new Exception("[AppContext] ImageUploadService não encontrado.");
-            if (answeredQuestionsMgr == null)
-                throw new Exception("[AppContext] AnsweredQuestionsManager não encontrado.");
-            if (playerLevelMgr == null)
-                throw new Exception("[AppContext] PlayerLevelManager não encontrado no GameObject.");    
+            // 3. Validações
+            if (authRepo == null)             throw new Exception("[AppContext] AuthenticationRepository não encontrado.");
+            if (firestoreRepo == null)        throw new Exception("[AppContext] FirestoreRepository não encontrado.");
+            if (databaseMgr == null)          throw new Exception("[AppContext] DatabaseManager não encontrado.");
+            if (imageCacheSvc == null)        throw new Exception("[AppContext] ImageCacheService não encontrado.");
+            if (navigationMgr == null)        throw new Exception("[AppContext] NavigationManager não encontrado.");
+            if (sceneDataMgr == null)         throw new Exception("[AppContext] SceneDataManager não encontrado.");
+            if (statsManager == null)         throw new Exception("[AppContext] DatabaseStatisticsManager não encontrado.");
+            if (storageRepo == null)          throw new Exception("[AppContext] StorageRepository não encontrado.");
+            if (imageUploadSvc == null)       throw new Exception("[AppContext] ImageUploadService não encontrado.");
+            if (answeredQuestionsMgr == null) throw new Exception("[AppContext] AnsweredQuestionsManager não encontrado.");
+            if (playerLevelMgr == null)       throw new Exception("[AppContext] PlayerLevelService não encontrado.");
+            if (userSyncSvc == null)          throw new Exception("[AppContext] UserSyncService não encontrado. Adicione o componente ao GameObject App.");
 
-            // 3. Inicializa na ordem correta
+            // 4. Inicializa Firebase
             await authRepo.InitializeAsync();
             firestoreRepo.Initialize();
             storageRepo.Initialize();
 
-            // 4. Injeta dependências cruzadas
-            //    Auth precisa do Firestore para buscar UserData após login
+            // 5. Injeção de dependências cruzadas
             authRepo.InjectDependencies(firestoreRepo);
-
-            //    Storage precisa do Auth para obter o userId sem chamar FirebaseAuth diretamente
             storageRepo.InjectDependencies(authRepo);
             imageUploadSvc.InjectDependencies(storageRepo);
-
-            // 5. Injeta DatabaseManager no ImageCacheService - usando stub, esperando LiteDB
-            ImageCache = new ImageCacheServiceStub();
-
-            // 6. Injeta SceneDataService no NavigationManager
             navigationMgr.InjectDependencies(sceneDataMgr);
 
-            // 7. Inicializa estatísticas dos bancos de questões
+            // 6. LiteDB — instanciado diretamente (não é MonoBehaviour)
+            var liteDB = new LiteDBService();
+
+            // 7. UserSyncService recebe dependências via injeção
+            userSyncSvc.Initialize(liteDB, firestoreRepo);
+
+            // 8. Estatísticas
             await statsManager.Initialize();
 
-            // 8. Expõe como interfaces — a partir daqui ninguém conhece a classe concreta
-            Auth      = authRepo;
-            Firestore = firestoreRepo;
-            Storage     = storageRepo;
-            Statistics  = statsManager;
-            Navigation     = navigationMgr;
-            LocalDatabase  = databaseMgr;
-            ImageCache     = imageCacheSvc;
-            SceneData   = sceneDataMgr;
-            ImageUpload = imageUploadSvc;
+            // 9. Expõe interfaces
+            Auth              = authRepo;
+            Firestore         = firestoreRepo;
+            Storage           = storageRepo;
+            Statistics        = statsManager;
+            Navigation        = navigationMgr;
+            SceneData         = sceneDataMgr;
+            LocalDatabase     = databaseMgr;    // SQLite — remover após migração
+            LocalDB           = liteDB;
+            UserSync          = userSyncSvc;
+            ImageCache        = imageCacheSvc;
+            ImageUpload       = imageUploadSvc;
             AnsweredQuestions = answeredQuestionsMgr;
-            PlayerLevel = playerLevelMgr;
+            PlayerLevel       = playerLevelMgr;
 
             IsReady = true;
             OnReady?.Invoke();
             Debug.Log("[AppContext] Todos os serviços prontos.");
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[AppContext] Falha na inicialização: {e.Message}\n{e.StackTrace}");
             if (e.InnerException != null)
-                Debug.LogError($"[AppContext] InnerException: {e.InnerException.Message}\n{e.InnerException.StackTrace}");
+                Debug.LogError($"[AppContext] InnerException: {e.InnerException.Message}");
             IsReady = false;
             throw;
         }
     }
 
-    // -------------------------------------------------------
-    // Suporte a testes: substitui as implementações reais por fakes
-    // Chame isso no [SetUp] dos seus testes antes de instanciar
-    // qualquer Manager que dependa do AppContext.
-    //
-    // Exemplo:
-    //   AppContext.OverrideForTests(
-    //       firestore: new FakeFirestoreRepository(),
-    //       auth:      new FakeAuthRepository()
-    //   );
-    // -------------------------------------------------------
     public static void OverrideForTests(
-        IFirestoreRepository firestore = null,
-        IAuthRepository      auth      = null,
-        IStorageRepository   storage    = null,
-        IStatisticsProvider  statistics  = null,
-        INavigationService   navigation  = null,
-        ISceneDataService    sceneData      = null,
-        IDatabaseManager     localDatabase  = null,
-        IImageCacheService   imageCache     = null,
-        IImageUploadService  imageUpload       = null,
+        IFirestoreRepository      firestore         = null,
+        IAuthRepository           auth              = null,
+        IStorageRepository        storage           = null,
+        IStatisticsProvider       statistics        = null,
+        INavigationService        navigation        = null,
+        ISceneDataService         sceneData         = null,
+        IDatabaseManager          localDatabase     = null,
+        ILiteDBService            localDB           = null,
+        IUserSyncService          userSync          = null,
+        IImageCacheService        imageCache        = null,
+        IImageUploadService       imageUpload       = null,
         IAnsweredQuestionsManager answeredQuestions = null,
-        IPlayerLevelService  playerLevel       = null)
+        IPlayerLevelService       playerLevel       = null)
     {
-        if (firestore != null) Firestore = firestore;
-        if (auth      != null) Auth      = auth;
-        if (storage    != null) Storage    = storage;
-        if (statistics != null) Statistics = statistics;
-        if (navigation != null) Navigation = navigation;
-        if (sceneData     != null) SceneData     = sceneData;
-        if (localDatabase != null) LocalDatabase = localDatabase;
-        if (imageCache    != null) ImageCache    = imageCache;
-        if (imageUpload != null) ImageUpload = imageUpload;
+        if (firestore         != null) Firestore         = firestore;
+        if (auth              != null) Auth              = auth;
+        if (storage           != null) Storage           = storage;
+        if (statistics        != null) Statistics        = statistics;
+        if (navigation        != null) Navigation        = navigation;
+        if (sceneData         != null) SceneData         = sceneData;
+        if (localDatabase     != null) LocalDatabase     = localDatabase;
+        if (localDB           != null) LocalDB           = localDB;
+        if (userSync          != null) UserSync          = userSync;
+        if (imageCache        != null) ImageCache        = imageCache;
+        if (imageUpload       != null) ImageUpload       = imageUpload;
         if (answeredQuestions != null) AnsweredQuestions = answeredQuestions;
-        if (playerLevel != null) PlayerLevel = playerLevel;
+        if (playerLevel       != null) PlayerLevel       = playerLevel;
         IsReady = true;
     }
 }

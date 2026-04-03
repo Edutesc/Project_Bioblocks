@@ -16,19 +16,19 @@
 // }
 
 
-using UnityEngine;
+// using UnityEngine;
 
-public class LiteDBMockTest : MonoBehaviour
-{
-    void Start()
-    {
-        var user = LiteDBService.Instance.GetUser("mock-user-123");
+// public class LiteDBMockTest : MonoBehaviour
+// {
+//     void Start()
+//     {
+//         var user = LiteDBService.Instance.GetUser("mock-user-123");
         
-        // Usa uma única string para o log, facilitando a leitura [1]
-        string status = (user != null) 
-            ? $"[PERSISTÊNCIA] {user.NickName} (Nível {user.PlayerLevel}) carregado com sucesso!" 
-            : "[AVISO] Usuário não encontrado. Rode a cena de teste da Etapa 4 primeiro.";
+//         // Usa uma única string para o log, facilitando a leitura [1]
+//         string status = (user != null) 
+//             ? $"[PERSISTÊNCIA] {user.NickName} (Nível {user.PlayerLevel}) carregado com sucesso!" 
+//             : "[AVISO] Usuário não encontrado. Rode a cena de teste da Etapa 4 primeiro.";
             
-        Debug.Log(status);
-    }
-}
+//         Debug.Log(status);
+//     }
+// }
