@@ -30,7 +30,11 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private TextMeshProUGUI playerLevelProgressText;
     [SerializeField] private ProgressBarManager playerLevelProgressBarManager;
 
+<<<<<<< HEAD
     private readonly Color[] levelColors = new Color[]
+=======
+    public static readonly Color[] LevelColors = new Color[]
+>>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
     {
         HexToColor("#B000FF"),  // Level 1 - Roxo claro
         HexToColor("#FF0097"),  // Level 2 - Azul ciano vibrante
@@ -812,6 +816,7 @@ public class UserHeaderManager : BarsManager
     {
         if (AppContext.PlayerLevel == null) return;
 
+<<<<<<< HEAD
         int   currentLevel       = AppContext.PlayerLevel.GetCurrentLevel();
         int   questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
         int   questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
@@ -827,6 +832,21 @@ public class UserHeaderManager : BarsManager
 
         if (playerLevelText != null)
             playerLevelText.text = currentLevel.ToString();
+=======
+        int currentLevel = AppContext.PlayerLevel.GetCurrentLevel();
+        int questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
+        int questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
+        int questionsAtStart = AppContext.PlayerLevel.GetQuestionsAtLevelStart();
+
+        if (playerLevelText != null)
+            playerLevelText.text = currentLevel.ToString();
+
+        if (playerLevelBackground != null)
+        {
+            int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
+            playerLevelBackground.color = LevelColors[colorIndex];
+        }
+>>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
 
         if (currentLevel >= 10)
         {
@@ -844,6 +864,7 @@ public class UserHeaderManager : BarsManager
         }
         else
         {
+<<<<<<< HEAD
             int nextLevel       = currentLevel + 1;
             int progressPercent = Mathf.RoundToInt(progressInLevel * 100f);
 
@@ -928,5 +949,52 @@ public class UserHeaderManager : BarsManager
         }
     }
 
+=======
+            int nextLevel = currentLevel + 1;
+            int progressInLevel = questionsAnswered - questionsAtStart;
+            int intervalSize = questionsUntilNext + progressInLevel;
+
+            if (intervalSize <= 0 || progressInLevel < 0)
+            {
+                Debug.LogWarning($"[UserHeaderManager] Dados inconsistentes: " +
+                                $"answered={questionsAnswered}, start={questionsAtStart}, " +
+                                $"untilNext={questionsUntilNext}, interval={intervalSize}. " +
+                                $"Aguardando dados consistentes...");
+                return;
+            }
+
+            if (playerLevelProgressBarManager != null)
+            {
+                playerLevelProgressBarManager.ApplyLevelGradient(currentLevel);
+                playerLevelProgressBarManager.UpdateProgress(
+                    progressInLevel,
+                    intervalSize,
+                    $"Level {currentLevel}"
+                );
+                Debug.Log($"[UserHeaderManager] Barra: {progressInLevel}/{intervalSize} " +
+                        $"(answered={questionsAnswered}, start={questionsAtStart})");
+            }
+
+            if (playerLevelProgressText != null)
+            {
+                float percentageLeft = intervalSize > 0 
+                    ? (questionsUntilNext / (float)intervalSize) * 100f 
+                    : 0f;
+                int   roundedPercentage = Mathf.RoundToInt(percentageLeft);
+
+                Debug.Log($"[UserHeaderManager] currentLevel={currentLevel}, " +
+                        $"questionsAnswered={questionsAnswered}, " +
+                        $"questionsAtStart={questionsAtStart}, " +
+                        $"progressInLevel={progressInLevel}, " +
+                        $"intervalSize={intervalSize}, " +
+                        $"questionsUntilNext={questionsUntilNext}, " +
+                        $"percentageLeft={percentageLeft:F1}%");
+
+                playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
+            }
+        }
+    }
+
+>>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
     #endregion
 }

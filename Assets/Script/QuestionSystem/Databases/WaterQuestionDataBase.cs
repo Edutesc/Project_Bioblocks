@@ -1236,6 +1236,7 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
         }
     };
 
+<<<<<<< HEAD
     public List<Question> GetQuestions()
     {
         return questions;
@@ -1260,4 +1261,11 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
     {
         return databaseInDevelopment;
     }
+=======
+    public List<Question> GetQuestions() => questions;
+    public QuestionSet GetQuestionSetType() => QuestionSet.water;
+    public string GetDatabankName()  => "WaterQuestionDatabase";
+    public string GetDisplayName()   => "Água";
+    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
+>>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
 }

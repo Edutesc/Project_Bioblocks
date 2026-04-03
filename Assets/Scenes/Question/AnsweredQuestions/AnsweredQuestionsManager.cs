@@ -4,15 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+/// <summary>
+/// Gerencia as questões respondidas corretamente pelo usuário.
+/// </summary>
 public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
 {
-    public delegate void AnsweredQuestionsUpdatedHandler(Dictionary<string, int> answeredCounts);
-    public static event AnsweredQuestionsUpdatedHandler OnAnsweredQuestionsUpdated;   
+  public delegate void AnsweredQuestionsUpdatedHandler(Dictionary<string, int> answeredCounts);
+    public static event AnsweredQuestionsUpdatedHandler OnAnsweredQuestionsUpdated;
+
+    // -------------------------------------------------------
+    // Dependências — obtidas do AppContext no Start()
+    // -------------------------------------------------------
     private IFirestoreRepository _firestore;
     private IAuthRepository _auth;
+
     private string userId;
     private bool isInitialized = false;
 
+    // -------------------------------------------------------
+    // Ciclo de vida
+    // -------------------------------------------------------
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -20,29 +31,33 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
 
     private async void Start()
     {
-        if (AppContext.IsReady)
+        if (!AppContext.IsReady)
         {
-            OnAppContextReady();
-        }
-        else
-        {
-            AppContext.OnReady += OnAppContextReady;
-        }
-    }
+            Debug.Log("[AnsweredQuestionsManager] Aguardando AppContext...");
+            float elapsed = 0f;
+            while (!AppContext.IsReady && elapsed < 15f)
+            {
+                await Task.Delay(100);
+                elapsed += 0.1f;
+            }
 
-    private async void OnAppContextReady()
-    {
-        AppContext.OnReady -= OnAppContextReady;
+            if (!AppContext.IsReady)
+            {
+                Debug.LogError("[AnsweredQuestionsManager] Timeout aguardando AppContext.");
+                return;
+            }
+        }
 
         _firestore = AppContext.Firestore;
         _auth      = AppContext.Auth;
 
-        await Initialize();
-    }
+        if (_firestore == null || _auth == null)
+        {
+            Debug.LogError("[AnsweredQuestionsManager] Serviços não disponíveis após AppContext.IsReady");
+            return;
+        }
 
-    private void OnDestroy()
-    {
-        AppContext.OnReady -= OnAppContextReady;
+        await Initialize();
     }
 
     // -------------------------------------------------------
@@ -51,13 +66,26 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
     private async Task Initialize()
     {
         if (isInitialized) return;
+
         try
         {
             await Task.Yield();
 
+            if (_firestore == null)
+            {
+                Debug.LogError("[AnsweredQuestionsManager] _firestore é null");
+                return;
+            }
+
             if (!_firestore.IsInitialized)
             {
                 Debug.LogError("[AnsweredQuestionsManager] FirestoreRepository não está inicializado");
+                return;
+            }
+
+            if (_auth == null)
+            {
+                Debug.LogError("[AnsweredQuestionsManager] _auth é null");
                 return;
             }
 

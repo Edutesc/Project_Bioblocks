@@ -32,6 +32,7 @@ using System;
 ///       auth:      new FakeAuthRepository()
 ///   );
 /// </summary>
+/// 
 public class AppContext : MonoBehaviour
 {
     // -------------------------------------------------------
@@ -106,7 +107,7 @@ public class AppContext : MonoBehaviour
             var imageCacheSvc   = GetComponent<ImageCacheService>();
             var imageUploadSvc = GetComponent<ImageUploadService>();
             var answeredQuestionsMgr = GetComponent<AnsweredQuestionsManager>();
-            var playerLevelSvc = GetComponent<PlayerLevelService>();
+            var playerLevelMgr = GetComponent<PlayerLevelService>();
 
             if (authRepo == null)
                 throw new System.Exception("[AppContext] AuthenticationRepository não encontrado no GameObject. Adicione o componente.");
@@ -128,8 +129,8 @@ public class AppContext : MonoBehaviour
                 throw new Exception("[AppContext] ImageUploadService não encontrado.");
             if (answeredQuestionsMgr == null)
                 throw new Exception("[AppContext] AnsweredQuestionsManager não encontrado.");
-            if (playerLevelSvc == null)
-                throw new Exception("[AppContext] PlayerLevelService não encontrado no GameObject. Adicione o componente.");
+            if (playerLevelMgr == null)
+                throw new Exception("[AppContext] PlayerLevelManager não encontrado no GameObject.");    
 
             // 3. Inicializa na ordem correta
             await authRepo.InitializeAsync();
@@ -144,8 +145,8 @@ public class AppContext : MonoBehaviour
             storageRepo.InjectDependencies(authRepo);
             imageUploadSvc.InjectDependencies(storageRepo);
 
-            // 5. Injeta DatabaseManager no ImageCacheService
-            imageCacheSvc.InjectDependencies(databaseMgr);
+            // 5. Injeta DatabaseManager no ImageCacheService - usando stub, esperando LiteDB
+            ImageCache = new ImageCacheServiceStub();
 
             // 6. Injeta SceneDataService no NavigationManager
             navigationMgr.InjectDependencies(sceneDataMgr);
@@ -164,7 +165,7 @@ public class AppContext : MonoBehaviour
             SceneData   = sceneDataMgr;
             ImageUpload = imageUploadSvc;
             AnsweredQuestions = answeredQuestionsMgr;
-            PlayerLevel = playerLevelSvc;
+            PlayerLevel = playerLevelMgr;
 
             IsReady = true;
             OnReady?.Invoke();
@@ -200,7 +201,9 @@ public class AppContext : MonoBehaviour
         ISceneDataService    sceneData      = null,
         IDatabaseManager     localDatabase  = null,
         IImageCacheService   imageCache     = null,
-        IPlayerLevelService       playerLevel       = null)
+        IImageUploadService  imageUpload       = null,
+        IAnsweredQuestionsManager answeredQuestions = null,
+        IPlayerLevelService  playerLevel       = null)
     {
         if (firestore != null) Firestore = firestore;
         if (auth      != null) Auth      = auth;
@@ -210,6 +213,8 @@ public class AppContext : MonoBehaviour
         if (sceneData     != null) SceneData     = sceneData;
         if (localDatabase != null) LocalDatabase = localDatabase;
         if (imageCache    != null) ImageCache    = imageCache;
+        if (imageUpload != null) ImageUpload = imageUpload;
+        if (answeredQuestions != null) AnsweredQuestions = answeredQuestions;
         if (playerLevel != null) PlayerLevel = playerLevel;
         IsReady = true;
     }

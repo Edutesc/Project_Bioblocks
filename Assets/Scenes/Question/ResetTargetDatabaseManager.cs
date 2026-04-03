@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using QuestionSystem;
 using System.Linq;
 
-public class ResetTargetDatabaseManager : MonoBehaviour
+public class ResetTargetDatabaseScene : MonoBehaviour
 {
     [SerializeField] private Button resetButton;
     [SerializeField] private TextMeshProUGUI resetButtonText;
@@ -75,16 +75,17 @@ public class ResetTargetDatabaseManager : MonoBehaviour
             return;
         }
 
-        IQuestionDatabase database = FindDatabaseByName(databankName);
+        IQuestionDatabase database = FindDatabaseByName(databankName);                                                                                              
         string displayName = database != null
         ? database.GetDisplayName()
         : databankName; // fallback para o nome técnico
 
-    databankNameText.text = $"Tópico: {displayName}";
+        databankNameText.text = $"Tópico: {displayName}";
     }
 
     private IQuestionDatabase FindDatabaseByName(string name)
     {
+        // Busca entre todos os bancos registrados na cena
         var databases = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
             .OfType<IQuestionDatabase>();
 
@@ -115,8 +116,8 @@ public class ResetTargetDatabaseManager : MonoBehaviour
 
             try
             {
-                if (AppContext.PlayerLevel != null)
-                    await AppContext.PlayerLevel.RecalculateTotalAnswered();                               
+              if (AppContext.PlayerLevel != null)
+                await AppContext.PlayerLevel.RecalculateTotalAnswered();   
             }
             catch (Exception e)
             {

@@ -35,7 +35,11 @@ public class InitializationManager : MonoBehaviour
         SetupUI();
         StartInitialization();
     }
-   private void InitializeGlobalSpinner()
+
+    // -------------------------------------------------------
+    // Spinner
+    // -------------------------------------------------------
+    private void InitializeGlobalSpinner()
     {
         try
         {
@@ -60,6 +64,9 @@ public class InitializationManager : MonoBehaviour
         }
     }
 
+    // -------------------------------------------------------
+    // Fluxo principal
+    // -------------------------------------------------------
     private void SetupUI()
     {
         if (retryPanel != null) retryPanel.SetActive(false);
@@ -185,14 +192,11 @@ public class InitializationManager : MonoBehaviour
         try
         {
             if (!_auth.IsUserLoggedIn()) return false;
-
             string userId = _auth.CurrentUserId;
             var userData  = await _firestore.GetUserData(userId);
             if (userData == null) return false;
-
             UserDataStore.CurrentUserData = userData;
             Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
-
             return true;
         }
         catch (Exception e)
@@ -224,7 +228,6 @@ public class InitializationManager : MonoBehaviour
     // -------------------------------------------------------
     // UI helpers
     // -------------------------------------------------------
-
     private void UpdateStatus(string message)
     {
         if (statusText != null) statusText.text = message;

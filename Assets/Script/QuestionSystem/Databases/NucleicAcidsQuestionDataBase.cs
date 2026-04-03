@@ -989,28 +989,9 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
         }
     };
 
-    public List<Question> GetQuestions()
-    {
-        return questions;
-    }
-
-    public QuestionSet GetQuestionSetType()
-    {
-        return QuestionSet.nucleicAcids;
-    }
-
-    public string GetDatabankName()
-    {
-        return "NucleicAcidsQuestionDatabase";
-    }
-
-    public string GetDisplayName()
-    {
-        return "Ácidos Nucleicos";
-    }
-
-    public bool IsDatabaseInDevelopment()
-    {
-        return databaseInDevelopment;
-    }
+    public List<Question> GetQuestions() => questions;
+    public QuestionSet GetQuestionSetType() => QuestionSet.nucleicAcids;
+    public string GetDatabankName()  => "NucleicAcidsQuestionDatabase";
+    public string GetDisplayName()   => "Ácidos Nucleicos";
+    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
 }

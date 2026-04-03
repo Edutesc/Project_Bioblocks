@@ -27,7 +27,7 @@ public interface IFirestoreRepository
     Task UpdateUserProfileImageUrl(string userId, string imageUrl);
 
     Task ResetAnsweredQuestions(string userId, string databankName);
-
+    
     Task EnsureWeekScoreField();
 
     Task DeleteDocument(string collection, string documentId);

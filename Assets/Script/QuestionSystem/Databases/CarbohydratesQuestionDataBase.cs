@@ -1126,28 +1126,9 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
         }
     };
 
-    public List<Question> GetQuestions()
-    {
-        return questions;
-    }
-
-    public QuestionSet GetQuestionSetType()
-    {
-        return QuestionSet.carbohydrates;
-    }
-
-    public string GetDatabankName()
-    {
-        return "CarbohydratesQuestionDatabase";
-    }
-
-    public string GetDisplayName()
-    {
-        return "Carboidratos";
-    }
-
-    public bool IsDatabaseInDevelopment()
-    {
-        return databaseInDevelopment;
-    }
+    public List<Question> GetQuestions() => questions;
+    public QuestionSet GetQuestionSetType() => QuestionSet.carbohydrates;
+    public string GetDatabankName()  => "CarbohydratesQuestionDatabase";
+    public string GetDisplayName()   => "Carboidratos";
+    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
 }
