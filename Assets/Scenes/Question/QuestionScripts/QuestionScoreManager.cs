@@ -8,105 +8,114 @@ public class QuestionScoreManager : MonoBehaviour
     private UserData currentUserData;
     private AnsweredQuestionsManager answeredQuestionsManager;
     private QuestionBonusManager questionBonusManager;
+    private IAuthRepository _auth;
+    private IFirestoreRepository _firestore;
+    private UserHeaderManager _userHeaderManager;
+    private IPlayerLevelService _playerLevel;
 
     private void Start()
     {
-        currentUserData = UserDataStore.CurrentUserData;
-        answeredQuestionsManager = AnsweredQuestionsManager.Instance;
-        questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
-
-        if (currentUserData == null)
+        if (!AppContext.IsReady)
         {
-            Debug.LogError("CurrentUserData é null no ScoreManager");
+            Debug.LogWarning("[QuestionScoreManager] AppContext não está pronto. Aguardando...");
+            AppContext.OnReady += OnAppContextReady;
+            return;
         }
 
-        if (answeredQuestionsManager == null)
-        {
-            Debug.LogError("AnsweredQuestionsManager não encontrado");
-        }
-
-        if (questionBonusManager == null)
-        {
-            Debug.LogWarning("QuestionBonusManager não encontrado. O sistema de bônus não estará disponível.");
-        }
+        InitializeDependencies();
     }
 
-    
+    private void OnAppContextReady()
+    {
+        AppContext.OnReady -= OnAppContextReady;
+        InitializeDependencies();
+    }
+
+    private void InitializeDependencies()
+    {
+        _auth = AppContext.Auth;
+        _firestore = AppContext.Firestore;
+        _userHeaderManager = FindFirstObjectByType<UserHeaderManager>();
+        _playerLevel = AppContext.PlayerLevel;
+        currentUserData = UserDataStore.CurrentUserData;
+        questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
+
+        if (_auth == null)
+            Debug.LogError("[QuestionScoreManager] _auth é null");
+
+        if (_firestore == null)
+            Debug.LogError("[QuestionScoreManager] _firestore é null");
+
+        if (currentUserData == null)
+            Debug.LogError("[QuestionScoreManager] CurrentUserData é null no ScoreManager");
+
+        if (questionBonusManager == null)
+            Debug.LogWarning("[QuestionScoreManager] QuestionBonusManager não encontrado. O sistema de bônus não estará disponível.");
+    }
+
     public async Task UpdateScore(int scoreChange, bool isCorrect, Question answeredQuestion, IQuestionDatabase database = null)
     {
-        try
+        if (_firestore == null || _auth == null)
         {
-            if (AuthenticationRepository.Instance.Auth.CurrentUser == null)
+            Debug.LogError("[QuestionScoreManager] Dependências não inicializadas. Abortando UpdateScore.");
+            return;
+        }
+        
+        try
+        {           if (!_auth.IsUserLoggedIn())
             {
                 Debug.LogError("Usuário não autenticado");
                 return;
             }
-    
-            string userId = AuthenticationRepository.Instance.Auth.CurrentUser.UserId;
-            UserData userData = await FirestoreRepository.Instance.GetUserData(userId);
-    
+
+            string userId = _auth.CurrentUserId;
+            UserData userData = UserDataStore.CurrentUserData;
+
             if (userData == null)
             {
-                Debug.LogError("Dados do usuário não encontrados");
+                Debug.LogError("CurrentUserData é null");
                 return;
             }
-    
+
             int actualScoreChange = scoreChange;
-    
-            if (isCorrect && UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
-            {
-                actualScoreChange = UserHeaderManager.Instance.ApplyTotalBonus(scoreChange);
-            }
+
+            if (isCorrect && _userHeaderManager != null && _userHeaderManager.IsAnyBonusActive())
+                actualScoreChange = _userHeaderManager.ApplyTotalBonus(scoreChange);
             else if (isCorrect && questionBonusManager != null && questionBonusManager.IsBonusActive())
-            {
                 actualScoreChange = questionBonusManager.ApplyBonusToScore(scoreChange);
-            }
 
             actualScoreChange = ClampScoreChange(userData.Score, actualScoreChange);
-    
+
             if (isCorrect)
             {
-                string databankName = answeredQuestion.questionDatabankName;
-                int questionNumber = answeredQuestion.questionNumber;
-    
+                string databankName  = answeredQuestion.questionDatabankName;
+                int    questionNumber = answeredQuestion.questionNumber;
+
                 try
                 {
                     if (database != null && database.IsDatabaseInDevelopment())
                     {
-                        await SafeAnsweredQuestionsManager.Instance.MarkQuestionAsAnswered(questionNumber, database);
-                        Debug.Log($"[QuestionScoreManager] Modo DEV - Questão {questionNumber} NÃO salva no Firebase");
+                        await AppContext.AnsweredQuestions.MarkQuestionAsAnswered(databankName, questionNumber);
                     }
                     else
                     {
-                        await FirestoreRepository.Instance.UpdateUserScores(
-                            userId,
-                            actualScoreChange,
-                            questionNumber,
-                            databankName,
-                            true
-                        );
-    
+                        await _firestore.UpdateUserScores(userId, actualScoreChange, questionNumber, databankName, true);
+
                         if (answeredQuestionsManager != null && answeredQuestionsManager.IsManagerInitialized)
-                        {
                             await answeredQuestionsManager.ForceUpdate();
-                        }
-    
+
                         bool isDatabankReset = UserDataStore.IsDatabankReset(databankName);
-    
-                        if (!isDatabankReset && PlayerLevelManager.Instance != null)
+
+                        if (_playerLevel != null)
                         {
-                            await PlayerLevelManager.Instance.IncrementTotalAnswered();
-                            await PlayerLevelManager.Instance.CheckAndHandleLevelUp();
-                        }
-                        else if (isDatabankReset)
-                        {
-                            Debug.Log($"[QuestionScoreManager] Banco {databankName} foi resetado. Questão não conta para level.");
+                            await _playerLevel.IncrementTotalAnswered();
+                            await _playerLevel.CheckAndHandleLevelUp();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"Falha ao atualizar scores e marcar questão como respondida: {ex.Message}");
+                    Debug.LogError($"Falha ao atualizar scores: {ex.Message}");
                 }
             }
             else
@@ -114,48 +123,28 @@ public class QuestionScoreManager : MonoBehaviour
                 try
                 {
                     if (database == null || !database.IsDatabaseInDevelopment())
-                    {
-                        await FirestoreRepository.Instance.UpdateUserScores(
-                            userId,
-                            actualScoreChange,
-                            0,
-                            "",
-                            false
-                        );
-                    }
+                        await _firestore.UpdateUserScores(userId, actualScoreChange, 0, "", false);
                     else
-                    {
-                        Debug.Log($"[QuestionScoreManager] Modo DEV - Score negativo NÃO salvo no Firebase");
-                    }
+                        Debug.Log("[QuestionScoreManager] Modo DEV - Score negativo NÃO salvo no Firebase");
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"Falha ao atualizar o score no Firestore: {ex.Message}");
-                }
-            }
-    
-            if (database == null || !database.IsDatabaseInDevelopment())
-            {
-                UserData updatedUserData = await FirestoreRepository.Instance.GetUserData(userId);
-    
-                if (updatedUserData != null)
-                {
-                    UserDataStore.CurrentUserData = updatedUserData;
+                    Debug.LogError($"Falha ao atualizar score negativo: {ex.Message}");
                 }
             }
         }
         catch (Exception ex)
         {
             Debug.LogError($"Erro ao atualizar score: {ex.Message}\n{ex.StackTrace}");
-    
-            if (currentUserData != null && scoreChange != 0)
+
+            if (UserDataStore.CurrentUserData != null && scoreChange != 0)
             {
-                int clientSideScore = Mathf.Max(0, currentUserData.Score + scoreChange);
-                int clientSideWeekScore = Mathf.Max(0, currentUserData.WeekScore + scoreChange);
-    
-                currentUserData.Score = clientSideScore;
-                currentUserData.WeekScore = clientSideWeekScore;
-                UserDataStore.CurrentUserData = currentUserData;
+                int clientSideScore     = Mathf.Max(0, UserDataStore.CurrentUserData.Score + scoreChange);
+                int clientSideWeekScore = Mathf.Max(0, UserDataStore.CurrentUserData.WeekScore + scoreChange);
+
+                UserDataStore.CurrentUserData.Score     = clientSideScore;
+                UserDataStore.CurrentUserData.WeekScore = clientSideWeekScore;
+                UserDataStore.CurrentUserData = UserDataStore.CurrentUserData;
             }
         }
     }
@@ -177,7 +166,7 @@ public class QuestionScoreManager : MonoBehaviour
 
     public bool HasBonusActive()
     {
-        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
+        if (_userHeaderManager != null && _userHeaderManager.IsAnyBonusActive())
         {
             return true;
         }
@@ -187,9 +176,9 @@ public class QuestionScoreManager : MonoBehaviour
 
     public int CalculateBonusScore(int baseScore)
     {
-        if (UserHeaderManager.Instance != null && UserHeaderManager.Instance.IsAnyBonusActive())
+       if (_userHeaderManager != null && _userHeaderManager.IsAnyBonusActive())
         {
-            return UserHeaderManager.Instance.ApplyTotalBonus(baseScore);
+            return _userHeaderManager.ApplyTotalBonus(baseScore);
         }
 
         if (questionBonusManager != null && questionBonusManager.IsBonusActive())

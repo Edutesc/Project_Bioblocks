@@ -5,27 +5,7 @@ using UnityEngine;
 using System.Linq;
 
 public class RankingSyncManager : MonoBehaviour
-{
-    private static RankingSyncManager _instance;
-    public static RankingSyncManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<RankingSyncManager>();
-                
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("RankingSyncManager");
-                    _instance = go.AddComponent<RankingSyncManager>();
-                    DontDestroyOnLoad(go);
-                }
-            }
-            return _instance;
-        }
-    }
-
+{                                                                      
     private LocalRankingRepository _localRepo;
     private LocalSyncMetadataRepository _syncMetadataRepo;
     private IRankingRepository _remoteRepo;
@@ -38,22 +18,22 @@ public class RankingSyncManager : MonoBehaviour
     public event Action OnSyncStarted;
     public event Action<bool> OnSyncCompleted;
 
+    private IFirestoreRepository _firestore;
+    private ConnectivityMonitor _connectivity;
+
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        Initialize();
-    }
+        _firestore        = AppContext.Firestore;
+        _connectivity     = FindFirstObjectByType<ConnectivityMonitor>();
+        _localRepo        = new LocalRankingRepository(AppContext.LocalDatabase);
+        _syncMetadataRepo = new LocalSyncMetadataRepository(AppContext.LocalDatabase);
+        Initialize();                 
+     }
 
     private bool Initialize()
     {
@@ -62,16 +42,13 @@ public class RankingSyncManager : MonoBehaviour
 
         try
         {
-            _localRepo = new LocalRankingRepository();
-            _syncMetadataRepo = new LocalSyncMetadataRepository();
-            
             if (BioBlocksSettings.Instance != null && BioBlocksSettings.Instance.IsDebugMode())
             {
-                _remoteRepo = new MockRankingRepository();
+                _remoteRepo = new FakeRankingRepository();
             }
             else
             {
-                if (FirestoreRepository.Instance == null || !FirestoreRepository.Instance.IsInitialized)
+                if (_firestore == null || !_firestore.IsInitialized)
                 {
                     Debug.LogError("[RankingSyncManager] FirestoreRepository not initialized");
                     return false;
@@ -143,7 +120,7 @@ public class RankingSyncManager : MonoBehaviour
 
     private async Task TrySyncInBackground()
     {
-        if (ConnectivityMonitor.Instance == null || !ConnectivityMonitor.Instance.IsOnline)
+        if (_connectivity == null || !_connectivity.IsOnline)
         {
             return;
         }
@@ -190,7 +167,7 @@ public class RankingSyncManager : MonoBehaviour
             return false;
         }
 
-        if (ConnectivityMonitor.Instance == null || !ConnectivityMonitor.Instance.IsOnline)
+        if (_connectivity == null || !_connectivity.IsOnline)
         {
             Debug.LogWarning("[RankingSyncManager] Cannot sync - device is offline");
             return false;
@@ -211,21 +188,9 @@ public class RankingSyncManager : MonoBehaviour
                 return false;
             }
 
-            var currentUser = await _remoteRepo.GetCurrentUserDataAsync();
-            
-            var entities = new List<RankingEntity>();
-            for (int i = 0; i < remoteRankings.Count; i++)
-            {
-                var r = remoteRankings[i];
-                var userId = i.ToString();
-                
-                if (currentUser != null && r.userName == currentUser.NickName)
-                {
-                    userId = currentUser.UserId;
-                }
-                
-                entities.Add(RankingDTO.ToEntity(r, userId));
-            }
+            var entities = remoteRankings
+                .Select(r => RankingDTO.ToEntity(r, r.UserId))
+                .ToList();
 
             _localRepo.SaveRankings(entities);
             _syncMetadataRepo.UpdateSyncMetadata(RANKINGS_ENTITY_TYPE, true);
@@ -274,13 +239,5 @@ public class RankingSyncManager : MonoBehaviour
             return 0;
             
         return _localRepo.GetRankingsCount();
-    }
-
-    private void OnDestroy()
-    {
-        if (_instance == this)
-        {
-            _instance = null;
-        }
     }
 }

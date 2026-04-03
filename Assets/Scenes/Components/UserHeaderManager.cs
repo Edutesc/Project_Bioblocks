@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 public class UserHeaderManager : BarsManager
 {
+    protected INavigationService _navigation;
     [Header("Elementos da User TopBar")]
     [SerializeField] private RawImage avatarImage;
     [SerializeField] private Image avatarImageBackground;
@@ -29,8 +30,7 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private TextMeshProUGUI playerLevelProgressText;
     [SerializeField] private ProgressBarManager playerLevelProgressBarManager;
 
-    [Header("Level Colors (opcional)")]
-    [SerializeField] private Color[] levelColors = new Color[]
+    public static readonly Color[] LevelColors = new Color[]
     {
         HexToColor("#B000FF"),  // Level 1 - Roxo claro
         HexToColor("#FF0097"),  // Level 2 - Azul ciano vibrante
@@ -92,31 +92,15 @@ public class UserHeaderManager : BarsManager
         { "persistenceBonusPro", "Bônus XP Triplicada" }
     };
 
-    // Singleton
-    private static UserHeaderManager _instance;
+
     private float lastVerificationTime = 0f;
     private string pendingAvatarUrl = null;
-
     protected override string BarName => "PersistentUserTopBar";
     protected override string BarChildName => "TopBar";
 
-    public static UserHeaderManager Instance => _instance;
-
     // Events
     public event Action<int> OnBonusMultiplierUpdated;
-
     #region Unity Lifecycle
-
-    protected override void ConfigureSingleton()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-    }
 
     protected override void OnAwake()
     {
@@ -137,23 +121,24 @@ public class UserHeaderManager : BarsManager
 
     protected override void OnStart()
     {
+        _navigation = AppContext.Navigation;
         UserDataStore.OnUserDataChanged += OnUserDataChanged;
         UpdateFromCurrentUserData();
         InitializeBonusManagement();
 
-        if (PlayerLevelManager.Instance != null)
+        if (AppContext.PlayerLevel != null)
         {
-            PlayerLevelManager.OnLevelChanged += OnPlayerLevelChanged;
-            PlayerLevelManager.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
+            AppContext.PlayerLevel.OnLevelChanged += OnPlayerLevelChanged;
+            AppContext.PlayerLevel.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
             UpdatePlayerLevelUI();
         }
     }
 
     protected override void OnCleanup()
     {
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete -= OnNavigationComplete;
+            _navigation.OnNavigationComplete -= OnNavigationComplete;
         }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -162,15 +147,10 @@ public class UserHeaderManager : BarsManager
         StopBonusTimer();
         SaveBonusStateToFirestore();
 
-        if (PlayerLevelManager.Instance != null)
+        if (AppContext.PlayerLevel != null)
         {
-            PlayerLevelManager.OnLevelChanged -= OnPlayerLevelChanged;
-            PlayerLevelManager.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
-        }
-        
-        if (_instance == this)
-        {
-            _instance = null;
+            AppContext.PlayerLevel.OnLevelChanged -= OnPlayerLevelChanged;
+            AppContext.PlayerLevel.OnLevelProgressUpdated -= OnPlayerLevelProgressUpdated;
         }
     }
 
@@ -178,9 +158,9 @@ public class UserHeaderManager : BarsManager
     {
         base.OnEnable();
 
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete += OnNavigationComplete;
+            _navigation.OnNavigationComplete += OnNavigationComplete;
         }
 
         RefreshPendingAvatar();
@@ -193,9 +173,9 @@ public class UserHeaderManager : BarsManager
 
     private void OnDisable()
     {
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete -= OnNavigationComplete;
+            _navigation.OnNavigationComplete -= OnNavigationComplete;
         }
 
         SaveBonusStateToFirestore();
@@ -621,9 +601,9 @@ public class UserHeaderManager : BarsManager
     {
         base.RegisterWithNavigationManager();
 
-        if (NavigationManager.Instance != null)
+        if (_navigation != null)
         {
-            NavigationManager.Instance.OnNavigationComplete += OnNavigationComplete;
+            _navigation.OnNavigationComplete += OnNavigationComplete;
         }
     }
 
@@ -636,6 +616,10 @@ public class UserHeaderManager : BarsManager
         if (userData != null)
         {
             UpdateUserInfoDisplay(userData);
+            if (!isBonusSystemInitialized || string.IsNullOrEmpty(userId))
+            {
+                InitializeBonusManagement();
+            }
         }
     }
 
@@ -824,71 +808,78 @@ public class UserHeaderManager : BarsManager
 
     private void UpdatePlayerLevelUI()
     {
-        if (PlayerLevelManager.Instance == null) return;
+        if (AppContext.PlayerLevel == null) return;
 
-        int currentLevel = PlayerLevelManager.Instance.GetCurrentLevel();
-        int questionsAnswered = PlayerLevelManager.Instance.GetTotalValidAnswered();
-        int questionsUntilNext = PlayerLevelManager.Instance.GetQuestionsUntilNextLevel();
+        int currentLevel = AppContext.PlayerLevel.GetCurrentLevel();
+        int questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
+        int questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
+        int questionsAtStart = AppContext.PlayerLevel.GetQuestionsAtLevelStart();
 
         if (playerLevelText != null)
-        {
             playerLevelText.text = currentLevel.ToString();
-        }
 
-        if (playerLevelBackground != null && levelColors != null && levelColors.Length >= 10)
+        if (playerLevelBackground != null)
         {
             int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
-            playerLevelBackground.color = levelColors[colorIndex];
+            playerLevelBackground.color = LevelColors[colorIndex];
         }
 
         if (currentLevel >= 10)
         {
             if (playerLevelProgressBarManager != null)
             {
-                int maxQuestions = PlayerLevelManager.Instance.GetTotalQuestionsInAllDatabanks();
+                int maxQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
                 playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
             }
 
             if (playerLevelProgressText != null)
-            {
                 playerLevelProgressText.text = "MÁXIMO!";
-            }
         }
         else
         {
-            int nextLevelTotal = questionsAnswered + questionsUntilNext;
             int nextLevel = currentLevel + 1;
+            int progressInLevel = questionsAnswered - questionsAtStart;
+            int intervalSize = questionsUntilNext + progressInLevel;
+
+            if (intervalSize <= 0 || progressInLevel < 0)
+            {
+                Debug.LogWarning($"[UserHeaderManager] Dados inconsistentes: " +
+                                $"answered={questionsAnswered}, start={questionsAtStart}, " +
+                                $"untilNext={questionsUntilNext}, interval={intervalSize}. " +
+                                $"Aguardando dados consistentes...");
+                return;
+            }
 
             if (playerLevelProgressBarManager != null)
             {
+                playerLevelProgressBarManager.ApplyLevelGradient(currentLevel);
                 playerLevelProgressBarManager.UpdateProgress(
-                    questionsAnswered,
-                    nextLevelTotal,
+                    progressInLevel,
+                    intervalSize,
                     $"Level {currentLevel}"
                 );
-
-                Debug.Log($"[UserHeaderManager] Barra animada: {questionsAnswered}/{nextLevelTotal}");
+                Debug.Log($"[UserHeaderManager] Barra: {progressInLevel}/{intervalSize} " +
+                        $"(answered={questionsAnswered}, start={questionsAtStart})");
             }
 
             if (playerLevelProgressText != null)
             {
-                float percentageToNext = (questionsUntilNext / (float)nextLevelTotal) * 100f;
-                int roundedPercentage = Mathf.RoundToInt(percentageToNext);
+                float percentageLeft = intervalSize > 0 
+                    ? (questionsUntilNext / (float)intervalSize) * 100f 
+                    : 0f;
+                int   roundedPercentage = Mathf.RoundToInt(percentageLeft);
+
+                Debug.Log($"[UserHeaderManager] currentLevel={currentLevel}, " +
+                        $"questionsAnswered={questionsAnswered}, " +
+                        $"questionsAtStart={questionsAtStart}, " +
+                        $"progressInLevel={progressInLevel}, " +
+                        $"intervalSize={intervalSize}, " +
+                        $"questionsUntilNext={questionsUntilNext}, " +
+                        $"percentageLeft={percentageLeft:F1}%");
+
                 playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
             }
         }
-    }
-
-    #endregion
-
-    #region Nested Classes
-
-    private class BonusInfo
-    {
-        public string bonusName;
-        public float remainingTime;
-        public int multiplier;
-        public string displayName;
     }
 
     #endregion
