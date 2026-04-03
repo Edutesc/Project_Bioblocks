@@ -70,7 +70,11 @@ public class AuthenticationRepository : MonoBehaviour
             if (result != null && result.User != null)
             {
                 string uid = result.User.UserId;
-                UserData userData = await FirestoreRepository.Instance.GetUserData(uid);
+                // UserData userData = await FirestoreRepository.Instance.GetUserData(uid);
+                await UserSyncService.Instance.LoadUserAsync(uid);//Codigo adicionado
+                UserData userData = UserDataStore.CurrentUserData;//Codigo adicionado
+
+
                 if (userData != null)
                 {
                     UserDataStore.CurrentUserData = userData;

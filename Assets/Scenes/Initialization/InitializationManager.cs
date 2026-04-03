@@ -193,41 +193,56 @@ public class InitializationManager : MonoBehaviour
         StorageRepository.Instance.Initialize();
     }
 
+    //Modifiquei essa função
+
     private async Task<bool> LoadUserData()
+{
+    try
     {
-        try
+        await Task.Yield();
+        // No futuro, aqui entrará o ID do Firebase. 
+            // Por enquanto, usamos o ID que você definiu no seu Mock/Banco Local.
+            string meuIdDeTeste = "mock-user-123"; 
+
+        // Chamamos o método padrão do seu LiteDBService (sem alterá-lo)
+        var dbData = LiteDBService.Instance.GetUser(meuIdDeTeste);
+
+        if (dbData == null)
         {
-            var user = AuthenticationRepository.Instance.Auth.CurrentUser;
-            if (user != null)
-            {
-                var userData = await FirestoreRepository.Instance.GetUserData(user.UserId);
-                if (userData == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    UserDataStore.CurrentUserData = userData;
-                    Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
-                    await Task.Yield();
-
-                    if (PlayerLevelManager.Instance != null)
-                    {
-                        Debug.Log("[InitializationManager] Notificando PlayerLevelManager sobre dados carregados");
-                        PlayerLevelManager.Instance.OnUserDataLoaded(userData);
-                    }
-                    return true;
-                }
-            }
-
+            Debug.LogError($"[LiteDB] ERRO: Usuário '{meuIdDeTeste}' não encontrado. Verifique se o banco local foi populado.");
             return false;
         }
-        catch (System.Exception e)
+
+        // --- TRADUTOR (DTO) ---
+        // Convertemos o dado do Banco (UserDataDB) para o dado do Jogo (UserData)
+        UserData convertedData = new UserData();
+        convertedData.UserId = dbData.UserId;
+        convertedData.Score = dbData.Score;
+        convertedData.PlayerLevel = dbData.PlayerLevel;
+
+        // Salva no Store para a Top Bar ler
+        UserDataStore.CurrentUserData = convertedData;
+
+        Debug.Log($"[LITE DB] Sucesso! Usuário '{dbData.NickName}' carregado. Score: {convertedData.Score}");
+
+        // Notifica outros sistemas (como o de Nível)
+        if (PlayerLevelManager.Instance != null)
         {
-            Debug.LogError($"Erro ao carregar dados: {e.Message}");
-            throw;
+            PlayerLevelManager.Instance.OnUserDataLoaded(convertedData);
         }
+
+        return true;
     }
+    catch (System.Exception e)
+    {
+        Debug.LogError($"[InitializationManager] Falha crítica no carregamento: {e.Message}");
+        return false;
+    }
+} 
+
+
+
+
 
     private async Task<bool> CheckAuthentication()
     {
