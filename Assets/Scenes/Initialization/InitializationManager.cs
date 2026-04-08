@@ -187,40 +187,7 @@ public class InitializationManager : MonoBehaviour
     {
         try
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            Debug.LogError($"[LiteDB] ERRO: Usuário '{meuIdDeTeste}' não encontrado. Verifique se o banco local foi populado.");
-            return false;
-        }
-
-        // --- TRADUTOR (DTO) ---
-        // Convertemos o dado do Banco (UserDataDB) para o dado do Jogo (UserData)
-        UserData convertedData = new UserData();
-        convertedData.UserId = dbData.UserId;
-        convertedData.Score = dbData.Score;
-        convertedData.PlayerLevel = dbData.PlayerLevel;
-
-        // Salva no Store para a Top Bar ler
-        UserDataStore.CurrentUserData = convertedData;
-
-        Debug.Log($"[LITE DB] Sucesso! Usuário '{dbData.NickName}' carregado. Score: {convertedData.Score}");
-
-        // Notifica outros sistemas (como o de Nível)
-        if (PlayerLevelManager.Instance != null)
-=======
             if (!_auth.IsUserLoggedIn()) return false;
-            string userId = _auth.CurrentUserId;
-            var userData  = await _firestore.GetUserData(userId);
-            if (userData == null) return false;
-            UserDataStore.CurrentUserData = userData;
-            Debug.Log($"[InitializationManager] UserData carregado. UserId: {userData.UserId}, Level: {userData.PlayerLevel}");
-            return true;
-        }
-        catch (Exception e)
->>>>>>> 747bbff294378e8c8f7a65f152756185ac5b95e3
-=======
-            if (!_auth.IsUserLoggedIn()) return false;
-
             string userId = _auth.CurrentUserId;
 
             // UserSyncService cuida de tudo: fonte correta + popula UserDataStore
@@ -238,7 +205,7 @@ public class InitializationManager : MonoBehaviour
             return true;
         }
         catch (Exception e)
->>>>>>> 59d21bec4b2dd672897d43a135ce1a98b7d7e70f
+
         {
             Debug.LogError($"[InitializationManager] Erro ao carregar dados: {e.Message}");
             throw;

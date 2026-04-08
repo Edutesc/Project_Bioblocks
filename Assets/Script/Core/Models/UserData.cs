@@ -1,55 +1,54 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Firebase.Firestore;
+
 
 [System.Serializable]
-[FirestoreData]
+
 public class UserData
 {
-    [FirestoreProperty]
+    
     public string UserId { get; set; }
 
-    [FirestoreProperty]
+    
     public string NickName { get; set; }
 
-    [FirestoreProperty]
+   
     public string Name { get; set; }
 
-    [FirestoreProperty]
+    
     public string Email { get; set; }
 
-    [FirestoreProperty]
     public string ProfileImageUrl { get; set; }
 
-    [FirestoreProperty]
+  
     public int Score { get; set; }
 
-    [FirestoreProperty]
+    
     public int WeekScore { get; set; }
 
-    [FirestoreProperty]
+    
     public int QuestionTypeProgress { get; set; }
 
-    [FirestoreProperty]
-    public Timestamp CreatedTime { get; set; }
+    
+    public DateTime CreatedTime { get; set; }
 
-    [FirestoreProperty]
+  
     public Dictionary<string, List<int>> AnsweredQuestions { get; set; }
 
-    [FirestoreProperty]
+    
     public bool IsUserRegistered { get; set; }
 
-    [FirestoreProperty]
+ 
     public int PlayerLevel { get; set; } = 1;
 
-    [FirestoreProperty]
+   
     public int TotalValidQuestionsAnswered { get; set; } = 0;
 
-    [FirestoreProperty]
+
     public int TotalQuestionsInAllDatabanks { get; set; } = 0;
 
-    [FirestoreProperty]
+
     public Dictionary<string, bool> ResetDatabankFlags { get; set; } = new Dictionary<string, bool>();
 
     public UserData()
@@ -70,7 +69,7 @@ public class UserData
         Score = score;
         WeekScore = weekScore;
         QuestionTypeProgress = questionTypeProgress;
-        CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow);
+        CreatedTime = DateTime.UtcNow;
         IsUserRegistered = isRegistered;
         AnsweredQuestions = new Dictionary<string, List<int>>();
         PlayerLevel = 1;
@@ -108,7 +107,7 @@ public class UserData
 
     public DateTime GetCreatedDateTime()
     {
-        return CreatedTime.ToDateTime();
+        return CreatedTime;
     }
 
     public string GetFormattedCreatedTime()

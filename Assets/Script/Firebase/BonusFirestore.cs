@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Firebase.Firestore;
+//using Firebase.Firestore;
 using UnityEngine;
 
 public class BonusFirestore
@@ -11,15 +11,15 @@ public class BonusFirestore
     private const string CORRECT_ANSWER_BONUS = "correctAnswerBonus";
     private const int BONUS_ACTIVATION_THRESHOLD = 5;
 
-    private FirebaseFirestore db;
-    private ListenerRegistration bonusListener;
+    //private FirebaseFirestore db;
+    //private ListenerRegistration bonusListener;
 
     public BonusFirestore()
     {
-        db = FirebaseFirestore.DefaultInstance;
+       // db = FirebaseFirestore.DefaultInstance;
     }
 
-    public async Task IncrementCorrectAnswerBonus(string userId, float bonusDuration = 600f)
+    /*public async Task IncrementCorrectAnswerBonus(string userId, float bonusDuration = 600f)
     {
         if (string.IsNullOrEmpty(userId))
         {
@@ -151,7 +151,7 @@ public class BonusFirestore
         {
             Debug.LogError($"BonusFirestore: Erro ao incrementar bônus: {e.Message}");
         }
-    }
+    }*/
 
     public async Task ActivateSpecialBonus(string userId, float durationInSeconds)
     {
@@ -353,9 +353,13 @@ public class BonusFirestore
 
     private async Task SaveBonusList(string userId, List<BonusType> bonusList)
     {
-        try
+       
+        Debug.LogWarning("SaveBonusList desativado (Firebase não configurado)");
+        await Task.CompletedTask;
+
+        /*try
         {
-            DocumentReference docRef = db.Collection(COLLECTION_NAME).Document(userId);
+           DocumentReference docRef = db.Collection(COLLECTION_NAME).Document(userId);
 
             Dictionary<string, object> data = new Dictionary<string, object>
             {
@@ -368,18 +372,22 @@ public class BonusFirestore
         catch (Exception e)
         {
             Debug.LogError($"BonusFirestore: Erro ao salvar lista de bônus: {e.Message}");
-        }
+        }*/
     }
 
     public async Task<List<BonusType>> GetUserBonuses(string userId)
     {
+
         if (string.IsNullOrEmpty(userId))
         {
             Debug.LogError("BonusFirestore: UserId é nulo ou vazio");
+
             return new List<BonusType>();
         }
+        await Task.CompletedTask;
+        return new List<BonusType>();
 
-        try
+        /*try
         {
             DocumentReference docRef = db.Collection(COLLECTION_NAME).Document(userId);
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
@@ -441,7 +449,7 @@ public class BonusFirestore
         {
             Debug.LogError($"BonusFirestore: Erro ao obter bônus do usuário: {e.Message}");
             return new List<BonusType>();
-        }
+        }*/
     }
 
     public void ListenForBonusUpdates(string userId, Action<List<BonusType>> onUpdate)
@@ -452,7 +460,7 @@ public class BonusFirestore
             return;
         }
 
-        try
+       /* try
         {
             StopListeningForBonusUpdates();
             DocumentReference docRef = db.Collection(COLLECTION_NAME).Document(userId);
@@ -507,13 +515,13 @@ public class BonusFirestore
         catch (Exception e)
         {
             Debug.LogError($"BonusFirestore: Erro ao configurar listener: {e.Message}");
-        }
+        }*/
     }
 
     public void StopListeningForBonusUpdates()
     {
-        bonusListener?.Stop();
-        bonusListener = null;
+        //bonusListener?.Stop();
+        //bonusListener = null;
         Debug.Log("BonusFirestore: Parou de ouvir atualizações");
     }
 }

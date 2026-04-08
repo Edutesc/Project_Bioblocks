@@ -1,21 +1,21 @@
-using Firebase.Firestore;
+//using Firebase.Firestore;
 
 [System.Serializable]
-[FirestoreData]
+//[FirestoreData]
 public class Ranking
 {
    public string UserId { get; set; }
 
-    [FirestoreProperty("nickName")]
+    //[FirestoreProperty("nickName")]
     public string userName { get; set; }
 
-    [FirestoreProperty("score")]
+    //[FirestoreProperty("score")]
     public int userScore { get; set; }
 
-    [FirestoreProperty("weekScore")]
+    //[FirestoreProperty("weekScore")]
     public int userWeekScore { get; set; }
 
-    [FirestoreProperty("profileImageUrl")]
+    //[FirestoreProperty("profileImageUrl")]
     public string profileImageUrl { get; set; }
 
     // Construtor vazio obrigatório para o FirestoreData desserializar
