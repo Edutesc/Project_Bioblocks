@@ -116,7 +116,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
                 ProfileImageUrl = "",
                 Score = 0,
                 QuestionTypeProgress = 0,
-                CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow),
+                CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow).ToDateTime(),
                 IsUserRegistered = true,
                 AnsweredQuestions = new Dictionary<string, List<int>>()
             };
