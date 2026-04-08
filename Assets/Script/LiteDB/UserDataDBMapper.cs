@@ -15,7 +15,7 @@ public static class UserDataDBMapper
             Score = source.Score,
             WeekScore = source.WeekScore,
             QuestionTypeProgress = source.QuestionTypeProgress,
-            CreatedTime = source.CreatedTime.ToDateTime(),
+            CreatedTime = source.CreatedTime,
             IsUserRegistered = source.IsUserRegistered,
             PlayerLevel = source.PlayerLevel,
             TotalValidQuestionsAnswered = source.TotalValidQuestionsAnswered,
@@ -41,8 +41,7 @@ public static class UserDataDBMapper
             Score = source.Score,
             WeekScore = source.WeekScore,
             QuestionTypeProgress = source.QuestionTypeProgress,
-            CreatedTime = Timestamp.FromDateTime(
-        DateTime.SpecifyKind(source.CreatedTime, DateTimeKind.Utc)),
+            CreatedTime = Timestamp.FromDateTime(DateTime.SpecifyKind(source.CreatedTime, DateTimeKind.Utc)).ToDateTime(),
             IsUserRegistered = source.IsUserRegistered,
             PlayerLevel = source.PlayerLevel,
             TotalValidQuestionsAnswered = source.TotalValidQuestionsAnswered,

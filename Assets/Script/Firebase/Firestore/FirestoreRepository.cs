@@ -77,9 +77,9 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
             ? Convert.ToBoolean(data["IsUserRegistered"]) : false;
 
         if (data.ContainsKey("CreatedTime") && data["CreatedTime"] is Timestamp timestamp)
-            userData.CreatedTime = timestamp;
+            userData.CreatedTime = timestamp.ToDateTime();
         else
-            userData.CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow);
+            userData.CreatedTime = Timestamp.FromDateTime(DateTime.UtcNow).ToDateTime();
 
         if (data.ContainsKey("ResetDatabankFlags") && data["ResetDatabankFlags"] is Dictionary<string, object> resetFlagsData)
         {
