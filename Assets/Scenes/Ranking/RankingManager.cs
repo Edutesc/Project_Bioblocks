@@ -204,7 +204,7 @@ public class RankingManager : MonoBehaviour
             {
                 GameObject go    = Instantiate(rankingRowPrefab, rankingTableContent);
                 var        rowUI = go.GetComponent<RankingRowUI>();
-                rowUI?.SetupAsExtraRow(userRank, userRanking.userName,
+                rowUI?.SetupAsExtraRow(userRank, userRanking.UserId, userRanking.userName,
                     userRanking.userScore, userRanking.userWeekScore,
                     userRanking.profileImageUrl);
             }

@@ -46,7 +46,7 @@ public class RankingRowUI : MonoBehaviour
 
         UserId = userId;
 
-        rankText.text     = _isExtraRow ? "..." : $"{rank}";
+        rankText.text     = $"{rank}";
         nickNameText.text = userName;
 
         if (totalScoreText != null)
@@ -71,11 +71,11 @@ public class RankingRowUI : MonoBehaviour
         if (weekScoreText  != null) weekScoreText.text  = $"{weekScore}";
     }
 
-    public void SetupAsExtraRow(int actualRank, string userName,
+    public void SetupAsExtraRow(int actualRank, string userId, string userName,
                                 int totalScore, int weekScore, string profileImageUrl)
     {
         _isExtraRow = true;
-        Setup(actualRank, "", userName, totalScore, weekScore, profileImageUrl, true);
+        Setup(actualRank, userId, userName, totalScore, weekScore, profileImageUrl, true);
     }
 
     // ─────────────────────────────────────────────────────────
