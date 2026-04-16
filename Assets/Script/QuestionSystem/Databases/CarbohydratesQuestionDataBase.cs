@@ -499,10 +499,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/L-glicose",
-                "AnswerImages/CarbohydrateDB/D-frutose",
-                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
-                "AnswerImages/CarbohydrateDB/D-galactose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer34_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer34_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer34_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer34_4"
             },
             correctIndex = 1,
             questionNumber = 34,
@@ -510,16 +510,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer34",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/L-glicose",
-                "AnswerImages/CarbohydrateDB/D-frutose",
-                "AnswerImages/CarbohydrateDB/D-tagatose",
-                "AnswerImages/CarbohydrateDB/D-glicose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer35_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer35_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer35_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer35_4"
             },
             correctIndex = 3,
             questionNumber = 35,
@@ -527,7 +527,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer35",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
