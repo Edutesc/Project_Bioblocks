@@ -550,10 +550,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "Identifique abaixo a estrutura da glicose, que também pode ser nomeada como beta-D-glicopiranose",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
-                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
-                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
-                "AnswerImages/CarbohydrateDB/beta-glicopiranose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer37_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer37_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer37_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer37_4"
             },
             correctIndex = 3,
             questionNumber = 37,
@@ -561,16 +561,16 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
-                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
-                "AnswerImages/CarbohydrateDB/alfa-glicopiranose",
-                "AnswerImages/CarbohydrateDB/beta-glicopiranose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer38_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer38_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer38_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer38_4"
             },
             correctIndex = 2,
             questionNumber = 38,
@@ -578,7 +578,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer38",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
