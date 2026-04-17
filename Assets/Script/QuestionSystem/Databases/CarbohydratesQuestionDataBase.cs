@@ -533,10 +533,10 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionDatabankName = "CarbohydratesQuestionDatabase",
             questionText = "",
             answers = new string[] {
-                "AnswerImages/CarbohydrateDB/beta-galactopiranose",
-                "AnswerImages/CarbohydrateDB/alfa-galactopiranose",
-                "AnswerImages/CarbohydrateDB/beta-glicopiranose",
-                "AnswerImages/CarbohydrateDB/alfa-glicopiranose"
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer36_1",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer36_2",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer36_3",
+                "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer36_4"
             },
             correctIndex = 2,
             questionNumber = 36,
@@ -544,7 +544,7 @@ public class CarbohydratesQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = true,
             questionImagePath = "QuestionImages/CarbohydrateDB/carbohydrateDB_ImageQuestionContainer36",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = true
         },
         new Question {
             questionDatabankName = "CarbohydratesQuestionDatabase",
