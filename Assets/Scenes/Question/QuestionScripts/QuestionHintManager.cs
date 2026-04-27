@@ -20,11 +20,8 @@ public class QuestionHintManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI hintStatusText;
 
     // UI - painel de dicas
-    [Header("UI — Painel de Dicas")]
-    [SerializeField] private GameObject hintPanel;
-    [SerializeField] private Button closeHintPanelButton;
-    [SerializeField] private Transform hintContentParent;
-    [SerializeField] private TextMeshProUGUI hintPanelTitle;
+    [Header("Canal de dados")]
+    [SerializeField] private HintChannelSO hintChannel;
 
     // Prefab - sistema modular que carrega diversos tipos de questões
     [Header("Prefabs de Dica")]
@@ -46,11 +43,11 @@ public class QuestionHintManager : MonoBehaviour
         {
             openHintPanelButton.onClick.AddListener(OpenPanel);
         }
-        if (closeHintPanelButton != null)
-        {
-            closeHintPanelButton.onClick.AddListener(ClosePanel);
-        }
-        ClosePanel();
+        // if (closeHintPanelButton != null)
+        // {
+        //     closeHintPanelButton.onClick.AddListener(ClosePanel);
+        // }
+        // ClosePanel();
     }
 
     // remove as funções dos botões
@@ -60,10 +57,10 @@ public class QuestionHintManager : MonoBehaviour
         {
             openHintPanelButton.onClick.RemoveListener(OpenPanel);
         }
-        if (closeHintPanelButton != null)
-        {
-            closeHintPanelButton.onClick.RemoveListener(ClosePanel);
-        }
+        // if (closeHintPanelButton != null)
+        // {
+        //     closeHintPanelButton.onClick.RemoveListener(ClosePanel);
+        // }
     }
 
     // puxa o banco de dados ativo e a lista de questões para puxar as dicas já desbloqueadas
@@ -79,7 +76,7 @@ public class QuestionHintManager : MonoBehaviour
     public void OnQuestionChanged(Question question)
     {
         currentQuestion = question;
-        ClosePanel();
+        // ClosePanel();
         RefreshButtonUI();
     }
 
@@ -187,134 +184,119 @@ public class QuestionHintManager : MonoBehaviour
     // logica para abrir o painel de dica
     private void OpenPanel()
     {
-        // se nao tem questao ou a dica esta bloqueada, nao abre o painel
-        if (currentQuestion == null || !IsCurrentUnlocked())
-        {
-            Debug.LogWarning("Hint Manager - Não é possível abrir painel sem dica.");
-            return;
-        }
+        if (currentQuestion == null || !IsCurrentUnlocked()) return;
+        if (currentQuestion.hint == null || currentQuestion.hint.Count == 0) return;
 
-        //  se a questao nao tem dicas, nao faz nada
-        if (currentQuestion.hint == null || currentQuestion.hint.Count == 0)
-        {
-            Debug.Log("Hint Manager - Questão sem dicas.");
-            return;
-        }
+        // Publica os dados ANTES de abrir a scene
+        hintChannel.Publish(
+            $"Dicas — Questão {currentQuestion.questionNumber}",
+            currentQuestion.hint
+        );
 
-        // se tem dica, seta o titulo para o titulo da questao
-        if (hintPanelTitle != null)
-        {
-            hintPanelTitle.text = $"Dicas — Questão {currentQuestion.questionNumber}";
-        }
-
-        // popula o conteudo no painel antes de abrir o painel
-        PopulatePanel(currentQuestion.hint);
-
-        // se passar em todos os if's, ativa o painel
-        if (hintPanel != null)
-        {
-            hintPanel.SetActive(true);
-        }
+        // Abre a modal scene por cima (Additive)
+        UnityEngine.SceneManagement.SceneManager
+            .LoadScene("QuestionModalScene",
+                       UnityEngine.SceneManagement.LoadSceneMode.Additive);
     }
 
     // fecha o painel e limpa o conteuda do painel (destoi os prefabs)
-    private void ClosePanel()
-    {
-        if (hintPanel != null)
-        {
-            hintPanel.SetActive(false);
-        }
-        ClearPanelContent();
-    }
+    // private void ClosePanel()
+    // {
+    //     if (hintPanel != null)
+    //     {
+    //         hintPanel.SetActive(false);
+    //     }
+    //     ClearPanelContent();
+    // }
 
     // é passado uma lista com todas as hints referente ao banco de dado ativo, ele limpa o conteudo atual, e com um foreach
     // vai delegando cada caso (TextHint, ImageHint, LinkHint) para cada metodo com o objetivo de spawnar os prefabs
-    private void PopulatePanel(List<Hint> hints)
-    {
-        ClearPanelContent();
-        foreach (var hint in hints)
-        {
-            switch (hint)
-            {
-                case TextHint th: SpawnTextHint(th); break;
-                case ImageHint ih: SpawnImageHint(ih); break;
-                case LinkHint lh: SpawnLinkHint(lh); break;
-            }
-        }
-    }
+    // private void PopulatePanel(List<Hint> hints)
+    // {
+    //     ClearPanelContent();
+    //     foreach (var hint in hints)
+    //     {
+    //         switch (hint)
+    //         {
+    //             case TextHint th: SpawnTextHint(th); break;
+    //             case ImageHint ih: SpawnImageHint(ih); break;
+    //             case LinkHint lh: SpawnLinkHint(lh); break;
+    //         }
+    //     }
+    // }
 
     // se o painel nao exibir nada, nao faz nada, se tiver conteudo, passa com um foreach em cada elemento e destroi eles 
-    private void ClearPanelContent()
-    {
-        if (hintContentParent == null)
-        {
-            return;
-        }
+    // private void ClearPanelContent()
+    // {
+    //     if (hintContentParent == null)
+    //     {
+    //         return;
+    //     }
 
-        // passa por cada prefab dentro do hintContent (Scroll View) e destroi eles
-        foreach (Transform child in hintContentParent)
-        {
-            Destroy(child.gameObject);
-        }
-    }
+    //     // passa por cada prefab dentro do hintContent (Scroll View) e destroi eles
+    //     foreach (Transform child in hintContentParent)
+    //     {
+    //         Destroy(child.gameObject);
+    //     }
+    // }
 
-    // instanciar prefabs no hintContent (Scroll View)
-    // instancia o prefab, pega o textMesh e coloca o texto da dica nele
-    private void SpawnTextHint(TextHint hint)
-    {
-        if (textHintPrefab == null)
-        {
-            return;
-        }
-        var gameObj = Instantiate(textHintPrefab, hintContentParent);
-        var textMesh = gameObj.GetComponentInChildren<TextMeshProUGUI>();
-        if (textMesh != null)
-        {
-            textMesh.text = hint.text;
-        }
-    }
+    // // instanciar prefabs no hintContent (Scroll View)
+    // // instancia o prefab, pega o textMesh e coloca o texto da dica nele
+    // private void SpawnTextHint(TextHint hint)
+    // {
+    //     if (textHintPrefab == null)
+    //     {
+    //         return;
+    //     }
+    //     var gameObj = Instantiate(textHintPrefab, hintContentParent);
+    //     var textMesh = gameObj.GetComponentInChildren<TextMeshProUGUI>();
+    //     if (textMesh != null)
+    //     {
+    //         textMesh.text = hint.text;
+    //     }
+    // }
 
-    // instancia o prefab, pega o componente de imagem dele e coloca o path da imagem da dica nele
-    private void SpawnImageHint(ImageHint hint)
-    {
-        if (imageHintPrefab == null)
-        {
-            return;
-        }
-        var gameObj = Instantiate(imageHintPrefab, hintContentParent);
-        var img = gameObj.GetComponentInChildren<Image>();
-        if (img != null)
-        {
-            img.sprite = Resources.Load<Sprite>(hint.imagePath);
-        }
-    }
+    // // instancia o prefab, pega o componente de imagem dele e coloca o path da imagem da dica nele
+    // private void SpawnImageHint(ImageHint hint)
+    // {
+    //     if (imageHintPrefab == null)
+    //     {
+    //         return;
+    //     }
+    //     var gameObj = Instantiate(imageHintPrefab, hintContentParent);
+    //     var img = gameObj.GetComponentInChildren<Image>();
+    //     if (img != null)
+    //     {
+    //         img.sprite = Resources.Load<Sprite>(hint.imagePath);
+    //     }
+    // }
 
-    // instancia, pega o componente de texto e o botao, altera o texto e adiciona a função de OpenURL no botão, e puxa o link da dica
-    private void SpawnLinkHint(LinkHint hint)
-    {
-        if (linkHintPrefab == null)
-        {
-            return;
-        }
-        var gameObj = Instantiate(linkHintPrefab, hintContentParent);
-        var textMesh = gameObj.GetComponentInChildren<TextMeshProUGUI>();
-        var btn = gameObj.GetComponentInChildren<Button>();
-        if (textMesh != null)
-        {
-            textMesh.text = hint.link;
-        }
-        if (btn != null)
-        {
-            string link = hint.link;
+    // // instancia, pega o componente de texto e o botao, altera o texto e adiciona a função de OpenURL no botão, e puxa o link da dica
+    // private void SpawnLinkHint(LinkHint hint)
+    // {
+    //     if (linkHintPrefab == null)
+    //     {
+    //         return;
+    //     }
+    //     var gameObj = Instantiate(linkHintPrefab, hintContentParent);
+    //     var textMesh = gameObj.GetComponentInChildren<TextMeshProUGUI>();
+    //     var btn = gameObj.GetComponentInChildren<Button>();
+    //     if (textMesh != null)
+    //     {
+    //         textMesh.text = hint.link;
+    //     }
+    //     if (btn != null)
+    //     {
+    //         string link = hint.link;
 
-            btn.onClick.AddListener(OpenLink);
+    //         btn.onClick.AddListener(OpenLink);
 
-            void OpenLink()
-            {
-                Application.OpenURL(link);
-            }
-        }
-    }
+    //         void OpenLink()
+    //         {
+    //             Application.OpenURL(link);
+    //         }
+    //     }
+    // }
 
     // verifica se a questao é nula e verifica se a chave gerada existe no unlockedKeys
     private bool IsCurrentUnlocked()
@@ -354,7 +336,7 @@ public class QuestionHintManager : MonoBehaviour
             PlayerPrefs.SetString(UserIdKey, userId);
             PlayerPrefs.Save();
             // unlockedKeys permanece vazio — nenhuma dica desbloqueada
-            return; 
+            return;
         }
 
         // se for o mesmo usuario, so roda normalmente
@@ -371,10 +353,10 @@ public class QuestionHintManager : MonoBehaviour
     // valida os componentes 
     private void ValidateComponents()
     {
-        if (hintPanel == null)
-            Debug.LogError("Hint Manager - hintPanel não atribuído no Inspector.");
-        if (hintContentParent == null)
-            Debug.LogError("Hint Manager - hintContentParent não atribuído no Inspector.");
+        // if (hintPanel == null)
+        //     Debug.LogError("Hint Manager - hintPanel não atribuído no Inspector.");
+        // if (hintContentParent == null)
+        //     Debug.LogError("Hint Manager - hintContentParent não atribuído no Inspector.");
         if (openHintPanelButton == null)
             Debug.LogWarning("Hint Manager - openHintPanelButton não atribuído.");
     }

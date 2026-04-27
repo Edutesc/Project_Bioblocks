@@ -28,7 +28,7 @@ public class AcidBaseBufferQuestionDatabase : MonoBehaviour, IQuestionDatabase
             questionLevel = 1,
             questionInDevelopment = false,
 
-            hint = new System.Collections.Generic.List<QuestionSystem.Hint>
+            hint = new List<QuestionSystem.Hint>
             {
                 new TextHint
                 {

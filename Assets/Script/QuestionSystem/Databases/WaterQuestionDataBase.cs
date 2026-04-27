@@ -44,7 +44,17 @@ public class WaterQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new List<QuestionSystem.Hint>
+            {
+                new LinkHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 1,
+                    link = "https://pt.wikipedia.org/wiki/Tens%C3%A3o_superficial"
+                }
+            }
         },
         new Question
         {

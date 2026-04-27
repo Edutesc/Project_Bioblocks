@@ -26,7 +26,17 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new List<QuestionSystem.Hint>
+            {
+                new ImageHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 1,
+                    imagePath = "Assets/Images/AHintMock/estrutura-do-aminoacido.webp"
+                }
+            }
         },
         new Question
         {
@@ -458,7 +468,17 @@ public class AminoacidQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+
+            hint = new List<QuestionSystem.Hint>
+            {
+                new ImageHint
+                {
+                    dataBankName   = "AcidBaseBufferQuestionDatabase",
+                    questionNumber = 1,
+                    imagePath = "AHintMock/estrutura-do-aminoacido"
+                }
+            }
         },
         new Question
         {
