@@ -285,74 +285,45 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
         //     prerequisites = null,
         //     questionHint = null
         // },
+        // new Question {
+        //     questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+        //     questionText = "",
+        //     answers = new string[] {
+        //         "AnswerImages/IntroductionDB/2-metil-3-dimetil-pentano",
+        //         "AnswerImages/IntroductionDB/ciclo-hexano",
+        //         "AnswerImages/IntroductionDB/benzeno",
+        //         "AnswerImages/IntroductionDB/2-3-dimetil-pentano"
+        //     },
+        //     correctIndex = 3,
+        //     questionNumber = 12,
+        //     isImageAnswer = true,
+        //     isImageQuestion = true,
+        //     questionImagePath = "QuestionImages/IntroductionDB/introductionDB_ImageQuestionContainer12",
+        //     questionLevel = 1,
+        //     questionInDevelopment = false,
+        //     globalId = "biochem_011",
+        //     topic = "biochem",
+        //     subtopic = null,
+        //     displayName = "Introdução à Bioquímica",
+        //     bloomLevel = "unclassified",
+        //     conceptTags = null,
+        //     prerequisites = null,
+        //     questionHint = null
+        // },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
             answers = new string[] {
                 "AnswerImages/IntroductionDB/2-metil-3-dimetil-pentano",
-                "AnswerImages/IntroductionDB/ciclo-hexano",
-                "AnswerImages/IntroductionDB/benzeno",
+                "AnswerImages/IntroductionDB/3-metil-pentano",
+                "AnswerImages/IntroductionDB/2-metil-butanol",
                 "AnswerImages/IntroductionDB/2-3-dimetil-pentano"
             },
             correctIndex = 3,
-            questionNumber = 12,
+            questionNumber = 13,
             isImageAnswer = true,
             isImageQuestion = true,
-            questionImagePath = "QuestionImages/IntroductionDB/introductionDB_ImageQuestionContainer12",
-            questionLevel = 1,
-            questionInDevelopment = false,
-            globalId = "biochem_011",
-            topic = "biochem",
-            subtopic = null,
-            displayName = "Introdução à Bioquímica",
-            bloomLevel = "unclassified",
-            conceptTags = null,
-            prerequisites = null,
-            questionHint = null
-        },
-        
-        
-        
-        
-        new Question {
-            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "O que são enantiômeros?",
-            answers = new string[] {
-                "Isômeros que são imagens especulares não sobreponíveis.",
-                "Isômeros que são imagens especulares sobreponíveis.",
-                "Isômeros com diferentes grupos funcionais.",
-                "Isômeros com diferente número de átomos."
-            },
-            correctIndex = 0,
-            questionNumber = 12,
-            isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
-            questionLevel = 2,
-            questionInDevelopment = false,
-            globalId = "biochem_012",
-            topic = "biochem",
-            subtopic = null,
-            displayName = "Introdução à Bioquímica",
-            bloomLevel = "unclassified",
-            conceptTags = null,
-            prerequisites = null,
-            questionHint = null
-        },
-        new Question {
-            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "O que é um carbono quiral?",
-            answers = new string[] {
-                "Um carbono com ligação dupla.",
-                "Um carbono com ligação tripla.",
-                "Um carbono ligado a quatro grupos diferentes.",
-                "Um carbono terminal."
-            },
-            correctIndex = 2,
-            questionNumber = 13,
-            isImageAnswer = false,
-            isImageQuestion = false,
-            questionImagePath = "",
+            questionImagePath = "QuestionImages/IntroductionDB/introductionDB_ImageQuestionContainer13",
             questionLevel = 2,
             questionInDevelopment = false,
             globalId = "biochem_013",
@@ -374,8 +345,7 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
                 "AnswerImages/IntroductionDB/acido_propanoico"
             },
             correctIndex = 0,
-            questionNumber = 14,
-            isImageAnswer = true,
+            questionNumber = 14,   isImageAnswer = true,
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
