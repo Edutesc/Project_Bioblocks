@@ -922,16 +922,16 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
         // },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "Qual a principal função do ATP na célula?",
+            questionText = "Amidas são compostos com grupo funcional -CO-N- (carbonila ligada a nitrogênio), e elas são a espinha dorçal para a formação de proteínas. Assinale a estrutura da amida?",
             answers = new string[] {
-                "Armazenamento de informação genética",
-                "Transporte de moléculas",
-                "Carreador de energia",
-                "Catálise de reações"
-                },
+                "AnswerImages/IntroductionDB/aminoacido",
+                "AnswerImages/IntroductionDB/aminocetona",
+                "AnswerImages/IntroductionDB/propanamida",
+                "AnswerImages/IntroductionDB/anilina"
+            },
             correctIndex = 2,
             questionNumber = 36,
-            isImageAnswer = false,
+            isImageAnswer = true,
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
@@ -945,31 +945,31 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
-        // new Question {
-            // questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            // questionText = "Qual a atividade que mais consome energia nas células?",
-            // answers = new string[] {
-                // "Transporte de íons",
-                // "Síntese de macromoléculas",
-                // "Respiração celular",
-                // "Fotossíntese"
-                // },
-            // correctIndex = 1,
-            // questionNumber = 37,
-            // isImageAnswer = false,
-            // isImageQuestion = false,
-            // questionImagePath = "",
-            // questionLevel = 2,
-            // questionInDevelopment = false,
-            // globalId = "biochem_037",
-            // topic = "biochem",
-            // subtopic = null,
-            // displayName = "Introdução à Bioquímica",
-            // bloomLevel = "unclassified",
-            // conceptTags = null,
-            // prerequisites = null,
-            // questionHint = null
-        // },
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Iminas são compostos com grupo funcional -C=N- (ligação dupla carbono-nitrogênio). Diferem de amidas e aminas, estão presentes em diversas moléculas biológicas. Assinale o composto que possui grupo funcional imina?",
+            answers = new string[] {
+                "AnswerImages/IntroductionDB/propanamida",
+                "AnswerImages/IntroductionDB/aminocetona",
+                "AnswerImages/IntroductionDB/cetose",
+                "AnswerImages/IntroductionDB/histidina"
+            },
+            correctIndex = 3,
+            questionNumber = 37,
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false,
+            globalId = "biochem_037",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
+        },
         // new Question {
             // questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             // questionText = "O que são complexos supramoleculares?",
