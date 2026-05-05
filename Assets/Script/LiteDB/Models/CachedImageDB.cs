@@ -9,4 +9,6 @@ public class CachedImageDB
     public DateTime CachedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
     public long FileSizeBytes { get; set; }
+    public string DatabankName { get; set; }
+    public string Sha256 { get; set; }
 }
