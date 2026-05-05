@@ -7,6 +7,7 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
 
     private List<Question> questions = new List<Question>
     {
+        //Questão 01
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -33,6 +34,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 02
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -59,6 +62,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 03
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -85,6 +90,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 04
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Qual a importância de Louis Pasteur para o desenvolvimento da Bioquímica?",
@@ -110,6 +117,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 05
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Quais os quatro elementos mais abundantes nos organismos vivos?",
@@ -135,6 +144,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 06
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Os seres vivos são caracterizados por um alto grau de complexidade química e organização molecular. Qual apção melhor se alinha com essa afirmação?",
@@ -160,6 +171,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 07
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Qual é a importância dos grupos funcionais nas moléculas orgânicas que formam macromoléculas?",
@@ -185,6 +198,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 08
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Identifique a estrutura que representa um hidrocarboneto ramificado",
@@ -210,14 +225,16 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 09
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "Identifique a estrutura molecular do ácido carboxílico",
+            questionText = "Identifique a estrutura molecular de um hidrocarboneto insaturado",
             answers = new string[] {
-                "AnswerImages/IntroductionDB/2-butanona",
-                "AnswerImages/IntroductionDB/metanoato-de-propila",
-                "AnswerImages/IntroductionDB/propanal",
-                "AnswerImages/IntroductionDB/acido-propanoico"
+                "AnswerImages/IntroductionDB/ciclo-hexano",
+                "AnswerImages/IntroductionDB/3-metil-hexano",
+                "AnswerImages/IntroductionDB/2-metil-butanol",
+                "AnswerImages/IntroductionDB/2-hexeno"
             },
             correctIndex = 3,
             questionNumber = 9,
@@ -235,16 +252,18 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 10
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "Identifique a estrutura molecular da amina",
+            questionText = "Identifique a estrutura molecular da hidrocarboneto alifático",
             answers = new string[] {
-                "AnswerImages/IntroductionDB/n-trimetil-etanamina",
-                "AnswerImages/IntroductionDB/propanamida",
-                "AnswerImages/IntroductionDB/trans-3-hexeno",
-                "AnswerImages/IntroductionDB/fenol"
+                "AnswerImages/IntroductionDB/ciclo-hexano",
+                "AnswerImages/IntroductionDB/hexano",
+                "AnswerImages/IntroductionDB/benzeno",
+                "AnswerImages/IntroductionDB/2-hexeno"
             },
-            correctIndex = 0,
+            correctIndex = 1,
             questionNumber = 10,
             isImageAnswer = true,
             isImageQuestion = false,
@@ -260,6 +279,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 11
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -285,6 +306,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 12
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -310,6 +333,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 13
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -335,6 +360,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 14
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Compostos orgânicos insaturados podem ser classificados como isômeros cis e trans. Assinale a alternativa que representa um isômero cis.",
@@ -360,31 +387,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
-        new Question {
-            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-            questionText = "Assinale a alternativa que representa um isômero trans.",
-            answers = new string[] {
-                "AnswerImages/IntroductionDB/benzeno",
-                "AnswerImages/IntroductionDB/trans-3-hexeno",
-                "AnswerImages/IntroductionDB/cis-3-hexeno",
-                "AnswerImages/IntroductionDB/anilina"
-            },
-            correctIndex = 1,
-            questionNumber = 15,   
-            isImageAnswer = true,
-            isImageQuestion = false,
-            questionImagePath = "",
-            questionLevel = 2,
-            questionInDevelopment = false,
-            globalId = "biochem_015",
-            topic = "biochem",
-            subtopic = null,
-            displayName = "Introdução à Bioquímica",
-            bloomLevel = "unclassified",
-            conceptTags = null,
-            prerequisites = null,
-            questionHint = null
-        },
+
+        // Questão 15
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -411,6 +415,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 16
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -437,6 +443,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 17
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -463,6 +471,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 18
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -489,6 +499,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 19
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -515,6 +527,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 20
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Abaixo existem três compostos isômeros. Ou seja, mesma fórmula molécular e diferentes fórmulas estruturais. Assinale o composto que não é um isômero.",
@@ -540,6 +554,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 21
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -566,6 +582,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 22
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -592,6 +610,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 23
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -618,6 +638,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 29
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -644,6 +666,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 25
         new Question
         {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -670,6 +694,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 26
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             // questionText = "",
@@ -695,6 +721,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 27
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -720,6 +748,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 28
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Assinale a amina secundária",
@@ -745,6 +775,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 29
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Assinale a amina terciária",
@@ -770,6 +802,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 30
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -795,6 +829,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 31
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Dentre as aminas listadas, assinale a amina que possui um carbono quiral em sua cadeia carbônica.",
@@ -820,6 +856,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 32
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -845,6 +883,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 33
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -870,6 +910,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 34
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -895,6 +937,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 35
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "",
@@ -920,6 +964,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 36
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Amidas são compostos com grupo funcional -CO-N- (carbonila ligada a nitrogênio), e elas são a espinha dorçal para a formação de proteínas. Assinale a estrutura da amida?",
@@ -945,6 +991,8 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
+        // Questão 37
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
             questionText = "Iminas são compostos com grupo funcional -C=N- (ligação dupla carbono-nitrogênio). Diferem de amidas e aminas, estão presentes em diversas moléculas biológicas. Assinale o composto que possui grupo funcional imina?",
@@ -970,6 +1018,7 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
         // Questão 38
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -996,6 +1045,7 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
         // Questão 39
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1022,7 +1072,6 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
-        
 
         // Questão 40
         new Question {
@@ -1455,6 +1504,7 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             prerequisites = null,
             questionHint = null
         },
+
         // Questão 56
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1534,6 +1584,141 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
             conceptTags = null,
             prerequisites = null,
             // questionHint = null
+        },
+
+        // Questão 59
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Assinale a alternativa que representa um isômero trans.",
+            answers = new string[] {
+                "AnswerImages/IntroductionDB/benzeno",
+                "AnswerImages/IntroductionDB/trans-3-hexeno",
+                "AnswerImages/IntroductionDB/cis-3-hexeno",
+                "AnswerImages/IntroductionDB/anilina"
+            },
+            correctIndex = 1,
+            questionNumber = 59,   
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false,
+            globalId = "biochem_059",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
+        },
+
+        // Questão 60
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "Os aminoácidos são os monômeros que formam todas as proteínas que conhecemos na natureza. Assinale a opção que apresenta um aminoácido que nao tem carbono quiral",
+            answers = new string[] {
+                "AnswerImages/IntroductionDB/histidina",
+                "AnswerImages/IntroductionDB/cisteina",
+                "AnswerImages/IntroductionDB/glicina",
+                "AnswerImages/IntroductionDB/metionina"
+            },
+            correctIndex = 2,
+            questionNumber = 60,   
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "biochem_060",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
+        },
+
+        // Questão 61
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "",
+            answers = new string[] {
+                "   4",
+                "   5",
+                "   6",
+                "   7"
+            },
+            correctIndex = 0,
+            questionNumber = 61,   
+            isImageAnswer = false,
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/IntroductionDB/introductionDB_ImageQuestionContainer61",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "biochem_061",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
+        },
+
+        // Questão 62
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "",
+            answers = new string[] {
+                "amida",
+                "amina terciária",
+                "imina",
+                "anilina"
+            },
+            correctIndex = 2,
+            questionNumber = 62,   
+            isImageAnswer = false,
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/IntroductionDB/introductionDB_ImageQuestionContainer62",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "biochem_062",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
+        },
+
+        // Questão 63
+        new Question {
+            questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
+            questionText = "",
+            answers = new string[] {
+                "Estruturas moleculares de álcoois nunca possuem anéis aromáticos",
+                "Porque a hidroxila está fora do anel aromático",
+                "Porque está faltando um grupo NH no anel aromático",
+                "Porque a hidroxila não está ligada em um carbono com geometria sp3"
+            },
+            correctIndex = 3,
+            questionNumber = 63,   
+            isImageAnswer = false,
+            isImageQuestion = true,
+            questionImagePath = "QuestionImages/IntroductionDB/introductionDB_ImageQuestionContainer63",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            // globalId = "biochem_063",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
 
    };
