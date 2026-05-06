@@ -9,8 +9,13 @@ public class FirebaseStorageImageRepository : MonoBehaviour, IFirebaseStorageIma
     private StorageReference _root;
     private bool isInitialized;
 
-    private const int MaxBytes = 1024 * 1024; // 1 MB
-    private const string ROOT_PATH = "questions";
+    // 4 MB cobre com folga as imagens do app (média ~50KB, máx esperado <500KB).
+    private const int MaxBytes = 4 * 1024 * 1024;
+
+    // Layout: Question/<topic>/<filename>.png
+    // Ex.: Question/biochem/benzeno.png, Question/water/agua_polar.png, ...
+    private const string ROOT_PATH       = "Question";
+    private const string DEFAULT_EXT     = ".png";
 
     // ── Inicialização ──────────────────────────────────────────────────────────
 
@@ -21,6 +26,14 @@ public class FirebaseStorageImageRepository : MonoBehaviour, IFirebaseStorageIma
         try
         {
             _storage = FirebaseStorage.DefaultInstance;
+
+            // Reduz retry times — defaults do SDK são absurdos (download=600s,
+            // operation=120s) e fazem o app parecer travado quando uma imagem
+            // dá 404 ou a rede falha. 8s/5s é o suficiente pra cobrir um hiccup
+            // de rede sem deixar o usuário esperando.
+            _storage.MaxDownloadRetryTime  = TimeSpan.FromSeconds(8);
+            _storage.MaxOperationRetryTime = TimeSpan.FromSeconds(5);
+
             _root = _storage.GetReference(ROOT_PATH);
             isInitialized = true;
             Debug.Log("[FirebaseStorageImageRepository] Inicializado com sucesso.");
@@ -40,49 +53,23 @@ public class FirebaseStorageImageRepository : MonoBehaviour, IFirebaseStorageIma
 
         try
         {
-            Debug.Log($"[FirebaseStorageImageRepository] Baixando imagem '{storageKey}'...");
-
-            StorageReference imageRef = _root.Child(storageKey + ".png");
+            string keyWithExt = EnsureExtension(storageKey);
+            StorageReference imageRef = _root.Child(keyWithExt);
             byte[] data = await imageRef.GetBytesAsync(MaxBytes);
-
-            Debug.Log($"[FirebaseStorageImageRepository] Imagem '{storageKey}' baixada com sucesso ({data.Length} bytes).");
             return data;
         }
-        catch (Exception e)
+        catch (Firebase.Storage.StorageException se)
         {
-            Debug.LogError($"[FirebaseStorageImageRepository] DownloadImage falhou para {storageKey}: {e.Message}");
+            // Log compacto. ErrorCode -13010 = Object Not Found (404) — comum se
+            // o questionImagePath aponta pra arquivo que não foi para o Storage.
+            // ErrorCode -13020 = Unauthenticated. ErrorCode -13021 = Unauthorized.
+            Debug.LogWarning($"[FirebaseStorageImageRepository] '{storageKey}' falhou " +
+                             $"(code={se.ErrorCode}, http={se.HttpResultCode}).");
             return null;
         }
-    }
-
-    public async Task<string> GetDownloadUrlAsync(string storageKey)
-    {
-        EnsureInitialized();
-
-        try
-        {
-            Debug.Log($"[FirebaseStorageImageRepository] Obtendo URL de download para '{storageKey}'...");
-
-            StorageReference imageRef = _root.Child(storageKey + ".png");
-
-            var result = await imageRef.GetDownloadUrlAsync().ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    Debug.LogError($"[FirebaseStorageImageRepository] Erro ao obter URL para '{storageKey}': {task.Exception?.Message}");
-                    return (string)null;
-                }
-
-                string url = task.Result.ToString();
-                Debug.Log($"[FirebaseStorageImageRepository] URL obtida para '{storageKey}'.");
-                return url;
-            });
-
-            return result;
-        }
         catch (Exception e)
         {
-            Debug.LogError($"[FirebaseStorageImageRepository] GetDownloadUrl falhou para {storageKey}: {e.Message}");
+            Debug.LogError($"[FirebaseStorageImageRepository] {e.GetType().Name} para '{storageKey}': {e.Message}");
             return null;
         }
     }
@@ -93,12 +80,13 @@ public class FirebaseStorageImageRepository : MonoBehaviour, IFirebaseStorageIma
 
         try
         {
-            Debug.Log($"[FirebaseStorageImageRepository] Verificando existência de '{storageKey}'...");
+            string keyWithExt = EnsureExtension(storageKey);
+            Debug.Log($"[FirebaseStorageImageRepository] Verificando existência de '{keyWithExt}'...");
 
-            StorageReference imageRef = _root.Child(storageKey + ".png");
+            StorageReference imageRef = _root.Child(keyWithExt);
             await imageRef.GetMetadataAsync();
 
-            Debug.Log($"[FirebaseStorageImageRepository] Imagem '{storageKey}' existe.");
+            Debug.Log($"[FirebaseStorageImageRepository] Imagem '{keyWithExt}' existe.");
             return true;
         }
         catch (Exception e)
@@ -109,6 +97,22 @@ public class FirebaseStorageImageRepository : MonoBehaviour, IFirebaseStorageIma
     }
 
     // ── Utilitário ─────────────────────────────────────────────────────────────
+
+    private static string EnsureExtension(string storageKey)
+    {
+        if (string.IsNullOrEmpty(storageKey)) return storageKey;
+        if (HasImageExtension(storageKey))    return storageKey;
+        return storageKey + DEFAULT_EXT;
+    }
+
+    private static bool HasImageExtension(string path)
+    {
+        return path.EndsWith(".png",  StringComparison.OrdinalIgnoreCase) ||
+               path.EndsWith(".jpg",  StringComparison.OrdinalIgnoreCase) ||
+               path.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+               path.EndsWith(".webp", StringComparison.OrdinalIgnoreCase) ||
+               path.EndsWith(".gif",  StringComparison.OrdinalIgnoreCase);
+    }
 
     private void EnsureInitialized()
     {

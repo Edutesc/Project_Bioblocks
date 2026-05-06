@@ -11,7 +11,7 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
 
     public void InjectDependencies(ILiteDBManager liteDb, IImageCacheService imageCache)
     {
-        _liteDb = liteDb;
+        _liteDb     = liteDb;
         _imageCache = imageCache;
     }
 
@@ -26,16 +26,12 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
             string cachedPath = _imageCache.GetCachedImagePath(storageKey);
 
             if (string.IsNullOrEmpty(cachedPath))
-            {
-                Debug.Log($"[ImageLocalRepository] Cache não encontrado para '{storageKey}'.");
                 return false;
-            }
 
             texture = _imageCache.LoadImageFromCache(cachedPath);
-
             if (texture != null)
             {
-                Debug.Log($"[ImageLocalRepository] Imagem '{storageKey}' carregada do cache.");
+                Debug.Log($"[ImageLocalRepository] Cache hit '{storageKey}'.");
                 return true;
             }
 
@@ -50,7 +46,7 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
 
     // ── Escrita ────────────────────────────────────────────────────────────────
 
-    public void Save(string storageKey, byte[] pngBytes, string databankName)
+    public void Save(string storageKey, byte[] pngBytes, string topic)
     {
         if (string.IsNullOrEmpty(storageKey) || pngBytes == null || pngBytes.Length == 0)
         {
@@ -60,35 +56,14 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
 
         try
         {
-            // Decodifica bytes para Texture2D
-            Texture2D texture = new Texture2D(2, 2);
-            if (!texture.LoadImage(pngBytes))
-            {
-                Debug.LogError($"[ImageLocalRepository] Falha ao decodificar PNG para '{storageKey}'.");
-                Destroy(texture);
-                return;
-            }
-
-            // Salva no cache físico
-            _imageCache.SaveImageToCache(storageKey, texture);
-            Destroy(texture);
-
-            // Computa SHA256 dos bytes
+            // Salva os bytes PNG direto no cache, sem decodificar pra Texture2D.
+            // Isso permite que o Save seja chamado de qualquer thread (background
+            // downloads do prewarm). A conversão pra Texture2D acontece só no
+            // TryGetCachedTexture, que é sempre chamado da main thread.
             string sha256 = ComputeSha256(pngBytes);
+            _imageCache.SaveImageBytesToCache(storageKey, pngBytes, topic, sha256);
 
-            // Atualiza documento CachedImageDB com DatabankName e Sha256
-            var cached = _liteDb.CachedImages.FindById(storageKey);
-            if (cached != null)
-            {
-                cached.DatabankName = databankName;
-                cached.Sha256 = sha256;
-                _liteDb.CachedImages.Update(cached);
-                Debug.Log($"[ImageLocalRepository] Imagem '{storageKey}' atualizada com DatabankName='{databankName}' e Sha256.");
-            }
-            else
-            {
-                Debug.LogWarning($"[ImageLocalRepository] Documento CachedImageDB não encontrado para '{storageKey}' após SaveImageToCache.");
-            }
+            Debug.Log($"[ImageLocalRepository] Imagem '{storageKey}' salva (topic='{topic ?? "-"}', {pngBytes.Length} bytes).");
         }
         catch (Exception e)
         {
@@ -101,6 +76,7 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
 
     public bool Has(string storageKey)
     {
+        if (string.IsNullOrEmpty(storageKey)) return false;
         try
         {
             return _liteDb.CachedImages.Exists(x => x.ImageUrl == storageKey);
@@ -114,37 +90,42 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
 
     // ── Metadados de cache ─────────────────────────────────────────────────────
 
-    public DateTime? GetLatestCacheTimestamp(string databankName)
+    public DateTime? GetLatestCacheTimestamp(string topic = null)
     {
         try
         {
-            var latest = _liteDb.CachedImages.FindAll()
-                                .Where(x => x.DatabankName == databankName)
-                                .OrderByDescending(x => x.CachedAt)
-                                .FirstOrDefault();
+            var query = _liteDb.CachedImages.FindAll();
+            if (!string.IsNullOrEmpty(topic))
+                query = query.Where(x => x.Topic == topic);
 
+            var latest = query.OrderByDescending(x => x.CachedAt).FirstOrDefault();
             return latest?.CachedAt;
         }
         catch (Exception e)
         {
-            Debug.LogError($"[ImageLocalRepository] Erro ao obter timestamp de cache para '{databankName}': {e.Message}");
+            Debug.LogError($"[ImageLocalRepository] Erro ao obter timestamp de cache para '{topic}': {e.Message}");
             return null;
         }
     }
 
     // ── Limpeza ────────────────────────────────────────────────────────────────
 
-    public void EvictByDatabank(string databankName)
+    public void EvictByTopic(string topic)
     {
+        if (string.IsNullOrEmpty(topic))
+        {
+            Debug.LogWarning("[ImageLocalRepository] EvictByTopic chamado sem topic — ignorado.");
+            return;
+        }
+
         try
         {
             var toDelete = _liteDb.CachedImages.FindAll()
-                                  .Where(x => x.DatabankName == databankName)
+                                  .Where(x => x.Topic == topic)
                                   .ToList();
 
             foreach (var cached in toDelete)
             {
-                // Remove arquivo físico
                 try
                 {
                     if (System.IO.File.Exists(cached.LocalPath))
@@ -155,15 +136,14 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
                     Debug.LogWarning($"[ImageLocalRepository] Erro ao deletar arquivo físico '{cached.LocalPath}': {e.Message}");
                 }
 
-                // Remove documento LiteDB
                 _liteDb.CachedImages.Delete(cached.ImageUrl);
             }
 
-            Debug.Log($"[ImageLocalRepository] {toDelete.Count} imagens removidas para databank '{databankName}'.");
+            Debug.Log($"[ImageLocalRepository] {toDelete.Count} imagens removidas para topic '{topic}'.");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[ImageLocalRepository] Erro ao fazer evict por databank '{databankName}': {e.Message}");
+            Debug.LogError($"[ImageLocalRepository] Erro ao fazer evict por topic '{topic}': {e.Message}");
             throw;
         }
     }
@@ -184,12 +164,15 @@ public class ImageLocalRepository : MonoBehaviour, IImageLocalRepository
 
     // ── Utilitários ────────────────────────────────────────────────────────────
 
-    private string ComputeSha256(byte[] data)
+    private static string ComputeSha256(byte[] data)
     {
         using (var sha256 = SHA256.Create())
         {
             byte[] hashBytes = sha256.ComputeHash(data);
-            return Convert.ToHexString(hashBytes).ToLowerInvariant();
+            var sb = new StringBuilder(hashBytes.Length * 2);
+            foreach (byte b in hashBytes)
+                sb.Append(b.ToString("x2"));
+            return sb.ToString();
         }
     }
 }
