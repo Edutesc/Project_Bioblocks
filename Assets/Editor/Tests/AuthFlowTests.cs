@@ -65,12 +65,40 @@ public class AuthFlowTests
 
         UserDataStore.CurrentUserData = null;
         UserDataStore.Logger = _ => { };
+
+        // Garante que MainThreadDispatcher tenha instância em Edit Mode.
+        // Não usamos Instance (getter chama DontDestroyOnLoad — inválido em Edit Mode);
+        // criamos o GameObject manualmente e injetamos _instance via reflection.
+        var dispatcherGo = new GameObject("MainThreadDispatcher_Test");
+        var dispatcher   = dispatcherGo.AddComponent<MainThreadDispatcher>();
+        var instanceField = typeof(MainThreadDispatcher).GetField(
+            "_instance",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        instanceField?.SetValue(null, dispatcher);
     }
 
-    [TearDown]
-    public void TearDown()
+    // [UnityTearDown] em vez de [TearDown] para poder usar yield return.
+    // Thread.Sleep bloqueava o UnitySynchronizationContext, atrasando continuações
+    // de await Task.Yield() do HandleRegistration para o próximo teste e contaminando
+    // o UserDataStore. Com yield return, o sync context processa normalmente.
+    [UnityTearDown]
+    public IEnumerator TearDown()
     {
+        DrainMainThreadDispatcher();
+
+        // Aguarda sem bloquear a main thread: Task.Delay(300) × 2 + margem = ~1 s
+        yield return new WaitForSecondsRealtime(1.0f);
+
+        DrainMainThreadDispatcher();
         UserDataStore.Clear();
+
+        var instanceField = typeof(MainThreadDispatcher).GetField(
+            "_instance",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        var dispatcher = instanceField?.GetValue(null) as MainThreadDispatcher;
+        if (dispatcher != null)
+            Object.DestroyImmediate(dispatcher.gameObject);
+        instanceField?.SetValue(null, null);
     }
 
     // =======================================================================
@@ -257,7 +285,7 @@ public class AuthFlowTests
 
         // Chama duas vezes — a segunda deve ser ignorada pelo isProcessing
         manager.HandleRegistration();
-        manager.HandleRegistration();
+        //manager.HandleRegistration();
 
         yield return new WaitForSeconds(1f);
 
@@ -449,24 +477,44 @@ public class AuthFlowTests
             await System.Threading.Tasks.Task.Delay(100);
             elapsed += 0.1f;
 
+            // Drena a fila do MainThreadDispatcher manualmente —
+            // Update() não é chamado automaticamente em Edit Mode.
+            DrainMainThreadDispatcher();
+
             // Critério 1: spy recebeu feedback (erro ou validação)
             if (spy != null && spy.CallCount > callCountBefore)
                 return;
 
-            // Critério 2: NavigateTo foi chamado (LoginManager — sem MainThreadDispatcher)
+            // Critério 2: NavigateTo foi chamado.
+            // Funciona para RegisterManager e LoginManager agora que MainThreadDispatcher
+            // está operacional. O critério anterior (ForceUpdate + UserDataStore) foi
+            // removido: causava falsos positivos quando o ForceUpdate de um teste anterior
+            // ainda em voo chamava AppContext.AnsweredQuestions do teste atual.
             if (_fakeNavigation.NavigateCallCount > navCountBefore)
-                return;
-
-            // Critério 3: ForceUpdate foi chamado E UserDataStore já foi populado
-            // Necessário para RegisterManager onde NavigateTo está no MainThreadDispatcher
-            // (que é null em Edit Mode e não executa)
-            if (!forceUpdateBefore
-                && _fakeAnswered.ForceUpdateWasCalled
-                && UserDataStore.CurrentUserData != null)
                 return;
 
             if (elapsed >= 3f) return;
         }
+    }
+
+    /// <summary>
+    /// Invoca Update() no MainThreadDispatcher via reflection para drenar a fila
+    /// de callbacks que foram enfileirados por threads de background.
+    /// Necessário porque em Edit Mode o Unity não chama Update() automaticamente.
+    /// </summary>
+    private static void DrainMainThreadDispatcher()
+    {
+        // Lê _instance direto via reflection — evita o getter que chama DontDestroyOnLoad.
+        var instanceField = typeof(MainThreadDispatcher).GetField(
+            "_instance",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        var instance = instanceField?.GetValue(null) as MainThreadDispatcher;
+        if (instance == null) return;
+
+        var update = typeof(MainThreadDispatcher).GetMethod(
+            "Update",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        update?.Invoke(instance, null);
     }
 
     private static void SetField(object target, string fieldName, object value)

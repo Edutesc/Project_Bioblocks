@@ -132,3 +132,8 @@ audit-dryrun-*.json
 audit-apply-*.json
 Assets/Editor/FirebaseSecrets.json
 Assets/Editor/FirebaseSecrets.json.meta
+
+# ===========================
+# Local Python Scripts# 
+# ===========================
+Python_Local_Scripts/

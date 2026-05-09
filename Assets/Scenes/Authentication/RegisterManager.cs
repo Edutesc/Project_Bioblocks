@@ -109,9 +109,6 @@ public class RegisterManager : MonoBehaviour
             AssignRandomDefaultAvatar(userData);
 
             Debug.Log("[RegisterManager] Enfileirando LoadScene na main thread...");
-
-            // Task.Yield() não garante retorno à main thread quando ConfigureAwait(false)
-            // foi usado anteriormente na cadeia. MainThreadDispatcher.Enqueue garante.
             MainThreadDispatcher.Enqueue(() =>
             {
                 Debug.Log("[RegisterManager] Carregando PathwayScene na main thread...");
