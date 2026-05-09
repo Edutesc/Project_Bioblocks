@@ -38,7 +38,10 @@ public static class QuestionTestHelpers
         int number,
         int level = 1,
         string databankName = "TestDB",
-        bool inDevelopment = false)
+        bool inDevelopment = false,
+        AnswerType answerType   = AnswerType.Text,
+        QuestionType questionType = QuestionType.Text,
+        BloomLevel bloomLevel   = BloomLevel.Unclassified)
     {
         return new Question
         {
@@ -46,15 +49,20 @@ public static class QuestionTestHelpers
             questionLevel         = level,
             questionDatabankName  = databankName,
             questionText          = $"Questão {number}",
-            answers               = new[] { "A", "B", "C", "D" },
+            answers               = answerType == AnswerType.Open
+                                        ? new string[0]
+                                        : new[] { "A", "B", "C", "D" },
             correctIndex          = 0,
             questionInDevelopment = inDevelopment,
-            // Novos campos com valores default seguros
+            answerType            = answerType,
+            questionType          = questionType,
+            isImageAnswer         = (answerType   == AnswerType.Image),
+            isImageQuestion       = (questionType == QuestionType.Image),
             globalId              = $"{databankName}_{number:D3}",
             topic                 = "",
             displayName           = "",
             subtopic              = null,
-            bloomLevel            = "unclassified",
+            bloomLevel            = bloomLevel,
             conceptTags           = new List<string>(),
             prerequisites         = new List<string>(),
             questionHint          = new QuestionHint()
@@ -74,7 +82,9 @@ public static class QuestionTestHelpers
         int level = 1,
         string databankName = "TestDB",
         string topic = "testTopic",
-        string bloomLevel = "remember",
+        BloomLevel bloomLevel     = BloomLevel.Remember,
+        AnswerType answerType     = AnswerType.Text,
+        QuestionType questionType = QuestionType.Text,
         bool inDevelopment = false)
     {
         return new Question
@@ -83,10 +93,14 @@ public static class QuestionTestHelpers
             questionLevel         = level,
             questionDatabankName  = databankName,
             questionText          = $"Questão completa {number}",
-            answers               = new[] { "Resposta A", "Resposta B", "Resposta C", "Resposta D" },
+            answers               = answerType == AnswerType.Open
+                                        ? new string[0]
+                                        : new[] { "Resposta A", "Resposta B", "Resposta C", "Resposta D" },
             correctIndex          = 0,
-            isImageAnswer         = false,
-            isImageQuestion       = false,
+            answerType            = answerType,
+            questionType          = questionType,
+            isImageAnswer         = (answerType   == AnswerType.Image),
+            isImageQuestion       = (questionType == QuestionType.Image),
             questionImagePath     = "",
             questionInDevelopment = inDevelopment,
             globalId              = $"{databankName}_{number:D3}",
@@ -98,10 +112,10 @@ public static class QuestionTestHelpers
             prerequisites         = new List<string>(),
             questionHint          = new QuestionHint
             {
-                text     = $"Dica da questão {number}",
-                videoUrl = null,
-                imagePath= null,
-                link     = null
+                text      = $"Dica da questão {number}",
+                videoUrl  = null,
+                imagePath = null,
+                link      = null
             }
         };
     }

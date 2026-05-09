@@ -305,7 +305,7 @@ public class QuestionSyncServiceTests
             number: 1,
             databankName: "TestDB",
             topic: "acidsBase",
-            bloomLevel: "understand");
+            bloomLevel: BloomLevel.Understand);
 
         // Act
         repo.SaveQuestions(new List<Question> { question });
@@ -314,11 +314,11 @@ public class QuestionSyncServiceTests
         // Assert
         Assert.AreEqual(1, result.Count);
         var saved = result[0];
-        Assert.AreEqual("TestDB_001",  saved.globalId,   "globalId deve ser preservado.");
-        Assert.AreEqual("acidsBase",   saved.topic,      "topic deve ser preservado.");
-        Assert.AreEqual("understand",  saved.bloomLevel, "bloomLevel deve ser preservado.");
-        Assert.IsNotNull(saved.conceptTags,              "conceptTags não deve ser null.");
-        Assert.IsNotNull(saved.questionHint,             "questionHint não deve ser null.");
+        Assert.AreEqual("TestDB_001",          saved.globalId,   "globalId deve ser preservado.");
+        Assert.AreEqual("acidsBase",           saved.topic,      "topic deve ser preservado.");
+        Assert.AreEqual(BloomLevel.Understand, saved.bloomLevel, "bloomLevel deve ser preservado.");
+        Assert.IsNotNull(saved.conceptTags,                      "conceptTags não deve ser null.");
+        Assert.IsNotNull(saved.questionHint,                     "questionHint não deve ser null.");
 
         db.Close();
     }

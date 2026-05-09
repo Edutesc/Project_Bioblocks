@@ -15,15 +15,18 @@ public class FeedbackUIElements : MonoBehaviour
     [Header("Sprites de Feedback")]
     [SerializeField] private Sprite feedbackCorrect5Points;
     [Tooltip("Imagem: 'Resposta correta! +5 pontos'")]
-    
+
     [SerializeField] private Sprite feedbackCorrect10PointsBonus;
     [Tooltip("Imagem: 'Resposta correta! +10 pontos (Bônus ativo!)'")]
-    
+
     [SerializeField] private Sprite feedbackWrong;
     [Tooltip("Imagem: 'Resposta errada! -2 pontos'")]
-    
+
     [SerializeField] private Sprite feedbackTimeout;
     [Tooltip("Imagem: 'Tempo Esgotado! -1 ponto'")]
+
+    [SerializeField] private Sprite feedbackOpenAnswerSubmitted;
+    [Tooltip("Imagem: 'Resposta enviada para avaliação!'")]
 
     [Header("Feedback Completo (Conclusão de Nível)")]
     [SerializeField] private CanvasGroup levelCompletionFeedbackGroup;
@@ -111,6 +114,19 @@ public class FeedbackUIElements : MonoBehaviour
     public void ShowTimeout()
     {
         ShowFeedbackSprite(feedbackTimeout);
+    }
+
+    /// <summary>
+    /// Mostra feedback neutro para questões dissertativas (AnswerType.Open):
+    /// a resposta foi recebida e será avaliada posteriormente por LLM.
+    /// </summary>
+    public void ShowOpenAnswerSubmitted()
+    {
+        // Se o sprite dedicado não estiver configurado, exibe o feedback correto
+        // como fallback visual temporário até o sprite ser criado no projeto.
+        ShowFeedbackSprite(feedbackOpenAnswerSubmitted != null
+            ? feedbackOpenAnswerSubmitted
+            : feedbackCorrect5Points);
     }
 
     /// <summary>

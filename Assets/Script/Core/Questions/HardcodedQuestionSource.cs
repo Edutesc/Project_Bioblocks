@@ -37,8 +37,15 @@ public class HardcodedQuestionSource : IQuestionSource
         foreach (var db in databases)
         {
             string name = db.GetDatabankName();
-            var questions = db.GetQuestions();
-            _cache[name] = questions ?? new List<Question>();
+            var questions = db.GetQuestions() ?? new List<Question>();
+
+            // Os arquivos hardcoded definem isImageAnswer/isImageQuestion (booleans legados).
+            // Derivamos answerType e questionType para que todo código consumidor
+            // possa usar os enums sem precisar alterar os 10 arquivos de database.
+            foreach (var q in questions)
+                NormalizeQuestionTypes(q);
+
+            _cache[name] = questions;
             Debug.Log($"[HardcodedQuestionSource] {name}: {_cache[name].Count} questões carregadas.");
         }
     }
@@ -50,5 +57,25 @@ public class HardcodedQuestionSource : IQuestionSource
 
         Debug.LogWarning($"[HardcodedQuestionSource] Banco '{databankName}' não encontrado.");
         return new List<Question>();
+    }
+
+    /// <summary>
+    /// Deriva answerType e questionType a partir dos booleans legados
+    /// isImageAnswer / isImageQuestion, mantendo os dois em sincronia.
+    /// Questões que já tiverem answerType != default (Text) são ignoradas,
+    /// permitindo que bancos futuros definam o enum diretamente.
+    /// </summary>
+    private static void NormalizeQuestionTypes(Question q)
+    {
+        if (q.answerType == AnswerType.Text && q.isImageAnswer)
+            q.answerType = AnswerType.Image;
+
+        if (q.questionType == QuestionType.Text && q.isImageQuestion)
+            q.questionType = QuestionType.Image;
+
+        // Garante sincronia no sentido inverso: se o banco futuro setar
+        // o enum diretamente, os booleans legados acompanham.
+        q.isImageAnswer   = (q.answerType   == AnswerType.Image);
+        q.isImageQuestion = (q.questionType == QuestionType.Image);
     }
 }

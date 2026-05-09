@@ -35,13 +35,16 @@ public class QuestionUIManager : MonoBehaviour
     {
         ApplyTheme(question);
 
-        if (question.isImageQuestion)
+        switch (question.questionType)
         {
-            ShowImageQuestion(question);
-        }
-        else
-        {
-            ShowTextQuestion(question);
+            case QuestionType.Image:
+                ShowImageQuestion(question);
+                break;
+
+            case QuestionType.Text:
+            default:
+                ShowTextQuestion(question);
+                break;
         }
     }
 
@@ -49,12 +52,16 @@ public class QuestionUIManager : MonoBehaviour
     {
         if (answerButtonThemeManager != null)
         {
-            answerButtonThemeManager.ApplyTheme(question.questionLevel, question.isImageAnswer);
+            answerButtonThemeManager.ApplyTheme(
+                question.questionLevel,
+                question.answerType == AnswerType.Image);
         }
 
         if (questionBackgroundThemeManager != null)
         {
-            questionBackgroundThemeManager.ApplyTheme(question.questionLevel, question.isImageQuestion);
+            questionBackgroundThemeManager.ApplyTheme(
+                question.questionLevel,
+                question.questionType == QuestionType.Image);
         }
     }
 
@@ -99,7 +106,7 @@ public class QuestionUIManager : MonoBehaviour
 
     public async Task PreloadQuestionImage(Question questionToPreload)
     {
-        if (!questionToPreload.isImageQuestion || string.IsNullOrEmpty(questionToPreload.questionImagePath))
+        if (questionToPreload.questionType != QuestionType.Image || string.IsNullOrEmpty(questionToPreload.questionImagePath))
         {
             preloadedQuestionImage = null;
             return;

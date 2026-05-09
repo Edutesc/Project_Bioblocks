@@ -33,6 +33,10 @@ public class QuestionLoadManagerTests
     [SetUp]
     public void Setup()
     {
+        // Garante que Preview Mode está desativado independente do EnvironmentConfig.asset local.
+        // Testes que precisam de Preview Mode chamam OverridePreviewModeForTests(true) explicitamente.
+        EnvironmentConfig.OverridePreviewModeForTests(false);
+
         _fakeAnswered = new ConfigurableFakeAnsweredQuestionsManager();
         _fakeSync     = new FakeQuestionSyncService { IsCacheReady = true };
 

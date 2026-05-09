@@ -80,7 +80,7 @@ public class QuestionCounterManager : MonoBehaviour
 
         if (questionCounterText != null)
         {
-            string counterText = $"Respostas corretas: {answeredInLevel} de {totalInLevel}\n{levelName}";
+            string counterText = $"{answeredInLevel} de {totalInLevel}";
             questionCounterText.text = counterText;
         }
 

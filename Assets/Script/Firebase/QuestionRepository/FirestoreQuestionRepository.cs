@@ -104,6 +104,33 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
         {
             var data = doc.ToDictionary();
 
+            // ── AnswerType ───────────────────────────────────────────────────
+            // Lê o campo novo "answerType" (string). Se ausente ou inválido,
+            // deriva do booleano legado "isImageAnswer" — compatibilidade com
+            // documentos Firestore que ainda não foram migrados.
+            bool legacyImageAnswer = GetBool(data, "isImageAnswer", false);
+            string answerTypeRaw   = GetString(data, "answerType", null);
+            AnswerType answerType  = (answerTypeRaw != null &&
+                                      System.Enum.TryParse(answerTypeRaw, true, out AnswerType at))
+                                     ? at
+                                     : (legacyImageAnswer ? AnswerType.Image : AnswerType.Text);
+
+            // ── QuestionType ─────────────────────────────────────────────────
+            // Mesma lógica: campo novo "questionType" com fallback para
+            // o booleano legado "isImageQuestion".
+            bool legacyImageQuestion  = GetBool(data, "isImageQuestion", false);
+            string questionTypeRaw    = GetString(data, "questionType", null);
+            QuestionType questionType = (questionTypeRaw != null &&
+                                         System.Enum.TryParse(questionTypeRaw, true, out QuestionType qt))
+                                        ? qt
+                                        : (legacyImageQuestion ? QuestionType.Image : QuestionType.Text);
+
+            // ── BloomLevel ───────────────────────────────────────────────────
+            string bloomRaw       = GetString(data, "bloomLevel", null);
+            BloomLevel bloomLevel = (bloomRaw != null &&
+                                     System.Enum.TryParse(bloomRaw, true, out BloomLevel bl))
+                                    ? bl : BloomLevel.Unclassified;
+
             var question = new Question
             {
                 globalId              = GetString(data, "globalId",              doc.Id),
@@ -111,15 +138,17 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
                 questionText          = GetString(data, "questionText",           ""),
                 correctIndex          = GetInt   (data, "correctIndex",           0),
                 questionNumber        = GetInt   (data, "questionNumber",         0),
-                isImageAnswer         = GetBool  (data, "isImageAnswer",          false),
-                isImageQuestion       = GetBool  (data, "isImageQuestion",        false),
+                answerType            = answerType,
+                isImageAnswer         = (answerType == AnswerType.Image),
+                questionType          = questionType,
+                isImageQuestion       = (questionType == QuestionType.Image),
                 questionImagePath     = GetString(data, "questionImagePath",      ""),
                 questionLevel         = GetInt   (data, "questionLevel",          1),
                 questionInDevelopment = GetBool  (data, "questionInDevelopment",  false),
                 topic                 = GetString(data, "topic",                  ""),
                 displayName           = GetString(data, "displayName",            ""),
                 subtopic              = GetString(data, "subtopic",               null),
-                bloomLevel            = GetString(data, "bloomLevel",             "unclassified"),
+                bloomLevel            = bloomLevel,
                 conceptTags           = GetStringList(data, "conceptTags"),
                 prerequisites         = GetStringList(data, "prerequisites"),
                 answers               = GetStringArray(data, "answers"),

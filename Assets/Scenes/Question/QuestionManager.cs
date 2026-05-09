@@ -68,7 +68,10 @@ public class QuestionManager : MonoBehaviour
             timerManager.OnTimerComplete -= HandleTimeUp;
 
         if (answerManager != null)
-            answerManager.OnAnswerSelected -= CheckAnswer;
+        {
+            answerManager.OnAnswerSelected     -= CheckAnswer;
+            answerManager.OnOpenAnswerSubmitted -= HandleOpenAnswer;
+        }
 
         if (transitionManager != null)
         {
@@ -218,10 +221,11 @@ public class QuestionManager : MonoBehaviour
 
     private void SetupEventHandlers()
     {
-        timerManager.OnTimerComplete             += HandleTimeUp;
-        answerManager.OnAnswerSelected           += CheckAnswer;
+        timerManager.OnTimerComplete              += HandleTimeUp;
+        answerManager.OnAnswerSelected            += CheckAnswer;
+        answerManager.OnOpenAnswerSubmitted       += HandleOpenAnswer;
         transitionManager.OnBeforeTransitionStart += PrepareNextQuestion;
-        transitionManager.OnTransitionMidpoint   += ApplyPreparedQuestion;
+        transitionManager.OnTransitionMidpoint    += ApplyPreparedQuestion;
     }
 
     // -------------------------------------------------------
@@ -268,6 +272,36 @@ public class QuestionManager : MonoBehaviour
         {
             Debug.LogError($"Erro ao processar resposta: {e.Message}");
         }
+    }
+
+    // -------------------------------------------------------
+    // Resposta dissertativa (AnswerType.Open)
+    // -------------------------------------------------------
+
+    /// <summary>
+    /// Chamado quando o jogador submete uma resposta dissertativa.
+    /// A avaliação real é feita offline por LLM; aqui apenas registramos
+    /// que a questão foi respondida e habilitamos a navegação — sem alterar
+    /// pontuação positiva ou negativamente.
+    /// </summary>
+    private void HandleOpenAnswer(string answerText)
+    {
+        timerManager.StopTimer();
+        answerManager.DisableAllButtons();
+
+        var currentQuestion = currentSession.GetCurrentQuestion();
+        Debug.Log($"[QuestionManager] Resposta aberta recebida para questão {currentQuestion.globalId}: \"{answerText}\"");
+
+        feedbackElements.ShowOpenAnswerSubmitted();
+
+        if (counterManager != null)
+        {
+            counterManager.MarkQuestionAsAnswered(currentQuestion.questionNumber);
+            counterManager.UpdateCounter(currentQuestion);
+        }
+
+        questionBottomBarManager.EnableNavigationButtons();
+        SetupNavigationButtons();
     }
 
     private async Task CheckLevelCompletionAfterCorrectAnswer(Question answeredQuestion)
@@ -379,7 +413,7 @@ public class QuestionManager : MonoBehaviour
 
     private async Task PreloadQuestionResources(Question question)
     {
-        if (question.isImageQuestion)
+        if (question.questionType == QuestionType.Image)
             await questionUIManager.PreloadQuestionImage(question);
     }
 
@@ -390,8 +424,8 @@ public class QuestionManager : MonoBehaviour
             answerManager.ResetButtonBackgrounds();
             answerManager.SetupAnswerButtons(nextQuestionToShow);
             questionCanvasGroupManager.ShowQuestion(
-                nextQuestionToShow.isImageQuestion,
-                nextQuestionToShow.isImageAnswer,
+                nextQuestionToShow.questionType,
+                nextQuestionToShow.answerType,
                 nextQuestionToShow.questionLevel);
             questionUIManager.ShowQuestion(nextQuestionToShow);
 
@@ -416,8 +450,8 @@ public class QuestionManager : MonoBehaviour
             var newQuestion = currentSession.GetCurrentQuestion();
             answerManager.SetupAnswerButtons(newQuestion);
             questionCanvasGroupManager.ShowQuestion(
-                newQuestion.isImageQuestion,
-                newQuestion.isImageAnswer,
+                newQuestion.questionType,
+                newQuestion.answerType,
                 newQuestion.questionLevel);
             questionUIManager.ShowQuestion(newQuestion);
 
@@ -434,15 +468,15 @@ public class QuestionManager : MonoBehaviour
             answerManager.ResetButtonBackgrounds();
             answerManager.SetupAnswerButtons(currentQuestion);
             questionCanvasGroupManager.ShowQuestion(
-                currentQuestion.isImageQuestion,
-                currentQuestion.isImageAnswer,
+                currentQuestion.questionType,
+                currentQuestion.answerType,
                 currentQuestion.questionLevel);
             questionUIManager.ShowQuestion(currentQuestion);
 
             if (counterManager != null)
                 counterManager.UpdateCounter(currentQuestion);
 
-            timerManager.StartTimer();
+            timerManager.StartTimer(currentSession.GetCurrentQuestion().bloomLevel);
         }
         catch (Exception e)
         {
@@ -485,7 +519,7 @@ public class QuestionManager : MonoBehaviour
                 // Preview Mode: sem usuário logado → transiciona normalmente;
                 // o loop é gerenciado em PrepareNextQuestion().
                 await transitionManager.TransitionToNextQuestion();
-                timerManager.StartTimer();
+                timerManager.StartTimer(currentSession.GetCurrentQuestion().bloomLevel);
                 return;
             }
 
@@ -538,7 +572,7 @@ public class QuestionManager : MonoBehaviour
         }
 
         await transitionManager.TransitionToNextQuestion();
-        timerManager.StartTimer();
+        timerManager.StartTimer(currentSession.GetCurrentQuestion().bloomLevel);
     }
 
     private async Task CheckAndLoadMoreQuestions()

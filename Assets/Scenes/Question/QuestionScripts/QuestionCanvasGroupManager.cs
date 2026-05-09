@@ -1,3 +1,4 @@
+using QuestionSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     [Header("Answer UI")]
     [SerializeField] private CanvasGroup answerTextCanvasGroup;
     [SerializeField] private CanvasGroup answerImageCanvasGroup;
+    [SerializeField] private CanvasGroup answerOpenCanvasGroup;
 
     [Header("Feedback UI")]
     [SerializeField] private CanvasGroup questionsCompletedFeedback;
@@ -44,23 +46,35 @@ public class QuestionCanvasGroupManager : MonoBehaviour
 
     public void ShowLoading()
     {
-        SetCanvasGroupState(loadingCanvasGroup, true);
+        SetCanvasGroupState(loadingCanvasGroup,    true);
         SetCanvasGroupState(questionTextContainer, false);
         SetCanvasGroupState(questionImageContainer, false);
         SetCanvasGroupState(answerTextCanvasGroup, false);
         SetCanvasGroupState(answerImageCanvasGroup, false);
-        SetCanvasGroupState(questionBottomBar, false);
+        SetCanvasGroupState(answerOpenCanvasGroup, false);
+        SetCanvasGroupState(questionBottomBar,     false);
     }
 
-    public void ShowQuestion(bool isImageQuestion, bool isImageAnswer, int questionLevel)
+    /// <summary>Mostra os canvas groups corretos de acordo com o tipo de questão/resposta (enum).</summary>
+    public void ShowQuestion(QuestionType questionType, AnswerType answerType, int questionLevel)
     {
         currentQuestionLevel = questionLevel;
-        SetCanvasGroupState(loadingCanvasGroup, false);
-        SetCanvasGroupState(questionTextContainer, !isImageQuestion);
-        SetCanvasGroupState(questionImageContainer, isImageQuestion);
-        SetCanvasGroupState(answerTextCanvasGroup, !isImageAnswer);
-        SetCanvasGroupState(answerImageCanvasGroup, isImageAnswer);
-        SetCanvasGroupState(questionBottomBar, true);
+        SetCanvasGroupState(loadingCanvasGroup,     false);
+        SetCanvasGroupState(questionTextContainer,  questionType == QuestionType.Text);
+        SetCanvasGroupState(questionImageContainer, questionType == QuestionType.Image);
+        SetCanvasGroupState(answerTextCanvasGroup,  answerType   == AnswerType.Text);
+        SetCanvasGroupState(answerImageCanvasGroup, answerType   == AnswerType.Image);
+        SetCanvasGroupState(answerOpenCanvasGroup,  answerType   == AnswerType.Open);
+        SetCanvasGroupState(questionBottomBar,      true);
+    }
+
+    /// <summary>Overload legado — mantido para retrocompatibilidade.</summary>
+    public void ShowQuestion(bool isImageQuestion, bool isImageAnswer, int questionLevel)
+    {
+        ShowQuestion(
+            isImageQuestion ? QuestionType.Image : QuestionType.Text,
+            isImageAnswer   ? AnswerType.Image   : AnswerType.Text,
+            questionLevel);
     }
 
     public Color GetFeedbackColorForCurrentLevel(bool isCorrect)
@@ -92,10 +106,11 @@ public class QuestionCanvasGroupManager : MonoBehaviour
 
     public void ShowCompletionFeedback()
     {
-        if (questionTextContainer != null) questionTextContainer.gameObject.SetActive(false);
+        if (questionTextContainer  != null) questionTextContainer.gameObject.SetActive(false);
         if (questionImageContainer != null) questionImageContainer.gameObject.SetActive(false);
-        if (answerTextCanvasGroup != null) answerTextCanvasGroup.gameObject.SetActive(false);
+        if (answerTextCanvasGroup  != null) answerTextCanvasGroup.gameObject.SetActive(false);
         if (answerImageCanvasGroup != null) answerImageCanvasGroup.gameObject.SetActive(false);
+        if (answerOpenCanvasGroup  != null) answerOpenCanvasGroup.gameObject.SetActive(false);
 
         if (feedbackPanel != null)
         {
@@ -151,8 +166,9 @@ public class QuestionCanvasGroupManager : MonoBehaviour
 
     public void DisableAnswers()
     {
-        SetCanvasGroupInteractable(answerTextCanvasGroup, false);
+        SetCanvasGroupInteractable(answerTextCanvasGroup,  false);
         SetCanvasGroupInteractable(answerImageCanvasGroup, false);
+        SetCanvasGroupInteractable(answerOpenCanvasGroup,  false);
     }
 
     private void InitializeCanvasGroups()
@@ -254,6 +270,7 @@ public class QuestionCanvasGroupManager : MonoBehaviour
             loadingCanvasGroup,
             answerTextCanvasGroup,
             answerImageCanvasGroup,
+            answerOpenCanvasGroup,
             questionsCompletedFeedback,
             questionBottomBar,
             questionTextContainer,
@@ -262,12 +279,13 @@ public class QuestionCanvasGroupManager : MonoBehaviour
         };
     }
 
-    public CanvasGroup LoadingCanvasGroup => loadingCanvasGroup;
-    public CanvasGroup AnswerTextCanvasGroup => answerTextCanvasGroup;
+    public CanvasGroup LoadingCanvasGroup     => loadingCanvasGroup;
+    public CanvasGroup AnswerTextCanvasGroup  => answerTextCanvasGroup;
     public CanvasGroup AnswerImageCanvasGroup => answerImageCanvasGroup;
+    public CanvasGroup AnswerOpenCanvasGroup  => answerOpenCanvasGroup;
     public CanvasGroup QuestionsCompletedFeedback => questionsCompletedFeedback;
-    public CanvasGroup BottomBar => questionBottomBar;
-    public CanvasGroup QuestionTextContainer => questionTextContainer;
+    public CanvasGroup BottomBar              => questionBottomBar;
+    public CanvasGroup QuestionTextContainer  => questionTextContainer;
     public CanvasGroup QuestionImageContainer => questionImageContainer;
     public CanvasGroup BonusFeedbackCanvasGroup => questionBonusUIFeedback;
 

@@ -199,28 +199,30 @@ public class UploadQuestionBanksEditor : EditorWindow
                         globalId = string.IsNullOrEmpty(q.globalId)
                             ? $"{q.topic}_{q.questionNumber:D3}"
                             : q.globalId,
-                        questionDatabankName = q.questionDatabankName,
-                        questionNumber = q.questionNumber,
-                        questionText = q.questionText,
-                        answers = q.answers,
-                        correctIndex = q.correctIndex,
-                        isImageQuestion = q.isImageQuestion,
-                        isImageAnswer = q.isImageAnswer,
-                        questionImagePath = q.questionImagePath,
-                        questionLevel = q.questionLevel,
-                        topic = q.topic,
-                        subtopic = q.subtopic,
-                        displayName = q.displayName,
-                        bloomLevel = q.bloomLevel ?? "unclassified",
-                        conceptTags = q.conceptTags ?? new List<string>(),
-                        prerequisites = q.prerequisites ?? new List<string>(),
+                        questionDatabankName  = q.questionDatabankName,
+                        questionNumber        = q.questionNumber,
+                        questionText          = q.questionText,
+                        answers               = q.answers,
+                        correctIndex          = q.correctIndex,
+                        questionType          = q.questionType.ToString(),
+                        answerType            = q.answerType.ToString(),
+                        isImageQuestion       = q.isImageQuestion,
+                        isImageAnswer         = q.isImageAnswer,
+                        questionImagePath     = q.questionImagePath,
+                        questionLevel         = q.questionLevel,
+                        topic                 = q.topic,
+                        subtopic              = q.subtopic,
+                        displayName           = q.displayName,
+                        bloomLevel            = q.bloomLevel.ToString(),
+                        conceptTags           = q.conceptTags   ?? new List<string>(),
+                        prerequisites         = q.prerequisites ?? new List<string>(),
                         questionInDevelopment = q.questionInDevelopment,
                         questionHint = q.questionHint != null ? new QuestionHintData
                         {
                             imagePath = q.questionHint.imagePath ?? "",
-                            link = q.questionHint.link ?? "",
-                            text = q.questionHint.text ?? "",
-                            videoUrl = q.questionHint.videoUrl ?? ""
+                            link      = q.questionHint.link      ?? "",
+                            text      = q.questionHint.text      ?? "",
+                            videoUrl  = q.questionHint.videoUrl  ?? ""
                         } : new QuestionHintData()
                     };
 
@@ -343,14 +345,16 @@ public class UploadQuestionBanksEditor : EditorWindow
         public string questionText;
         public string[] answers;
         public int correctIndex;
-        public bool isImageQuestion;
-        public bool isImageAnswer;
+        public string questionType;      // enum QuestionType serializado como string
+        public string answerType;        // enum AnswerType serializado como string
+        public bool isImageQuestion;     // legado — mantido para compatibilidade
+        public bool isImageAnswer;       // legado — mantido para compatibilidade
         public string questionImagePath;
         public int questionLevel;
         public string topic;
         public string subtopic;
         public string displayName;
-        public string bloomLevel;
+        public string bloomLevel;        // enum BloomLevel serializado como string
         public List<string> conceptTags;
         public List<string> prerequisites;
         public bool questionInDevelopment;
