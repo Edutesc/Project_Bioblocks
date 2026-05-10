@@ -26,7 +26,8 @@ public class AppContext : MonoBehaviour
     public static IQuestionLocalRepository      QuestionLocal     { get; private set; }
     public static IQuestionSyncService          QuestionSync      { get; private set; }
     public static IQuestionSource               QuestionSource    { get; private set; }
-    public static IAvatarSelectionService       AvatarSelection   { get; private set; }
+    public static IAvatarSelectionService       AvatarSelection     { get; private set; }
+    public static IOpenAnswerEvaluator          OpenAnswerEvaluator { get; private set; }
 
     public static bool IsReady { get; private set; }
 
@@ -74,6 +75,10 @@ public class AppContext : MonoBehaviour
                 SceneData  = sceneDataMgr;
                 Debug.Log("[AppContext] Preview mode — Navigation e SceneData inicializados.");
             }
+
+            // Avaliador de respostas dissertativas — disponível também em Preview Mode
+            var secretsCfg = SecretsConfig.Load();
+            OpenAnswerEvaluator = new GeminiEvaluator(secretsCfg?.ResolvedGeminiApiKey ?? "");
 
             IsReady = true;
             OnReady?.Invoke();
@@ -211,6 +216,11 @@ public class AppContext : MonoBehaviour
             QuestionSync      = questionSyncSvc;
             AvatarSelection   = avatarSelectionSvc;
 
+            // ── 10. Avaliador de respostas dissertativas (Anthropic API) ──────────
+            var secretsCfg = SecretsConfig.Load();
+            OpenAnswerEvaluator = new GeminiEvaluator(secretsCfg?.ResolvedGeminiApiKey ?? "");
+            Debug.Log("[AppContext] OpenAnswerEvaluator (Gemini) inicializado.");
+
             IsReady = true;
             OnReady?.Invoke();
             Debug.Log("[AppContext] Todos os serviços prontos.");
@@ -265,24 +275,26 @@ public class AppContext : MonoBehaviour
         IQuestionLocalRepository        questionLocal        = null,
         IQuestionSyncService            questionSync         = null,
         IQuestionSource                 questionSource       = null,
-        IAvatarSelectionService         avatarSelection      = null)
+        IAvatarSelectionService         avatarSelection      = null,
+        IOpenAnswerEvaluator            openAnswerEvaluator  = null)
     {
-        if (firestore         != null) Firestore         = firestore;
-        if (auth              != null) Auth              = auth;
-        if (statistics        != null) Statistics        = statistics;
-        if (navigation        != null) Navigation        = navigation;
-        if (sceneData         != null) SceneData         = sceneData;
-        if (localDatabase     != null) LocalDatabase     = localDatabase;
-        if (imageCache        != null) ImageCache        = imageCache;
-        if (answeredQuestions != null) AnsweredQuestions = answeredQuestions;
-        if (playerLevel       != null) PlayerLevel       = playerLevel;
-        if (userDataLocal     != null) UserDataLocal     = userDataLocal;
-        if (userDataSync      != null) UserDataSync      = userDataSync;
-        if (questionFirestore != null) QuestionFirestore = questionFirestore;
-        if (questionLocal     != null) QuestionLocal     = questionLocal;
-        if (questionSync      != null) QuestionSync      = questionSync;
-        if (questionSource    != null) QuestionSource    = questionSource;
-        if (avatarSelection   != null) AvatarSelection   = avatarSelection;
+        if (firestore            != null) Firestore            = firestore;
+        if (auth                 != null) Auth                 = auth;
+        if (statistics           != null) Statistics           = statistics;
+        if (navigation           != null) Navigation           = navigation;
+        if (sceneData            != null) SceneData            = sceneData;
+        if (localDatabase        != null) LocalDatabase        = localDatabase;
+        if (imageCache           != null) ImageCache           = imageCache;
+        if (answeredQuestions    != null) AnsweredQuestions    = answeredQuestions;
+        if (playerLevel          != null) PlayerLevel          = playerLevel;
+        if (userDataLocal        != null) UserDataLocal        = userDataLocal;
+        if (userDataSync         != null) UserDataSync         = userDataSync;
+        if (questionFirestore    != null) QuestionFirestore    = questionFirestore;
+        if (questionLocal        != null) QuestionLocal        = questionLocal;
+        if (questionSync         != null) QuestionSync         = questionSync;
+        if (questionSource       != null) QuestionSource       = questionSource;
+        if (avatarSelection      != null) AvatarSelection      = avatarSelection;
+        if (openAnswerEvaluator  != null) OpenAnswerEvaluator  = openAnswerEvaluator;
         IsReady = true;
     }
 }

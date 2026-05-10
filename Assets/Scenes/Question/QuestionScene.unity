@@ -6513,7 +6513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1266426255
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8813,7 +8813,7 @@ MonoBehaviour:
   feedbackCorrect10PointsBonus: {fileID: 21300000, guid: 80893de6032354dc3abc28693c815494, type: 3}
   feedbackWrong: {fileID: 21300000, guid: 99f115e887b4d4b75b8c66cd40a1409a, type: 3}
   feedbackTimeout: {fileID: 21300000, guid: 004684f66d07c43e092e6e2105be926c, type: 3}
-  feedbackOpenAnswerSubmitted: {fileID: 0}
+  feedbackOpenAnswerSubmitted: {fileID: 21300000, guid: 1e5cbfc1c9d4b4ed99a522d65abdb451, type: 3}
   levelCompletionFeedbackGroup: {fileID: 2075623352}
   levelCompletionTitle: {fileID: 1809569470}
   levelCompletionText: {fileID: 1927822801}

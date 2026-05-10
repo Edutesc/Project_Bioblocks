@@ -1,4 +1,10 @@
 # ===========================
+# Secrets / API Keys
+# ===========================
+Assets/Resources/SecretsConfig.asset
+Assets/Resources/SecretsConfig.asset.meta
+
+# ===========================
 # Google Services / Firebase credentials
 # ===========================
 **/google-services-desktop.json

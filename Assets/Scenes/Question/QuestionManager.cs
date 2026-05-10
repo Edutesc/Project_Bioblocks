@@ -280,19 +280,43 @@ public class QuestionManager : MonoBehaviour
 
     /// <summary>
     /// Chamado quando o jogador submete uma resposta dissertativa.
-    /// A avaliação real é feita offline por LLM; aqui apenas registramos
-    /// que a questão foi respondida e habilitamos a navegação — sem alterar
-    /// pontuação positiva ou negativamente.
+    /// Envia a resposta + prerequisites para a LLM (Anthropic API),
+    /// exibe o score e registra a questão como respondida.
     /// </summary>
-    private void HandleOpenAnswer(string answerText)
+    private async void HandleOpenAnswer(string answerText)
     {
         timerManager.StopTimer();
         answerManager.DisableAllButtons();
 
         var currentQuestion = currentSession.GetCurrentQuestion();
-        Debug.Log($"[QuestionManager] Resposta aberta recebida para questão {currentQuestion.globalId}: \"{answerText}\"");
 
-        feedbackElements.ShowOpenAnswerSubmitted();
+        // ── Avaliação por LLM ──────────────────────────────────────────────────
+        var evaluator = AppContext.OpenAnswerEvaluator;
+        if (evaluator != null && currentQuestion.prerequisites != null && currentQuestion.prerequisites.Count > 0)
+        {
+            try
+            {
+                var result = await evaluator.EvaluateAsync(answerText, currentQuestion.prerequisites);
+
+                if (result.IsSuccess)
+                {
+                    float nota = result.Score * 10f;
+                    var (gradeTitle, gradeLetter) = GetOpenAnswerGrade(nota);
+                    feedbackElements.ShowOpenAnswerGrade(
+                        $"{gradeLetter} — {gradeTitle}",
+                        $"Nota: {nota:F1} / 10");
+                }
+                else
+                {
+                    Debug.LogWarning($"[QuestionManager] Avaliação falhou: {result.ErrorMessage}");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[QuestionManager] Erro ao avaliar resposta aberta: {e.Message}");
+            }
+        }
+        // ──────────────────────────────────────────────────────────────────────
 
         if (counterManager != null)
         {
@@ -302,6 +326,18 @@ public class QuestionManager : MonoBehaviour
 
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();
+    }
+
+    /// <summary>
+    /// Converte a nota (0–10) em título e conceito para o feedback dissertativo.
+    /// </summary>
+    private static (string title, string letter) GetOpenAnswerGrade(float nota)
+    {
+        if (nota >= 9f) return ("Excelente",            "A");
+        if (nota >= 7f) return ("Muito bem",            "B");
+        if (nota >= 5f) return ("Você pode fazer melhor", "C");
+        if (nota >= 3f) return ("Precisa estudar mais", "D");
+                        return ("Precisa estudar mais", "F");
     }
 
     private async Task CheckLevelCompletionAfterCorrectAnswer(Question answeredQuestion)

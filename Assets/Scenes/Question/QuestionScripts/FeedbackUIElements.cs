@@ -130,6 +130,94 @@ public class FeedbackUIElements : MonoBehaviour
     }
 
     /// <summary>
+    /// Exibe o resultado de uma resposta dissertativa no FeedbackPanel usando texto.
+    /// Exemplo: gradeText = "A — Excelente", scoreText = "Nota: 9.5 / 10"
+    /// Funciona sem sprite: usa cor sólida semitransparente como fundo.
+    /// </summary>
+    public void ShowOpenAnswerGrade(string gradeText, string scoreText)
+    {
+        if (feedbackPanel == null)
+        {
+            Debug.LogError("[FeedbackUIElements] FeedbackPanel não atribuído!");
+            return;
+        }
+
+        if (currentFeedbackCoroutine != null)
+            StopCoroutine(currentFeedbackCoroutine);
+
+        // Usa sprite dedicado se disponível; caso contrário, fundo sólido escuro
+        if (feedbackOpenAnswerSubmitted != null)
+        {
+            feedbackPanel.sprite = feedbackOpenAnswerSubmitted;
+            feedbackPanel.color  = Color.white;
+        }
+        else
+        {
+            feedbackPanel.sprite = null;
+            feedbackPanel.color  = new Color(0.1f, 0.1f, 0.1f, 0.85f); // fundo escuro semitransparente
+        }
+
+        feedbackPanel.gameObject.SetActive(true);
+
+        if (feedbackText != null)
+        {
+            feedbackText.text  = $"{gradeText}\n{scoreText}";
+            feedbackText.color = Color.white;
+            feedbackText.gameObject.SetActive(true);
+        }
+
+        if (useAnimation)
+            currentFeedbackCoroutine = StartCoroutine(AnimateOpenAnswerGrade());
+    }
+
+    private IEnumerator AnimateOpenAnswerGrade()
+    {
+        // Fade in — aplica alpha=0 imediatamente antes de começar o lerp
+        Color panelColor = feedbackPanel.color;
+        Color textColor  = feedbackText != null ? feedbackText.color : Color.white;
+        panelColor.a = 0f;
+        feedbackPanel.color = panelColor;   // ← aplica agora, sem esperar o loop
+        if (feedbackText != null) { textColor.a = 0f; feedbackText.color = textColor; }
+
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed    += Time.deltaTime;
+            float t     = elapsed / fadeDuration;
+            panelColor.a = Mathf.Lerp(0f, 1f, t);
+            feedbackPanel.color = panelColor;
+            if (feedbackText != null)
+            {
+                textColor.a = Mathf.Lerp(0f, 1f, t);
+                feedbackText.color = textColor;
+            }
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(displayDuration);
+
+        // Fade out
+        elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed    += Time.deltaTime;
+            float t     = elapsed / fadeDuration;
+            panelColor.a = Mathf.Lerp(1f, 0f, t);
+            feedbackPanel.color = panelColor;
+            if (feedbackText != null)
+            {
+                textColor.a = Mathf.Lerp(1f, 0f, t);
+                feedbackText.color = textColor;
+            }
+            yield return null;
+        }
+
+        feedbackPanel.gameObject.SetActive(false);
+        if (feedbackText != null) feedbackText.gameObject.SetActive(false);
+        currentFeedbackCoroutine = null;
+    }
+
+    /// <summary>
     /// Método interno para exibir um sprite de feedback
     /// </summary>
     private void ShowFeedbackSprite(Sprite sprite)
