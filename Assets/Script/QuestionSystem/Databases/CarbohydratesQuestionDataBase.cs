@@ -1306,31 +1306,31 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = null
         //},
-        //new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Qual dos seguintes é um monossacarídeo?",
-        //    answers = new string[] {
-        //        "Sacarose",
-        //        "Maltose",
-        //        "Glicose",
-        //        "Amido"
-        //    },
-        //    correctIndex = 2,
-        //    questionNumber = 56,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 1,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_056",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+        new Question {
+           questionDatabankName = "CarbohydratesQuestionDatabase",
+           questionText = "Qual dos seguintes é um monossacarídeo?",
+           answers = new string[] {
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer56_1",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer56_2",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer56_3",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer56_4"
+           },
+           correctIndex = 2,
+           questionNumber = 56,
+           isImageAnswer = true,
+           isImageQuestion = false,
+           questionImagePath = "",
+           questionLevel = 1,
+           questionInDevelopment = false,
+           globalId = "carbohydrates_056",
+           topic = "carbohydrates",
+           subtopic = null,
+           displayName = "Carboidratos",
+           bloomLevel = "unclassified",
+           conceptTags = null,
+           prerequisites = null,
+           questionHint = null
+        },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "A sacarose, encontrada no açúcar de mesa, é formada por:",
