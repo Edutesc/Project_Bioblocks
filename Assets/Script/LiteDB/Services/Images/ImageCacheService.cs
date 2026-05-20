@@ -70,42 +70,22 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
         }
     }
 
-    public void SaveImageToCache(string imageUrl, Texture2D texture)
+    public void SaveImageToCache(string imageUrl, Texture2D texture,
+                                 string topic = null, string sha256 = null)
     {
         if (string.IsNullOrEmpty(imageUrl) || texture == null || !IsInitialized) return;
         if (_dbManager == null || !_dbManager.IsInitialized) return;
 
         try
         {
-            string fileName  = GetHashedFileName(imageUrl);
-            string localPath = Path.Combine(_cacheDirectory, fileName);
-
-            bool needsResize      = texture.width > MAX_IMAGE_DIMENSION || texture.height > MAX_IMAGE_DIMENSION;
-            Texture2D toSave      = needsResize ? ResizeTexture(texture, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION) : texture;
-            byte[] imageBytes     = toSave.EncodeToPNG();
+            bool needsResize  = texture.width > MAX_IMAGE_DIMENSION || texture.height > MAX_IMAGE_DIMENSION;
+            Texture2D toSave  = needsResize ? ResizeTexture(texture, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION) : texture;
+            byte[] imageBytes = toSave.EncodeToPNG();
 
             if (needsResize && toSave != texture)
                 Destroy(toSave);
 
-            if (imageBytes.Length > MAX_IMAGE_BYTES)
-            {
-                Debug.LogWarning($"[ImageCacheService] Imagem muito grande, não será cacheada: {imageUrl}");
-                return;
-            }
-
-            File.WriteAllBytes(localPath, imageBytes);
-
-            _dbManager.CachedImages.Upsert(new CachedImageDB
-            {
-                ImageUrl      = imageUrl,
-                LocalPath     = localPath,
-                CachedAt      = DateTime.UtcNow,
-                ExpiresAt     = DateTime.UtcNow.AddDays(CACHE_EXPIRY_DAYS),
-                FileSizeBytes = imageBytes.Length
-            });
-
-            Debug.Log($"[ImageCacheService] Imagem cacheada: {imageUrl} ({imageBytes.Length} bytes)");
-            CleanupOldCacheIfNeeded();
+            SaveImageBytesToCache(imageUrl, imageBytes, topic, sha256);
         }
         catch (OutOfMemoryException)
         {
@@ -116,6 +96,59 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
         {
             Debug.LogError($"[ImageCacheService] Erro ao salvar cache: {e.Message}");
         }
+    }
+
+    public void SaveImageBytesToCache(string imageUrl, byte[] pngBytes,
+                                      string topic = null, string sha256 = null)
+    {
+        if (string.IsNullOrEmpty(imageUrl) || pngBytes == null || pngBytes.Length == 0) return;
+        if (!IsInitialized || _dbManager == null || !_dbManager.IsInitialized) return;
+
+        try
+        {
+            if (pngBytes.Length > MAX_IMAGE_BYTES)
+            {
+                Debug.LogWarning($"[ImageCacheService] Imagem muito grande ({pngBytes.Length} bytes), não cacheada: {imageUrl}");
+                return;
+            }
+
+            // Validação leve do header PNG (89 50 4E 47 0D 0A 1A 0A) — thread-safe.
+            if (!IsValidPng(pngBytes))
+            {
+                Debug.LogWarning($"[ImageCacheService] Bytes não parecem PNG válido: {imageUrl}");
+                return;
+            }
+
+            string fileName  = GetHashedFileName(imageUrl);
+            string localPath = Path.Combine(_cacheDirectory, fileName);
+
+            File.WriteAllBytes(localPath, pngBytes);
+
+            _dbManager.CachedImages.Upsert(new CachedImageDB
+            {
+                ImageUrl      = imageUrl,
+                LocalPath     = localPath,
+                CachedAt      = DateTime.UtcNow,
+                ExpiresAt     = DateTime.UtcNow.AddDays(CACHE_EXPIRY_DAYS),
+                FileSizeBytes = pngBytes.Length,
+                Topic         = topic,
+                Sha256        = sha256
+            });
+
+            Debug.Log($"[ImageCacheService] Imagem cacheada (raw bytes): {imageUrl} ({pngBytes.Length} bytes, topic='{topic ?? "-"}')");
+            CleanupOldCacheIfNeeded();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[ImageCacheService] Erro ao salvar bytes no cache para '{imageUrl}': {e.Message}");
+        }
+    }
+
+    private static bool IsValidPng(byte[] bytes)
+    {
+        if (bytes == null || bytes.Length < 8) return false;
+        return bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47 &&
+               bytes[4] == 0x0D && bytes[5] == 0x0A && bytes[6] == 0x1A && bytes[7] == 0x0A;
     }
 
     public Texture2D LoadImageFromCache(string localPath)

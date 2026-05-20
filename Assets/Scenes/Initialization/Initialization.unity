@@ -1488,13 +1488,16 @@ GameObject:
   - component: {fileID: 564396351}
   - component: {fileID: 564396343}
   - component: {fileID: 564396366}
+  - component: {fileID: 564396370}
   - component: {fileID: 564396360}
   - component: {fileID: 564396359}
   - component: {fileID: 564396358}
   - component: {fileID: 564396367}
   - component: {fileID: 564396365}
   - component: {fileID: 564396364}
+  - component: {fileID: 564396369}
   - component: {fileID: 564396357}
+  - component: {fileID: 564396368}
   - component: {fileID: 564396362}
   - component: {fileID: 564396363}
   - component: {fileID: 564396348}
@@ -1742,6 +1745,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cf854b0e90ee4e9bb36152de5d65122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &564396368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564396342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe53ec9d26bd142c18a5f4bc5ea2532c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxParallelDownloads: 4
+--- !u!114 &564396369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564396342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2375dcedbcac34144aaeed0dec943f8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &564396370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564396342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cccb34f6a94c449e5bd621d136755984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &593266781 stripped
