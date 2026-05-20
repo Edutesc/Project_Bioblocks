@@ -94,22 +94,32 @@ public class QuestionUIManager : MonoBehaviour
         _activeLoadCts = new CancellationTokenSource();
         var ct = _activeLoadCts.Token;
 
-        string key = QuestionStorageKeys.Resolve(question.questionImagePath, question.topic);
-        if (string.IsNullOrEmpty(key))
-        {
-            Debug.LogWarning($"[QuestionUIManager] Não foi possível resolver storageKey para questão '{question.globalId}'.");
-            return;
-        }
+        string imagePath = question.questionImagePath;
 
+        // Preview mode: AppContext.ImageSync não está disponível — lê direto de Resources.
+        // O path no C# database é um caminho Resources.Load válido (ex: "QuestionImages/AminoacidsDB/...").
         if (AppContext.ImageSync == null)
         {
-            Debug.LogError("[QuestionUIManager] AppContext.ImageSync indisponível.");
+            Texture2D resourceTexture = Resources.Load<Texture2D>(imagePath);
+            if (resourceTexture == null)
+            {
+                Debug.LogWarning($"[QuestionUIManager] Preview mode — imagem não encontrada em Resources: '{imagePath}'.");
+                return;
+            }
+            var resourceSprite = Sprite.Create(
+                resourceTexture,
+                new Rect(0, 0, resourceTexture.width, resourceTexture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
+            AssignSprite(resourceSprite);
             return;
         }
 
+        // Dev/Prod mode: imagePath é uma storage key (ex: "aminoacids/aminoacidDB_ImageQuestionContainer10").
+        // O Firestore já armazena storage keys após a migração do UploadQuestionBanksEditor.
         try
         {
-            Texture2D texture = await AppContext.ImageSync.GetImageAsync(key, ct);
+            Texture2D texture = await AppContext.ImageSync.GetImageAsync(imagePath, ct);
             if (ct.IsCancellationRequested || texture == null)
             {
                 if (texture != null) Destroy(texture);
@@ -126,7 +136,7 @@ public class QuestionUIManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"[QuestionUIManager] Erro ao carregar imagem da questão '{key}': {e.Message}");
+            Debug.LogError($"[QuestionUIManager] Erro ao carregar imagem da questão '{imagePath}': {e.Message}");
         }
     }
 
@@ -141,27 +151,33 @@ public class QuestionUIManager : MonoBehaviour
         if (isPreloading) return;
         isPreloading = true;
 
+        string imagePath = questionToPreload.questionImagePath;
+
         try
         {
-            string key = QuestionStorageKeys.Resolve(questionToPreload.questionImagePath, questionToPreload.topic);
-            if (string.IsNullOrEmpty(key))
-            {
-                Debug.LogWarning($"[QuestionUIManager] Preload: storageKey não resolvido para '{questionToPreload.globalId}'.");
-                preloadedQuestionImage = null;
-                return;
-            }
-
+            // Preview mode: lê de Resources usando o path legado do C# database.
             if (AppContext.ImageSync == null)
             {
-                Debug.LogError("[QuestionUIManager] AppContext.ImageSync indisponível no preload.");
-                preloadedQuestionImage = null;
+                Texture2D resourceTexture = Resources.Load<Texture2D>(imagePath);
+                if (resourceTexture == null)
+                {
+                    Debug.LogWarning($"[QuestionUIManager] Preload preview mode — imagem não encontrada em Resources: '{imagePath}'.");
+                    preloadedQuestionImage = null;
+                    return;
+                }
+                preloadedQuestionImage = Sprite.Create(
+                    resourceTexture,
+                    new Rect(0, 0, resourceTexture.width, resourceTexture.height),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
                 return;
             }
 
-            Texture2D texture = await AppContext.ImageSync.GetImageAsync(key);
+            // Dev/Prod mode: imagePath é storage key, já armazenada assim no Firestore.
+            Texture2D texture = await AppContext.ImageSync.GetImageAsync(imagePath);
             if (texture == null)
             {
-                Debug.LogWarning($"[QuestionUIManager] Preload: imagem '{key}' não disponível.");
+                Debug.LogWarning($"[QuestionUIManager] Preload: imagem '{imagePath}' não disponível.");
                 preloadedQuestionImage = null;
                 return;
             }

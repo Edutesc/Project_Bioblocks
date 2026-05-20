@@ -24,14 +24,26 @@ namespace QuestionSystem
         private const string QUESTION_IMAGES_PREFIX = "QuestionImages/";
 
         /// <summary>
-        /// Verifica se uma string parece ser um path de imagem (legado ou novo layout)
-        /// e não apenas texto literal de resposta.
+        /// Verifica se uma string parece ser um path de imagem e não texto literal de resposta.
+        ///
+        /// Reconhece dois formatos:
+        ///   1. Legado (C# databases / HardcodedQuestionSource em preview mode):
+        ///      "AnswerImages/..." ou "QuestionImages/..."
+        ///   2. Storage key (Firestore após migração do UploadQuestionBanksEditor):
+        ///      "&lt;topic&gt;/&lt;filename&gt;" — contém "/" mas não começa com os prefixos legados.
+        ///
+        /// Nota: só é chamado quando isImageAnswer == true, portanto o risco de
+        /// um texto de resposta com "/" ser confundido com imagem é irrelevante.
         /// </summary>
         public static bool LooksLikeImagePath(string value)
         {
             if (string.IsNullOrEmpty(value)) return false;
-            return value.StartsWith(ANSWER_IMAGES_PREFIX) ||
-                   value.StartsWith(QUESTION_IMAGES_PREFIX);
+            // Formato legado
+            if (value.StartsWith(ANSWER_IMAGES_PREFIX) || value.StartsWith(QUESTION_IMAGES_PREFIX))
+                return true;
+            // Formato storage key: "<topic>/<filename>" (contém "/" e não começa com "/")
+            int slash = value.IndexOf('/');
+            return slash > 0 && slash < value.Length - 1;
         }
 
         /// <summary>

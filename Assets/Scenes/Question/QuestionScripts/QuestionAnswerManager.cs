@@ -227,47 +227,55 @@ public class QuestionAnswerManager : MonoBehaviour
                 continue;
             }
 
-            string answerPath = question.answers[i];
-            if (!QuestionStorageKeys.LooksLikeImagePath(answerPath))
+            string imagePath = question.answers[i];
+            if (!QuestionStorageKeys.LooksLikeImagePath(imagePath))
             {
-                Debug.LogWarning($"Resposta {i} não parece um path de imagem: '{answerPath}'.");
+                Debug.LogWarning($"Resposta {i} não parece um path de imagem: '{imagePath}'.");
                 continue;
             }
 
-            string key = QuestionStorageKeys.Resolve(answerPath, question.topic);
-            if (string.IsNullOrEmpty(key))
-            {
-                Debug.LogError($"Não foi possível resolver storageKey para '{answerPath}'.");
-                continue;
-            }
-
+            // imagePath já é:
+            //   - Preview mode: path legado do C# database (ex: "AnswerImages/AminoacidsDB/.../isoleucina")
+            //   - Dev/Prod mode: storage key do Firestore (ex: "aminoacids/isoleucina")
+            // LoadAnswerImageAsync distingue os dois casos via AppContext.ImageSync.
             int buttonIndex = i;  // captura para o lambda
             imageAnswerButtons[i].interactable = false;
-            _ = LoadAnswerImageAsync(buttonIndex, key, _activeLoadCts.Token);
+            _ = LoadAnswerImageAsync(buttonIndex, imagePath, _activeLoadCts.Token);
         }
     }
 
-    private async Task LoadAnswerImageAsync(int buttonIndex, string storageKey, CancellationToken ct)
+    private async Task LoadAnswerImageAsync(int buttonIndex, string imagePath, CancellationToken ct)
     {
-        if (AppContext.ImageSync == null)
-        {
-            Debug.LogError("[QuestionAnswerManager] AppContext.ImageSync indisponível.");
-            return;
-        }
+        Texture2D texture = null;
 
         try
         {
-            Texture2D texture = await AppContext.ImageSync.GetImageAsync(storageKey, ct);
-            if (ct.IsCancellationRequested || texture == null)
+            // Preview mode: AppContext.ImageSync é null — lê direto de Resources.
+            // imagePath é o path legado do C# database (ex: "AnswerImages/AminoacidsDB/.../isoleucina").
+            if (AppContext.ImageSync == null)
             {
-                if (texture != null) Destroy(texture);
-                return;
+                texture = Resources.Load<Texture2D>(imagePath);
+                if (texture == null)
+                {
+                    Debug.LogWarning($"[QuestionAnswerManager] Preview mode — imagem não encontrada em Resources: '{imagePath}'.");
+                    return;
+                }
+            }
+            else
+            {
+                // Dev/Prod mode: imagePath é storage key (ex: "aminoacids/isoleucina").
+                texture = await AppContext.ImageSync.GetImageAsync(imagePath, ct);
+                if (ct.IsCancellationRequested || texture == null)
+                {
+                    if (texture != null) Destroy(texture);
+                    return;
+                }
             }
 
             // Pode ter caído fora do range se a UI foi reconfigurada nesse meio tempo.
             if (buttonIndex >= imageButtonContents.Length || imageButtonContents[buttonIndex] == null)
             {
-                Destroy(texture);
+                if (AppContext.ImageSync != null) Destroy(texture); // não destruir textures de Resources
                 return;
             }
 
@@ -292,11 +300,11 @@ public class QuestionAnswerManager : MonoBehaviour
             if (buttonIndex < imageAnswerButtons.Length && imageAnswerButtons[buttonIndex] != null)
                 imageAnswerButtons[buttonIndex].interactable = true;
 
-            Debug.Log($"Imagem carregada para o botão {buttonIndex}: {storageKey}");
+            Debug.Log($"Imagem carregada para o botão {buttonIndex}: {imagePath}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Erro ao carregar imagem da resposta '{storageKey}': {e.Message}");
+            Debug.LogError($"Erro ao carregar imagem da resposta '{imagePath}': {e.Message}");
         }
     }
 
