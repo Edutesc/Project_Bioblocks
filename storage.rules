@@ -1,0 +1,56 @@
+rules_version = '2';
+
+// Regras de segurança do Firebase Storage para o BioBlocks.
+//
+// Princípios:
+//   1. Deny by default — qualquer path fora dos blocos abaixo é bloqueado.
+//   2. Estrutura validada — topic na whitelist + extensão .png.
+//   3. Auth obrigatório — só usuário logado lê.
+//   4. Nenhuma escrita pelo cliente — uploads acontecem só via Admin SDK
+//      (script upload_images_to_firebase.py + service account), que bypassa
+//      essas regras por design.
+//
+// Defesa contra abuso de bot/scrape: feita via App Check ENFORCEMENT no API
+// level (Firebase Console → App Check → APIs → Storage → Aplicada).
+// Quando ligado, o servidor rejeita requisições sem token de App Check
+// válido ANTES de rodar essas rules. Aplicar em prod (microlearning-33132).
+// Em dev (microlearning-dev-79c0c), deixar em "Não aplicada" para o Editor
+// continuar funcionando sem o file-backed provider.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ────────────────────────────────────────────────────────────
+    // Question images
+    //
+    // Layout: Question/<topic>/<filename>.png
+    //   topic    ∈ enum QuestionSet (10 temas conhecidos)
+    //   filename = qualquer nome terminando em .png
+    // ────────────────────────────────────────────────────────────
+    match /Question/{topic}/{filename} {
+      allow read:  if request.auth != null
+                   && topic in [
+                        'acidsBase',
+                        'aminoacids',
+                        'biochem',
+                        'carbohydrates',
+                        'enzymes',
+                        'lipids',
+                        'membranes',
+                        'nucleicAcids',
+                        'proteins',
+                        'water'
+                      ]
+                   && filename.matches('.+\\.png');
+
+      allow write: if false;
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Catch-all — nega tudo que não foi listado acima.
+    // ────────────────────────────────────────────────────────────
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

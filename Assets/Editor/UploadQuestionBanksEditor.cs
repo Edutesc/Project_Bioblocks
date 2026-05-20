@@ -194,6 +194,20 @@ public class UploadQuestionBanksEditor : EditorWindow
 
                 foreach (var q in questions)
                 {
+                    // Traduz paths legados (ex: "AnswerImages/AminoacidsDB/.../isoleucina") para
+                    // storage keys (ex: "aminoacids/isoleucina") antes de gravar no Firestore.
+                    // Assim o app pode usar o path diretamente, sem precisar de Resolve() em runtime.
+                    string resolvedImagePath = q.isImageQuestion && !string.IsNullOrEmpty(q.questionImagePath)
+                        ? QuestionSystem.QuestionStorageKeys.Resolve(q.questionImagePath, q.topic) ?? q.questionImagePath
+                        : q.questionImagePath;
+
+                    string[] resolvedAnswers = q.isImageAnswer && q.answers != null
+                        ? System.Array.ConvertAll(q.answers, a =>
+                            QuestionSystem.QuestionStorageKeys.LooksLikeImagePath(a)
+                                ? QuestionSystem.QuestionStorageKeys.Resolve(a, q.topic) ?? a
+                                : a)
+                        : q.answers;
+
                     var questionData = new QuestionData
                     {
                         globalId = string.IsNullOrEmpty(q.globalId)
@@ -202,11 +216,11 @@ public class UploadQuestionBanksEditor : EditorWindow
                         questionDatabankName = q.questionDatabankName,
                         questionNumber = q.questionNumber,
                         questionText = q.questionText,
-                        answers = q.answers,
+                        answers = resolvedAnswers,
                         correctIndex = q.correctIndex,
                         isImageQuestion = q.isImageQuestion,
                         isImageAnswer = q.isImageAnswer,
-                        questionImagePath = q.questionImagePath,
+                        questionImagePath = resolvedImagePath,
                         questionLevel = q.questionLevel,
                         topic = q.topic,
                         subtopic = q.subtopic,

@@ -28,6 +28,11 @@ public class AppContext : MonoBehaviour
     public static IQuestionSource               QuestionSource    { get; private set; }
     public static IAvatarSelectionService       AvatarSelection   { get; private set; }
 
+    // ── Pipeline de imagens (Storage → LiteDB) ─────────────────────────────────
+    public static IFirebaseStorageImageRepository ImageStorage { get; private set; }
+    public static IImageLocalRepository           ImageLocal   { get; private set; }
+    public static IImageSyncService               ImageSync    { get; private set; }
+
     public static bool IsReady { get; private set; }
 
     private async void Awake()
@@ -103,8 +108,21 @@ public class AppContext : MonoBehaviour
 
             Debug.Log("AppCheck IN");
 #if UNITY_EDITOR
-            Firebase.AppCheck.FirebaseAppCheck.SetAppCheckProviderFactory(
-                Firebase.AppCheck.DebugAppCheckProviderFactory.Instance);
+            // No Editor usamos um IAppCheckProviderFactory custom que lê o UUID
+            // de debug de <projectRoot>/firebase_app_check_debug_token.txt e
+            // chama exchangeDebugToken da App Check API diretamente — não
+            // depende de env var, que não funciona no plugin nativo do Editor
+            // macOS.
+            var debugFactory = FileBackedDebugAppCheckProviderFactory.TryCreateFromFile();
+            if (debugFactory != null)
+            {
+                Firebase.AppCheck.FirebaseAppCheck.SetAppCheckProviderFactory(debugFactory);
+                Debug.Log("[AppContext] App Check Debug Provider (file-backed) configurado.");
+            }
+            else
+            {
+                Debug.LogWarning("[AppContext] firebase_app_check_debug_token.txt ausente. App Check NÃO ativo no Editor.");
+            }
 #elif UNITY_ANDROID
             Firebase.AppCheck.FirebaseAppCheck.SetAppCheckProviderFactory(
                 Firebase.AppCheck.PlayIntegrityProviderFactory.Instance);
@@ -132,6 +150,9 @@ public class AppContext : MonoBehaviour
             var questionLocalRepo     = GetComponent<QuestionLocalRepository>();
             var questionSyncSvc       = GetComponent<QuestionSyncService>();
             var avatarSelectionSvc    = GetComponent<AvatarSelectionService>();
+            var firebaseStorageRepo   = GetComponent<FirebaseStorageImageRepository>();
+            var imageLocalRepo        = GetComponent<ImageLocalRepository>();
+            var imageSyncSvc          = GetComponent<ImageSyncService>();
 
             // ── Validações existentes ──────────────────────────────────────────
             if (authRepo            == null) throw new Exception("[AppContext] AuthenticationRepository não encontrado.");
@@ -151,6 +172,9 @@ public class AppContext : MonoBehaviour
             if (questionLocalRepo     == null) throw new Exception("[AppContext] QuestionLocalRepository não encontrado.");
             if (questionSyncSvc       == null) throw new Exception("[AppContext] QuestionSyncService não encontrado.");
             if (avatarSelectionSvc    == null) throw new Exception("[AppContext] AvatarSelectionService não encontrado.");
+            if (firebaseStorageRepo   == null) throw new Exception("[AppContext] FirebaseStorageImageRepository não encontrado.");
+            if (imageLocalRepo        == null) throw new Exception("[AppContext] ImageLocalRepository não encontrado.");
+            if (imageSyncSvc          == null) throw new Exception("[AppContext] ImageSyncService não encontrado.");
 
             // ── 1. LiteDB ──────────────────────────────────────────────────────
             liteDBMgr.Initialize();
@@ -168,15 +192,22 @@ public class AppContext : MonoBehaviour
             imageCacheSvc.InjectDependencies(liteDBMgr);
             avatarSelectionSvc.InjectDependencies(firestoreRepo, userDataLocalRepo);
 
-            // ── 5. Dependências LiteDB (questões) ──────────────────────────────
+            // ── 5. Pipeline de imagens (Storage + LiteDB) ──────────────────────
+            // O AuthGate faz o prewarm aguardar request.auth != null antes de
+            // bater no Storage (cuja rule exige usuário autenticado + App Check).
+            firebaseStorageRepo.Initialize();
+            imageLocalRepo.InjectDependencies(liteDBMgr, imageCacheSvc);
+            imageSyncSvc.InjectDependencies(firebaseStorageRepo, imageLocalRepo, new FirebaseAuthGate());
+
+            // ── 6. Dependências LiteDB (questões) ──────────────────────────────
             questionFirestoreRepo.Initialize();
             questionLocalRepo.InjectDependencies(liteDBMgr);
-            questionSyncSvc.InjectDependencies(questionFirestoreRepo, questionLocalRepo);
+            questionSyncSvc.InjectDependencies(questionFirestoreRepo, questionLocalRepo, imageSyncSvc);
 
-            // ── 6. Navegação ───────────────────────────────────────────────────
+            // ── 7. Navegação ───────────────────────────────────────────────────
             navigationMgr.InjectDependencies(sceneDataMgr);
 
-            // ── 7. Fonte de questões ───────────────────────────────────────────
+            // ── 8. Fonte de questões ───────────────────────────────────────────
             // Prod e Dev → FirestoreQuestionSource (Firestore + LiteDB).
             // A única diferença entre Prod e Dev é o projeto Firebase ao qual apontam.
             QuestionSync = questionSyncSvc;
@@ -189,10 +220,10 @@ public class AppContext : MonoBehaviour
             var firebaseEnv = EnvironmentConfig.Load()?.FirebaseEnvironment;
             Debug.Log($"[AppContext] {firebaseEnv} mode — QuestionSource: FirestoreQuestionSource.");
 
-            // ── 8. Estatísticas — agora que o LiteDB está populado ─────────────
+            // ── 9. Estatísticas — agora que o LiteDB está populado ─────────────
             await statsManager.Initialize();
 
-            // ── 9. Expõe serviços existentes ───────────────────────────────────
+            // ── 10. Expõe serviços existentes ──────────────────────────────────
             Auth              = authRepo;
             Firestore         = firestoreRepo;
             Statistics        = statsManager;
@@ -210,6 +241,9 @@ public class AppContext : MonoBehaviour
             QuestionLocal     = questionLocalRepo;
             QuestionSync      = questionSyncSvc;
             AvatarSelection   = avatarSelectionSvc;
+            ImageStorage      = firebaseStorageRepo;
+            ImageLocal        = imageLocalRepo;
+            ImageSync         = imageSyncSvc;
 
             IsReady = true;
             OnReady?.Invoke();
@@ -265,7 +299,10 @@ public class AppContext : MonoBehaviour
         IQuestionLocalRepository        questionLocal        = null,
         IQuestionSyncService            questionSync         = null,
         IQuestionSource                 questionSource       = null,
-        IAvatarSelectionService         avatarSelection      = null)
+        IAvatarSelectionService         avatarSelection      = null,
+        IFirebaseStorageImageRepository imageStorage         = null,
+        IImageLocalRepository           imageLocal           = null,
+        IImageSyncService               imageSync            = null)
     {
         if (firestore         != null) Firestore         = firestore;
         if (auth              != null) Auth              = auth;
@@ -283,6 +320,9 @@ public class AppContext : MonoBehaviour
         if (questionSync      != null) QuestionSync      = questionSync;
         if (questionSource    != null) QuestionSource    = questionSource;
         if (avatarSelection   != null) AvatarSelection   = avatarSelection;
+        if (imageStorage      != null) ImageStorage      = imageStorage;
+        if (imageLocal        != null) ImageLocal        = imageLocal;
+        if (imageSync         != null) ImageSync         = imageSync;
         IsReady = true;
     }
 }

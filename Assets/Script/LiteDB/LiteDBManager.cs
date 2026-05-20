@@ -101,6 +101,7 @@ public class LiteDBManager : MonoBehaviour, ILiteDBManager
         // Índices existentes
         Users.EnsureIndex(x => x.UserId, unique: true);
         CachedImages.EnsureIndex(x => x.ImageUrl, unique: true);
+        CachedImages.EnsureIndex(x => x.Topic);               // eviction/prewarm por tema
         Rankings.EnsureIndex(x => x.Score);
         Rankings.EnsureIndex(x => x.WeekScore);
 
