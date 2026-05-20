@@ -1460,10 +1460,10 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
            questionDatabankName = "CarbohydratesQuestionDatabase",
            questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
            answers = new string[] {
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_1",
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_2",
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_3",
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_4"
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer62_1",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer62_2",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer62_3",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer62_4"
            },
            correctIndex = 2,
            questionNumber = 62,
@@ -1560,10 +1560,10 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
            questionDatabankName = "CarbohydratesQuestionDatabase",
            questionText = "Qual destes carboidratos é considerado um polissacarídeo de armazenamento em animais?",
            answers = new string[] {
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_1",
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_2",
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_3",
-               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_4"
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer66_1",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer66_2",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer66_3",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer66_4"
            },
            correctIndex = 2,
            questionNumber = 66,
