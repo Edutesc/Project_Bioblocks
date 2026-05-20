@@ -1456,31 +1456,31 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = null
         //},
-        //new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
-        //    answers = new string[] {
-        //        "Amido",
-        //        "Glicogênio",
-        //        "Celulose",
-        //        "Maltose"
-        //    },
-        //    correctIndex = 2,
-        //    questionNumber = 62,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 1,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_062",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+        new Question {
+           questionDatabankName = "CarbohydratesQuestionDatabase",
+           questionText = "Entre as alternativas abaixo, qual é um polissacarídeo estrutural?",
+           answers = new string[] {
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_1",
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_2",
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_3",
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer62_4"
+           },
+           correctIndex = 2,
+           questionNumber = 62,
+           isImageAnswer = true,
+           isImageQuestion = false,
+           questionImagePath = "",
+           questionLevel = 1,
+           questionInDevelopment = false,
+           globalId = "carbohydrates_062",
+           topic = "carbohydrates",
+           subtopic = null,
+           displayName = "Carboidratos",
+           bloomLevel = "unclassified",
+           conceptTags = null,
+           prerequisites = null,
+           questionHint = null
+        },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "A fórmula geral mais comum dos carboidratos é:",
@@ -1556,31 +1556,31 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = null
         //},
-        // new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Qual destes carboidratos é considerado um polissacarídeo de armazenamento em animais?",
-        //    answers = new string[] {
-        //        "Amido",
-        //        "Celulose",
-        //        "Glicogênio",
-        //        "Quitina"
-        //    },
-        //    correctIndex = 2,
-        //    questionNumber = 66,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 1,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_066",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+        new Question {
+           questionDatabankName = "CarbohydratesQuestionDatabase",
+           questionText = "Qual destes carboidratos é considerado um polissacarídeo de armazenamento em animais?",
+           answers = new string[] {
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_1",
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_2",
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_3",
+               "CarbohydrateDB/carbohydrateDB_ImageAnswer66_4"
+           },
+           correctIndex = 2,
+           questionNumber = 66,
+           isImageAnswer = true,
+           isImageQuestion = false,
+           questionImagePath = "",
+           questionLevel = 1,
+           questionInDevelopment = false,
+           globalId = "carbohydrates_066",
+           topic = "carbohydrates",
+           subtopic = null,
+           displayName = "Carboidratos",
+           bloomLevel = "unclassified",
+           conceptTags = null,
+           prerequisites = null,
+           questionHint = null
+        },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "Qual destes carboidratos é um polissacarídeo estrutural presente na parede celular de vegetais?",
