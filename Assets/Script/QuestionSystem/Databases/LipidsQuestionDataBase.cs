@@ -7,7 +7,6 @@ public class LipidsQuestionDatabase : IQuestionDatabase
     
     private List<Question> questions = new List<Question>
     {
-        // // Question Example
         // new Question
         // {
         //     questionDatabankName = "LipidsQuestionDatabase",
@@ -20,8 +19,8 @@ public class LipidsQuestionDatabase : IQuestionDatabase
         //     },
         //     correctIndex = 2,
         //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = false,
+        //     answerType = AnswerType.Text,
+        //     questionType = QuestionType.Text,
         //     questionImagePath = "",
         //     questionLevel = 1,
         //     questionInDevelopment = false,
@@ -29,12 +28,12 @@ public class LipidsQuestionDatabase : IQuestionDatabase
         //     topic = "lipids",
         //     subtopic = null,
         //     displayName = "Lipídeos",
-        //     bloomLevel = "unclassified",
+        //     bloomLevel = BloomLevel.Unclassified,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
-        
+        // 
     };
 
     public List<Question> GetQuestions() => questions;

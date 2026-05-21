@@ -7,7 +7,6 @@ public class AminoacidQuestionDatabase : IQuestionDatabase
 
     private List<Question> questions = new List<Question>
     {
-        // // Question Example
         // new Question
         // {
         //     questionDatabankName = "AminoacidQuestionDatabase",
@@ -20,8 +19,8 @@ public class AminoacidQuestionDatabase : IQuestionDatabase
         //     },
         //     correctIndex = 0,
         //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = false,
+        //     answerType = AnswerType.Text,
+        //     questionType = QuestionType.Text,
         //     questionImagePath = "",
         //     questionLevel = 2,
         //     questionInDevelopment = false,
@@ -29,12 +28,18 @@ public class AminoacidQuestionDatabase : IQuestionDatabase
         //     topic = "aminoacids",
         //     subtopic = null,
         //     displayName = "Aminoácidos e peptídeos",
-        //     bloomLevel = "unclassified",
+        //     bloomLevel = BloomLevel.Remember,
         //     conceptTags = null,
         //     prerequisites = null,
-        //     questionHint = null
+        //     questionHint = new QuestionHint
+        //     {
+        //         text = "Um aminoácido pode ser definido como uma molécula orgânica que possui simultaneamente um grupo amino (-NH₂) e um grupo carboxila (-COOH) ligados ao mesmo carbono central (carbono alfa), além de um átomo de hidrogênio e uma cadeia lateral variável (radical R). Essas moléculas são consideradas orgânicas porque são formadas por átomos de carbono ligados covalentemente entre si ou a outros elementos como hidrogênio, oxigênio, nitrogênio, etc. A presença conjunta do grupo amino (de caráter básico) e do grupo carboxila (de caráter ácido) é a característica fundamental que define um aminoácido. Retirado de “Princípios de Bioquímica de Lehninger”, ed. 6, pg. 76",
+        //         imagePath = null,
+        //         videoUrl = null,
+        //         link = null
+        //     }
         // },
-    
+        // 
     };
 
     public List<Question> GetQuestions() => questions;

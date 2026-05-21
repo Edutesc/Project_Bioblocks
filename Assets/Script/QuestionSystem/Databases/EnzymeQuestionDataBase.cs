@@ -7,7 +7,6 @@ public class EnzymeQuestionDatabase : IQuestionDatabase
     
     private List<Question> questions = new List<Question>
     {
-    //    // Question Example
     //    new Question
     //     {
     //         questionDatabankName = "EnzymeQuestionDatabase",
@@ -20,8 +19,8 @@ public class EnzymeQuestionDatabase : IQuestionDatabase
     //         },
     //         correctIndex = 1,
     //         questionNumber = 1,
-    //         isImageAnswer = false,
-    //         isImageQuestion = false,
+    //         answerType = AnswerType.Text,
+    //         questionType = QuestionType.Text,
     //         questionImagePath = "",
     //         questionLevel = 1,
     //         questionInDevelopment = false,
@@ -29,12 +28,12 @@ public class EnzymeQuestionDatabase : IQuestionDatabase
     //         topic = "enzymes",
     //         subtopic = null,
     //         displayName = "Enzimas",
-    //         bloomLevel = "unclassified",
+    //         bloomLevel = BloomLevel.Unclassified,
     //         conceptTags = null,
     //         prerequisites = null,
     //         questionHint = null
     //     },
-        
+       
     };
     
     public List<Question> GetQuestions() => questions;

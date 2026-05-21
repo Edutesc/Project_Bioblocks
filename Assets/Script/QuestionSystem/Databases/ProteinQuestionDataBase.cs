@@ -7,8 +7,7 @@ public class ProteinQuestionDatabase : IQuestionDatabase
     
     private List<Question> questions = new List<Question>
     {
-        // // Question Example
-        // new Question
+        //  new Question
         // {
         //     questionDatabankName = "ProteinQuestionDatabase",
         //     questionText = "",
@@ -20,8 +19,8 @@ public class ProteinQuestionDatabase : IQuestionDatabase
         //     },
         //     correctIndex = 2,
         //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = true,
+        //     answerType = AnswerType.Text,
+        //     questionType = QuestionType.Image,
         //     questionImagePath = "AnswerImages/ProteinDB/proteinQuestion_1",
         //     questionLevel = 3,
         //     questionInDevelopment = false,
@@ -29,12 +28,12 @@ public class ProteinQuestionDatabase : IQuestionDatabase
         //     topic = "proteins",
         //     subtopic = null,
         //     displayName = "Proteínas",
-        //     bloomLevel = "unclassified",
+        //     bloomLevel = BloomLevel.Unclassified,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
-        
+        // 
     };
 
     public List<Question> GetQuestions() => questions;

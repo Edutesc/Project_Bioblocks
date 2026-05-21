@@ -7,7 +7,6 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
     
     private List<Question> questions = new List<Question>
     {
-        // // Question Example
         // new Question {
         //     questionDatabankName = "CarbohydratesQuestionDatabase",
         //     questionText = "Qual a fórmula geral dos monossacarídeos?",
@@ -19,8 +18,8 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //     },
         //     correctIndex = 0,
         //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = false,
+        //     answerType = AnswerType.Text,
+        //     questionType = QuestionType.Text,
         //     questionImagePath = "",
         //     questionLevel = 2,
         //     questionInDevelopment = false,
@@ -28,12 +27,12 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //     topic = "carbohydrates",
         //     subtopic = null,
         //     displayName = "Carboidratos",
-        //     bloomLevel = "unclassified",
+        //     bloomLevel = BloomLevel.Unclassified,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
-        
+        // 
     };
 
     public List<Question> GetQuestions() => questions;

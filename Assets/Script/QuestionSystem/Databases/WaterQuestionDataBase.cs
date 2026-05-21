@@ -7,7 +7,6 @@ public class WaterQuestionDatabase : IQuestionDatabase
     
     private List<Question> questions = new List<Question>
     {
-        // // Question example
         // new Question
         // {
         //     questionDatabankName = "WaterQuestionDatabase",
@@ -20,8 +19,8 @@ public class WaterQuestionDatabase : IQuestionDatabase
         //     },
         //     correctIndex = 1,
         //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = false,
+        //     answerType = AnswerType.Text,
+        //     questionType = QuestionType.Text,
         //     questionImagePath = "",
         //     questionLevel = 2,
         //     questionInDevelopment = false,
@@ -29,12 +28,12 @@ public class WaterQuestionDatabase : IQuestionDatabase
         //     topic = "water",
         //     subtopic = null,
         //     displayName = "Água",
-        //     bloomLevel = "unclassified",
+        //     bloomLevel = BloomLevel.Unclassified,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
-        
+ 
     };
 
     public List<Question> GetQuestions() => questions;

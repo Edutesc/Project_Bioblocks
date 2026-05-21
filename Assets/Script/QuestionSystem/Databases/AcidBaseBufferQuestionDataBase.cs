@@ -7,7 +7,6 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
 
     private List<Question> questions = new List<Question>
     {
-        //  // Question Example
         // new Question
         // {
         //     questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -20,8 +19,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //     },
         //     correctIndex = 0,
         //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = false,
+        //     answerType = AnswerType.Text,
+        //     questionType = QuestionType.Text,
         //     questionImagePath = "",
         //     questionLevel = 1,
         //     questionInDevelopment = false,
@@ -29,11 +28,12 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //     topic = "acidsBase",
         //     subtopic = null,
         //     displayName = "Ácidos, Bases e Tampões",
-        //     bloomLevel = "unclassified",
+        //     bloomLevel = BloomLevel.Unclassified,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
+        
     };
 
     public List<Question> GetQuestions() => questions;
