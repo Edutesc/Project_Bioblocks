@@ -133,4 +133,22 @@ public class QuestionLocalRepository : MonoBehaviour, IQuestionLocalRepository
             throw;
         }
     }
+
+    // ── Versão do cache (PlayerPrefs) ─────────────────────────────────────────
+
+    private const string VERSION_PREFS_KEY = "QuestionCache_Version";
+
+    public long GetCachedVersion()
+    {
+        // PlayerPrefs não tem overload para long; armazenamos como string.
+        string raw = PlayerPrefs.GetString(VERSION_PREFS_KEY, "-1");
+        return long.TryParse(raw, out long v) ? v : -1L;
+    }
+
+    public void SaveCachedVersion(long version)
+    {
+        PlayerPrefs.SetString(VERSION_PREFS_KEY, version.ToString());
+        PlayerPrefs.Save();
+        Debug.Log($"[QuestionLocalRepository] Versão do cache salva: {version}.");
+    }
 }

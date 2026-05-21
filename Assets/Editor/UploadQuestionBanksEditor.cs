@@ -26,8 +26,12 @@ using UnityEditor;
 
 public class UploadQuestionBanksEditor : EditorWindow
 {
-    private string cloudFunctionUrl = "";
-    private string secretKey = "";
+    // URLs das Cloud Functions por ambiente
+    private const string CloudFunctionUrlDev  = "https://us-central1-microlearning-dev-79c0c.cloudfunctions.net/uploadQuestionBanks";
+    private const string CloudFunctionUrlProd = "https://us-central1-microlearning-33132.cloudfunctions.net/uploadQuestionBanks";
+
+    private FirebaseEnvironment targetEnvironment = FirebaseEnvironment.Dev;
+    private SecretsData secrets;
     private bool isUploading = false;
     private string uploadStatus = "";
     private Vector2 scrollPosition;
@@ -46,26 +50,15 @@ public class UploadQuestionBanksEditor : EditorWindow
 
     private void LoadSecrets()
     {
+        secrets = null;
         string secretsPath = "Assets/Editor/FirebaseSecrets.json";
         if (System.IO.File.Exists(secretsPath))
         {
             try
             {
                 string json = System.IO.File.ReadAllText(secretsPath);
-                var secrets = JsonUtility.FromJson<SecretsData>(json);
-                
-                // Usa Dev por padrão
-                if (!string.IsNullOrEmpty(secrets.devSecretKey) && 
-                    secrets.devSecretKey != "COLOQUE_AQUI_A_SECRET_KEY_DEV")
-                {
-                    secretKey = secrets.devSecretKey;
-                    uploadStatus = "✓ Secret key Dev carregada do arquivo FirebaseSecrets.json\n";
-                }
-                else
-                {
-                    uploadStatus = "⚠️  FirebaseSecrets.json não foi preenchido corretamente.\n";
-                    uploadStatus += "Edite o arquivo e adicione sua secret key Dev.\n";
-                }
+                secrets = JsonUtility.FromJson<SecretsData>(json);
+                uploadStatus = "✓ FirebaseSecrets.json carregado.\n";
             }
             catch (System.Exception ex)
             {
@@ -74,15 +67,25 @@ public class UploadQuestionBanksEditor : EditorWindow
         }
         else
         {
-            uploadStatus = "❌ Arquivo não encontrado: Assets/Editor/FirebaseSecrets.json\n\n";
-            uploadStatus += "📋 Instruções:\n";
-            uploadStatus += "1. Copie FirebaseSecrets-template.json\n";
-            uploadStatus += "2. Renomeie para FirebaseSecrets.json\n";
-            uploadStatus += "3. Coloque em Assets/Editor/\n";
-            uploadStatus += "4. Edite com suas secret keys\n";
-            uploadStatus += "5. Adicione ao .gitignore\n";
-            uploadStatus += "6. Reabra esta janela\n";
+            uploadStatus = "❌ Arquivo não encontrado: Assets/Editor/FirebaseSecrets.json\n\n" +
+                           "Crie o arquivo com o conteúdo:\n" +
+                           "{\n  \"devSecretKey\": \"SUA_KEY_DEV\",\n  \"prodSecretKey\": \"SUA_KEY_PROD\"\n}\n";
         }
+    }
+
+    private string GetActiveSecretKey()
+    {
+        if (secrets == null) return null;
+        return targetEnvironment == FirebaseEnvironment.Dev
+            ? secrets.devSecretKey
+            : secrets.prodSecretKey;
+    }
+
+    private string GetCloudFunctionUrl()
+    {
+        return targetEnvironment == FirebaseEnvironment.Dev
+            ? CloudFunctionUrlDev
+            : CloudFunctionUrlProd;
     }
 
     private void OnGUI()
@@ -90,76 +93,94 @@ public class UploadQuestionBanksEditor : EditorWindow
         GUILayout.Label("Upload Question Banks to Firestore", EditorStyles.boldLabel);
         GUILayout.Space(10);
 
-        // Status da secret key
-        if (string.IsNullOrEmpty(secretKey))
+        // Secrets não carregadas
+        if (secrets == null)
         {
             EditorGUILayout.HelpBox(
-                "❌ Secret key não carregada!\n\nCopie FirebaseSecrets-template.json para Assets/Editor/FirebaseSecrets.json e edite com suas chaves.",
-                MessageType.Error
-            );
-            
+                "❌ FirebaseSecrets.json não carregado.\n\n" +
+                "Crie Assets/Editor/FirebaseSecrets.json com suas secret keys.",
+                MessageType.Error);
+
             if (GUILayout.Button("Tentar carregar novamente", GUILayout.Height(30)))
-            {
                 LoadSecrets();
-            }
-            
+
+            GUILayout.Space(10);
+            GUILayout.Label("Status:", EditorStyles.boldLabel);
+            GUILayout.TextArea(uploadStatus, GUILayout.Height(120));
             return;
+        }
+
+        // Seleção de ambiente
+        EditorGUILayout.LabelField("Ambiente de destino:", EditorStyles.label);
+        var newEnv = (FirebaseEnvironment)EditorGUILayout.EnumPopup(targetEnvironment);
+        if (newEnv != targetEnvironment)
+        {
+            targetEnvironment = newEnv;
+            uploadStatus = $"Ambiente alterado para {targetEnvironment}.\n";
+        }
+
+        GUILayout.Space(6);
+
+        // Validação da secret key do ambiente selecionado
+        string activeKey = GetActiveSecretKey();
+        bool keyOk = !string.IsNullOrEmpty(activeKey) && activeKey != "SUA_KEY_DEV" && activeKey != "SUA_KEY_PROD";
+
+        if (!keyOk)
+        {
+            EditorGUILayout.HelpBox(
+                $"⚠️  Secret key de {targetEnvironment} não configurada em FirebaseSecrets.json.",
+                MessageType.Warning);
         }
         else
         {
             EditorGUILayout.HelpBox(
-                "✓ Secret key Dev carregada com sucesso",
-                MessageType.Info
-            );
+                $"✓ Secret key {targetEnvironment} carregada.\n" +
+                $"Cloud Function: {GetCloudFunctionUrl()}",
+                MessageType.Info);
         }
 
-        GUILayout.Space(10);
-
-        // Cloud Function URL
-        GUILayout.Label("Cloud Function URL:", EditorStyles.label);
-        cloudFunctionUrl = EditorGUILayout.TextField(cloudFunctionUrl);
-        EditorGUILayout.HelpBox(
-            "Ex: https://region-projectid.cloudfunctions.net/uploadQuestionBanks\n\n" +
-            "Para descobrir a URL, vá a Firebase Console > Functions > uploadQuestionBanks > Trigger",
-            MessageType.Info
-        );
         GUILayout.Space(15);
 
-        // Ambiente (Dev/Prod)
-        EditorGUILayout.LabelField("Ambiente:", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox(
-            "Você está usando a secret key de DEV.\n\n" +
-            "Para enviar para PROD, edite FirebaseSecrets.json e mude a linha 61 do script de\n" +
-            "  secretKey = secrets.devSecretKey;\n" +
-            "para\n" +
-            "  secretKey = secrets.prodSecretKey;",
-            MessageType.Warning
-        );
-        GUILayout.Space(15);
-
-        // Upload Button
-        GUI.enabled = !isUploading && !string.IsNullOrEmpty(cloudFunctionUrl) && !string.IsNullOrEmpty(secretKey);
-        if (GUILayout.Button("🚀 Upload Question Banks", GUILayout.Height(50)))
+        // Confirmação extra para Prod
+        if (targetEnvironment == FirebaseEnvironment.Prod)
         {
-            EditorApplication.delayCall += () => UploadDatabases();
+            EditorGUILayout.HelpBox(
+                "⚠️  ATENÇÃO: você está enviando para PRODUÇÃO.\n" +
+                "Isso vai sobrescrever os dados reais dos usuários.",
+                MessageType.Warning);
+            GUILayout.Space(8);
+        }
+
+        // Botão de upload
+        GUI.enabled = !isUploading && keyOk;
+        if (GUILayout.Button($"🚀 Upload para {targetEnvironment}", GUILayout.Height(50)))
+        {
+            if (targetEnvironment == FirebaseEnvironment.Prod)
+            {
+                bool confirm = EditorUtility.DisplayDialog(
+                    "Confirmar upload para PRODUÇÃO",
+                    "Isso vai sobrescrever as questões no Firestore de PRODUÇÃO.\n\nTem certeza?",
+                    "Enviar", "Cancelar");
+                if (confirm)
+                    EditorApplication.delayCall += UploadDatabases;
+            }
+            else
+            {
+                EditorApplication.delayCall += UploadDatabases;
+            }
         }
         GUI.enabled = true;
 
-        GUILayout.Space(20);
+        GUILayout.Space(10);
 
         // Status
-        if (!string.IsNullOrEmpty(uploadStatus))
-        {
-            GUILayout.Label("Status:", EditorStyles.boldLabel);
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Height(200));
-            GUILayout.TextArea(uploadStatus, GUILayout.ExpandHeight(true));
-            GUILayout.EndScrollView();
-        }
+        GUILayout.Label("Status:", EditorStyles.boldLabel);
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandHeight(true));
+        GUILayout.TextArea(uploadStatus, GUILayout.ExpandHeight(true));
+        GUILayout.EndScrollView();
 
         if (isUploading)
-        {
             GUILayout.Label("⏳ Uploading...", EditorStyles.miniLabel);
-        }
     }
 
     private void UploadDatabases()
@@ -246,11 +267,11 @@ public class UploadQuestionBanksEditor : EditorWindow
             }
 
             uploadStatus += $"\n✓ Total: {totalQuestions} questões\n";
-            uploadStatus += "Enviando para Firestore...\n";
+            uploadStatus += $"Enviando para Firestore {targetEnvironment}...\n";
 
             // Serializa e envia
             string json = JsonUtility.ToJson(payload);
-            SendToCloudFunction(json);
+            SendToCloudFunction(json, GetCloudFunctionUrl(), GetActiveSecretKey());
         }
         catch (Exception ex)
         {
@@ -259,10 +280,10 @@ public class UploadQuestionBanksEditor : EditorWindow
         }
     }
 
-    private void SendToCloudFunction(string jsonPayload)
+    private void SendToCloudFunction(string jsonPayload, string url, string secretKey)
     {
         // Constrói URL com secret key
-        string urlWithKey = $"{cloudFunctionUrl}?key={UnityWebRequest.EscapeURL(secretKey)}";
+        string urlWithKey = $"{url}?key={UnityWebRequest.EscapeURL(secretKey)}";
 
         // Cria request
         var www = new UnityWebRequest(urlWithKey, "POST");

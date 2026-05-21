@@ -10,7 +10,9 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
     private FirebaseFirestore db;
     private bool isInitialized;
 
-    private const string COLLECTION = "Questions";
+    private const string COLLECTION      = "Questions";
+    private const string CONFIG_COLLECTION = "Config";
+    private const string STATS_DOCUMENT    = "QuestionStats";
 
     // ── Inicialização ──────────────────────────────────────────────────────────
 
@@ -93,6 +95,41 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
         {
             Debug.LogError($"[FirestoreQuestionRepository] Erro em GetQuestionsByDatabankName('{databankName}'): {e.Message}");
             throw;
+        }
+    }
+
+    public async Task<long> GetRemoteVersion()
+    {
+        EnsureInitialized();
+
+        try
+        {
+            DocumentSnapshot doc = await db
+                .Collection(CONFIG_COLLECTION)
+                .Document(STATS_DOCUMENT)
+                .GetSnapshotAsync();
+
+            if (!doc.Exists)
+            {
+                Debug.LogWarning("[FirestoreQuestionRepository] Config/QuestionStats não encontrado — retornando -1.");
+                return -1L;
+            }
+
+            var data = doc.ToDictionary();
+            if (data.TryGetValue("Version", out object val))
+            {
+                if (val is long   l) return l;
+                if (val is int    i) return (long)i;
+                if (long.TryParse(val.ToString(), out long parsed)) return parsed;
+            }
+
+            Debug.LogWarning("[FirestoreQuestionRepository] Campo 'Version' não encontrado em QuestionStats — retornando -1.");
+            return -1L;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[FirestoreQuestionRepository] Erro ao ler versão remota: {e.Message}");
+            return -1L;
         }
     }
 
