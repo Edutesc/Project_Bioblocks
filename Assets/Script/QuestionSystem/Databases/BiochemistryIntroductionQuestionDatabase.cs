@@ -1,12 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
 using QuestionSystem;
 
-public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestionDatabase
+public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
 {
-
-    [Header("Development Settings")]
-    [SerializeField] private bool databaseInDevelopment = false;
+    private bool databaseInDevelopment = false;
 
     private List<Question> questions = new List<Question>
     {
@@ -26,7 +23,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_001",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -44,7 +49,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_002",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -62,7 +75,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_003",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -79,7 +100,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_004",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -96,7 +125,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_005",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -113,7 +150,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_006",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -130,7 +175,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_007",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -147,7 +200,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_008",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -164,7 +225,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_009",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -181,7 +250,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_010",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -198,7 +275,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_011",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -215,7 +300,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_012",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -232,7 +325,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_013",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -249,7 +350,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_014",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -267,7 +376,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_015",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -285,7 +402,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_016",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -303,7 +428,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_017",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -321,7 +454,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_018",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -339,7 +480,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_019",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -356,7 +505,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_020",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -374,7 +531,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_021",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -392,7 +557,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_022",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -410,7 +583,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_023",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -428,7 +609,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_024",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -446,7 +635,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_025",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -463,7 +660,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_026",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -480,7 +685,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_027",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -497,7 +710,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_028",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -514,7 +735,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_029",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -531,7 +760,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_030",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -548,7 +785,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_031",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -565,7 +810,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_032",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -582,7 +835,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_033",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -599,7 +860,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_034",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -616,7 +885,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_035",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -633,7 +910,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_036",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -650,7 +935,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_037",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -667,7 +960,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_038",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -684,7 +985,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_039",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -701,7 +1010,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_040",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -718,7 +1035,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_041",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -735,7 +1060,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_042",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -752,7 +1085,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_043",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -769,7 +1110,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_044",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -786,7 +1135,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_045",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -803,7 +1160,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_046",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -820,7 +1185,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_047",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -837,7 +1210,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_048",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
          new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -854,7 +1235,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_049",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -871,7 +1260,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_050",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -888,7 +1285,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_051",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -905,7 +1310,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_052",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -922,7 +1335,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_053",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -939,7 +1360,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_054",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -956,7 +1385,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_055",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -973,7 +1410,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_056",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -990,7 +1435,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_057",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1007,7 +1460,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_058",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1024,7 +1485,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_059",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1041,7 +1510,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_060",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1058,7 +1535,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_061",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1075,7 +1560,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_062",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },    
         new Question {
             questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
@@ -1092,7 +1585,15 @@ public class BiochemistryIntroductionQuestionDatabase : MonoBehaviour, IQuestion
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "biochem_063",
+            topic = "biochem",
+            subtopic = null,
+            displayName = "Introdução à Bioquímica",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         }   
     };
 

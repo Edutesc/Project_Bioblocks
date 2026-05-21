@@ -1,12 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
 using QuestionSystem;
 
-public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
+public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 {
-
-    [Header("Development Settings")]
-    [SerializeField] private bool databaseInDevelopment = false;
+    private bool databaseInDevelopment = false;
     
     private List<Question> questions = new List<Question>
     {
@@ -20,7 +17,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_001",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question
         {
@@ -38,7 +43,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_002",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -55,7 +68,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_003",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -67,7 +88,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_004",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -79,7 +108,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_005",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -96,7 +133,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_006",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -113,7 +158,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_007",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -125,7 +178,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_008",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -137,7 +198,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_009",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -149,7 +218,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_010",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -161,7 +238,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_011",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -173,7 +258,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_012",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -190,7 +283,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_013",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -202,7 +303,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_014",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -214,7 +323,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_015",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -226,7 +343,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_016",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -243,7 +368,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_017",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -260,7 +393,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_018",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -277,7 +418,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_019",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -294,7 +443,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_020",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -311,7 +468,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_021",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -328,7 +493,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_022",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -345,7 +518,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_023",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -357,7 +538,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_024",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -369,7 +558,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_025",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -381,7 +578,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_026",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -393,7 +598,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_027",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -410,7 +623,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_028",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -427,7 +648,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_029",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -444,7 +673,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_030",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -456,7 +693,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_031",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -468,7 +713,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_032",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -480,7 +733,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_033",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -492,7 +753,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 2,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_034",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -509,7 +778,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_035",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -526,7 +803,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_036",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -543,7 +828,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_037",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
          new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -560,7 +853,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_038",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
          new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -577,7 +878,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_039",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -594,7 +903,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_040",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -611,7 +928,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_041",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -628,7 +953,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_042",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -645,7 +978,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_043",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -662,7 +1003,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_044",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -679,7 +1028,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_045",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -696,7 +1053,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_046",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -713,7 +1078,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_047",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -730,7 +1103,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_048",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -747,7 +1128,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_049",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -764,7 +1153,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_050",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -781,7 +1178,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_051",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -798,7 +1203,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_052",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -815,7 +1228,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_053",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -832,7 +1253,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_054",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -849,7 +1278,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_055",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -866,7 +1303,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_056",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -883,7 +1328,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_057",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -900,7 +1353,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_058",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -917,7 +1378,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_059",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -934,7 +1403,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_060",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -951,7 +1428,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_061",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -968,7 +1453,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_062",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         },
         new Question {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
@@ -985,7 +1478,15 @@ public class NucleicAcidsQuestionDatabase : MonoBehaviour, IQuestionDatabase
             isImageQuestion = false,
             questionImagePath = "",
             questionLevel = 1,
-            questionInDevelopment = false
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_063",
+            topic = "nucleicAcids",
+            subtopic = null,
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
         }
     };
 
