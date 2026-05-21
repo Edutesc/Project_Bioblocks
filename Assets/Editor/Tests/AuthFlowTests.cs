@@ -43,10 +43,25 @@ public class AuthFlowTests
     private FakeStatisticsProvider                   _fakeStatistics;
     private FakeQuestionSyncService                  _fakeSync;
     private FakeNavigationService                    _fakeNavigation;
+    private GameObject                               _dispatcherGO;
+    private MainThreadDispatcher                     _dispatcher;
+    private System.Reflection.MethodInfo             _dispatcherUpdateMethod;
 
     [SetUp]
     public void Setup()
     {
+        // MainThreadDispatcher é necessário para que os catch blocks do RegisterManager
+        // consigam entregar feedback ao SpyFeedbackManager durante os testes.
+        // Instance não pode ser usado em edit mode (chama DontDestroyOnLoad).
+        // Setamos _instance via reflection para registrar o componente sem efeitos colaterais.
+        _dispatcherGO = new GameObject("MainThreadDispatcher");
+        _dispatcher   = _dispatcherGO.AddComponent<MainThreadDispatcher>();
+        _dispatcherUpdateMethod = typeof(MainThreadDispatcher)
+            .GetMethod("Update", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        typeof(MainThreadDispatcher)
+            .GetField("_instance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+            .SetValue(null, _dispatcher);
+
         _fakeAuth        = new FakeAuthRepository();
         _fakeFirestore   = new FakeFirestoreRepository();
         _fakeAnswered    = new FakeAnsweredQuestionsManagerForAuth();
@@ -71,6 +86,13 @@ public class AuthFlowTests
     public void TearDown()
     {
         UserDataStore.Clear();
+        typeof(MainThreadDispatcher)
+            .GetField("_instance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+            .SetValue(null, null);
+        if (_dispatcherGO != null)
+            Object.DestroyImmediate(_dispatcherGO);
+        _dispatcher             = null;
+        _dispatcherUpdateMethod = null;
     }
 
     // =======================================================================
@@ -448,6 +470,12 @@ public class AuthFlowTests
         {
             await System.Threading.Tasks.Task.Delay(100);
             elapsed += 0.1f;
+
+            // Em Edit Mode, Unity não chama Update() automaticamente nos GameObjects.
+            // Invocamos manualmente para que o MainThreadDispatcher processe sua fila
+            // e entregue feedbacks ao SpyFeedbackManager.
+            if (_dispatcher != null && _dispatcherUpdateMethod != null)
+                _dispatcherUpdateMethod.Invoke(_dispatcher, null);
 
             // Critério 1: spy recebeu feedback (erro ou validação)
             if (spy != null && spy.CallCount > callCountBefore)

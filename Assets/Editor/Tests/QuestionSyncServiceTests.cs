@@ -118,9 +118,10 @@ public class QuestionSyncServiceTests
     [UnityTest]
     public IEnumerator InitializeAsync_CacheValido_NaoChamaFirestore()
     {
-        // Arrange — cache salvo há 1 dia (válido)
+        // Arrange — cache salvo há 1 dia (válido) com versão sincronizada ao remoto
         var questions = QuestionTestHelpers.MakeQuestions(nivel1: 5, databankName: "TestDB");
         _fakeLocal.SetQuestions(questions, savedDaysAgo: 1);
+        _fakeLocal.SetCachedVersion(_fakeFirestore.RemoteVersion); // versão local == remota → sem refresh
 
         // Act
         var task = _syncService.InitializeAsync();
