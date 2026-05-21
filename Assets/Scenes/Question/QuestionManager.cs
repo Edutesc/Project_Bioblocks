@@ -379,7 +379,7 @@ public class QuestionManager : MonoBehaviour
 
     private async Task PreloadQuestionResources(Question question)
     {
-        if (question.isImageQuestion)
+        if (question.questionType == QuestionType.Image)
             await questionUIManager.PreloadQuestionImage(question);
     }
 
@@ -390,8 +390,8 @@ public class QuestionManager : MonoBehaviour
             answerManager.ResetButtonBackgrounds();
             answerManager.SetupAnswerButtons(nextQuestionToShow);
             questionCanvasGroupManager.ShowQuestion(
-                nextQuestionToShow.isImageQuestion,
-                nextQuestionToShow.isImageAnswer,
+                nextQuestionToShow.questionType == QuestionType.Image,
+                nextQuestionToShow.answerType   == AnswerType.Image,
                 nextQuestionToShow.questionLevel);
             questionUIManager.ShowQuestion(nextQuestionToShow);
 
@@ -416,8 +416,8 @@ public class QuestionManager : MonoBehaviour
             var newQuestion = currentSession.GetCurrentQuestion();
             answerManager.SetupAnswerButtons(newQuestion);
             questionCanvasGroupManager.ShowQuestion(
-                newQuestion.isImageQuestion,
-                newQuestion.isImageAnswer,
+                newQuestion.questionType == QuestionType.Image,
+                newQuestion.answerType   == AnswerType.Image,
                 newQuestion.questionLevel);
             questionUIManager.ShowQuestion(newQuestion);
 
@@ -434,8 +434,8 @@ public class QuestionManager : MonoBehaviour
             answerManager.ResetButtonBackgrounds();
             answerManager.SetupAnswerButtons(currentQuestion);
             questionCanvasGroupManager.ShowQuestion(
-                currentQuestion.isImageQuestion,
-                currentQuestion.isImageAnswer,
+                currentQuestion.questionType == QuestionType.Image,
+                currentQuestion.answerType   == AnswerType.Image,
                 currentQuestion.questionLevel);
             questionUIManager.ShowQuestion(currentQuestion);
 

@@ -88,10 +88,10 @@ public class QuestionAnswerManager : MonoBehaviour
         }
 
         currentQuestionLevel = question.questionLevel;
-        currentIsImageAnswer = question.isImageAnswer;
-        ApplyTheme(question.questionLevel, question.isImageAnswer);
+        currentIsImageAnswer = question.answerType == AnswerType.Image;
+        ApplyTheme(question.questionLevel, question.answerType == AnswerType.Image);
 
-        if (question.isImageAnswer)
+        if (question.answerType == AnswerType.Image)
         {
             SetupImageAnswers(question);
         }

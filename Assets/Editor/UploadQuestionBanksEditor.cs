@@ -218,11 +218,11 @@ public class UploadQuestionBanksEditor : EditorWindow
                     // Traduz paths legados (ex: "AnswerImages/AminoacidsDB/.../isoleucina") para
                     // storage keys (ex: "aminoacids/isoleucina") antes de gravar no Firestore.
                     // Assim o app pode usar o path diretamente, sem precisar de Resolve() em runtime.
-                    string resolvedImagePath = q.isImageQuestion && !string.IsNullOrEmpty(q.questionImagePath)
+                    string resolvedImagePath = q.questionType == QuestionSystem.QuestionType.Image && !string.IsNullOrEmpty(q.questionImagePath)
                         ? QuestionSystem.QuestionStorageKeys.Resolve(q.questionImagePath, q.topic) ?? q.questionImagePath
                         : q.questionImagePath;
 
-                    string[] resolvedAnswers = q.isImageAnswer && q.answers != null
+                    string[] resolvedAnswers = q.answerType == QuestionSystem.AnswerType.Image && q.answers != null
                         ? System.Array.ConvertAll(q.answers, a =>
                             QuestionSystem.QuestionStorageKeys.LooksLikeImagePath(a)
                                 ? QuestionSystem.QuestionStorageKeys.Resolve(a, q.topic) ?? a
@@ -239,8 +239,8 @@ public class UploadQuestionBanksEditor : EditorWindow
                         questionText = q.questionText,
                         answers = resolvedAnswers,
                         correctIndex = q.correctIndex,
-                        isImageQuestion = q.isImageQuestion,
-                        isImageAnswer = q.isImageAnswer,
+                        questionType = q.questionType.ToString().ToLower(),
+                        answerType   = q.answerType.ToString().ToLower(),
                         questionImagePath = resolvedImagePath,
                         questionLevel = q.questionLevel,
                         topic = q.topic,
@@ -378,8 +378,8 @@ public class UploadQuestionBanksEditor : EditorWindow
         public string questionText;
         public string[] answers;
         public int correctIndex;
-        public bool isImageQuestion;
-        public bool isImageAnswer;
+        public string questionType;
+        public string answerType;
         public string questionImagePath;
         public int questionLevel;
         public string topic;

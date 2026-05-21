@@ -20,8 +20,8 @@ public class QuestionDB
     public string[] Answers               { get; set; }
     public int      CorrectIndex          { get; set; }
     public int      QuestionNumber        { get; set; }
-    public bool     IsImageAnswer         { get; set; }
-    public bool     IsImageQuestion       { get; set; }
+    public AnswerType   AnswerType   { get; set; }
+    public QuestionType QuestionType { get; set; }
     public string   QuestionImagePath     { get; set; }
     public int      QuestionLevel         { get; set; }
     public bool     QuestionInDevelopment { get; set; }
@@ -63,8 +63,8 @@ public class QuestionDB
             Answers               = q.answers               ?? new string[0],
             CorrectIndex          = q.correctIndex,
             QuestionNumber        = q.questionNumber,
-            IsImageAnswer         = q.isImageAnswer,
-            IsImageQuestion       = q.isImageQuestion,
+            AnswerType            = q.answerType,
+            QuestionType          = q.questionType,
             QuestionImagePath     = q.questionImagePath     ?? "",
             QuestionLevel         = q.questionLevel,
             QuestionInDevelopment = q.questionInDevelopment,
@@ -92,8 +92,8 @@ public class QuestionDB
             answers               = Answers ?? new string[0],
             correctIndex          = CorrectIndex,
             questionNumber        = QuestionNumber,
-            isImageAnswer         = IsImageAnswer,
-            isImageQuestion       = IsImageQuestion,
+            answerType            = AnswerType,
+            questionType          = QuestionType,
             questionImagePath     = QuestionImagePath,
             questionLevel         = QuestionLevel,
             questionInDevelopment = QuestionInDevelopment,

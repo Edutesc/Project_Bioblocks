@@ -151,8 +151,8 @@ public class ImageSyncServiceTests
             questionDatabankName = $"{topic}DB",
             questionNumber       = number,
             topic                = topic,
-            isImageQuestion      = true,
-            isImageAnswer        = false,
+            questionType         = QuestionType.Image,
+            answerType           = AnswerType.Text,
             questionImagePath    = imagePath,
             answers              = new[] { "A", "B", "C", "D" }
         };
@@ -166,8 +166,8 @@ public class ImageSyncServiceTests
             questionDatabankName = $"{topic}DB",
             questionNumber       = number,
             topic                = topic,
-            isImageQuestion      = false,
-            isImageAnswer        = true,
+            questionType         = QuestionType.Text,
+            answerType           = AnswerType.Image,
             questionImagePath    = "",
             answers              = answers
         };
