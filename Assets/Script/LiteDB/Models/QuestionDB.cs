@@ -30,7 +30,7 @@ public class QuestionDB
     public string       Topic        { get; set; }
     public string       DisplayName  { get; set; }
     public string       Subtopic     { get; set; }
-    public string       BloomLevel   { get; set; }
+    public BloomLevel   BloomLevel   { get; set; }
     public List<string> ConceptTags  { get; set; }
     public List<string> Prerequisites{ get; set; }
 
@@ -71,7 +71,7 @@ public class QuestionDB
             Topic                 = q.topic                 ?? "",
             DisplayName           = q.displayName           ?? "",
             Subtopic              = q.subtopic              ?? "",
-            BloomLevel            = q.bloomLevel            ?? "unclassified",
+            BloomLevel            = q.bloomLevel,
             ConceptTags           = q.conceptTags           ?? new List<string>(),
             Prerequisites         = q.prerequisites         ?? new List<string>(),
             HintImagePath         = q.questionHint?.imagePath ?? "",
