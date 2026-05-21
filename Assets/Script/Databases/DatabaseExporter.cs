@@ -103,7 +103,7 @@ public class DatabaseExporter
 
         // Converter questões para formato de exportação
         var questionsData = questions
-            .Where(q => q.isImageQuestion || q.isImageAnswer)  // Apenas questões com imagens
+            .Where(q => q.questionType == QuestionSystem.QuestionType.Image || q.answerType == QuestionSystem.AnswerType.Image)  // Apenas questões com imagens
             .OrderBy(q => q.questionNumber)
             .Select(q => new QuestionImageData
             {

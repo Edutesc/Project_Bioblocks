@@ -75,13 +75,13 @@ namespace QuestionSystem
             if (q == null) yield break;
             string topic = q.topic;
 
-            if (q.isImageQuestion && !string.IsNullOrEmpty(q.questionImagePath))
+            if (q.questionType == QuestionType.Image && !string.IsNullOrEmpty(q.questionImagePath))
             {
                 string key = Resolve(q.questionImagePath, topic);
                 if (!string.IsNullOrEmpty(key)) yield return key;
             }
 
-            if (q.isImageAnswer && q.answers != null)
+            if (q.answerType == AnswerType.Image && q.answers != null)
             {
                 foreach (var answer in q.answers)
                 {

@@ -148,8 +148,8 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
                 questionText          = GetString(data, "questionText",           ""),
                 correctIndex          = GetInt   (data, "correctIndex",           0),
                 questionNumber        = GetInt   (data, "questionNumber",         0),
-                isImageAnswer         = GetBool  (data, "isImageAnswer",          false),
-                isImageQuestion       = GetBool  (data, "isImageQuestion",        false),
+                answerType            = GetAnswerType(data),
+                questionType          = GetQuestionType(data),
                 questionImagePath     = GetString(data, "questionImagePath",      ""),
                 questionLevel         = GetInt   (data, "questionLevel",          1),
                 questionInDevelopment = GetBool  (data, "questionInDevelopment",  false),
@@ -209,6 +209,36 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
             System.Enum.TryParse(raw, ignoreCase: true, out BloomLevel result))
             return result;
         return BloomLevel.Unclassified;
+    }
+
+    /// <summary>
+    /// Lê questionType do Firestore com retrocompatibilidade:
+    ///   - Novo formato: campo "questionType" como string ("text" / "image")
+    ///   - Formato legado: campo "isImageQuestion" como bool
+    /// </summary>
+    private static QuestionType GetQuestionType(Dictionary<string, object> data)
+    {
+        if (data.TryGetValue("questionType", out object newVal) && newVal != null)
+        {
+            if (System.Enum.TryParse(newVal.ToString(), ignoreCase: true, out QuestionType parsed))
+                return parsed;
+        }
+        return GetBool(data, "isImageQuestion", false) ? QuestionType.Image : QuestionType.Text;
+    }
+
+    /// <summary>
+    /// Lê answerType do Firestore com retrocompatibilidade:
+    ///   - Novo formato: campo "answerType" como string ("text" / "image")
+    ///   - Formato legado: campo "isImageAnswer" como bool
+    /// </summary>
+    private static AnswerType GetAnswerType(Dictionary<string, object> data)
+    {
+        if (data.TryGetValue("answerType", out object newVal) && newVal != null)
+        {
+            if (System.Enum.TryParse(newVal.ToString(), ignoreCase: true, out AnswerType parsed))
+                return parsed;
+        }
+        return GetBool(data, "isImageAnswer", false) ? AnswerType.Image : AnswerType.Text;
     }
 
     private static string[] GetStringArray(Dictionary<string, object> data, string key)

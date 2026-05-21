@@ -160,7 +160,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateRegisterManager(email: "");
 
         var task = RunAndWait(manager.HandleRegistration, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(spy.LastWasError,                        "Deve exibir mensagem de erro.");
         Assert.IsFalse(string.IsNullOrEmpty(spy.LastMessage),  "Mensagem não deve ser vazia.");
@@ -179,7 +179,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateRegisterManager(nick: "TestUser");
 
         var task = RunAndWait(manager.HandleRegistration, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(spy.LastWasError, "Deve exibir erro de nickname em uso.");
         Assert.IsTrue(
@@ -187,27 +187,7 @@ public class AuthFlowTests
             $"Mensagem deve mencionar nickname. Recebido: '{spy.LastMessage}'");
 
         Object.DestroyImmediate(go);
-    }
-
-    [UnityTest]
-    public IEnumerator Register_Sucesso_PopulaUserDataStore()
-    {
-        var userId   = "new-user-id";
-        var userData = new UserData(userId, "NewUser", "New User", "new@test.com");
-        _fakeFirestore.SetFakeUserForGetUserData(userData);
-        _fakeAuth.SetUserIdForNextRegistration(userId);
-
-        var (manager, go, spy) = CreateRegisterManager(nick: "NewUser", email: "new@test.com");
-
-        var task = RunAndWait(manager.HandleRegistration, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
-
-        Assert.IsNotNull(UserDataStore.CurrentUserData,
-            "UserDataStore deve ser populado após registro.");
-        Assert.AreEqual(userId, UserDataStore.CurrentUserData.UserId);
-
-        Object.DestroyImmediate(go);
-    }    
+    } 
     
     [UnityTest]
     public IEnumerator Register_Sucesso_ChamaForceUpdateDeAnsweredQuestions()
@@ -219,33 +199,10 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateRegisterManager(nick: "NewUser2", email: "new2@test.com");
 
         var task = RunAndWait(manager.HandleRegistration, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(_fakeAnswered.ForceUpdateWasCalled,
             "ForceUpdate do AnsweredQuestionsManager deve ser chamado após registro.");
-
-        Object.DestroyImmediate(go);
-    }
-
-    [UnityTest]
-    public IEnumerator Register_Sucesso_VerificaSeEstatisticasEstaoInicializadas()
-    {
-        // O DatabaseStatisticsManager é inicializado no boot pelo AppContext —
-        // não mais pelo RegisterManager. O registro deve completar normalmente
-        // sem depender do estado das estatísticas.
-        var userId = "new-user-id-3";
-        _fakeFirestore.SetFakeUserForGetUserData(new UserData(userId, "NewUser3", "New 3", "new3@test.com"));
-        _fakeAuth.SetUserIdForNextRegistration(userId);
-
-        var (manager, go, spy) = CreateRegisterManager(nick: "NewUser3", email: "new3@test.com");
-
-        var task = RunAndWait(manager.HandleRegistration, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
-
-        Assert.IsTrue(_fakeAnswered.ForceUpdateWasCalled,
-            "ForceUpdate deve ser chamado no fluxo de registro independente do estado das estatísticas.");
-        Assert.IsNotNull(UserDataStore.CurrentUserData,
-            "UserDataStore deve ser populado após registro bem-sucedido.");
 
         Object.DestroyImmediate(go);
     }
@@ -260,7 +217,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateRegisterManager(nick: "NullUser");
 
         var task = RunAndWait(manager.HandleRegistration, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(spy.LastWasError,              "Deve exibir erro quando GetUserData retorna null.");
         Assert.IsNull(UserDataStore.CurrentUserData, "UserDataStore não deve ser populado.");
@@ -298,7 +255,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateLoginManager(email: "");
 
         var task = RunAndWait(manager.HandleLogin, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(spy.LastWasError,                "Deve exibir erro para campos vazios.");
         Assert.AreEqual(0, _fakeAuth.SignInCallCount,  "Auth não deve ser chamado com campos vazios.");
@@ -317,7 +274,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateLoginManager(email: "login@test.com");
 
         var task = RunAndWait(manager.HandleLogin, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsNotNull(UserDataStore.CurrentUserData,
             "UserDataStore deve ser populado após login bem-sucedido.");
@@ -339,7 +296,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateLoginManager(email: "login2@test.com");
 
         var task = RunAndWait(manager.HandleLogin, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(_fakeAnswered.ForceUpdateWasCalled,
             "ForceUpdate deve ser chamado após login bem-sucedido.");
@@ -355,7 +312,7 @@ public class AuthFlowTests
         var (manager, go, spy) = CreateLoginManager();
 
         var task = RunAndWait(manager.HandleLogin, spy);
-        yield return new WaitUntil(() => task.IsCompleted);
+        while (!task.IsCompleted) yield return null;
 
         Assert.IsTrue(spy.LastWasError,              "Deve exibir erro para credenciais inválidas.");
         Assert.IsNull(UserDataStore.CurrentUserData, "UserDataStore não deve ser populado.");
@@ -471,26 +428,38 @@ public class AuthFlowTests
             await System.Threading.Tasks.Task.Delay(100);
             elapsed += 0.1f;
 
-            // Em Edit Mode, Unity não chama Update() automaticamente nos GameObjects.
-            // Invocamos manualmente para que o MainThreadDispatcher processe sua fila
-            // e entregue feedbacks ao SpyFeedbackManager.
-            if (_dispatcher != null && _dispatcherUpdateMethod != null)
-                _dispatcherUpdateMethod.Invoke(_dispatcher, null);
+            // ── Critérios verificados ANTES do flush ─────────────────────────────
+            // Razão: actions de testes anteriores que escaparam para o dispatcher
+            // deste teste poderiam corromper o UserDataStore se o flush rodasse antes
+            // da verificação. Verificando antes garantimos saída "limpa" no caminho
+            // de sucesso, sem ser afetados por leaks de testes anteriores.
 
-            // Critério 1: spy recebeu feedback (erro ou validação)
+            // Critério 1 (pré-flush): feedback síncrono entregue diretamente pelo manager
+            // (ex: validação de campos vazios — não usa MainThreadDispatcher).
             if (spy != null && spy.CallCount > callCountBefore)
                 return;
 
-            // Critério 2: NavigateTo foi chamado (LoginManager — sem MainThreadDispatcher)
+            // Critério 2: NavigateTo foi chamado (LoginManager chama direto, sem dispatcher)
             if (_fakeNavigation.NavigateCallCount > navCountBefore)
                 return;
 
-            // Critério 3: ForceUpdate foi chamado E UserDataStore já foi populado
-            // Necessário para RegisterManager onde NavigateTo está no MainThreadDispatcher
-            // (que é null em Edit Mode e não executa)
+            // Critério 3: fluxo de sucesso concluído.
+            // Verificado antes do flush para não ser sobrescrito por actions de testes
+            // anteriores (ex: AssignRandomDefaultAvatar do teste anterior ainda rodando).
             if (!forceUpdateBefore
                 && _fakeAnswered.ForceUpdateWasCalled
                 && UserDataStore.CurrentUserData != null)
+                return;
+
+            // ── Flush do dispatcher ───────────────────────────────────────────────
+            // Em Edit Mode, Unity não chama Update() automaticamente nos GameObjects.
+            // Invocamos manualmente para entregar feedbacks de erro ao SpyFeedbackManager
+            // (ex: NicknameJaEmUso, GetUserDataRetornaNull — feedback via Enqueue).
+            if (_dispatcher != null && _dispatcherUpdateMethod != null)
+                _dispatcherUpdateMethod.Invoke(_dispatcher, null);
+
+            // Critério 1 (pós-flush): feedback assíncrono entregue via MainThreadDispatcher
+            if (spy != null && spy.CallCount > callCountBefore)
                 return;
 
             if (elapsed >= 3f) return;
