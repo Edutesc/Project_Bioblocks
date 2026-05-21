@@ -1581,31 +1581,31 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
            prerequisites = null,
            questionHint = null
         },
-        //new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Qual destes carboidratos é um polissacarídeo estrutural presente na parede celular de vegetais?",
-        //    answers = new string[] {
-        //        "Amido",
-        //        "Celulose",
-        //        "Maltose",
-        //        "Lactose"
-        //    },
-        //    correctIndex = 1,
-        //    questionNumber = 67,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 1,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_067",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+        new Question {
+           questionDatabankName = "CarbohydratesQuestionDatabase",
+           questionText = "Qual destes carboidratos é um polissacarídeo estrutural presente na parede celular de vegetais?",
+           answers = new string[] {
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer67_1",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer67_2",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer67_3",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer67_4"
+           },
+           correctIndex = 1,
+           questionNumber = 67,
+           isImageAnswer = true,
+           isImageQuestion = false,
+           questionImagePath = "",
+           questionLevel = 1,
+           questionInDevelopment = false,
+           globalId = "carbohydrates_067",
+           topic = "carbohydrates",
+           subtopic = null,
+           displayName = "Carboidratos",
+           bloomLevel = "unclassified",
+           conceptTags = null,
+           prerequisites = null,
+           questionHint = null
+        },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "Qual destes carboidratos está presente no leite?",
