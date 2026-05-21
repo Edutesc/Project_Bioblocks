@@ -3,6 +3,17 @@ using System.Collections.Generic;
 
 namespace QuestionSystem
 {
+    public enum BloomLevel
+    {
+        Unclassified,
+        Remember,
+        Understand,
+        Apply,
+        Analyze,
+        Evaluate,
+        Create
+    }
+
     [System.Serializable]
     public class Question
     {
@@ -20,7 +31,7 @@ namespace QuestionSystem
         public string questionImagePath;
         public int questionLevel;
         public bool questionInDevelopment;
-        public string bloomLevel;
+        public BloomLevel bloomLevel;
         public List<string> conceptTags;
         public List<string> prerequisites;
         public QuestionHint questionHint;

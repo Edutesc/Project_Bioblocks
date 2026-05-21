@@ -156,7 +156,7 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
                 topic                 = GetString(data, "topic",                  ""),
                 displayName           = GetString(data, "displayName",            ""),
                 subtopic              = GetString(data, "subtopic",               null),
-                bloomLevel            = GetString(data, "bloomLevel",             "unclassified"),
+                bloomLevel            = GetBloomLevel(data, "bloomLevel"),
                 conceptTags           = GetStringList(data, "conceptTags"),
                 prerequisites         = GetStringList(data, "prerequisites"),
                 answers               = GetStringArray(data, "answers"),
@@ -200,6 +200,15 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
             if (bool.TryParse(value.ToString(), out bool parsed)) return parsed;
         }
         return defaultValue;
+    }
+
+    private static BloomLevel GetBloomLevel(Dictionary<string, object> data, string key)
+    {
+        string raw = GetString(data, key, "");
+        if (!string.IsNullOrEmpty(raw) &&
+            System.Enum.TryParse(raw, ignoreCase: true, out BloomLevel result))
+            return result;
+        return BloomLevel.Unclassified;
     }
 
     private static string[] GetStringArray(Dictionary<string, object> data, string key)

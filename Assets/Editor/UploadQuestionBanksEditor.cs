@@ -246,7 +246,7 @@ public class UploadQuestionBanksEditor : EditorWindow
                         topic = q.topic,
                         subtopic = q.subtopic,
                         displayName = q.displayName,
-                        bloomLevel = q.bloomLevel ?? "unclassified",
+                        bloomLevel = q.bloomLevel.ToString().ToLower(),
                         conceptTags = q.conceptTags ?? new List<string>(),
                         prerequisites = q.prerequisites ?? new List<string>(),
                         questionInDevelopment = q.questionInDevelopment,

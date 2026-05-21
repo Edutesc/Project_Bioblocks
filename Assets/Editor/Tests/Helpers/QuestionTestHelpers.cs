@@ -54,7 +54,7 @@ public static class QuestionTestHelpers
             topic                 = "",
             displayName           = "",
             subtopic              = null,
-            bloomLevel            = "unclassified",
+            bloomLevel            = BloomLevel.Unclassified,
             conceptTags           = new List<string>(),
             prerequisites         = new List<string>(),
             questionHint          = new QuestionHint()
@@ -74,7 +74,7 @@ public static class QuestionTestHelpers
         int level = 1,
         string databankName = "TestDB",
         string topic = "testTopic",
-        string bloomLevel = "remember",
+        BloomLevel bloomLevel = BloomLevel.Remember,
         bool inDevelopment = false)
     {
         return new Question
