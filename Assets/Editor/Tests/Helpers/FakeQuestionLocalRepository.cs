@@ -38,12 +38,20 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
     public Exception ExceptionToThrow { get; set; } =
         new Exception("Simulated local storage error");
 
+    // ── Versão do cache em memória ─────────────────────────────────────────────
+    private long _cachedVersion = -1L;
+
     // ── Rastreamento de chamadas ───────────────────────────────────────────────
-    public int SaveQuestionsCallCount { get; private set; }
-    public int ClearAllCallCount      { get; private set; }
+    public int SaveQuestionsCallCount    { get; private set; }
+    public int ClearAllCallCount         { get; private set; }
+    public int SaveCachedVersionCallCount { get; private set; }
+    public int GetCachedVersionCallCount  { get; private set; }
 
     /// <summary>Número total de questões passadas para SaveQuestions nas últimas chamadas.</summary>
-    public int LastSaveCount          { get; private set; }
+    public int LastSaveCount             { get; private set; }
+
+    /// <summary>Última versão passada para SaveCachedVersion (para asserções em testes).</summary>
+    public long LastSavedVersion         { get; private set; } = -1L;
 
     // ── Configuração de cenários ───────────────────────────────────────────────
 
@@ -139,15 +147,40 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
         _latestCacheTimestamp = DateTime.MinValue;
     }
 
+    // ── IQuestionLocalRepository: versão do cache ──────────────────────────────
+
+    public long GetCachedVersion()
+    {
+        GetCachedVersionCallCount++;
+        return _cachedVersion;
+    }
+
+    public void SaveCachedVersion(long version)
+    {
+        SaveCachedVersionCallCount++;
+        LastSavedVersion = version;
+        _cachedVersion   = version;
+    }
+
+    /// <summary>
+    /// Define a versão do cache diretamente, sem incrementar SaveCachedVersionCallCount.
+    /// Útil para configurar o estado inicial de um teste.
+    /// </summary>
+    public void SetCachedVersion(long version) => _cachedVersion = version;
+
     // ── Utilitário ─────────────────────────────────────────────────────────────
     /// <summary>Zera tudo para reutilização entre testes.</summary>
     public void Reset()
     {
         _storage.Clear();
-        _latestCacheTimestamp   = DateTime.MinValue;
-        ShouldThrowOnSave       = false;
-        SaveQuestionsCallCount  = 0;
-        ClearAllCallCount       = 0;
-        LastSaveCount           = 0;
+        _latestCacheTimestamp      = DateTime.MinValue;
+        _cachedVersion             = -1L;
+        ShouldThrowOnSave          = false;
+        SaveQuestionsCallCount     = 0;
+        ClearAllCallCount          = 0;
+        SaveCachedVersionCallCount = 0;
+        GetCachedVersionCallCount  = 0;
+        LastSaveCount              = 0;
+        LastSavedVersion           = -1L;
     }
 }

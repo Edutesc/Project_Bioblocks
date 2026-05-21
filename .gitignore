@@ -141,5 +141,19 @@ Assets/Editor/FirebaseSecrets.json.meta
 
 # ===========================
 # Local Python Scripts# 
+# ==========================
+# Firebase App Check debug token (Editor only)
+# Cada dev gera um UUID local, registra no Firebase Console e coloca aqui.
+# Nunca commitar.
 # ===========================
-Python_Local_Scripts/
+firebase_app_check_debug_token.txt
+
+# Storage scripts
+FIREBASE_REORGANIZE_README.md
+FIREBASE_UPLOAD_README.md
+check_storage_images.py
+reorganize_firebase_stoe.py
+run_check_storage.sh
+run_reorganize.sh
+run_upload.sh
+upload_images_to_firebase.py
