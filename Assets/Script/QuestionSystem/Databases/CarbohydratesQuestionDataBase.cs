@@ -1606,31 +1606,31 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
            prerequisites = null,
            questionHint = null
         },
-        //new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Qual destes carboidratos está presente no leite?",
-        //    answers = new string[] {
-        //        "Sacarose",
-        //        "Lactose",
-        //        "Maltose",
-        //        "Glicogênio"
-        //    },
-        //    correctIndex = 1,
-        //    questionNumber = 68,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 1,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_068",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+        new Question {
+           questionDatabankName = "CarbohydratesQuestionDatabase",
+           questionText = "Qual destes carboidratos está presente no leite?",
+           answers = new string[] {
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer68_1",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer68_2",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer68_3",
+               "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer68_4"
+           },
+           correctIndex = 1,
+           questionNumber = 68,
+           isImageAnswer = true,
+           isImageQuestion = false,
+           questionImagePath = "",
+           questionLevel = 1,
+           questionInDevelopment = false,
+           globalId = "carbohydrates_068",
+           topic = "carbohydrates",
+           subtopic = null,
+           displayName = "Carboidratos",
+           bloomLevel = "unclassified",
+           conceptTags = null,
+           prerequisites = null,
+           questionHint = null
+        },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "Os carboidratos podem ser classificados de acordo com:",
