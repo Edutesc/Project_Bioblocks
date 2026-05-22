@@ -17,7 +17,7 @@ public class InitializationManager : MonoBehaviour
     [SerializeField] private float minimumLoadingTime = 2.0f;
 
     [Header("Global Loading Spinner")]
-    [SerializeField] private GameObject globalSpinnerPrefab;
+    [SerializeField] private GameObject spinnerContainerPrefab;
 
     private IFirestoreRepository _firestore;
     private IAuthRepository _auth;
@@ -43,18 +43,28 @@ public class InitializationManager : MonoBehaviour
         {
             globalSpinner = LoadingSpinnerComponent.Instance;
 
-            if (globalSpinner == null && globalSpinnerPrefab != null)
+            if (globalSpinner == null)
             {
-                Canvas mainCanvas = FindObjectOfType<Canvas>();
-                GameObject spinnerObject = mainCanvas != null
-                    ? Instantiate(globalSpinnerPrefab, mainCanvas.transform)
-                    : Instantiate(globalSpinnerPrefab);
+                if (spinnerContainerPrefab == null)
+                {
+                    Debug.LogError("[InitializationManager] O prefab SpinnerContainer não foi vinculado no Inspector.");
+                    return;
+                }
 
+                GameObject spinnerObject = Instantiate(spinnerContainerPrefab);
                 spinnerObject.name = "GlobalLoadingSpinner";
                 DontDestroyOnLoad(spinnerObject);
+
                 globalSpinner = spinnerObject.GetComponent<LoadingSpinnerComponent>();
+
+                if (globalSpinner == null)
+                {
+                    Debug.LogError("[InitializationManager] O prefab SpinnerContainer não possui LoadingSpinnerComponent no objeto raiz.");
+                    return;
+                }
             }
-            globalSpinner?.ShowSpinner();
+
+            globalSpinner.ShowSpinner();
         }
         catch (Exception e)
         {
@@ -81,9 +91,9 @@ public class InitializationManager : MonoBehaviour
             UpdateStatus("Modo preview ativo...");
             await WaitForAppContext();
 
-            float elapsed = Time.time - startTime;
-            if (elapsed < minimumLoadingTime)
-                await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
+            float elapsedPreview = Time.time - startTime;
+            if (elapsedPreview < minimumLoadingTime)
+                await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsedPreview) * 1000));
 
             globalSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
             SceneManager.LoadScene("PathwayScene");
@@ -109,49 +119,93 @@ public class InitializationManager : MonoBehaviour
             _userDataSync  = AppContext.UserDataSync;
             _userDataLocal = AppContext.UserDataLocal;
 
+            if (_auth == null)
+                throw new Exception("[InitManager] AppContext.Auth está null após AppContext.IsReady=true.");
+
             UpdateProgress(0.3f);
             UpdateStatus("Verificando autenticação...");
             Debug.Log("[InitManager] Verificando autenticação...");
+
             bool isAuthenticated = await CheckAuthentication();
+
             Debug.Log($"[InitManager] isAuthenticated={isAuthenticated}");
             UpdateProgress(0.5f);
 
+            // ── Usuário não autenticado: ir imediatamente para LoginView ─────────
+            if (!isAuthenticated)
+            {
+                UpdateStatus("Redirecionando para login...");
+                Debug.Log("[InitManager] Usuário não autenticado. Navegando imediatamente para LoginView.");
+
+                try
+                {
+                    globalSpinner?.HideSpinner();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[InitManager] Erro ao esconder spinner antes da LoginView: {e.Message}");
+                }
+
+                NavigateAfterInit(false);
+                return;
+            }
+
+            // ── A partir daqui, só continua se estiver autenticado ────────────────
             bool userDataLoaded = false;
 
-            if (isAuthenticated)
+            UpdateStatus("Carregando dados do usuário...");
+            Debug.Log("[InitManager] Carregando dados...");
+
+            userDataLoaded = await LoadUserData();
+
+            Debug.Log($"[InitManager] userDataLoaded={userDataLoaded}");
+            UpdateProgress(0.7f);
+
+            if (userDataLoaded)
             {
-                UpdateStatus("Carregando dados do usuário...");
-                Debug.Log("[InitManager] Carregando dados...");
-                userDataLoaded = await LoadUserData();
-                Debug.Log($"[InitManager] userDataLoaded={userDataLoaded}");
-                UpdateProgress(0.7f);
+                UpdateStatus("Carregando bancos de questões...");
 
-                if (userDataLoaded)
+                var statsManager = AppContext.Statistics as DatabaseStatisticsManager;
+                if (statsManager != null)
                 {
-                    UpdateStatus("Carregando bancos de questões...");
-                    await (AppContext.Statistics as DatabaseStatisticsManager)?.Initialize();
-                    UpdateProgress(0.85f);
-
-                    UpdateStatus("Configurando sistema de níveis...");
-                    InitializePlayerLevelService();
-                    UpdateProgress(0.9f);
+                    await statsManager.Initialize();
                 }
+                else
+                {
+                    Debug.LogWarning("[InitManager] AppContext.Statistics não é DatabaseStatisticsManager ou está null.");
+                }
+
+                UpdateProgress(0.85f);
+
+                UpdateStatus("Configurando sistema de níveis...");
+                InitializePlayerLevelService();
+                UpdateProgress(0.9f);
+            }
+            else
+            {
+                Debug.LogWarning("[InitManager] Usuário autenticado, mas dados do usuário não foram carregados.");
             }
 
             float elapsed = Time.time - startTime;
             if (elapsed < minimumLoadingTime)
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
 
-            NavigateAfterInit(isAuthenticated && userDataLoaded);
+            NavigateAfterInit(userDataLoaded);
         }
         catch (Exception ex)
         {
             Debug.LogError($"[InitializationManager] Falha: {ex.GetType().Name}: {ex.Message}");
             Debug.LogError($"[InitializationManager] StackTrace: {ex.StackTrace}");
+
             if (ex.InnerException != null)
                 Debug.LogError($"[InitializationManager] InnerException: {ex.InnerException.Message}");
 
-            try { globalSpinner?.HideSpinner(); } catch { }
+            try
+            {
+                globalSpinner?.HideSpinner();
+            }
+            catch { }
+
             ShowError($"Falha na inicialização: {ex.Message}");
         }
     }
@@ -242,16 +296,28 @@ public class InitializationManager : MonoBehaviour
 
     private void NavigateAfterInit(bool authenticated)
     {
+        string targetScene = authenticated ? "PathwayScene" : "LoginView";
+
+        Debug.Log($"[InitManager] NavigateAfterInit chamado. authenticated={authenticated}, targetScene={targetScene}");
+
+        if (!Application.CanStreamedLevelBeLoaded(targetScene))
+        {
+            Debug.LogError($"[InitManager] Cena não encontrada ou não está no Build Settings: {targetScene}");
+            return;
+        }
+
         try
         {
-            string targetScene = authenticated ? "PathwayScene" : "LoginView";
-            globalSpinner?.ShowSpinnerUntilSceneLoaded(targetScene);
-            SceneManager.LoadScene(targetScene);
+            // Diagnóstico: esconder spinner antes de trocar de cena
+            globalSpinner?.HideSpinner();
+
+            Debug.Log($"[InitManager] Carregando cena: {targetScene}");
+            SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            string targetScene = authenticated ? "PathwayScene" : "LoginView";
-            SceneManager.LoadScene(targetScene);
+            Debug.LogError($"[InitManager] Erro ao carregar cena {targetScene}: {e.GetType().Name}: {e.Message}");
+            Debug.LogError(e.StackTrace);
         }
     }
 
