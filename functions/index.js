@@ -540,3 +540,111 @@ async function _batchUpdate(db, docs, fields, batchMax) {
     await batch.commit();
   }
 }
+
+// ─────────────────────────────────────────────────────────────
+// SCHEDULE: Manage Test Active State
+// ─────────────────────────────────────────────────────────────
+exports.manageTestActiveState = onSchedule(
+    {
+      schedule: "every 5 minutes",
+    },
+    async () => {
+      const db = admin.firestore();
+      const now = admin.firestore.Timestamp.now();
+      const testsRef = db.collection("Tests");
+      
+      const snapshot = await testsRef.get();
+      let batch = db.batch();
+      let count = 0;
+      
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        const start = data.StartTime;
+        const end = data.EndTime;
+        
+        let shouldBeActive = false;
+        if (start && end) {
+             shouldBeActive = (now.toMillis() >= start.toMillis() && now.toMillis() <= end.toMillis());
+        }
+        
+        if (data.IsActive !== shouldBeActive) {
+            batch.update(doc.ref, { IsActive: shouldBeActive });
+            count++;
+        }
+      });
+      
+      if (count > 0) {
+          await batch.commit();
+      }
+    }
+);
+
+// ─────────────────────────────────────────────────────────────
+// HTTP: Get Test Results
+// ─────────────────────────────────────────────────────────────
+exports.getTestResults = onRequest(async (req, res) => {
+    const secret = req.headers["authorization"] || req.query.secret;
+    if (secret !== process.env.PROFESSOR_SECRET_KEY) {
+        res.status(403).send("Unauthorized");
+        return;
+    }
+    
+    const testId = req.query.testId;
+    if (!testId) {
+        res.status(400).send("Missing testId");
+        return;
+    }
+    
+    const db = admin.firestore();
+    const results = await db.collection("TestResults").where("TestId", "==", testId).get();
+    const data = results.docs.map((d) => d.data());
+    
+    res.json(data);
+});
+
+// ─────────────────────────────────────────────────────────────
+// TRIGGER: Calculate Test Score
+// ─────────────────────────────────────────────────────────────
+exports.calculateTestScore = onDocumentCreated(
+    "TestSubmissions/{submissionId}",
+    async (event) => {
+        const snap = event.data;
+        if (!snap) return;
+        
+        const data = snap.data();
+        const testId = data.TestId;
+        const userId = data.UserId;
+        const answers = data.Answers || {};
+        
+        const db = admin.firestore();
+        const testDoc = await db.collection("Tests").doc(testId).get();
+        if (!testDoc.exists) return;
+        
+        const questionIds = testDoc.data().QuestionIds || [];
+        if (questionIds.length === 0) return;
+        
+        let correctCount = 0;
+        
+        // O backend busca o gabarito em TestAnswers (coleção privada inacessível aos clientes)
+        for (const qId of questionIds) {
+            const answerDoc = await db.collection("TestAnswers").doc(qId).get();
+            if (answerDoc.exists) {
+                const correctOption = answerDoc.data().CorrectOptionIndex;
+                if (answers[qId] === correctOption) {
+                    correctCount++;
+                }
+            }
+        }
+        
+        const scorePercentage = correctCount / questionIds.length;
+        const finalScore = Math.round(scorePercentage * 10);
+        
+        const resultDocId = `${testId}_${userId}`;
+        await db.collection("TestResults").doc(resultDocId).set({
+            TestId: testId,
+            UserId: userId,
+            Score: finalScore,
+            SubmittedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+    }
+);
