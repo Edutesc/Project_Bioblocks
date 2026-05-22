@@ -7,75 +7,32 @@ using UnityEngine.SceneManagement;
 
 public class InitializationManager : MonoBehaviour
 {
-    [Header("UI References")]
-    [SerializeField] private GameObject retryPanel;
-    [SerializeField] private TMP_Text statusText;
-    [SerializeField] private Image progressBar;
-    [SerializeField] private TMP_Text errorText;
-
     [Header("Configuration")]
     [SerializeField] private float minimumLoadingTime = 2.0f;
 
-    [Header("Global Loading Spinner")]
-    [SerializeField] private GameObject spinnerContainerPrefab;
+[   Header("Initialization Loading Spinner")]
+    [SerializeField] private LoadingSpinnerComponent loadingSpinner;
 
     private IFirestoreRepository _firestore;
     private IAuthRepository _auth;
     private IUserDataSyncService _userDataSync;
     private IUserDataLocalRepository _userDataLocal;
 
-    private LoadingSpinnerComponent globalSpinner;
-
     private void Awake()
     {
-        InitializeGlobalSpinner();
+        if (loadingSpinner == null)
+        {
+            Debug.LogError("[InitializationManager] LoadingSpinnerComponent não foi vinculado no Inspector.");
+            return;
+        }
+
+        loadingSpinner.ShowSpinner();
+        loadingSpinner.SetMessage("Inicializando...");
     }
 
     private void Start()
     {
-        SetupUI();
         StartInitialization();
-    }
-
-    private void InitializeGlobalSpinner()
-    {
-        try
-        {
-            globalSpinner = LoadingSpinnerComponent.Instance;
-
-            if (globalSpinner == null)
-            {
-                if (spinnerContainerPrefab == null)
-                {
-                    Debug.LogError("[InitializationManager] O prefab SpinnerContainer não foi vinculado no Inspector.");
-                    return;
-                }
-
-                GameObject spinnerObject = Instantiate(spinnerContainerPrefab);
-                spinnerObject.name = "GlobalLoadingSpinner";
-                DontDestroyOnLoad(spinnerObject);
-
-                globalSpinner = spinnerObject.GetComponent<LoadingSpinnerComponent>();
-
-                if (globalSpinner == null)
-                {
-                    Debug.LogError("[InitializationManager] O prefab SpinnerContainer não possui LoadingSpinnerComponent no objeto raiz.");
-                    return;
-                }
-            }
-
-            globalSpinner.ShowSpinner();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InitializationManager] Erro ao inicializar spinner: {e.Message}");
-        }
-    }
-
-    private void SetupUI()
-    {
-        if (retryPanel != null) retryPanel.SetActive(false);
-        if (progressBar != null) progressBar.fillAmount = 0f;
     }
 
     private async void StartInitialization()
@@ -95,7 +52,7 @@ public class InitializationManager : MonoBehaviour
             if (elapsedPreview < minimumLoadingTime)
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsedPreview) * 1000));
 
-            globalSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
+            SceneManager.LoadScene("PathwayScene", LoadSceneMode.Single);
             SceneManager.LoadScene("PathwayScene");
             return;
         }
@@ -121,16 +78,7 @@ public class InitializationManager : MonoBehaviour
 
             if (_auth == null)
                 throw new Exception("[InitManager] AppContext.Auth está null após AppContext.IsReady=true.");
-
-            UpdateProgress(0.3f);
-            UpdateStatus("Verificando autenticação...");
-            Debug.Log("[InitManager] Verificando autenticação...");
-
             bool isAuthenticated = await CheckAuthentication();
-
-            Debug.Log($"[InitManager] isAuthenticated={isAuthenticated}");
-            UpdateProgress(0.5f);
-
             // ── Usuário não autenticado: ir imediatamente para LoginView ─────────
             if (!isAuthenticated)
             {
@@ -139,7 +87,7 @@ public class InitializationManager : MonoBehaviour
 
                 try
                 {
-                    globalSpinner?.HideSpinner();
+                    loadingSpinner?.HideSpinner();
                 }
                 catch (Exception e)
                 {
@@ -158,8 +106,6 @@ public class InitializationManager : MonoBehaviour
 
             userDataLoaded = await LoadUserData();
 
-            Debug.Log($"[InitManager] userDataLoaded={userDataLoaded}");
-            UpdateProgress(0.7f);
 
             if (userDataLoaded)
             {
@@ -175,11 +121,8 @@ public class InitializationManager : MonoBehaviour
                     Debug.LogWarning("[InitManager] AppContext.Statistics não é DatabaseStatisticsManager ou está null.");
                 }
 
-                UpdateProgress(0.85f);
-
                 UpdateStatus("Configurando sistema de níveis...");
                 InitializePlayerLevelService();
-                UpdateProgress(0.9f);
             }
             else
             {
@@ -202,7 +145,7 @@ public class InitializationManager : MonoBehaviour
 
             try
             {
-                globalSpinner?.HideSpinner();
+                loadingSpinner?.HideSpinner();
             }
             catch { }
 
@@ -302,22 +245,18 @@ public class InitializationManager : MonoBehaviour
 
         if (!Application.CanStreamedLevelBeLoaded(targetScene))
         {
-            Debug.LogError($"[InitManager] Cena não encontrada ou não está no Build Settings: {targetScene}");
             return;
         }
 
         try
         {
-            // Diagnóstico: esconder spinner antes de trocar de cena
-            globalSpinner?.HideSpinner();
-
-            Debug.Log($"[InitManager] Carregando cena: {targetScene}");
             SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
         }
         catch (Exception e)
         {
             Debug.LogError($"[InitManager] Erro ao carregar cena {targetScene}: {e.GetType().Name}: {e.Message}");
             Debug.LogError(e.StackTrace);
+            loadingSpinner?.SetMessage($"Erro ao carregar {targetScene}.");
         }
     }
 
@@ -333,28 +272,18 @@ public class InitializationManager : MonoBehaviour
 
     private void UpdateStatus(string message)
     {
-        if (statusText != null) statusText.text = message;
-    }
-
-    private void UpdateProgress(float progress)
-    {
-        if (progressBar != null) progressBar.fillAmount = progress;
+        loadingSpinner?.SetMessage(message);
     }
 
     private void ShowError(string message)
     {
-        // Esconde o spinner explicitamente aqui também
-        try { globalSpinner?.HideSpinner(); } catch { }
+        Debug.LogError($"[InitManager] {message}");
 
-        if (retryPanel != null)
+        try
         {
-            retryPanel.SetActive(true);
-            if (errorText != null) errorText.text = message;
+            loadingSpinner?.ShowSpinner();
+            loadingSpinner?.SetMessage(message);
         }
-        else
-        {
-            // retryPanel não configurado — loga para identificar no Xcode
-            Debug.LogError($"[InitManager] retryPanel é null. Mensagem de erro: {message}");
-        }
+        catch { }
     }
 }

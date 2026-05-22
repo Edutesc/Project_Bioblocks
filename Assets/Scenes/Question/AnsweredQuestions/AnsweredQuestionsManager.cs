@@ -66,6 +66,14 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
             Debug.LogError("[AnsweredQuestionsManager] Serviços não disponíveis após AppContext.IsReady");
             return;
         }
+        
+        if (!_auth.IsUserLoggedIn() || string.IsNullOrEmpty(_auth.CurrentUserId))
+        {
+            Debug.Log("[AnsweredQuestionsManager] Sem usuário autenticado no bootstrap. Aguardando login.");
+            isInitialized = false;
+            userId = null;
+            return;
+        }
 
         await Initialize();
     }
@@ -88,9 +96,11 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
                 return;
             }
 
-            if (_auth == null || !_auth.IsUserLoggedIn())
+            if (_auth == null || !_auth.IsUserLoggedIn() || string.IsNullOrEmpty(_auth.CurrentUserId))
             {
-                Debug.LogError("[AnsweredQuestionsManager] Nenhum usuário está autenticado");
+                Debug.Log("[AnsweredQuestionsManager] Nenhum usuário autenticado. Inicialização adiada até login.");
+                isInitialized = false;
+                userId = null;
                 return;
             }
 

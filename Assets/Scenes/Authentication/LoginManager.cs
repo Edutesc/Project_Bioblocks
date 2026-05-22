@@ -69,7 +69,7 @@ public class LoginManager : MonoBehaviour
 
             UserDataStore.CurrentUserData = userData;
             await AppContext.AnsweredQuestions?.ForceUpdate();
-            loadingSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
+          //  loadingSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
             _navigation.NavigateTo("PathwayScene");
         }
         catch (FirebaseException e)
@@ -100,7 +100,7 @@ public class LoginManager : MonoBehaviour
 
     public void HandleRegisterNavigation()
     {
-        loadingSpinner?.ShowSpinnerUntilSceneLoaded("RegisterView");
+    //    loadingSpinner?.ShowSpinnerUntilSceneLoaded("RegisterView");
         _navigation.NavigateTo("RegisterView");
     }
 

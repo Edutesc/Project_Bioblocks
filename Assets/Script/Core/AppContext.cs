@@ -201,6 +201,7 @@ public class AppContext : MonoBehaviour
             questionFirestoreRepo.Initialize();
             questionLocalRepo.InjectDependencies(liteDBMgr);
             questionSyncSvc.InjectDependencies(questionFirestoreRepo, questionLocalRepo, imageSyncSvc);
+            questionSyncSvc.RegisterAuthListener();
 
             // ── 7. Navegação ───────────────────────────────────────────────────
             navigationMgr.InjectDependencies(sceneDataMgr);

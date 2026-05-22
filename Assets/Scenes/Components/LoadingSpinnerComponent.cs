@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System.Collections;
+using TMPro;
 
 public class LoadingSpinnerComponent : MonoBehaviour
 {
@@ -9,44 +8,18 @@ public class LoadingSpinnerComponent : MonoBehaviour
     [SerializeField] private GameObject spinnerContainer;
     [SerializeField] private Image spinnerBackground;
     [SerializeField] private Image spinnerBorder;
+    [SerializeField] private TMP_Text messageLabel;
 
     [Header("Configuration")]
     [SerializeField] private float rotationSpeed = 100f;
     [SerializeField] private bool rotateBackground = false;
-
-    private static LoadingSpinnerComponent _instance;
+    [SerializeField] private bool showOnAwake = false;
 
     private CanvasGroup canvasGroup;
     private GraphicRaycaster graphicRaycaster;
 
-    private bool waitForSceneLoad = false;
-    private string sceneToWaitFor = string.Empty;
-    private Coroutine hideCoroutine;
-
-    public static LoadingSpinnerComponent Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindFirstObjectByType<LoadingSpinnerComponent>();
-            }
-
-            return _instance;
-        }
-    }
-
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
         {
@@ -60,36 +33,13 @@ public class LoadingSpinnerComponent : MonoBehaviour
             Debug.LogError("[LoadingSpinner] spinnerContainer não foi vinculado no prefab.");
         }
 
-        if (spinnerBackground == null)
+        if (showOnAwake)
         {
-            Debug.LogWarning("[LoadingSpinner] spinnerBackground não foi vinculado no prefab.");
+            ShowSpinner();
         }
-
-        if (spinnerBorder == null)
+        else
         {
-            Debug.LogWarning("[LoadingSpinner] spinnerBorder não foi vinculado no prefab.");
-        }
-
-        HideSpinner();
-    }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-
-        if (_instance == this)
-        {
-            _instance = null;
+            HideSpinner();
         }
     }
 
@@ -109,22 +59,8 @@ public class LoadingSpinnerComponent : MonoBehaviour
         }
     }
 
-    public void ShowSpinnerUntilSceneLoaded(string sceneName)
-    {
-        waitForSceneLoad = true;
-        sceneToWaitFor = sceneName;
-
-        ShowSpinner();
-    }
-
     public void ShowSpinner()
     {
-        if (hideCoroutine != null)
-        {
-            StopCoroutine(hideCoroutine);
-            hideCoroutine = null;
-        }
-
         if (spinnerContainer != null)
         {
             spinnerContainer.SetActive(true);
@@ -144,20 +80,11 @@ public class LoadingSpinnerComponent : MonoBehaviour
 
         SetRaycastTargets(true);
 
-        Debug.Log("[LoadingSpinner] Spinner mostrado.");
+        Debug.Log("[LoadingSpinner] Spinner local mostrado.");
     }
 
     public void HideSpinner()
     {
-        waitForSceneLoad = false;
-        sceneToWaitFor = string.Empty;
-
-        if (hideCoroutine != null)
-        {
-            StopCoroutine(hideCoroutine);
-            hideCoroutine = null;
-        }
-
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0f;
@@ -177,21 +104,15 @@ public class LoadingSpinnerComponent : MonoBehaviour
             spinnerContainer.SetActive(false);
         }
 
-        Debug.Log("[LoadingSpinner] Spinner escondido e raycasts desativados.");
+        Debug.Log("[LoadingSpinner] Spinner local escondido.");
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void SetMessage(string message)
     {
-        if (waitForSceneLoad && scene.name == sceneToWaitFor)
+        if (messageLabel != null)
         {
-            hideCoroutine = StartCoroutine(HideSpinnerDelayed(0.2f));
+            messageLabel.text = message;
         }
-    }
-
-    private IEnumerator HideSpinnerDelayed(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        HideSpinner();
     }
 
     private void SetRaycastTargets(bool enabled)

@@ -53,7 +53,7 @@ public class ProfileManager : MonoBehaviour
         _auth         = AppContext.Auth;
         _statistics   = AppContext.Statistics;
         _navigation   = AppContext.Navigation;
-        loadingSpinner = LoadingSpinnerComponent.Instance;
+     //   loadingSpinner = LoadingSpinnerComponent.Instance;
 
         if (deleteAccountPanel == null)
             Debug.LogError("DeleteAccountPanel não está atribuído no ProfileManager!");

@@ -45,26 +45,21 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         _imageSync = imageSync;
     }
 
-    // ── Auto-recovery quando o usuário entra DEPOIS do AppContext init ────────
-    //
-    // Cenário: na primeira abertura ou após cache ser limpo, AppContext chama
-    // InitializeAsync() ANTES do usuário fazer sign-in. As rules do Firestore
-    // exigem auth, então a leitura de Questions falha e IsCacheReady fica false.
-    // Quando o usuário registra/entra logo depois, ninguém re-dispara a sync.
-    // Esse listener detecta a mudança de estado de auth e re-roda InitializeAsync
-    // automaticamente, sem precisar mexer no fluxo de login.
-
-    private void Start()
+    public void RegisterAuthListener()
     {
-        try
+        if (_authListenerRegistered)
+            return;
+
+        if (_firestore == null || _local == null)
         {
-            Firebase.Auth.FirebaseAuth.DefaultInstance.StateChanged += OnAuthStateChanged;
-            _authListenerRegistered = true;
+            Debug.LogWarning("[QuestionSyncService] Dependências ainda não injetadas. Listener não registrado.");
+            return;
         }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[QuestionSyncService] Não foi possível registrar listener de auth: {e.Message}");
-        }
+
+        Firebase.Auth.FirebaseAuth.DefaultInstance.StateChanged += OnAuthStateChanged;
+        _authListenerRegistered = true;
+
+        Debug.Log("[QuestionSyncService] Auth listener registrado após injeção de dependências.");
     }
 
     private async void OnAuthStateChanged(object sender, EventArgs e)
@@ -92,6 +87,13 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
 
     public async Task<bool> InitializeAsync()
     {
+        if (_firestore == null || _local == null)
+        {
+            Debug.LogWarning("[QuestionSyncService] InitializeAsync chamado antes da injeção de dependências.");
+            IsCacheReady = false;
+            return false;
+        }
+
         if (IsSyncing) return IsCacheReady;
         IsSyncing = true;
 
@@ -162,7 +164,8 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     {
         try
         {
-            return await _firestore.GetRemoteVersion().ConfigureAwait(false);
+            long remoteVersion = await _firestore.GetRemoteVersion();
+            return remoteVersion;
         }
         catch (Exception e)
         {
@@ -196,8 +199,7 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     {
         try
         {
-            List<Question> questions = await _firestore.GetAllQuestions().ConfigureAwait(false);
-            await Task.Yield();  // retorna ao main thread
+            List<Question> questions = await _firestore.GetAllQuestions();
 
             if (questions == null || questions.Count == 0)
             {
@@ -206,12 +208,21 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
             }
 
             _local.SaveQuestions(questions);
-            if (remoteVersion != -1L)
-                _local.SaveCachedVersion(remoteVersion);
 
+            try
+            {
+                if (remoteVersion != -1L)
+                {
+                    _local.SaveCachedVersion(remoteVersion);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[QuestionSyncService] Questões salvas, mas falha ao salvar versão do cache: {e.Message}");
+            }
+            
             Debug.Log($"[QuestionSyncService] {questions.Count} questões cacheadas no LiteDB (versão {remoteVersion}).");
 
-            // Prewarm não bloqueia: as imagens caem no cache em background.
             _ = PrewarmImagesAsync(questions);
             return true;
         }
@@ -232,8 +243,7 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
 
         try
         {
-            List<Question> questions = await _firestore.GetAllQuestions().ConfigureAwait(false);
-            await Task.Yield();
+            List<Question> questions = await _firestore.GetAllQuestions();
 
             if (questions == null || questions.Count == 0)
             {
@@ -243,8 +253,11 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
 
             _local.ClearAll();
             _local.SaveQuestions(questions);
+
             if (newVersion != -1L)
+            {
                 _local.SaveCachedVersion(newVersion);
+            }
 
             Debug.Log($"[QuestionSyncService] Cache atualizado em background com {questions.Count} questões (versão {newVersion}).");
 

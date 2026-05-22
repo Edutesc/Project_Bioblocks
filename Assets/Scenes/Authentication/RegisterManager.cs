@@ -115,7 +115,7 @@ public class RegisterManager : MonoBehaviour
             MainThreadDispatcher.Enqueue(() =>
             {
                 Debug.Log("[RegisterManager] Carregando PathwayScene na main thread...");
-                loadingSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
+            //    loadingSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
                 _navigation.NavigateTo("PathwayScene");
             });
         }
@@ -204,7 +204,7 @@ public class RegisterManager : MonoBehaviour
 
         isProcessing = true;
         SetAllButtonsInteractable(false);
-        loadingSpinner?.ShowSpinnerUntilSceneLoaded("LoginView");
+       // loadingSpinner?.ShowSpinnerUntilSceneLoaded("LoginView");
         _navigation.NavigateTo("LoginView");
     }
 
