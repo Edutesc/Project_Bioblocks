@@ -91,6 +91,48 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // ────────────────────────────────────────────────────────────
+    // Tests
+    // ────────────────────────────────────────────────────────────
+    match /Tests/{testId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // TestQuestions
+    // ────────────────────────────────────────────────────────────
+    match /TestQuestions/{questionId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // TestSubmissions
+    // ────────────────────────────────────────────────────────────
+    match /TestSubmissions/{submissionId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.UserId;
+      allow create: if request.auth != null 
+        && request.auth.uid == request.resource.data.UserId
+        && submissionId == request.resource.data.TestId + "_" + request.auth.uid;
+      allow update, delete: if false; 
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // TestResults
+    // ────────────────────────────────────────────────────────────
+    match /TestResults/{resultId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.UserId;
+      allow write: if false; 
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // TestAnswers (Gabarito Privado - Apenas Backend)
+    // ────────────────────────────────────────────────────────────
+    match /TestAnswers/{questionId} {
+      allow read, write: if false;
+    }
+
     // Catch-all — bloqueia qualquer coleção não listada acima.
     match /{document=**} {
       allow read, write: if false;
