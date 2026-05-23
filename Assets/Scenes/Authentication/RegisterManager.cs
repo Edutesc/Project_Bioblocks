@@ -21,12 +21,7 @@ public class RegisterManager : MonoBehaviour
     private IAuthRepository    _auth;
     private IFirestoreRepository _firestore;
     private INavigationService _navigation;
-
     private bool isProcessing = false;
-
-    // Usado apenas em AssignRandomDefaultAvatar. System.Random em vez de UnityEngine.Random
-    // porque o sorteio roda em background thread (após a cadeia de ConfigureAwait(false)
-    // em HandleRegistration), e APIs da Unity — incluindo Random.Range — exigem main thread.
     private static readonly System.Random _avatarRng = new System.Random();
 
     private void Start()
@@ -43,18 +38,20 @@ public class RegisterManager : MonoBehaviour
 
     // -------------------------------------------------------
     // Registro
-    // -------------------------------------------------------
-
+    // ------------------------------------------------------
     public async void HandleRegistration()
     {
         if (isProcessing) return;
 
-        // Validação síncrona antes do try — garante feedback imediato na main thread
-        // sem passar pelo catch/MainThreadDispatcher
-        if (string.IsNullOrEmpty(nickNameInput.text) ||
-            string.IsNullOrEmpty(nameInput.text)     ||
-            string.IsNullOrEmpty(emailInput.text)    ||
-            string.IsNullOrEmpty(passwordInput.text))
+        string name     = nameInput.text;
+        string nickName = nickNameInput.text;
+        string email    = emailInput.text;
+        string password = passwordInput.text;
+
+        if (string.IsNullOrEmpty(nickName) ||
+            string.IsNullOrEmpty(name)     ||
+            string.IsNullOrEmpty(email)    ||
+            string.IsNullOrEmpty(password))
         {
             feedbackManager.ShowFeedback("Todos os campos são obrigatórios.", true);
             return;
@@ -64,10 +61,11 @@ public class RegisterManager : MonoBehaviour
         SetAllButtonsInteractable(false);
         loadingSpinner?.ShowSpinner();
 
+        bool success = false;
+
         try
         {
-            bool nicknameExists = await _firestore.AreNicknameTaken(nickNameInput.text).ConfigureAwait(false);
-            await Task.Yield();
+            bool nicknameExists = await _firestore.AreNicknameTaken(nickName);
 
             if (nicknameExists)
                 throw new Exception("Este nickname já está em uso. Por favor, escolha outro.");
@@ -75,81 +73,59 @@ public class RegisterManager : MonoBehaviour
             Debug.Log("=== LIMPEZA ANTES DE REGISTRAR NOVO USUÁRIO ===");
 
             UserDataStore.CurrentUserData = null;
-            Debug.Log("✓ UserDataStore limpo");
             AppContext.AnsweredQuestions?.ResetManager();
             AnsweredQuestionsListStore.ClearAll();
+
             Debug.Log("=== LIMPEZA CONCLUÍDA, INICIANDO REGISTRO ===");
 
-            await _auth.RegisterUserAsync(
-                nameInput.text,
-                nickNameInput.text,
-                emailInput.text,
-                passwordInput.text
-            ).ConfigureAwait(false);
-            await Task.Yield();
-            await Task.Delay(300);
+            await _auth.RegisterUserAsync(name, nickName, email, password);
 
             string userId = _auth.CurrentUserId;
             if (string.IsNullOrEmpty(userId))
                 throw new Exception("Erro: usuário criado mas ID não encontrado.");
 
-            var userData = await _firestore.GetUserData(userId).ConfigureAwait(false);
-            await Task.Yield(); // retorna ao main thread
+            var userData = await _firestore.GetUserData(userId);
 
             if (userData == null)
                 throw new Exception("Erro ao carregar dados do usuário recém-criado.");
 
             UserDataStore.CurrentUserData = userData;
+
             Debug.Log("[RegisterManager] UserData definido. Iniciando ForceUpdate...");
-            await Task.Delay(300);
-            await AppContext.AnsweredQuestions.ForceUpdate().ConfigureAwait(false);
+            await AppContext.AnsweredQuestions.ForceUpdate();
             Debug.Log("[RegisterManager] ForceUpdate concluído.");
 
-            // Atribui um avatar aleatório em background (não bloqueia navegação)
-            AssignRandomDefaultAvatar(userData);
+            _ = AssignRandomDefaultAvatarAsync(userData);
 
-            Debug.Log("[RegisterManager] Enfileirando LoadScene na main thread...");
-
-            // Task.Yield() não garante retorno à main thread quando ConfigureAwait(false)
-            // foi usado anteriormente na cadeia. MainThreadDispatcher.Enqueue garante.
-            MainThreadDispatcher.Enqueue(() =>
-            {
-                Debug.Log("[RegisterManager] Carregando PathwayScene na main thread...");
-            //    loadingSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
-                _navigation.NavigateTo("PathwayScene");
-            });
+            success = true;
+            _navigation.NavigateTo("PathwayScene");
         }
         catch (FirebaseException e)
         {
             string errorMessage = GetFirebaseAuthErrorMessage(e);
             Debug.LogWarning($"[RegisterManager] {errorMessage}");
-            MainThreadDispatcher.Enqueue(() => feedbackManager.ShowFeedback(errorMessage, true));
-            loadingSpinner?.HideSpinner();
-            SetAllButtonsInteractable(true);
-            isProcessing = false;
+            feedbackManager.ShowFeedback(errorMessage, true);
         }
         catch (Exception e)
         {
             Debug.LogWarning($"[RegisterManager] {e.Message}");
-            MainThreadDispatcher.Enqueue(() => feedbackManager.ShowFeedback(e.Message, true));
-            loadingSpinner?.HideSpinner();
-            SetAllButtonsInteractable(true);
-            isProcessing = false;
+            feedbackManager.ShowFeedback(e.Message, true);
+        }
+        finally
+        {
+            if (!success)
+            {
+                loadingSpinner?.HideSpinner();
+                SetAllButtonsInteractable(true);
+                isProcessing = false;
+            }
         }
     }
 
     // -------------------------------------------------------
     // Avatar padrão aleatório
     // -------------------------------------------------------
-
-    /// <summary>
-    /// Sorteia um avatar preset default (um por classe biológica) e associa ao usuário.
-    /// Fluxo 100% por referência: persiste apenas a string "preset:&lt;id&gt;" no Firestore
-    /// e no UserData local. O PNG físico já está bundled em Resources — nenhum upload
-    /// para Storage, nenhum arquivo temporário em disco.
-    /// Roda em background — não bloqueia a navegação para PathwayScene.
-    /// </summary>
-    private async void AssignRandomDefaultAvatar(UserData userData)
+    private async Task AssignRandomDefaultAvatarAsync(UserData userData)
     {
         try
         {
@@ -160,16 +136,14 @@ public class RegisterManager : MonoBehaviour
                 return;
             }
 
-            var chosen    = defaults[_avatarRng.Next(defaults.Count)];
+            var chosen = defaults[_avatarRng.Next(defaults.Count)];
             string presetUrl = $"preset:{chosen.Id}";
+
             Debug.Log($"[RegisterManager] Avatar padrão sorteado: {chosen.Id} ({chosen.DisplayName})");
 
-            // Persiste no Firestore — string curta, sem Storage envolvido.
-            // Falha aqui não impede atualização local; o usuário vê o avatar correto
-            // e o próximo login reconciliará via GetUserData.
             try
             {
-                await _firestore.UpdateUserProfileImageUrl(userData.UserId, presetUrl).ConfigureAwait(false);
+                await _firestore.UpdateUserProfileImageUrl(userData.UserId, presetUrl);
                 Debug.Log("[RegisterManager] Firestore atualizado com preset:id");
             }
             catch (Exception e)
@@ -177,19 +151,15 @@ public class RegisterManager : MonoBehaviour
                 Debug.LogWarning($"[RegisterManager] Firestore update falhou: {e.Message}");
             }
 
-            // Volta à main thread para mexer em stores e notificar UI (TopBar, etc).
-            MainThreadDispatcher.Enqueue(() =>
-            {
-                userData.ProfileImageUrl      = presetUrl;
-                UserDataStore.CurrentUserData = userData;
-                AppContext.UserDataLocal?.UpdateUser(userData);
-                UserAvatarSyncHelper.NotifyAvatarChanged(presetUrl);
-                Debug.Log("[RegisterManager] Avatar padrão aplicado com sucesso");
-            });
+            userData.ProfileImageUrl = presetUrl;
+            UserDataStore.CurrentUserData = userData;
+            AppContext.UserDataLocal?.UpdateUser(userData);
+            UserAvatarSyncHelper.NotifyAvatarChanged(presetUrl);
+
+            Debug.Log("[RegisterManager] Avatar padrão aplicado com sucesso");
         }
         catch (Exception e)
         {
-            // Falha no avatar padrão não deve impedir o uso do app
             Debug.LogWarning($"[RegisterManager] Erro ao atribuir avatar padrão: {e.Message}");
         }
     }

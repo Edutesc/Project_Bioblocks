@@ -67,12 +67,13 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
         try
         {
             var result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+
             if (result?.User == null)
                 throw new Exception("Login falhou: resultado ou usuário nulo");
 
             string uid = result.User.UserId;
-            UserData userData = await _firestore.GetUserData(uid).ConfigureAwait(false);
-            await Task.Yield();
+
+            UserData userData = await _firestore.GetUserData(uid);
 
             if (userData == null)
                 throw new Exception("Dados do usuário não encontrados");
@@ -87,14 +88,22 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
         }
     }
 
-    public async Task<UserData> RegisterUserAsync(string name, string nickName, string email, string password)
+    public async Task<UserData> RegisterUserAsync(
+    string name,
+    string nickName,
+    string email,
+    string password)
     {
-        if (_firestore == null) throw new Exception("FirestoreRepository não injetado");
+        if (_firestore == null)
+            throw new Exception("FirestoreRepository não injetado");
 
         try
         {
             var result = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
+
             string token = await result.User.TokenAsync(forceRefresh: true);
+            if (string.IsNullOrWhiteSpace(token))
+                throw new Exception("Token vazio após criação do usuário.");
 
             var user = new UserData
             {
@@ -110,8 +119,8 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
                 AnsweredQuestions = new Dictionary<string, List<int>>()
             };
 
-            await _firestore.CreateUserDocument(user).ConfigureAwait(false);
-            await Task.Yield();
+            await _firestore.CreateUserDocument(user);
+
             UserDataStore.CurrentUserData = user;
             return user;
         }

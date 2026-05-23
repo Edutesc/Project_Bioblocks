@@ -27,9 +27,8 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
         try
         {
-            var userData = await _firestore.GetUserData(userId).ConfigureAwait(false);
-            await Task.Yield();
-            
+            var userData = await _firestore.GetUserData(userId);
+
             if (userData == null)
             {
                 Debug.LogWarning($"[SyncService] Usuário {userId} não encontrado no Firestore.");
@@ -39,6 +38,7 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
             _localRepository.UpdateUser(userData);
             _localRepository.MarkAsSynced(userId);
             UserDataStore.CurrentUserData = userData;
+
             Debug.Log("[SyncService] Dados sincronizados do Firestore para o cache local.");
         }
         catch (Exception e)
@@ -66,9 +66,10 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
                 return;
             }
 
-            await _firestore.UpdateUserData(userData).ConfigureAwait(false);
-            await Task.Yield();
+            await _firestore.UpdateUserData(userData);
+
             _localRepository.MarkAsSynced(userId);
+
             Debug.Log("[SyncService] Dados locais enviados ao Firestore com sucesso.");
         }
         catch (Exception e)
@@ -137,8 +138,7 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
             try
             {
-                remoteData = await _firestore.GetUserData(userId).ConfigureAwait(false);
-                await Task.Yield();
+                remoteData = await _firestore.GetUserData(userId);
             }
             catch (Exception e)
             {
@@ -149,7 +149,20 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
             {
                 // Sem internet — usa LiteDB
                 Debug.Log("[SyncService] Firestore indisponível — usando LiteDB.");
-                UserDataStore.CurrentUserData = localData;
+
+                if (localData != null)
+                    UserDataStore.CurrentUserData = localData;
+
+                return;
+            }
+
+            if (localData == null)
+            {
+                // Não havia cache local válido, então usa Firestore
+                remoteData.SavedAt = DateTime.UtcNow;
+                _localRepository.UpdateUser(remoteData);
+                _localRepository.MarkAsSynced(userId);
+                UserDataStore.CurrentUserData = remoteData;
                 return;
             }
 
@@ -158,8 +171,8 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
             {
                 UserDataStore.CurrentUserData = localData;
 
-                // Se local é mais recente, sincroniza ao Firestore
-                if (localData.SavedAt > remoteData.SavedAt)
+                // Se local é mais recente, marca como pendente para envio futuro
+                if (localData.SavedAt.ToUniversalTime() > remoteData.SavedAt.ToUniversalTime())
                     _localRepository.MarkAsDirty(userId);
             }
             else
@@ -173,6 +186,7 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
         catch (Exception e)
         {
             Debug.LogWarning($"[SyncService] MergeWithFirestore falhou: {e.Message}");
+
             var cached = _localRepository.GetUser(userId);
             if (cached != null)
                 UserDataStore.CurrentUserData = cached;
@@ -187,42 +201,41 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
     }
 
     // UserDataSyncService.cs
-    public async Task UpdateUserScores(
-        string userId,
-        int additionalScore,
-        int questionNumber,
-        string databankName,
-        bool isCorrect)
+   public Task UpdateUserScores(
+    string userId,
+    int additionalScore,
+    int questionNumber,
+    string databankName,
+    bool isCorrect)
     {
-        await Task.Yield();
-
         var localUser = _localRepository.GetUser(userId);
         if (localUser == null)
         {
             Debug.LogWarning("[SyncService] Usuário não encontrado no cache local.");
-            return;
+            return Task.CompletedTask;
         }
 
-        int newScore     = Mathf.Max(0, localUser.Score     + additionalScore);
-        int newWeekScore = Mathf.Max(0, localUser.WeekScore + additionalScore);
+        int newScore     = Math.Max(0, localUser.Score + additionalScore);
+        int newWeekScore = Math.Max(0, localUser.WeekScore + additionalScore);
 
-        // LiteDB — síncrono, seguro
         _localRepository.UpdateScore(userId, newScore, newWeekScore);
+
         if (isCorrect && !string.IsNullOrEmpty(databankName) && questionNumber > 0)
             _localRepository.AddAnsweredQuestion(userId, databankName, questionNumber);
 
-        // UserDataStore — dispara UI, precisa estar no main thread
         var current = UserDataStore.CurrentUserData;
         if (current != null)
         {
-            current.Score     = newScore;
+            current.Score = newScore;
             current.WeekScore = newWeekScore;
 
             if (isCorrect && !string.IsNullOrEmpty(databankName) && questionNumber > 0)
             {
                 current.AnsweredQuestions ??= new Dictionary<string, List<int>>();
+
                 if (!current.AnsweredQuestions.ContainsKey(databankName))
                     current.AnsweredQuestions[databankName] = new List<int>();
+
                 if (!current.AnsweredQuestions[databankName].Contains(questionNumber))
                     current.AnsweredQuestions[databankName].Add(questionNumber);
             }
@@ -231,8 +244,17 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
         }
 
         var capturedUserData = UserDataStore.CurrentUserData;
-        _ = SyncToFirestoreBackground(userId, additionalScore, questionNumber,
-                                    databankName, isCorrect, capturedUserData);
+
+        _ = SyncToFirestoreBackground(
+            userId,
+            additionalScore,
+            questionNumber,
+            databankName,
+            isCorrect,
+            capturedUserData
+        );
+
+        return Task.CompletedTask;
     }
 
     private async Task SyncToFirestoreBackground(
@@ -246,20 +268,21 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
         try
         {
             await _firestore.UpdateUserScores(
-                userId, additionalScore,
-                questionNumber, databankName,
-                isCorrect, capturedUserData
-            )
-            .ConfigureAwait(false);
-            await Task.Yield();
+                userId,
+                additionalScore,
+                questionNumber,
+                databankName,
+                isCorrect,
+                capturedUserData
+            );
+
             _localRepository.MarkAsSynced(userId);
             Debug.Log("[SyncService] Score sincronizado com Firestore.");
         }
         catch (Exception e)
         {
-             _localRepository.MarkAsDirty(userId); // LiteDB — seguro em qualquer thread
+            _localRepository.MarkAsDirty(userId);
 
-            await Task.Yield();
             Debug.LogError($"[SyncBackground] FALHA — {e.GetType().Name}: {e.Message}");
             Debug.LogError($"[SyncBackground] StackTrace: {e.StackTrace}");
         }

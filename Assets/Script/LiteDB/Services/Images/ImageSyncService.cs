@@ -126,12 +126,11 @@ public class ImageSyncService : MonoBehaviour, IImageSyncService
     }
 
     // ── Prewarm ordenado por topic ─────────────────────────────────────────────
-
     public async Task PrewarmAsync(
-        IEnumerable<Question> questions,
-        IProgress<float> progress = null,
-        Action<string> onTopicReady = null,
-        CancellationToken ct = default)
+    IEnumerable<Question> questions,
+    IProgress<float> progress = null,
+    Action<string> onTopicReady = null,
+    CancellationToken ct = default)
     {
         if (IsSyncing)
         {
@@ -146,26 +145,23 @@ public class ImageSyncService : MonoBehaviour, IImageSyncService
 
         try
         {
-            // Aguarda autenticação antes de qualquer download — as regras do
-            // Storage exigem request.auth != null. Sem isso o SDK joga
-            // "User is not authenticated" e o prewarm falha em loop.
             if (_authGate != null)
-                await _authGate.WaitForAuthenticatedAsync(ct).ConfigureAwait(false);
+                await _authGate.WaitForAuthenticatedAsync(ct);
 
-            if (ct.IsCancellationRequested) return;
+            ct.ThrowIfCancellationRequested();
 
-            // Agrupa por topic e ordena os temas pelo enum QuestionSet.
-            // Cada item é (storageKey, topic).
             var jobsByTopic = questions
                 .Where(q => q != null)
                 .SelectMany(q => QuestionStorageKeys.AllForQuestion(q)
-                                                    .Select(k => (key: k, topic: q.topic)))
-                .Where(j => !string.IsNullOrEmpty(j.key) && !string.IsNullOrEmpty(j.topic))
+                    .Select(k => (key: k, topic: q.topic)))
+                .Where(j => !string.IsNullOrEmpty(j.key) &&
+                            !string.IsNullOrEmpty(j.topic))
                 .GroupBy(j => j.topic)
                 .OrderBy(g => TopicOrder(g.Key))
                 .ToList();
 
             int totalKeys = jobsByTopic.Sum(g => g.Select(j => j.key).Distinct().Count());
+
             if (totalKeys == 0)
             {
                 progress?.Report(1f);
@@ -177,51 +173,47 @@ public class ImageSyncService : MonoBehaviour, IImageSyncService
 
             foreach (var topicGroup in jobsByTopic)
             {
-                if (ct.IsCancellationRequested) break;
+                ct.ThrowIfCancellationRequested();
 
                 string topic = topicGroup.Key;
-                var allKeys = topicGroup.Select(j => j.key).Distinct().ToList();
-                var keysToDownload = allKeys.Where(k => !_local.Has(k)).ToList();
 
-                // Já contabiliza as imagens deste topic que estão em cache para
-                // o progresso, antes de iniciar os downloads pendentes.
+                var allKeys = topicGroup
+                    .Select(j => j.key)
+                    .Distinct()
+                    .ToList();
+
+                var keysToDownload = allKeys
+                    .Where(k => !_local.Has(k))
+                    .Where(k => !_knownMissingKeys.ContainsKey(k))
+                    .ToList();
+
                 int alreadyCached = allKeys.Count - keysToDownload.Count;
                 processed += alreadyCached;
                 progress?.Report((float)processed / totalKeys);
 
                 if (keysToDownload.Count == 0)
                 {
-                    // Tudo já em cache para este tema — só marca ready.
                     _readyTopics.Add(topic);
+                    IsCacheReady = true;
                     onTopicReady?.Invoke(topic);
                     continue;
                 }
 
-                Debug.Log($"[ImageSyncService] Prewarm topic='{topic}': {keysToDownload.Count} imagens (já em cache: {alreadyCached}).");
+                Debug.Log(
+                    $"[ImageSyncService] Prewarm topic='{topic}': {keysToDownload.Count} imagens " +
+                    $"(já em cache: {alreadyCached})."
+                );
 
                 using (var sem = new SemaphoreSlim(maxParallelDownloads))
                 {
-                    var tasks = keysToDownload.Select(async key =>
-                    {
-                        await sem.WaitAsync(ct).ConfigureAwait(false);
-                        try
-                        {
-                            byte[] bytes = await _storage.DownloadImageAsync(key).ConfigureAwait(false);
-                            if (bytes != null)
-                            {
-                                _local.Save(key, bytes, topic);
-                            }
-                            else
-                            {
-                                _knownMissingKeys.TryAdd(key, 0);
-                            }
-                        }
-                        finally { sem.Release(); }
-                    }).ToList();
+                    var tasks = keysToDownload
+                        .Select(key => DownloadAndCacheOneAsync(key, topic, sem, ct))
+                        .ToList();
 
-                    foreach (var t in tasks)
+                    foreach (var task in tasks)
                     {
-                        await t.ConfigureAwait(false);
+                        await task;
+
                         processed++;
                         progress?.Report((float)processed / totalKeys);
                     }
@@ -230,7 +222,11 @@ public class ImageSyncService : MonoBehaviour, IImageSyncService
                 _readyTopics.Add(topic);
                 IsCacheReady = true;
                 onTopicReady?.Invoke(topic);
-                Debug.Log($"[ImageSyncService] Topic '{topic}' pronto ({_readyTopics.Count}/{jobsByTopic.Count}).");
+
+                Debug.Log(
+                    $"[ImageSyncService] Topic '{topic}' pronto " +
+                    $"({_readyTopics.Count}/{jobsByTopic.Count})."
+                );
             }
         }
         catch (OperationCanceledException)
@@ -245,6 +241,35 @@ public class ImageSyncService : MonoBehaviour, IImageSyncService
         finally
         {
             IsSyncing = false;
+        }
+    }
+
+    // -- Helper -------------------------------
+    private async Task DownloadAndCacheOneAsync(
+    string key,
+    string topic,
+    SemaphoreSlim sem,
+    CancellationToken ct)
+    {
+        await sem.WaitAsync(ct).ConfigureAwait(false);
+
+        try
+        {
+            ct.ThrowIfCancellationRequested();
+            byte[] bytes = await _storage.DownloadImageAsync(key).ConfigureAwait(false);
+
+            if (bytes != null)
+            {
+                _local.Save(key, bytes, topic);
+            }
+            else
+            {
+                _knownMissingKeys.TryAdd(key, 0);
+            }
+        }
+        finally
+        {
+            sem.Release();
         }
     }
 

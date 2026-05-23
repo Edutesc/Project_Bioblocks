@@ -273,9 +273,7 @@ public class ProfileManager : MonoBehaviour
             if (!string.IsNullOrEmpty(currentUserId))
                 AnsweredQuestionsListStore.ClearUserAnsweredQuestions(currentUserId);
 
-            await _auth.LogoutAsync().ConfigureAwait(false);
-            await Task.Yield();
-
+            await _auth.LogoutAsync();
             Debug.Log("Logout realizado com sucesso");
             Navigate("LoginView");
         }

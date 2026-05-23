@@ -341,8 +341,7 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
             {
                 try
                 {
-                    await _firestore.UpdateUserScore(userId, userData.Score, questionNumber, databankName, true).ConfigureAwait(false);
-                    await Task.Yield();
+                    await _firestore.UpdateUserScore(userId, userData.Score, questionNumber, databankName, true);
                     AppContext.UserDataLocal?.MarkAsSynced(userId);
                 }
                 catch (Exception e)
@@ -357,7 +356,6 @@ public class AnsweredQuestionsManager : MonoBehaviour, IAnsweredQuestionsManager
                 AppContext.UserDataLocal?.MarkAsDirty(userId);
             }
 
-            await Task.Yield();
             await ForceUpdate();
 
             Debug.Log($"[AnsweredQuestionsManager] Questão {questionNumber} marcada em {databankName}");

@@ -187,29 +187,16 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
     // -------------------------------------------------------
     // Atualização de score e questões respondidas
     // -------------------------------------------------------
-
-    /// <summary>
-    /// Versão principal chamada pelo UserDataSyncService (background).
-    /// Usa os valores já calculados no UserDataStore — sem transaction,
-    /// sem read-modify-write, sem risco de deadlock no Android.
-    /// FieldValue.ArrayUnion garante atomicidade no servidor para AnsweredQuestions.
-    /// </summary>
     public async Task UpdateUserScores(
-        string userId,
-        int additionalScore,
-        int questionNumber,
-        string databankName,
-        bool isCorrect,
-        UserData capturedUserData)
+    string userId,
+    int additionalScore,
+    int questionNumber,
+    string databankName,
+    bool isCorrect,
+    UserData capturedUserData)
     {
-        if (!isInitialized) throw new Exception("Firestore não inicializado");
-
-        var current = UserDataStore.CurrentUserData;
-        if (current == null || current.UserId != userId)
-        {
-            Debug.LogError("[FirestoreRepository] CurrentUserData inválido em UpdateUserScores.");
-            return;
-        }
+        if (!isInitialized)
+            throw new Exception("Firestore não inicializado");
 
         if (capturedUserData == null || capturedUserData.UserId != userId)
         {
@@ -219,64 +206,70 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
 
         var updates = new Dictionary<string, object>
         {
-            { "Score",     current.Score },
-            { "WeekScore", current.WeekScore },
+            { "Score", capturedUserData.Score },
+            { "WeekScore", capturedUserData.WeekScore },
             { "SavedAt", FieldValue.ServerTimestamp }
         };
 
         if (isCorrect && !string.IsNullOrEmpty(databankName) && questionNumber > 0)
         {
-            // ArrayUnion é atômico no servidor — não sobrescreve outros bancos,
-            // não precisa ler o documento antes de escrever
-            updates[$"AnsweredQuestions.{databankName}"] = FieldValue.ArrayUnion(questionNumber);
+            updates[$"AnsweredQuestions.{databankName}"] =
+                FieldValue.ArrayUnion(questionNumber);
         }
 
         var docRef = db.Collection("Users").Document(userId);
-        await docRef.UpdateAsync(updates).ConfigureAwait(false);
 
-        Debug.Log($"[FirestoreRepository] UpdateUserScores concluído. Score={current.Score}");
+        await docRef.UpdateAsync(updates);
+
+        Debug.Log(
+            $"[FirestoreRepository] UpdateUserScores concluído. " +
+            $"Score={capturedUserData.Score}, WeekScore={capturedUserData.WeekScore}"
+        );
     }
 
-    /// <summary>
-    /// Versão legada — mantida para compatibilidade com código que ainda a chama.
-    /// Substituída pelo fluxo principal do UserDataSyncService → UpdateUserScores.
-    /// NÃO adicionar novos usos desta versão.
-    /// </summary>
-    public async Task UpdateUserScore(string userId, int newScore,
-        int questionNumber, string databankName, bool isCorrect)
+    public async Task UpdateUserScore(
+    string userId,
+    int newScore,
+    int questionNumber,
+    string databankName,
+    bool isCorrect)
     {
-        if (!isInitialized) throw new Exception("Firestore não inicializado");
+        if (!isInitialized)
+            throw new Exception("Firestore não inicializado");
 
-        var updates = new Dictionary<string, object> { { "Score", newScore } };
+        var updates = new Dictionary<string, object>
+        {
+            { "Score", newScore },
+            { "SavedAt", FieldValue.ServerTimestamp }
+        };
 
         if (isCorrect && !string.IsNullOrEmpty(databankName) && questionNumber > 0)
-            updates[$"AnsweredQuestions.{databankName}"] = FieldValue.ArrayUnion(questionNumber);
+        {
+            updates[$"AnsweredQuestions.{databankName}"] =
+                FieldValue.ArrayUnion(questionNumber);
+        }
 
         var docRef = db.Collection("Users").Document(userId);
-        await docRef.UpdateAsync(updates).ConfigureAwait(false);
+
+        await docRef.UpdateAsync(updates);
 
         Debug.Log($"[FirestoreRepository] UpdateUserScore concluído. Score={newScore}");
     }
 
-    /// <summary>
-    /// Atualiza apenas o WeekScore. Usa valor já calculado do UserDataStore —
-    /// sem transaction, sem deadlock.
-    /// </summary>
-    public async Task UpdateUserWeekScore(string userId, int additionalScore)
+    public async Task UpdateUserWeekScore(string userId, int weekScore)
     {
-        if (!isInitialized) throw new Exception("Firestore não inicializado");
-
-        var current = UserDataStore.CurrentUserData;
-        if (current == null || current.UserId != userId) return;
+        if (!isInitialized)
+            throw new Exception("Firestore não inicializado");
 
         var docRef = db.Collection("Users").Document(userId);
+
         await docRef.UpdateAsync(new Dictionary<string, object>
         {
-            { "WeekScore", current.WeekScore },
+            { "WeekScore", weekScore },
             { "SavedAt", FieldValue.ServerTimestamp }
-        }).ConfigureAwait(false);
+        });
 
-        Debug.Log($"[FirestoreRepository] WeekScore atualizado: {current.WeekScore}");
+        Debug.Log($"[FirestoreRepository] WeekScore atualizado: {weekScore}");
     }
 
     // -------------------------------------------------------
@@ -569,68 +562,109 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
         });
     }
 
-    public IDisposable ListenToScore(string userId,
-        Action<int> onScoreChanged,
-        Action<int> onWeekScoreChanged)
+    public IDisposable ListenToScore(
+    string userId,
+    Action<int> onScoreChanged,
+    Action<int> onWeekScoreChanged)
     {
         _userDataListener?.Stop();
+
         _userDataListener = db.Collection("Users").Document(userId)
             .Listen(snapshot =>
             {
-                if (!snapshot.Exists) return;
-                var data = snapshot.ToDictionary();
-
-                if (data.ContainsKey("Score"))
+                try
                 {
-                    int newScore = Convert.ToInt32(data["Score"]);
-                    UserDataStore.UpdateScore(newScore);
-                    onScoreChanged?.Invoke(newScore);
+                    if (snapshot == null || !snapshot.Exists)
+                        return;
+
+                    var data = snapshot.ToDictionary();
+
+                    if (data.ContainsKey("Score"))
+                    {
+                        int newScore = Convert.ToInt32(data["Score"]);
+
+                        MainThreadDispatcher.Enqueue(() =>
+                        {
+                            UserDataStore.UpdateScore(newScore);
+                            onScoreChanged?.Invoke(newScore);
+                        });
+                    }
+
+                    if (data.ContainsKey("WeekScore"))
+                    {
+                        int newWeekScore = Convert.ToInt32(data["WeekScore"]);
+
+                        MainThreadDispatcher.Enqueue(() =>
+                        {
+                            UserDataStore.UpdateWeekScore(newWeekScore);
+                            onWeekScoreChanged?.Invoke(newWeekScore);
+                        });
+                    }
                 }
-
-                if (data.ContainsKey("WeekScore"))
+                catch (Exception ex)
                 {
-                    int newWeekScore = Convert.ToInt32(data["WeekScore"]);
-                    UserDataStore.UpdateWeekScore(newWeekScore);
-                    onWeekScoreChanged?.Invoke(newWeekScore);
+                    Debug.LogWarning($"[FirestoreRepository] Erro no listener de score: {ex.Message}");
                 }
             });
-        return null;
+
+        return _userDataListener;
     }
 
-    public IDisposable ListenToAnsweredQuestions(string userId,
-        Action<Dictionary<string, List<int>>> onChanged)
+    public IDisposable ListenToAnsweredQuestions(
+    string userId,
+    Action<Dictionary<string, List<int>>> onChanged)
     {
         _answeredQuestionsListener?.Stop();
+
         _answeredQuestionsListener = db.Collection("Users").Document(userId)
             .Listen(snapshot =>
             {
-                if (!snapshot.Exists) return;
-                var data = snapshot.ToDictionary();
-
-                if (!data.ContainsKey("AnsweredQuestions")) return;
-
                 try
                 {
+                    if (snapshot == null || !snapshot.Exists)
+                        return;
+
+                    var data = snapshot.ToDictionary();
+
+                    if (!data.ContainsKey("AnsweredQuestions"))
+                        return;
+
                     var answeredQuestions = new Dictionary<string, List<int>>();
-                    var raw = data["AnsweredQuestions"] as Dictionary<string, object>;
-                    if (raw == null) return;
+
+                    if (data["AnsweredQuestions"] is not Dictionary<string, object> raw)
+                        return;
 
                     foreach (var kvp in raw)
                     {
                         if (kvp.Value is IEnumerable<object> list)
+                        {
                             answeredQuestions[kvp.Key] = list
                                 .Select(q => Convert.ToInt32(q))
                                 .ToList();
+                        }
                     }
 
-                    onChanged?.Invoke(answeredQuestions);
+                    MainThreadDispatcher.Enqueue(() =>
+                    {
+                        var local = UserDataStore.CurrentUserData;
+                        if (local != null)
+                        {
+                            local.AnsweredQuestions = answeredQuestions;
+                            UserDataStore.CurrentUserData = local;
+                        }
+
+                        onChanged?.Invoke(answeredQuestions);
+                    });
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"[FirestoreRepository] Erro no listener AnsweredQuestions: {ex.Message}");
+                    Debug.LogError(
+                        $"[FirestoreRepository] Erro no listener AnsweredQuestions: {ex.Message}"
+                    );
                 }
             });
-        return null;
+
+        return _answeredQuestionsListener;
     }
 
     public void StopListening()
@@ -740,29 +774,40 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
     // -------------------------------------------------------
     // UserBonus / CompletedDatabanks
     // -------------------------------------------------------
-
     public async Task<bool> IsDatabankEligibleForBonus(string userId, string databankName)
     {
         try
         {
-            if (!isInitialized) throw new Exception("Firestore não inicializado");
+            if (!isInitialized)
+                throw new Exception("Firestore não inicializado");
 
             DocumentSnapshot snapshot = await db.Collection("UserBonus")
                 .Document(userId)
-                .GetSnapshotAsync()
-                .ConfigureAwait(false);
+                .GetSnapshotAsync();
 
-            if (!snapshot.Exists) return true;
+            if (!snapshot.Exists)
+                return true;
 
             var data = snapshot.ToDictionary();
-            if (!data.ContainsKey("CompletedDatabanks")) return true;
 
-            var completedDatabanks = data["CompletedDatabanks"] as List<object>;
-            return completedDatabanks == null || !completedDatabanks.Contains(databankName);
+            if (!data.ContainsKey("CompletedDatabanks"))
+                return true;
+
+            if (data["CompletedDatabanks"] is IEnumerable<object> completedDatabanks)
+            {
+                return !completedDatabanks
+                    .Select(x => x.ToString())
+                    .Contains(databankName);
+            }
+
+            return true;
         }
         catch (Exception e)
         {
-            Debug.LogError($"[FirestoreRepository] Erro ao verificar elegibilidade do databank: {e.Message}");
+            Debug.LogError(
+                $"[FirestoreRepository] Erro ao verificar elegibilidade do databank: {e.Message}"
+            );
+
             return false;
         }
     }
@@ -771,40 +816,64 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
     {
         try
         {
-            if (!isInitialized) throw new Exception("Firestore não inicializado");
+            if (!isInitialized)
+                throw new Exception("Firestore não inicializado");
 
             DocumentReference docRef = db.Collection("UserBonus").Document(userId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync().ConfigureAwait(false);
+
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
 
             var completedDatabanks = new List<string>();
 
             if (snapshot.Exists)
             {
                 var data = snapshot.ToDictionary();
+
                 if (data.ContainsKey("CompletedDatabanks") &&
-                    data["CompletedDatabanks"] is List<object> existingList)
+                    data["CompletedDatabanks"] is IEnumerable<object> existingList)
                 {
-                    completedDatabanks = existingList.Select(i => i.ToString()).ToList();
+                    completedDatabanks = existingList
+                        .Select(i => i.ToString())
+                        .ToList();
                 }
             }
 
             if (completedDatabanks.Contains(databankName))
             {
-                Debug.LogWarning($"[FirestoreRepository] Databank '{databankName}' já está em CompletedDatabanks.");
+                Debug.LogWarning(
+                    $"[FirestoreRepository] Databank '{databankName}' já está em CompletedDatabanks."
+                );
+
                 return;
             }
 
             completedDatabanks.Add(databankName);
-            await docRef.UpdateAsync(new Dictionary<string, object>
-            {
-                { "CompletedDatabanks", completedDatabanks }
-            }).ConfigureAwait(false);
 
-            Debug.Log($"[FirestoreRepository] Databank '{databankName}' marcado como completo para userId={userId}.");
+            if (snapshot.Exists)
+            {
+                await docRef.UpdateAsync(new Dictionary<string, object>
+                {
+                    { "CompletedDatabanks", completedDatabanks }
+                });
+            }
+            else
+            {
+                await docRef.SetAsync(new Dictionary<string, object>
+                {
+                    { "CompletedDatabanks", completedDatabanks }
+                });
+            }
+
+            Debug.Log(
+                $"[FirestoreRepository] Databank '{databankName}' marcado como completo para userId={userId}."
+            );
         }
         catch (Exception e)
         {
-            Debug.LogError($"[FirestoreRepository] Erro ao marcar databank como completo: {e.Message}");
+            Debug.LogError(
+                $"[FirestoreRepository] Erro ao marcar databank como completo: {e.Message}"
+            );
+
             throw;
         }
     }
@@ -812,7 +881,6 @@ public class FirestoreRepository : MonoBehaviour, IFirestoreRepository
     // -------------------------------------------------------
     // Ciclo de vida
     // -------------------------------------------------------
-
     private void OnDestroy()
     {
         _userDataListener?.Stop();

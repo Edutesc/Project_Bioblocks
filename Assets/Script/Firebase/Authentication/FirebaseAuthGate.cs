@@ -1,9 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Firebase.Auth;
-using UnityEngine;
-
 /// <summary>
 /// Implementação de IAuthGate baseada em Firebase Auth.
 ///
@@ -15,6 +9,14 @@ using UnityEngine;
 /// CurrentUser é populado mas o token ainda não foi propagado, e o Storage
 /// retorna "User is not authenticated".
 /// </summary>
+/// 
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Firebase.Auth;
+using UnityEngine;
+
 public sealed class FirebaseAuthGate : IAuthGate
 {
     public async Task WaitForAuthenticatedAsync(CancellationToken ct = default)
@@ -22,12 +24,17 @@ public sealed class FirebaseAuthGate : IAuthGate
         var auth = FirebaseAuth.DefaultInstance;
 
         if (auth.CurrentUser == null)
-            await WaitForCurrentUserAsync(ct).ConfigureAwait(false);
+            await WaitForCurrentUserAsync(auth, ct);
+
+        var user = auth.CurrentUser;
+        if (user == null)
+            throw new InvalidOperationException("Usuário não autenticado após StateChanged.");
 
         try
         {
-            string token = await auth.CurrentUser.TokenAsync(forceRefresh: true).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(token))
+            string token = await user.TokenAsync(forceRefresh: true);
+
+            if (string.IsNullOrWhiteSpace(token))
                 throw new InvalidOperationException("Token vazio retornado pelo Firebase Auth.");
         }
         catch (Exception e)
@@ -37,30 +44,53 @@ public sealed class FirebaseAuthGate : IAuthGate
         }
     }
 
-    private static Task WaitForCurrentUserAsync(CancellationToken ct)
+    private static Task WaitForCurrentUserAsync(FirebaseAuth auth, CancellationToken ct)
     {
-        var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        if (auth.CurrentUser != null)
+            return Task.CompletedTask;
+
+        if (ct.IsCancellationRequested)
+            return Task.FromCanceled(ct);
+
+        var tcs = new TaskCompletionSource<bool>(
+            TaskCreationOptions.RunContinuationsAsynchronously
+        );
+
         EventHandler handler = null;
+        CancellationTokenRegistration ctr = default;
 
-        handler = (sender, _) =>
+        void Cleanup()
         {
-            var current = (sender as FirebaseAuth) ?? FirebaseAuth.DefaultInstance;
-            if (current.CurrentUser != null)
-            {
-                FirebaseAuth.DefaultInstance.StateChanged -= handler;
-                tcs.TrySetResult(true);
-            }
-        };
+            auth.StateChanged -= handler;
+            ctr.Dispose();
+        }
 
-        FirebaseAuth.DefaultInstance.StateChanged += handler;
+        handler = (_, __) =>
+        {
+            if (auth.CurrentUser == null)
+                return;
+
+            Cleanup();
+            tcs.TrySetResult(true);
+        };
 
         if (ct.CanBeCanceled)
         {
-            ct.Register(() =>
+            ctr = ct.Register(() =>
             {
-                FirebaseAuth.DefaultInstance.StateChanged -= handler;
+                Cleanup();
                 tcs.TrySetCanceled(ct);
             });
+        }
+
+        auth.StateChanged += handler;
+
+        // Evita race condition: o usuário pode ter sido definido
+        // entre a checagem inicial e a inscrição no evento.
+        if (auth.CurrentUser != null)
+        {
+            Cleanup();
+            tcs.TrySetResult(true);
         }
 
         return tcs.Task;

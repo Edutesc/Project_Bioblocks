@@ -105,7 +105,7 @@ internal sealed class FileBackedDebugAppCheckProvider : IAppCheckProvider
         }
 
         // Exchange UUID por JWT via API REST do App Check.
-        var exchanged = await ExchangeDebugTokenAsync().ConfigureAwait(false);
+        var exchanged = await ExchangeDebugTokenAsync();
 
         lock (_cacheLock)
         {
