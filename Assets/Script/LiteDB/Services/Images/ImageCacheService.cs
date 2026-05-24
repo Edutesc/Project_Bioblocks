@@ -1,25 +1,32 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine;
 
 public class ImageCacheService : MonoBehaviour, IImageCacheService
 {
-    private ILiteDBManager _dbManager;
     private string _cacheDirectory;
 
     private const long MAX_CACHE_SIZE_BYTES = 50 * 1024 * 1024;
-    private const int MAX_IMAGE_DIMENSION   = 512;
-    private const int MAX_IMAGE_BYTES       = 5 * 1024 * 1024;
-    private const int CACHE_EXPIRY_DAYS     = 7;
-    private const float CLEANUP_FRACTION    = 0.25f;
+    private const int MAX_IMAGE_DIMENSION = 512;
+    private const int MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+    private const int CACHE_EXPIRY_DAYS = 7;
+    private const float CLEANUP_FRACTION = 0.25f;
+    private const string CACHE_FILE_PREFIX = "cache_";
 
     public bool IsInitialized { get; private set; }
 
+    public void InjectDependencies()
+    {
+        Initialize();
+    }
+
     public void InjectDependencies(ILiteDBManager dbManager)
     {
-        _dbManager = dbManager;
-        Initialize();
+        _ = dbManager;
+        InjectDependencies();
     }
 
     private void Initialize()
@@ -46,22 +53,24 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
     public string GetCachedImagePath(string imageUrl)
     {
         if (string.IsNullOrEmpty(imageUrl) || !IsInitialized) return null;
-        if (_dbManager == null || !_dbManager.IsInitialized) return null;
 
         try
         {
-            var cached = _dbManager.CachedImages.FindById(imageUrl);
+            string localPath = Path.Combine(_cacheDirectory, GetHashedFileName(imageUrl));
 
-            if (cached == null) return null;
+            if (!File.Exists(localPath))
+                return null;
 
-            if (DateTime.UtcNow < cached.ExpiresAt && File.Exists(cached.LocalPath))
+            DateTime lastWriteUtc = File.GetLastWriteTimeUtc(localPath);
+
+            if (DateTime.UtcNow >= lastWriteUtc.AddDays(CACHE_EXPIRY_DAYS))
             {
-                Debug.Log($"[ImageCacheService] Cache hit: {imageUrl}");
-                return cached.LocalPath;
+                File.Delete(localPath);
+                return null;
             }
 
-            DeleteCachedImage(cached);
-            return null;
+            Debug.Log($"[ImageCacheService] Cache hit: {imageUrl}");
+            return localPath;
         }
         catch (Exception e)
         {
@@ -74,12 +83,11 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
                                  string topic = null, string sha256 = null)
     {
         if (string.IsNullOrEmpty(imageUrl) || texture == null || !IsInitialized) return;
-        if (_dbManager == null || !_dbManager.IsInitialized) return;
 
         try
         {
-            bool needsResize  = texture.width > MAX_IMAGE_DIMENSION || texture.height > MAX_IMAGE_DIMENSION;
-            Texture2D toSave  = needsResize ? ResizeTexture(texture, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION) : texture;
+            bool needsResize = texture.width > MAX_IMAGE_DIMENSION || texture.height > MAX_IMAGE_DIMENSION;
+            Texture2D toSave = needsResize ? ResizeTexture(texture, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION) : texture;
             byte[] imageBytes = toSave.EncodeToPNG();
 
             if (needsResize && toSave != texture)
@@ -102,7 +110,7 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
                                       string topic = null, string sha256 = null)
     {
         if (string.IsNullOrEmpty(imageUrl) || pngBytes == null || pngBytes.Length == 0) return;
-        if (!IsInitialized || _dbManager == null || !_dbManager.IsInitialized) return;
+        if (!IsInitialized) return;
 
         try
         {
@@ -112,28 +120,16 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
                 return;
             }
 
-            // Validação leve do header PNG (89 50 4E 47 0D 0A 1A 0A) — thread-safe.
             if (!IsValidPng(pngBytes))
             {
                 Debug.LogWarning($"[ImageCacheService] Bytes não parecem PNG válido: {imageUrl}");
                 return;
             }
 
-            string fileName  = GetHashedFileName(imageUrl);
-            string localPath = Path.Combine(_cacheDirectory, fileName);
+            string localPath = Path.Combine(_cacheDirectory, GetHashedFileName(imageUrl));
 
             File.WriteAllBytes(localPath, pngBytes);
-
-            _dbManager.CachedImages.Upsert(new CachedImageDB
-            {
-                ImageUrl      = imageUrl,
-                LocalPath     = localPath,
-                CachedAt      = DateTime.UtcNow,
-                ExpiresAt     = DateTime.UtcNow.AddDays(CACHE_EXPIRY_DAYS),
-                FileSizeBytes = pngBytes.Length,
-                Topic         = topic,
-                Sha256        = sha256
-            });
+            File.SetLastWriteTimeUtc(localPath, DateTime.UtcNow);
 
             Debug.Log($"[ImageCacheService] Imagem cacheada (raw bytes): {imageUrl} ({pngBytes.Length} bytes, topic='{topic ?? "-"}')");
             CleanupOldCacheIfNeeded();
@@ -144,21 +140,14 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
         }
     }
 
-    private static bool IsValidPng(byte[] bytes)
-    {
-        if (bytes == null || bytes.Length < 8) return false;
-        return bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47 &&
-               bytes[4] == 0x0D && bytes[5] == 0x0A && bytes[6] == 0x1A && bytes[7] == 0x0A;
-    }
-
     public Texture2D LoadImageFromCache(string localPath)
     {
         try
         {
             if (!File.Exists(localPath)) return null;
 
-            byte[]    imageBytes = File.ReadAllBytes(localPath);
-            Texture2D texture    = new Texture2D(2, 2);
+            byte[] imageBytes = File.ReadAllBytes(localPath);
+            Texture2D texture = new Texture2D(2, 2);
 
             if (texture.LoadImage(imageBytes))
                 return texture;
@@ -179,11 +168,12 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
 
         try
         {
-            var all = _dbManager.CachedImages.FindAll().ToList();
-            foreach (var image in all)
-                DeleteCachedImage(image);
+            FileInfo[] files = GetCacheFiles();
 
-            Debug.Log($"[ImageCacheService] Cache limpo ({all.Count} imagens removidas).");
+            foreach (var file in files)
+                file.Delete();
+
+            Debug.Log($"[ImageCacheService] Cache limpo ({files.Length} imagens removidas).");
         }
         catch (Exception e)
         {
@@ -194,54 +184,57 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
     public long GetTotalCacheSize()
     {
         if (!IsInitialized) return 0;
-        try { return _dbManager.CachedImages.FindAll().Sum(x => x.FileSizeBytes); }
-        catch { return 0; }
+
+        try
+        {
+            return GetCacheFiles().Sum(x => x.Length);
+        }
+        catch
+        {
+            return 0;
+        }
     }
 
     public int GetCachedImagesCount()
     {
         if (!IsInitialized) return 0;
-        try { return _dbManager.CachedImages.Count(); }
-        catch { return 0; }
-    }
 
-    private void DeleteCachedImage(CachedImageDB cached)
-    {
         try
         {
-            if (File.Exists(cached.LocalPath))
-                File.Delete(cached.LocalPath);
-
-            _dbManager.CachedImages.Delete(cached.ImageUrl);
+            return GetCacheFiles().Length;
         }
-        catch (Exception e)
+        catch
         {
-            Debug.LogError($"[ImageCacheService] Erro ao deletar cache: {e.Message}");
+            return 0;
         }
     }
 
     private void CleanupOldCacheIfNeeded()
     {
+        if (!IsInitialized) return;
+
         try
         {
-            var all       = _dbManager.CachedImages.FindAll().ToList();
-            long totalSize = all.Sum(x => x.FileSizeBytes);
+            FileInfo[] files = GetCacheFiles();
+            long totalSize = files.Sum(x => x.Length);
 
             if (totalSize > MAX_CACHE_SIZE_BYTES)
             {
-                var toDelete = all
-                    .OrderBy(x => x.CachedAt)
-                    .Take((int)(all.Count * CLEANUP_FRACTION))
+                var toDelete = files
+                    .OrderBy(x => x.LastWriteTimeUtc)
+                    .Take(Mathf.Max(1, Mathf.RoundToInt(files.Length * CLEANUP_FRACTION)))
                     .ToList();
 
-                foreach (var image in toDelete)
-                    DeleteCachedImage(image);
+                foreach (var file in toDelete)
+                    file.Delete();
 
                 Debug.Log($"[ImageCacheService] Cleanup: {toDelete.Count} imagens removidas.");
             }
 
-            foreach (var expired in all.Where(x => DateTime.UtcNow >= x.ExpiresAt))
-                DeleteCachedImage(expired);
+            DateTime expiryLimit = DateTime.UtcNow.AddDays(-CACHE_EXPIRY_DAYS);
+
+            foreach (var expired in files.Where(x => x.LastWriteTimeUtc <= expiryLimit))
+                expired.Delete();
         }
         catch (Exception e)
         {
@@ -249,16 +242,25 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
         }
     }
 
+    private FileInfo[] GetCacheFiles()
+    {
+        if (!Directory.Exists(_cacheDirectory))
+            return Array.Empty<FileInfo>();
+
+        var directory = new DirectoryInfo(_cacheDirectory);
+        return directory.GetFiles($"{CACHE_FILE_PREFIX}*.png");
+    }
+
     private Texture2D ResizeTexture(Texture2D source, int maxWidth, int maxHeight)
     {
         float ratio = Mathf.Min((float)maxWidth / source.width, (float)maxHeight / source.height);
         if (ratio >= 1f) return source;
 
-        int newWidth  = Mathf.RoundToInt(source.width  * ratio);
+        int newWidth = Mathf.RoundToInt(source.width * ratio);
         int newHeight = Mathf.RoundToInt(source.height * ratio);
 
         RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight);
-        rt.filterMode    = FilterMode.Bilinear;
+        rt.filterMode = FilterMode.Bilinear;
         RenderTexture.active = rt;
         Graphics.Blit(source, rt);
 
@@ -271,6 +273,33 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
         return result;
     }
 
-    private string GetHashedFileName(string url)
-        => $"img_{Math.Abs(url.GetHashCode()):X8}.png";
+    private static bool IsValidPng(byte[] bytes)
+    {
+        if (bytes == null || bytes.Length < 8) return false;
+
+        return bytes[0] == 0x89 &&
+               bytes[1] == 0x50 &&
+               bytes[2] == 0x4E &&
+               bytes[3] == 0x47 &&
+               bytes[4] == 0x0D &&
+               bytes[5] == 0x0A &&
+               bytes[6] == 0x1A &&
+               bytes[7] == 0x0A;
+    }
+
+    private static string GetHashedFileName(string value)
+    {
+        using (var sha256 = SHA256.Create())
+        {
+            byte[] inputBytes = Encoding.UTF8.GetBytes(value);
+            byte[] hashBytes = sha256.ComputeHash(inputBytes);
+
+            var sb = new StringBuilder(hashBytes.Length * 2);
+
+            foreach (byte b in hashBytes)
+                sb.Append(b.ToString("x2"));
+
+            return $"{CACHE_FILE_PREFIX}{sb}.png";
+        }
+    }
 }

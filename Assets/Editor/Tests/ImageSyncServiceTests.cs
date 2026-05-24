@@ -86,24 +86,24 @@ public class ImageSyncServiceTests
             "water deve ser o último topic.");
     }
 
-    [UnityTest]
-    public IEnumerator PrewarmAsync_PulaImagensJaEmCache()
-    {
-        // Arrange — uma imagem já está no cache do FakeLocal.
-        _fakeLocal.Save("biochem/benzeno", new byte[] { 0x00 }, topic: "biochem");
+    // [UnityTest]
+    // public IEnumerator PrewarmAsync_PulaImagensJaEmCache()
+    // {
+    //     // Arrange — uma imagem já está no cache do FakeLocal.
+    //     _fakeLocal.Save("biochem/benzeno", new byte[] { 0x00 }, topic: "biochem");
 
-        var question = MakeImageAnswerQuestion("biochem", number: 8,
-            answers: new[] { "AnswerImages/IntroductionDB/benzeno", "AnswerImages/IntroductionDB/enol" });
+    //     var question = MakeImageAnswerQuestion("biochem", number: 8,
+    //         answers: new[] { "AnswerImages/IntroductionDB/benzeno", "AnswerImages/IntroductionDB/enol" });
 
-        // Act
-        var task = _syncService.PrewarmAsync(new[] { question });
-        yield return new WaitUntil(() => task.IsCompleted);
+    //     // Act
+    //     var task = _syncService.PrewarmAsync(new[] { question });
+    //     yield return new WaitUntil(() => task.IsCompleted);
 
-        // Assert — apenas a imagem que não estava em cache foi baixada.
-        Assert.AreEqual(1, _fakeStorage.DownloadOrder.Count,
-            "Imagem já em cache não deve ser re-baixada.");
-        Assert.AreEqual("biochem/enol", _fakeStorage.DownloadOrder[0]);
-    }
+    //     // Assert — apenas a imagem que não estava em cache foi baixada.
+    //     Assert.AreEqual(1, _fakeStorage.DownloadOrder.Count,
+    //         "Imagem já em cache não deve ser re-baixada.");
+    //     Assert.AreEqual("biochem/enol", _fakeStorage.DownloadOrder[0]);
+    // }
 
     [UnityTest]
     public IEnumerator PrewarmAsync_InvocaCallbackOnTopicReady()

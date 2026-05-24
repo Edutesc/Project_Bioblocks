@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Firebase.Auth;
 
 public class InitializationManager : MonoBehaviour
 {
@@ -106,10 +107,28 @@ public class InitializationManager : MonoBehaviour
 
             userDataLoaded = await LoadUserData();
 
-
             if (userDataLoaded)
             {
                 UpdateStatus("Carregando bancos de questões...");
+
+                if (AppContext.QuestionSync != null)
+                {
+                    bool questionsReady = await AppContext.QuestionSync.InitializeAsync();
+
+                    if (!questionsReady)
+                    {
+                        Debug.LogWarning("[InitManager] Questões indisponíveis após inicialização.");
+
+                        // Aqui você decide a política:
+                        // 1) permitir seguir mesmo assim, se houver cache parcial;
+                        // 2) mostrar tela de erro/retry;
+                        // 3) voltar para LoginView.
+                    }
+                }
+                else
+                {
+                    Debug.LogError("[InitManager] AppContext.QuestionSync está null.");
+                }
 
                 var statsManager = AppContext.Statistics as DatabaseStatisticsManager;
                 if (statsManager != null)
@@ -127,6 +146,8 @@ public class InitializationManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("[InitManager] Usuário autenticado, mas dados do usuário não foram carregados.");
+                await ForceLogoutAndGoToLoginAsync("Usuário autenticado, mas documento/UserData não encontrado.");
+                return;
             }
 
             float elapsed = Time.time - startTime;
@@ -173,7 +194,8 @@ public class InitializationManager : MonoBehaviour
 
     private async Task<bool> CheckAuthentication()
     {
-        if (!_auth.HasLocalSession()) return false;
+        if (!_auth.HasLocalSession())
+            return false;
 
         try
         {
@@ -183,8 +205,24 @@ public class InitializationManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"[InitializationManager] Validação online falhou, entrando offline: {e.Message}");
-            return _auth.HasLocalSession();
+            Debug.LogWarning($"[InitializationManager] Falha ao validar sessão Firebase: {e.Message}");
+
+            string userId = _auth.CurrentUserId;
+
+            if (!string.IsNullOrEmpty(userId) && _userDataLocal != null)
+            {
+                var cached = _userDataLocal.GetUser(userId);
+
+                if (cached != null)
+                {
+                    UserDataStore.CurrentUserData = cached;
+                    Debug.LogWarning("[InitializationManager] Sessão não validada online, mas há UserData local. Permitindo modo offline.");
+                    return true;
+                }
+            }
+
+            await ForceLogoutAndGoToLoginAsync("Sessão Firebase inválida e sem UserData local.");
+            return false;
         }
     }
 
@@ -273,6 +311,50 @@ public class InitializationManager : MonoBehaviour
     private void UpdateStatus(string message)
     {
         loadingSpinner?.SetMessage(message);
+    }
+
+    private async Task ForceLogoutAndGoToLoginAsync(string reason)
+    {
+        Debug.LogWarning($"[InitializationManager] Limpando sessão e voltando para LoginView. Motivo: {reason}");
+
+        try
+        {
+            FirebaseAuth.DefaultInstance.SignOut();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Erro ao fazer Firebase SignOut: {e.Message}");
+        }
+
+        try
+        {
+            UserDataStore.CurrentUserData = null;
+        }
+        catch { }
+
+        try
+        {
+            PlayerPrefs.DeleteKey("UserId");
+            PlayerPrefs.DeleteKey("UserEmail");
+            PlayerPrefs.DeleteKey("UserNickname");
+            PlayerPrefs.Save();
+
+            loadingSpinner?.HideSpinner();
+            await Task.Yield();
+            NavigateAfterInit(false);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Erro ao limpar PlayerPrefs: {e.Message}");
+        }
+
+        try
+        {
+            loadingSpinner?.HideSpinner();
+        }
+        catch { }
+
+        NavigateAfterInit(false);
     }
 
     private void ShowError(string message)

@@ -14,7 +14,7 @@ public interface IImageCacheService
     Texture2D LoadImageFromCache(string path);
 
     /// <summary>
-    /// Salva a textura no cache em disco e atualiza o LiteDB.
+    /// Salva a textura no cache em disco.
     /// `topic` (opcional) identifica o agrupamento por tema do Storage; usado pelo
     /// ImageLocalRepository das Question. Para imagens sem topic (avatar/profile),
     /// passe null.
@@ -27,14 +27,14 @@ public interface IImageCacheService
                           string topic = null, string sha256 = null);
 
     /// <summary>
-    /// Salva bytes PNG diretamente no cache em disco e LiteDB, sem passar por
+    /// Salva bytes PNG diretamente no cache em disco, sem passar por
     /// Texture2D. Thread-safe — pode ser chamado de qualquer thread (background
     /// downloads). Não redimensiona — os bytes vão pro disco como vieram.
     /// </summary>
     void SaveImageBytesToCache(string imageUrl, byte[] pngBytes,
                                string topic = null, string sha256 = null);
 
-    /// <summary>Remove todas as imagens do cache (disco + LiteDB).</summary>
+    /// <summary>Remove todas as imagens gerenciadas por este cache em disco.</summary>
     void ClearAllCache();
 
     long GetTotalCacheSize();

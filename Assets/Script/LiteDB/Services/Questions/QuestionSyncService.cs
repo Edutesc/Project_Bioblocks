@@ -8,16 +8,14 @@ using QuestionSystem;
 /// Serviço que orquestra a sincronização de questões entre o Firestore e o cache LiteDB.
 ///
 /// Estratégia offline-first:
-///   - Primeira abertura (sem cache) → baixa tudo do Firestore → salva no LiteDB
-///   - Cache válido (< cacheDaysThreshold)  → usa LiteDB diretamente, sem rede
-///   - Cache expirado                       → baixa do Firestore em background e atualiza LiteDB
-///   - Sem internet + cache presente        → usa LiteDB (modo offline transparente)
-///   - Sem internet + sem cache             → IsCacheReady = false (app deve tratar este estado)
+///   - Primeira abertura (sem cache)       → baixa tudo do Firestore → salva no LiteDB
+///   - Cache válido                        → usa LiteDB diretamente
+///   - Versão remota diferente             → usa o cache atual e atualiza em background
+///   - Sem internet + cache presente       → usa LiteDB como fallback
+///   - Sem internet + sem cache            → IsCacheReady = false
 ///
-/// Após popular o cache de questões, dispara o prewarm das imagens via
-/// IImageSyncService (eager, ordenado por topic). O prewarm é não-bloqueante:
-/// InitializeAsync retorna assim que as questões estão prontas e as imagens
-/// continuam baixando em background.
+/// O LiteDB não é acessado diretamente aqui. Todo acesso passa por
+/// IQuestionLocalRepository, que por sua vez deve passar por ILiteDBManager.
 /// </summary>
 public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
 {
@@ -29,6 +27,21 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     private IImageSyncService            _imageSync;
 
     private bool _authListenerRegistered;
+
+    // Evita que duas chamadas simultâneas de InitializeAsync baixem as mesmas
+    // questões em paralelo ou retornem IsCacheReady=false enquanto a primeira
+    // inicialização ainda está em andamento.
+    private readonly object _initializeTaskGate = new object();
+    private Task<bool> _initializeTask;
+
+    // Evita refreshes em background duplicados.
+    private readonly object _refreshTaskGate = new object();
+    private Task _refreshTask;
+
+    // Mantém IsSyncing correto mesmo quando InitializeAsync dispara um refresh
+    // em background antes de terminar.
+    private readonly object _syncStateGate = new object();
+    private int _activeSyncOperations;
 
     public bool IsSyncing    { get; private set; }
     public bool IsCacheReady { get; private set; }
@@ -66,11 +79,16 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     {
         var auth = sender as Firebase.Auth.FirebaseAuth ?? Firebase.Auth.FirebaseAuth.DefaultInstance;
 
-        if (auth.CurrentUser == null) return;                                      // logout → nada a fazer
-        if (IsSyncing)                return;                                      // já está sincronizando
-        if (IsCacheReady && _local.HasAnyQuestions() && !IsCacheStale()) return;   // já temos cache válido
+        if (auth.CurrentUser == null)
+            return;
 
-        Debug.Log("[QuestionSyncService] Auth state mudou para autenticado — disparando re-sync.");
+        // Se já existe cache válido, não precisamos disparar outra sincronização.
+        // A chamada a _local passa pelo LiteDBManager e será serializada com as
+        // demais operações do LiteDB.
+        if (IsCacheReady && _local.HasAnyQuestions() && !IsCacheStale())
+            return;
+
+        Debug.Log("[QuestionSyncService] Auth state mudou para autenticado — verificando sincronização de questões.");
         await InitializeAsync();
     }
 
@@ -78,24 +96,41 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     {
         if (_authListenerRegistered)
         {
-            try { Firebase.Auth.FirebaseAuth.DefaultInstance.StateChanged -= OnAuthStateChanged; }
-            catch { /* SDK pode já estar desligado */ }
+            try
+            {
+                Firebase.Auth.FirebaseAuth.DefaultInstance.StateChanged -= OnAuthStateChanged;
+            }
+            catch
+            {
+                // O SDK pode já ter sido desligado durante o encerramento do app.
+            }
         }
     }
 
     // ── Inicialização ──────────────────────────────────────────────────────────
 
-    public async Task<bool> InitializeAsync()
+    public Task<bool> InitializeAsync()
     {
         if (_firestore == null || _local == null)
         {
             Debug.LogWarning("[QuestionSyncService] InitializeAsync chamado antes da injeção de dependências.");
             IsCacheReady = false;
-            return false;
+            return Task.FromResult(false);
         }
 
-        if (IsSyncing) return IsCacheReady;
-        IsSyncing = true;
+        lock (_initializeTaskGate)
+        {
+            if (_initializeTask != null && !_initializeTask.IsCompleted)
+                return _initializeTask;
+
+            _initializeTask = InitializeCoreAsync();
+            return _initializeTask;
+        }
+    }
+
+    private async Task<bool> InitializeCoreAsync()
+    {
+        BeginSyncOperation();
 
         try
         {
@@ -103,38 +138,46 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
 
             if (!hasCache)
             {
-                // ── Primeira abertura: sem cache local ────────────────────────
+                // Primeira abertura: sem cache local.
+                // Aqui não é background: o app precisa das questões antes de liberar
+                // o fluxo normal.
                 Debug.Log("[QuestionSyncService] Sem cache local — baixando questões do Firestore...");
+
                 long remoteVersion = await FetchRemoteVersionSafe();
                 bool success = await DownloadAndCacheAll(remoteVersion);
+
                 IsCacheReady = success;
                 return IsCacheReady;
             }
 
-            // ── Cache existe: checar versão remota como invalidação primária ──
-            long remote = await FetchRemoteVersionSafe();
+            // Cache existe: checar versão remota como invalidação primária.
+            long remoteVersionFromServer = await FetchRemoteVersionSafe();
+            long localVersion            = _local.GetCachedVersion();
 
-            if (remote != -1L && remote != _local.GetCachedVersion())
+            if (remoteVersionFromServer != -1L && remoteVersionFromServer != localVersion)
             {
-                // Versão mudou (novo upload de questões) → refresh em background
-                Debug.Log($"[QuestionSyncService] Nova versão remota ({remote}) — atualizando cache em background...");
-                IsCacheReady = true;   // usa o cache antigo enquanto atualiza
-                _ = RefreshCacheInBackground(remote);
+                // Versão mudou: mantém cache antigo disponível e atualiza em background.
+                Debug.Log($"[QuestionSyncService] Nova versão remota ({remoteVersionFromServer}) detectada; versão local atual: {localVersion}. Atualizando cache em background...");
+
+                IsCacheReady = true;
+                StartRefreshCacheInBackground(remoteVersionFromServer);
             }
-            else if (remote == -1L && IsCacheStale())
+            else if (remoteVersionFromServer == -1L && IsCacheStale())
             {
-                // Sem internet e cache TTL expirado → refresh assim que tiver conexão;
-                // por ora, usa o cache antigo (melhor do que nada).
+                // Sem acesso ao Firestore e TTL expirado: ainda assim é melhor usar
+                // o cache existente do que bloquear o app.
                 Debug.Log("[QuestionSyncService] Sem acesso ao Firestore e cache expirado — usando cache antigo como fallback.");
+
                 IsCacheReady = true;
             }
             else
             {
                 Debug.Log("[QuestionSyncService] Cache válido e atualizado — usando LiteDB diretamente.");
+
                 IsCacheReady = true;
 
                 // Mesmo com cache de questões válido, dispara o prewarm de imagens.
-                // É barato: o ImageSyncService pula imagens que já estão em cache.
+                // O ImageSyncService deve pular imagens já cacheadas.
                 _ = PrewarmImagesAsync(_local.GetAllQuestions());
             }
 
@@ -144,7 +187,8 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         {
             Debug.LogError($"[QuestionSyncService] Erro na inicialização: {e.Message}");
 
-            IsCacheReady = _local.HasAnyQuestions();
+            IsCacheReady = SafeHasAnyQuestions();
+
             if (IsCacheReady)
                 Debug.LogWarning("[QuestionSyncService] Usando cache antigo como fallback.");
 
@@ -152,7 +196,7 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         }
         finally
         {
-            IsSyncing = false;
+            EndSyncOperation();
         }
     }
 
@@ -174,7 +218,7 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         }
     }
 
-    // ── Leitura (síncrona, chamada pelos IQuestionDatabase) ────────────────────
+    // ── Leitura síncrona, chamada pelos IQuestionDatabase ──────────────────────
 
     public List<Question> GetQuestionsForDatabankName(string databankName)
     {
@@ -184,7 +228,8 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
             return new List<Question>();
         }
 
-        var questions = _local.GetQuestionsByDatabankName(databankName);
+        List<Question> questions = _local.GetQuestionsByDatabankName(databankName);
+
         Debug.Log($"[QuestionSyncService] {questions.Count} questões carregadas do LiteDB para '{databankName}'.");
         return questions;
     }
@@ -208,19 +253,8 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
             }
 
             _local.SaveQuestions(questions);
+            SaveVersionSafe(remoteVersion);
 
-            try
-            {
-                if (remoteVersion != -1L)
-                {
-                    _local.SaveCachedVersion(remoteVersion);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[QuestionSyncService] Questões salvas, mas falha ao salvar versão do cache: {e.Message}");
-            }
-            
             Debug.Log($"[QuestionSyncService] {questions.Count} questões cacheadas no LiteDB (versão {remoteVersion}).");
 
             _ = PrewarmImagesAsync(questions);
@@ -233,13 +267,31 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         }
     }
 
+    private void StartRefreshCacheInBackground(long newVersion = -1L)
+    {
+        lock (_refreshTaskGate)
+        {
+            if (_refreshTask != null && !_refreshTask.IsCompleted)
+            {
+                Debug.Log("[QuestionSyncService] Refresh de questões já está em andamento — nova solicitação ignorada.");
+                return;
+            }
+
+            _refreshTask = RefreshCacheInBackground(newVersion);
+        }
+    }
+
     /// <summary>
-    /// Atualização em background das questões: limpa cache antigo, salva novas,
-    /// persiste a nova versão e dispara prewarm das imagens.
+    /// Atualização em background das questões.
+    /// 
+    /// Preferencialmente usa ReplaceAllQuestions quando o repositório concreto
+    /// expõe esse método, pois isso troca o cache em uma única transação. Se a
+    /// interface ainda não tiver sido atualizada, mantém fallback compatível:
+    /// ClearAll() + SaveQuestions().
     /// </summary>
     private async Task RefreshCacheInBackground(long newVersion = -1L)
     {
-        IsSyncing = true;
+        BeginSyncOperation();
 
         try
         {
@@ -251,13 +303,8 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
                 return;
             }
 
-            _local.ClearAll();
-            _local.SaveQuestions(questions);
-
-            if (newVersion != -1L)
-            {
-                _local.SaveCachedVersion(newVersion);
-            }
+            ReplaceLocalQuestionCache(questions);
+            SaveVersionSafe(newVersion);
 
             Debug.Log($"[QuestionSyncService] Cache atualizado em background com {questions.Count} questões (versão {newVersion}).");
 
@@ -265,11 +312,31 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"[QuestionSyncService] Refresh em background falhou (usando cache antigo): {e.Message}");
+            Debug.LogWarning($"[QuestionSyncService] Refresh em background falhou; usando cache antigo: {e.Message}");
         }
         finally
         {
-            IsSyncing = false;
+            EndSyncOperation();
+        }
+    }
+
+    private void ReplaceLocalQuestionCache(List<Question> questions)
+    {
+        _local.ReplaceAllQuestions(questions);
+    }
+
+    private void SaveVersionSafe(long version)
+    {
+        if (version == -1L)
+            return;
+
+        try
+        {
+            _local.SaveCachedVersion(version);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[QuestionSyncService] Questões salvas, mas falha ao salvar versão do cache: {e.Message}");
         }
     }
 
@@ -300,9 +367,46 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     private bool IsCacheStale()
     {
         DateTime latestCache = _local.GetLatestCacheTimestamp();
-        if (latestCache == DateTime.MinValue) return true;
 
-        double daysSinceCache = (DateTime.Now - latestCache).TotalDays;
+        if (latestCache == DateTime.MinValue)
+            return true;
+
+        DateTime latestUtc = latestCache.Kind == DateTimeKind.Utc
+            ? latestCache
+            : latestCache.ToUniversalTime();
+
+        double daysSinceCache = (DateTime.UtcNow - latestUtc).TotalDays;
         return daysSinceCache > cacheDaysThreshold;
+    }
+
+    private bool SafeHasAnyQuestions()
+    {
+        try
+        {
+            return _local.HasAnyQuestions();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[QuestionSyncService] Falha ao verificar cache local: {e.Message}");
+            return false;
+        }
+    }
+
+    private void BeginSyncOperation()
+    {
+        lock (_syncStateGate)
+        {
+            _activeSyncOperations++;
+            IsSyncing = true;
+        }
+    }
+
+    private void EndSyncOperation()
+    {
+        lock (_syncStateGate)
+        {
+            _activeSyncOperations = Math.Max(0, _activeSyncOperations - 1);
+            IsSyncing = _activeSyncOperations > 0;
+        }
     }
 }

@@ -1,10 +1,10 @@
 using Firebase;
 using Firebase.Auth;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 using System;
 using System.Threading.Tasks;
+using TMPro;
 
 public class RegisterManager : MonoBehaviour
 {
@@ -18,34 +18,55 @@ public class RegisterManager : MonoBehaviour
     [SerializeField] private FeedbackManager feedbackManager;
     [SerializeField] private LoadingSpinnerComponent loadingSpinner;
 
-    private IAuthRepository    _auth;
-    private IFirestoreRepository _firestore;
-    private INavigationService _navigation;
+    private IAuthRepository              _auth;
+    private INicknameRepository          _nicknames;
+    private IFirestoreUserRepository     _usersRemote;
+    private IUserDataLocalRepository     _userDataLocal;
+    private INavigationService           _navigation;
+
     private bool isProcessing = false;
     private static readonly System.Random _avatarRng = new System.Random();
 
     private void Start()
     {
-        _auth        = AppContext.Auth;
-        _firestore   = AppContext.Firestore;
-        _navigation  = AppContext.Navigation;
+        _auth          = AppContext.Auth;
+        _nicknames     = AppContext.Nicknames;
+        _usersRemote   = AppContext.FirestoreUsers;
+        _userDataLocal = AppContext.UserDataLocal;
+        _navigation    = AppContext.Navigation;
+
+        if (_auth == null)
+            Debug.LogError("[RegisterManager] AppContext.Auth está nulo.");
+
+        if (_nicknames == null)
+            Debug.LogError("[RegisterManager] AppContext.Nicknames está nulo.");
+
+        if (_usersRemote == null)
+            Debug.LogError("[RegisterManager] AppContext.FirestoreUsers está nulo.");
+
+        if (_navigation == null)
+            Debug.LogError("[RegisterManager] AppContext.Navigation está nulo.");
 
         nickNameInput.contentType    = TMP_InputField.ContentType.Standard;
         nickNameInput.characterLimit = 15;
         nickNameInput.onValueChanged.AddListener(ValidateNickname);
+
         registerButton.onClick.AddListener(HandleRegistration);
+
     }
 
     // -------------------------------------------------------
     // Registro
-    // ------------------------------------------------------
+    // -------------------------------------------------------
+
     public async void HandleRegistration()
     {
-        if (isProcessing) return;
+        if (isProcessing)
+            return;
 
-        string name     = nameInput.text;
-        string nickName = nickNameInput.text;
-        string email    = emailInput.text;
+        string name     = nameInput.text?.Trim();
+        string nickName = nickNameInput.text?.Trim();
+        string email    = emailInput.text?.Trim().ToLower();
         string password = passwordInput.text;
 
         if (string.IsNullOrEmpty(nickName) ||
@@ -57,15 +78,28 @@ public class RegisterManager : MonoBehaviour
             return;
         }
 
+        if (nickName.Length < 3)
+        {
+            feedbackManager.ShowFeedback("Nickname deve possuir mais de 3 caracteres.", true);
+            return;
+        }
+
+        if (_auth == null || _nicknames == null || _usersRemote == null || _navigation == null)
+        {
+            feedbackManager.ShowFeedback("Serviços ainda não inicializados. Tente novamente.", true);
+            return;
+        }
+
         isProcessing = true;
         SetAllButtonsInteractable(false);
+        feedbackManager.HideFeedback();
         loadingSpinner?.ShowSpinner();
 
         bool success = false;
 
         try
         {
-            bool nicknameExists = await _firestore.AreNicknameTaken(nickName);
+            bool nicknameExists = await _nicknames.AreNicknameTaken(nickName);
 
             if (nicknameExists)
                 throw new Exception("Este nickname já está em uso. Por favor, escolha outro.");
@@ -78,16 +112,15 @@ public class RegisterManager : MonoBehaviour
 
             Debug.Log("=== LIMPEZA CONCLUÍDA, INICIANDO REGISTRO ===");
 
-            await _auth.RegisterUserAsync(name, nickName, email, password);
-
-            string userId = _auth.CurrentUserId;
-            if (string.IsNullOrEmpty(userId))
-                throw new Exception("Erro: usuário criado mas ID não encontrado.");
-
-            var userData = await _firestore.GetUserData(userId);
+            // AuthenticationRepository agora cria o usuário no Auth,
+            // cria o documento em Users e reserva o nickname em Nicknames.
+            UserData userData = await _auth.RegisterUserAsync(name, nickName, email, password);
 
             if (userData == null)
                 throw new Exception("Erro ao carregar dados do usuário recém-criado.");
+
+            if (string.IsNullOrEmpty(userData.UserId))
+                throw new Exception("Erro: usuário criado mas ID não encontrado.");
 
             UserDataStore.CurrentUserData = userData;
 
@@ -125,11 +158,13 @@ public class RegisterManager : MonoBehaviour
     // -------------------------------------------------------
     // Avatar padrão aleatório
     // -------------------------------------------------------
+
     private async Task AssignRandomDefaultAvatarAsync(UserData userData)
     {
         try
         {
             var defaults = AvatarCatalog.Defaults;
+
             if (defaults.Count == 0)
             {
                 Debug.LogWarning("[RegisterManager] AvatarCatalog.Defaults vazio — avatar padrão não atribuído.");
@@ -143,8 +178,8 @@ public class RegisterManager : MonoBehaviour
 
             try
             {
-                await _firestore.UpdateUserProfileImageUrl(userData.UserId, presetUrl);
-                Debug.Log("[RegisterManager] Firestore atualizado com preset:id");
+                await _usersRemote.UpdateUserProfileImageUrl(userData.UserId, presetUrl);
+                Debug.Log("[RegisterManager] FirestoreUsers atualizado com preset:id");
             }
             catch (Exception e)
             {
@@ -153,10 +188,12 @@ public class RegisterManager : MonoBehaviour
 
             userData.ProfileImageUrl = presetUrl;
             UserDataStore.CurrentUserData = userData;
-            AppContext.UserDataLocal?.UpdateUser(userData);
+
+            _userDataLocal?.UpdateUser(userData);
+
             UserAvatarSyncHelper.NotifyAvatarChanged(presetUrl);
 
-            Debug.Log("[RegisterManager] Avatar padrão aplicado com sucesso");
+            Debug.Log("[RegisterManager] Avatar padrão aplicado com sucesso.");
         }
         catch (Exception e)
         {
@@ -170,11 +207,12 @@ public class RegisterManager : MonoBehaviour
 
     public void SceneLoader()
     {
-        if (isProcessing) return;
+        if (isProcessing)
+            return;
 
         isProcessing = true;
         SetAllButtonsInteractable(false);
-       // loadingSpinner?.ShowSpinnerUntilSceneLoaded("LoginView");
+
         _navigation.NavigateTo("LoginView");
     }
 
@@ -185,9 +223,17 @@ public class RegisterManager : MonoBehaviour
     private void ValidateNickname(string value)
     {
         if (value.Length < 3)
-            MainThreadDispatcher.Enqueue(() => feedbackManager.ShowFeedback("Nickname deve possuir mais de 3 caracteres.", true));
+        {
+            MainThreadDispatcher.Enqueue(() =>
+                feedbackManager.ShowFeedback("Nickname deve possuir mais de 3 caracteres.", true)
+            );
+        }
         else
-            MainThreadDispatcher.Enqueue(() => feedbackManager.HideFeedback());
+        {
+            MainThreadDispatcher.Enqueue(() =>
+                feedbackManager.HideFeedback()
+            );
+        }
     }
 
     // -------------------------------------------------------
@@ -197,7 +243,10 @@ public class RegisterManager : MonoBehaviour
     private void SetAllButtonsInteractable(bool interactable)
     {
         registerButton.interactable = interactable;
-        if (backButton != null) backButton.interactable = interactable;
+
+        if (backButton != null)
+            backButton.interactable = interactable;
+
         nameInput.interactable     = interactable;
         nickNameInput.interactable = interactable;
         emailInput.interactable    = interactable;
@@ -206,16 +255,17 @@ public class RegisterManager : MonoBehaviour
 
     // -------------------------------------------------------
     // Tradução de erros Firebase
-    // Isolado aqui — se o SDK mudar, só este método é afetado
     // -------------------------------------------------------
 
     private string GetFirebaseAuthErrorMessage(FirebaseException e)
     {
         var errorCode = (int)e.ErrorCode;
+
         return errorCode switch
         {
             (int)AuthError.EmailAlreadyInUse => "Email já registrado.",
             (int)AuthError.WeakPassword      => "Senha muito fraca.",
+            (int)AuthError.InvalidEmail      => "Email inválido.",
             _                                => e.Message
         };
     }

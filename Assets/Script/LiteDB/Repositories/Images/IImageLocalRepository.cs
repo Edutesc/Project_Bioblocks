@@ -1,37 +1,45 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
-/// <summary>
-/// Cache local de imagens das Question (LiteDB + arquivo em disco).
-///
-/// As chaves passadas aqui são storage keys relativas à raiz "Question" do
-/// Firebase Storage — ex.: "biochem/benzeno", "water/molecula_h2o".
-/// </summary>
 public interface IImageLocalRepository
 {
     /// <summary>
-    /// Tenta carregar a textura cacheada. Retorna true em cache hit.
-    /// O caller é responsável por destruir a Texture2D quando não for mais usada.
+    /// Tenta carregar uma textura do cache local.
+    /// Deve ser chamado da main thread, pois cria Texture2D.
     /// </summary>
-    bool TryGetCachedTexture(string storageKey, out Texture2D texture);
+    Task<Texture2D> GetCachedTextureAsync(string storageKey, CancellationToken ct = default);
 
     /// <summary>
-    /// Salva os bytes PNG no cache, marcando o documento com o topic informado.
+    /// Salva os bytes da imagem no disco e registra os metadados no manifesto local.
+    /// Seguro para ser chamado a partir de tarefas assíncronas/background.
     /// </summary>
-    void Save(string storageKey, byte[] pngBytes, string topic);
-
-    /// <summary>Existe documento de cache para esta key?</summary>
-    bool Has(string storageKey);
+    Task SaveAsync(string storageKey, byte[] pngBytes, string topic = null, CancellationToken ct = default);
 
     /// <summary>
-    /// Timestamp da imagem mais recente cacheada para o topic. Passe null para
-    /// considerar todas as imagens cacheadas.
+    /// Verifica se uma imagem existe no cache local e ainda está válida.
     /// </summary>
-    DateTime? GetLatestCacheTimestamp(string topic = null);
+    Task<bool> HasAsync(string storageKey, CancellationToken ct = default);
 
-    /// <summary>Remove arquivos físicos e documentos LiteDB do topic informado.</summary>
-    void EvictByTopic(string topic);
+    /// <summary>
+    /// Retorna o timestamp mais recente do cache, opcionalmente filtrado por topic.
+    /// </summary>
+    Task<DateTime?> GetLatestCacheTimestampAsync(string topic = null, CancellationToken ct = default);
 
-    /// <summary>Remove tudo do cache.</summary>
-    void ClearAll();
+    /// <summary>
+    /// Remove todas as imagens de um determinado topic.
+    /// </summary>
+    Task EvictByTopicAsync(string topic, CancellationToken ct = default);
+
+    /// <summary>
+    /// Limpa todo o cache local de imagens.
+    /// </summary>
+    Task ClearAllAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Remove imagens expiradas ou excedentes.
+    /// Recomendo chamar ao final de um topic ou ao final do prewarm, não após cada imagem.
+    /// </summary>
+    Task CleanupOldCacheIfNeededAsync(CancellationToken ct = default);
 }

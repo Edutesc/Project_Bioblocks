@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class FakeRankingRepository : IRankingRepository
+public class FakeRankingRepository : IFirestoreRankingRepository
 {
     private readonly List<Ranking> _mockRankings;
 

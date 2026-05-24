@@ -1,78 +1,177 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// Fake puramente em memória do IImageLocalRepository — não toca o disco e não
-/// decodifica PNG. Save apenas registra metadados; TryGetCachedTexture retorna
-/// false (nunca há textura em cache "real" — testes focam em ordem/efeitos).
+/// Fake puramente em memória do IImageLocalRepository.
+/// 
+/// Não toca o disco.
+/// Não decodifica PNG.
+/// SaveAsync apenas registra metadados.
+/// GetCachedTextureAsync retorna null por padrão, pois testes normalmente focam
+/// em ordem, cacheamento e efeitos colaterais, não em textura real.
 /// </summary>
 public class FakeImageLocalRepository : IImageLocalRepository
 {
     public class Entry
     {
-        public string  Topic;
+        public string Topic;
         public DateTime CachedAt;
-        public byte[]   Bytes;
+        public byte[] Bytes;
     }
+
+    private readonly object _gate = new object();
 
     public Dictionary<string, Entry> Saved { get; } = new Dictionary<string, Entry>();
     public List<string> SaveOrder { get; } = new List<string>();
-    public bool ClearAllCalled { get; private set; }
 
-    public bool TryGetCachedTexture(string storageKey, out Texture2D texture)
+    public bool ClearAllCalled { get; private set; }
+    public bool CleanupCalled { get; private set; }
+
+    // ── Leitura ────────────────────────────────────────────────────────────────
+
+    public Task<Texture2D> GetCachedTextureAsync(
+        string storageKey,
+        CancellationToken ct = default)
     {
-        texture = null;
-        return false;
+        ct.ThrowIfCancellationRequested();
+
+        // Este fake não cria Texture2D.
+        // Mesmo que exista entrada em Saved, retornamos null para simular que
+        // não há textura real carregável em cache.
+        return Task.FromResult<Texture2D>(null);
     }
 
-    public void Save(string storageKey, byte[] pngBytes, string topic)
+    public Task<bool> HasAsync(
+        string storageKey,
+        CancellationToken ct = default)
     {
-        lock (SaveOrder)
+        ct.ThrowIfCancellationRequested();
+
+        if (string.IsNullOrEmpty(storageKey))
+            return Task.FromResult(false);
+
+        lock (_gate)
+        {
+            return Task.FromResult(Saved.ContainsKey(storageKey));
+        }
+    }
+
+    public Task<DateTime?> GetLatestCacheTimestampAsync(
+        string topic = null,
+        CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+
+        lock (_gate)
+        {
+            DateTime? latest = null;
+
+            foreach (var kvp in Saved)
+            {
+                if (!string.IsNullOrEmpty(topic) && kvp.Value.Topic != topic)
+                    continue;
+
+                if (latest == null || kvp.Value.CachedAt > latest.Value)
+                    latest = kvp.Value.CachedAt;
+            }
+
+            return Task.FromResult(latest);
+        }
+    }
+
+    // ── Escrita ────────────────────────────────────────────────────────────────
+
+    public Task SaveAsync(
+        string storageKey,
+        byte[] pngBytes,
+        string topic = null,
+        CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+
+        if (string.IsNullOrEmpty(storageKey) || pngBytes == null || pngBytes.Length == 0)
+            return Task.CompletedTask;
+
+        lock (_gate)
         {
             SaveOrder.Add(storageKey);
+
             Saved[storageKey] = new Entry
             {
-                Topic    = topic,
+                Topic = topic,
                 CachedAt = DateTime.UtcNow,
-                Bytes    = pngBytes
+                Bytes = pngBytes.ToArray()
             };
         }
+
+        return Task.CompletedTask;
     }
 
-    public bool Has(string storageKey) => Saved.ContainsKey(storageKey);
+    // ── Limpeza ────────────────────────────────────────────────────────────────
 
-    public DateTime? GetLatestCacheTimestamp(string topic = null)
+    public Task EvictByTopicAsync(
+        string topic,
+        CancellationToken ct = default)
     {
-        DateTime? latest = null;
-        foreach (var kvp in Saved)
+        ct.ThrowIfCancellationRequested();
+
+        if (string.IsNullOrEmpty(topic))
+            return Task.CompletedTask;
+
+        lock (_gate)
         {
-            if (!string.IsNullOrEmpty(topic) && kvp.Value.Topic != topic) continue;
-            if (latest == null || kvp.Value.CachedAt > latest.Value)
-                latest = kvp.Value.CachedAt;
+            var keys = Saved
+                .Where(kvp => kvp.Value.Topic == topic)
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            foreach (string key in keys)
+                Saved.Remove(key);
         }
-        return latest;
+
+        return Task.CompletedTask;
     }
 
-    public void EvictByTopic(string topic)
+    public Task ClearAllAsync(CancellationToken ct = default)
     {
-        var keys = new List<string>();
-        foreach (var kvp in Saved)
-            if (kvp.Value.Topic == topic) keys.Add(kvp.Key);
-        foreach (var k in keys) Saved.Remove(k);
+        ct.ThrowIfCancellationRequested();
+
+        lock (_gate)
+        {
+            Saved.Clear();
+            SaveOrder.Clear();
+            ClearAllCalled = true;
+        }
+
+        return Task.CompletedTask;
     }
 
-    public void ClearAll()
+    public Task CleanupOldCacheIfNeededAsync(CancellationToken ct = default)
     {
-        Saved.Clear();
-        SaveOrder.Clear();
-        ClearAllCalled = true;
+        ct.ThrowIfCancellationRequested();
+
+        lock (_gate)
+        {
+            CleanupCalled = true;
+        }
+
+        return Task.CompletedTask;
     }
+
+    // ── Utilitário para testes ─────────────────────────────────────────────────
 
     public void Reset()
     {
-        Saved.Clear();
-        SaveOrder.Clear();
-        ClearAllCalled = false;
+        lock (_gate)
+        {
+            Saved.Clear();
+            SaveOrder.Clear();
+            ClearAllCalled = false;
+            CleanupCalled = false;
+        }
     }
 }
