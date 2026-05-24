@@ -63,7 +63,8 @@ public class FirebaseStorageImageRepository : MonoBehaviour, IFirebaseStorageIma
             // Log compacto. ErrorCode -13010 = Object Not Found (404) — comum se
             // o questionImagePath aponta pra arquivo que não foi para o Storage.
             // ErrorCode -13020 = Unauthenticated. ErrorCode -13021 = Unauthorized.
-            Debug.LogWarning($"[FirebaseStorageImageRepository] '{storageKey}' falhou " +
+            string keyWithExt = EnsureExtension(storageKey);
+            Debug.LogWarning($"[FirebaseStorageImageRepository] 'Question/{keyWithExt}' falhou " +
                              $"(code={se.ErrorCode}, http={se.HttpResultCode}).");
             return null;
         }

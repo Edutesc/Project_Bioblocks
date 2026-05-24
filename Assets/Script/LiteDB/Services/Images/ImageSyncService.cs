@@ -160,9 +160,20 @@ public class ImageSyncService : MonoBehaviour, IImageSyncService
             // que deve ocorrer na main thread.
             string topic = ExtractTopicFromKey(storageKey);
 
+            if (_authGate != null)
+                await _authGate.WaitForAuthenticatedAsync(ct);
+
             byte[] bytes = await _storage.DownloadImageAsync(storageKey);
 
             ct.ThrowIfCancellationRequested();
+
+            if (bytes == null && _authGate != null)
+            {
+                await Task.Delay(250, ct);
+                await _authGate.WaitForAuthenticatedAsync(ct);
+                bytes = await _storage.DownloadImageAsync(storageKey);
+                ct.ThrowIfCancellationRequested();
+            }
 
             if (bytes == null)
             {
