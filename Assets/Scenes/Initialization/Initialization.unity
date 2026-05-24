@@ -1476,6 +1476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2676cc12a2b14593b7ed70ccdb4abb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cacheValidMinutes: 5
+  defaultLimit: 20
 --- !u!114 &564396363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1549,7 +1551,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe53ec9d26bd142c18a5f4bc5ea2532c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxParallelDownloads: 4
+  maxParallelDownloads: 6
+  prewarmBatchSize: 20
+  delayBetweenPrewarmBatchesMs: 250
 --- !u!114 &564396369
 MonoBehaviour:
   m_ObjectHideFlags: 0

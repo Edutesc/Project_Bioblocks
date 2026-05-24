@@ -9,7 +9,7 @@
 //   ✅ Registro bem-sucedido → UserDataStore populado
 //   ✅ Registro bem-sucedido → AnsweredQuestions.ForceUpdate chamado
 //   ✅ Registro bem-sucedido → Statistics inicializado se necessário
-//   ✅ Falha no GetUserData após registro → exibe feedback de erro
+//   ✅ Falha no RegisterUserAsync após registro → exibe feedback de erro
 //   ✅ isProcessing impede chamadas duplicadas
 //
 //   Login:
@@ -72,6 +72,8 @@ public class AuthFlowTests
         AppContext.OverrideForTests(
             auth:              _fakeAuth,
             firestore:         _fakeFirestore,
+            firestoreUsers:    _fakeFirestore,
+            nicknames:         _fakeFirestore,
             answeredQuestions: _fakeAnswered,
             statistics:        _fakeStatistics,
             questionSync:      _fakeSync,
@@ -114,7 +116,8 @@ public class AuthFlowTests
 
         // Start() não roda em Edit Mode — injeta dependências diretamente
         SetField(manager, "_auth",             _fakeAuth);
-        SetField(manager, "_firestore",        _fakeFirestore);
+        SetField(manager, "_nicknames",        _fakeFirestore);
+        SetField(manager, "_usersRemote",      _fakeFirestore);
         SetField(manager, "_navigation",       _fakeNavigation);
         SetField(manager, "feedbackManager",   spy);
         SetField(manager, "registerButton",    registerBtn);
@@ -208,18 +211,16 @@ public class AuthFlowTests
     }
 
     [UnityTest]
-    public IEnumerator Register_GetUserDataRetornaNull_ExibeFeedbackDeErro()
+    public IEnumerator Register_AuthRetornaNull_ExibeFeedbackDeErro()
     {
-        // Auth cria o usuário mas GetUserData retorna null (usuário não encontrado no Firestore)
-        _fakeAuth.SetUserIdForNextRegistration("null-user-id");
-        // NÃO chama SetFakeUser — GetUserData retornará null
+        _fakeAuth.SetRegisterShouldReturnNull(true);
 
         var (manager, go, spy) = CreateRegisterManager(nick: "NullUser");
 
         var task = RunAndWait(manager.HandleRegistration, spy);
         while (!task.IsCompleted) yield return null;
 
-        Assert.IsTrue(spy.LastWasError,              "Deve exibir erro quando GetUserData retorna null.");
+        Assert.IsTrue(spy.LastWasError,              "Deve exibir erro quando RegisterUserAsync retorna null.");
         Assert.IsNull(UserDataStore.CurrentUserData, "UserDataStore não deve ser populado.");
 
         Object.DestroyImmediate(go);
@@ -454,7 +455,7 @@ public class AuthFlowTests
             // ── Flush do dispatcher ───────────────────────────────────────────────
             // Em Edit Mode, Unity não chama Update() automaticamente nos GameObjects.
             // Invocamos manualmente para entregar feedbacks de erro ao SpyFeedbackManager
-            // (ex: NicknameJaEmUso, GetUserDataRetornaNull — feedback via Enqueue).
+            // (ex: NicknameJaEmUso, RegisterUserAsync retornando null — feedback via Enqueue).
             if (_dispatcher != null && _dispatcherUpdateMethod != null)
                 _dispatcherUpdateMethod.Invoke(_dispatcher, null);
 

@@ -141,6 +141,7 @@ Assets/Editor/FirebaseSecrets.json.meta
 firebase_app_check_debug_token.txt
 
 # Storage scripts
+Assets/Python_Local_Scripts/
 FIREBASE_REORGANIZE_README.md
 FIREBASE_UPLOAD_README.md
 check_storage_images.py
