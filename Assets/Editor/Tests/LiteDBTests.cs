@@ -810,13 +810,13 @@ public class LiteDBTests
         var q = QuestionTestHelpers.MakeFullQuestion(number: 1,
             databankName: "WaterQuestionDataBase",
             topic: "water",
-            bloomLevel: "understand");
+            bloomLevel: BloomLevel.Understand);
 
         var db = QuestionDB.FromDomain(q);
 
         Assert.AreEqual("WaterQuestionDataBase_001", db.GlobalId);
-        Assert.AreEqual("water",      db.Topic);
-        Assert.AreEqual("understand", db.BloomLevel);
+        Assert.AreEqual("water",              db.Topic);
+        Assert.AreEqual(BloomLevel.Understand, db.BloomLevel);
         Assert.AreEqual("subtopico-1", db.Subtopic);
         Assert.AreEqual(2,            db.ConceptTags.Count);
     }
@@ -854,14 +854,14 @@ public class LiteDBTests
     public void QuestionDB_ToDomain_MapsNewFirestoreFields()
     {
         var db = QuestionDB.FromDomain(
-            QuestionTestHelpers.MakeFullQuestion(1, topic: "lipids", bloomLevel: "apply",
+            QuestionTestHelpers.MakeFullQuestion(1, topic: "lipids", bloomLevel: BloomLevel.Apply,
                 databankName: "LipidsQuestionDataBase"));
 
         var domain = db.ToDomain();
 
         Assert.AreEqual("LipidsQuestionDataBase_001", domain.globalId);
-        Assert.AreEqual("lipids", domain.topic);
-        Assert.AreEqual("apply",  domain.bloomLevel);
+        Assert.AreEqual("lipids",         domain.topic);
+        Assert.AreEqual(BloomLevel.Apply, domain.bloomLevel);
         Assert.IsNotNull(domain.conceptTags);
         Assert.IsNotNull(domain.prerequisites);
     }
@@ -997,16 +997,16 @@ public class LiteDBTests
     public void QuestionLocalRepository_NovoCamposFirestore_SobrevivemAoCicloSaveGet()
     {
         var q = QuestionTestHelpers.MakeFullQuestion(number: 1,
-            databankName: "TestDB", topic: "enzymes", bloomLevel: "analyze");
+            databankName: "TestDB", topic: "enzymes", bloomLevel: BloomLevel.Analyze);
 
         _questionRepo.SaveQuestions(new List<Question> { q });
         var result = _questionRepo.GetQuestionsByDatabankName("TestDB");
 
         Assert.AreEqual(1, result.Count);
         var saved = result[0];
-        Assert.AreEqual("TestDB_001",  saved.globalId);
-        Assert.AreEqual("enzymes",     saved.topic);
-        Assert.AreEqual("analyze",     saved.bloomLevel);
+        Assert.AreEqual("TestDB_001",       saved.globalId);
+        Assert.AreEqual("enzymes",          saved.topic);
+        Assert.AreEqual(BloomLevel.Analyze, saved.bloomLevel);
         Assert.AreEqual("subtopico-1", saved.subtopic);
         Assert.IsNotNull(saved.conceptTags);
         Assert.AreEqual(2, saved.conceptTags.Count);

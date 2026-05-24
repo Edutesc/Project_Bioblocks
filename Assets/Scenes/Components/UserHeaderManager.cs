@@ -61,7 +61,8 @@ public class UserHeaderManager : BarsManager
     {
         "LoginView",
         "RegisterView",
-        "ResetDatabaseView"
+        "ResetDatabaseView",
+        "Initialization"
     };
 
     [Header("Cenas com User TopBar")]

@@ -10,7 +10,9 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
     private FirebaseFirestore db;
     private bool isInitialized;
 
-    private const string COLLECTION = "Questions";
+    private const string COLLECTION      = "Questions";
+    private const string CONFIG_COLLECTION = "Config";
+    private const string STATS_DOCUMENT    = "QuestionStats";
 
     // ── Inicialização ──────────────────────────────────────────────────────────
 
@@ -96,6 +98,41 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
         }
     }
 
+    public async Task<long> GetRemoteVersion()
+    {
+        EnsureInitialized();
+
+        try
+        {
+            DocumentSnapshot doc = await db
+                .Collection(CONFIG_COLLECTION)
+                .Document(STATS_DOCUMENT)
+                .GetSnapshotAsync();
+
+            if (!doc.Exists)
+            {
+                Debug.LogWarning("[FirestoreQuestionRepository] Config/QuestionStats não encontrado — retornando -1.");
+                return -1L;
+            }
+
+            var data = doc.ToDictionary();
+            if (data.TryGetValue("Version", out object val))
+            {
+                if (val is long   l) return l;
+                if (val is int    i) return (long)i;
+                if (long.TryParse(val.ToString(), out long parsed)) return parsed;
+            }
+
+            Debug.LogWarning("[FirestoreQuestionRepository] Campo 'Version' não encontrado em QuestionStats — retornando -1.");
+            return -1L;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[FirestoreQuestionRepository] Erro ao ler versão remota: {e.Message}");
+            return -1L;
+        }
+    }
+
     // ── Conversão Firestore → Question ─────────────────────────────────────────
 
     private Question ConvertFromFirestore(DocumentSnapshot doc)
@@ -111,15 +148,15 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
                 questionText          = GetString(data, "questionText",           ""),
                 correctIndex          = GetInt   (data, "correctIndex",           0),
                 questionNumber        = GetInt   (data, "questionNumber",         0),
-                isImageAnswer         = GetBool  (data, "isImageAnswer",          false),
-                isImageQuestion       = GetBool  (data, "isImageQuestion",        false),
+                answerType            = GetAnswerType(data),
+                questionType          = GetQuestionType(data),
                 questionImagePath     = GetString(data, "questionImagePath",      ""),
                 questionLevel         = GetInt   (data, "questionLevel",          1),
                 questionInDevelopment = GetBool  (data, "questionInDevelopment",  false),
                 topic                 = GetString(data, "topic",                  ""),
                 displayName           = GetString(data, "displayName",            ""),
                 subtopic              = GetString(data, "subtopic",               null),
-                bloomLevel            = GetString(data, "bloomLevel",             "unclassified"),
+                bloomLevel            = GetBloomLevel(data, "bloomLevel"),
                 conceptTags           = GetStringList(data, "conceptTags"),
                 prerequisites         = GetStringList(data, "prerequisites"),
                 answers               = GetStringArray(data, "answers"),
@@ -163,6 +200,45 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
             if (bool.TryParse(value.ToString(), out bool parsed)) return parsed;
         }
         return defaultValue;
+    }
+
+    private static BloomLevel GetBloomLevel(Dictionary<string, object> data, string key)
+    {
+        string raw = GetString(data, key, "");
+        if (!string.IsNullOrEmpty(raw) &&
+            System.Enum.TryParse(raw, ignoreCase: true, out BloomLevel result))
+            return result;
+        return BloomLevel.Unclassified;
+    }
+
+    /// <summary>
+    /// Lê questionType do Firestore com retrocompatibilidade:
+    ///   - Novo formato: campo "questionType" como string ("text" / "image")
+    ///   - Formato legado: campo "isImageQuestion" como bool
+    /// </summary>
+    private static QuestionType GetQuestionType(Dictionary<string, object> data)
+    {
+        if (data.TryGetValue("questionType", out object newVal) && newVal != null)
+        {
+            if (System.Enum.TryParse(newVal.ToString(), ignoreCase: true, out QuestionType parsed))
+                return parsed;
+        }
+        return GetBool(data, "isImageQuestion", false) ? QuestionType.Image : QuestionType.Text;
+    }
+
+    /// <summary>
+    /// Lê answerType do Firestore com retrocompatibilidade:
+    ///   - Novo formato: campo "answerType" como string ("text" / "image")
+    ///   - Formato legado: campo "isImageAnswer" como bool
+    /// </summary>
+    private static AnswerType GetAnswerType(Dictionary<string, object> data)
+    {
+        if (data.TryGetValue("answerType", out object newVal) && newVal != null)
+        {
+            if (System.Enum.TryParse(newVal.ToString(), ignoreCase: true, out AnswerType parsed))
+                return parsed;
+        }
+        return GetBool(data, "isImageAnswer", false) ? AnswerType.Image : AnswerType.Text;
     }
 
     private static string[] GetStringArray(Dictionary<string, object> data, string key)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class FakeFirestoreRepository : IFirestoreRepository
+public class FakeFirestoreRepository : IFirestoreRepository, IFirestoreUserRepository, INicknameRepository
 {
     private readonly Dictionary<string, UserData> _users = new();
     private readonly List<UserData> _allUsers = new();
@@ -13,6 +13,8 @@ public class FakeFirestoreRepository : IFirestoreRepository
     public object LastUpdatedValue           { get; private set; }
     public bool UpdateProfileImageUrlCalled  { get; private set; }
     public string LastProfileImageUrl        { get; private set; }
+
+    private TaskCompletionSource<bool> _getUserDataGate;
 
     // -------------------------------------------------------
     // Rastreamento de deleções por coleção
@@ -65,16 +67,31 @@ public class FakeFirestoreRepository : IFirestoreRepository
         _users[user.UserId] = user;
     }
 
+    public void HoldGetUserData()
+    {
+        _getUserDataGate = new TaskCompletionSource<bool>();
+    }
+
+    public void ReleaseGetUserData()
+    {
+        _getUserDataGate?.TrySetResult(true);
+        _getUserDataGate = null;
+    }
+
     // -------------------------------------------------------
     // IFirestoreRepository
     // -------------------------------------------------------
     public bool IsInitialized => true;
     public void Initialize() { }
 
-    public Task<UserData> GetUserData(string userId)
+    public async Task<UserData> GetUserData(string userId)
     {
+        var gate = _getUserDataGate;
+        if (gate != null)
+            await gate.Task;
+
         _users.TryGetValue(userId, out var user);
-        return Task.FromResult(user);
+        return user;
     }
 
     public Task CreateUserDocument(UserData userData)
@@ -181,6 +198,22 @@ public class FakeFirestoreRepository : IFirestoreRepository
     {
         bool taken = _allUsers.Exists(u => u.NickName == nickName);
         return Task.FromResult(taken);
+    }
+
+    public Task ReserveNickname(string nickName, string userId)
+    {
+        if (!_users.TryGetValue(userId, out var user))
+        {
+            user = new UserData(userId, nickName, string.Empty, string.Empty);
+            _users[userId] = user;
+        }
+
+        user.NickName = nickName;
+
+        if (!_allUsers.Exists(u => u.UserId == userId))
+            _allUsers.Add(user);
+
+        return Task.CompletedTask;
     }
 
     public Task<List<UserData>> GetAllUsersData()
@@ -295,5 +328,36 @@ public class FakeFirestoreRepository : IFirestoreRepository
         Action<Dictionary<string, List<int>>> onAnsweredQuestionsChanged = null)
     {
         IsListening = true;
+    }
+
+    // -------------------------------------------------------
+    // Rankings — fake injetável
+    // -------------------------------------------------------
+
+    /// <summary>
+    /// Rankings simulados retornados por GetRankingsAsync e GetWeekRankingsAsync.
+    /// Pré-popule nos testes para simular rankings do Firestore.
+    /// </summary>
+    public List<Ranking> FakeRankings { get; set; } = new();
+
+    public int GetRankingsAsyncCallCount { get; private set; }
+    public int GetWeekRankingsAsyncCallCount { get; private set; }
+
+    public Task<List<Ranking>> GetRankingsAsync(int limit = 50)
+    {
+        GetRankingsAsyncCallCount++;
+        var result = new List<Ranking>(FakeRankings);
+        if (result.Count > limit)
+            result = result.GetRange(0, limit);
+        return Task.FromResult(result);
+    }
+
+    public Task<List<Ranking>> GetWeekRankingsAsync(int limit = 50)
+    {
+        GetWeekRankingsAsyncCallCount++;
+        var result = new List<Ranking>(FakeRankings);
+        if (result.Count > limit)
+            result = result.GetRange(0, limit);
+        return Task.FromResult(result);
     }
 }

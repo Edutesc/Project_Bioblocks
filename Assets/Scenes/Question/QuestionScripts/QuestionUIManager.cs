@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +18,8 @@ public class QuestionUIManager : MonoBehaviour
     private Sprite preloadedQuestionImage;
     private bool isPreloading = false;
 
+    private CancellationTokenSource _activeLoadCts;
+
     private void Start()
     {
         ValidateComponents();
@@ -35,7 +37,7 @@ public class QuestionUIManager : MonoBehaviour
     {
         ApplyTheme(question);
 
-        if (question.isImageQuestion)
+        if (question.questionType == QuestionType.Image)
         {
             ShowImageQuestion(question);
         }
@@ -49,12 +51,12 @@ public class QuestionUIManager : MonoBehaviour
     {
         if (answerButtonThemeManager != null)
         {
-            answerButtonThemeManager.ApplyTheme(question.questionLevel, question.isImageAnswer);
+            answerButtonThemeManager.ApplyTheme(question.questionLevel, question.answerType == AnswerType.Image);
         }
 
         if (questionBackgroundThemeManager != null)
         {
-            questionBackgroundThemeManager.ApplyTheme(question.questionLevel, question.isImageQuestion);
+            questionBackgroundThemeManager.ApplyTheme(question.questionLevel, question.questionType == QuestionType.Image);
         }
     }
 
@@ -64,14 +66,20 @@ public class QuestionUIManager : MonoBehaviour
 
         if (preloadedQuestionImage != null && !string.IsNullOrEmpty(question.questionImagePath))
         {
-            questionImage.sprite = preloadedQuestionImage;
-            questionImage.gameObject.SetActive(true);
+            AssignSprite(preloadedQuestionImage);
             preloadedQuestionImage = null;
+            return;
         }
-        else if (!string.IsNullOrEmpty(question.questionImagePath))
+
+        if (string.IsNullOrEmpty(question.questionImagePath))
         {
-            StartCoroutine(LoadQuestionImage(question.questionImagePath));
+            questionImage.gameObject.SetActive(false);
+            return;
         }
+
+        // Sem preload: dispara fetch async e mantém escondido enquanto baixa.
+        questionImage.gameObject.SetActive(false);
+        _ = LoadQuestionImageAsync(question);
     }
 
     private void ShowTextQuestion(Question question)
@@ -80,62 +88,162 @@ public class QuestionUIManager : MonoBehaviour
         questionImage.gameObject.SetActive(false);
     }
 
-    private IEnumerator LoadQuestionImage(string imagePath)
+    private async Task LoadQuestionImageAsync(Question question)
     {
-        var request = Resources.LoadAsync<Sprite>(imagePath);
-        yield return request;
+        CancelActiveLoad();
+        _activeLoadCts = new CancellationTokenSource();
+        var ct = _activeLoadCts.Token;
 
-        if (request.asset != null)
+        string imagePath = question.questionImagePath;
+
+        // Preview mode: AppContext.ImageSync não está disponível — lê direto de Resources.
+        // O path no C# database é um caminho Resources.Load válido (ex: "QuestionImages/AminoacidsDB/...").
+        if (AppContext.ImageSync == null)
         {
-            questionImage.sprite = request.asset as Sprite;
-            questionImage.gameObject.SetActive(true);
+            Texture2D resourceTexture = Resources.Load<Texture2D>(imagePath);
+            if (resourceTexture == null)
+            {
+                Debug.LogWarning($"[QuestionUIManager] Preview mode — imagem não encontrada em Resources: '{imagePath}'.");
+                return;
+            }
+            var resourceSprite = Sprite.Create(
+                resourceTexture,
+                new Rect(0, 0, resourceTexture.width, resourceTexture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
+            AssignSprite(resourceSprite);
+            return;
         }
-        else
+
+        // Dev/Prod mode: imagePath é uma storage key (ex: "aminoacids/aminoacidDB_ImageQuestionContainer10").
+        // O Firestore já armazena storage keys após a migração do UploadQuestionBanksEditor.
+        try
         {
-            Debug.LogError($"Failed to load question image at path: {imagePath}");
-            questionImage.gameObject.SetActive(false);
+            Texture2D texture = await AppContext.ImageSync.GetImageAsync(imagePath, ct);
+            if (ct.IsCancellationRequested || texture == null)
+            {
+                if (texture != null) Destroy(texture);
+                return;
+            }
+
+            var sprite = Sprite.Create(
+                texture,
+                new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
+
+            AssignSprite(sprite);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[QuestionUIManager] Erro ao carregar imagem da questão '{imagePath}': {e.Message}");
         }
     }
 
     public async Task PreloadQuestionImage(Question questionToPreload)
     {
-        if (!questionToPreload.isImageQuestion || string.IsNullOrEmpty(questionToPreload.questionImagePath))
+        if (questionToPreload.questionType != QuestionType.Image || string.IsNullOrEmpty(questionToPreload.questionImagePath))
         {
             preloadedQuestionImage = null;
             return;
         }
 
         if (isPreloading) return;
-
         isPreloading = true;
 
-        var tcs = new TaskCompletionSource<bool>();
-        StartCoroutine(PreloadImageCoroutine(questionToPreload.questionImagePath, tcs));
-        await tcs.Task;
+        string imagePath = questionToPreload.questionImagePath;
 
-        isPreloading = false;
-    }
-
-    private IEnumerator PreloadImageCoroutine(string imagePath, TaskCompletionSource<bool> tcs)
-    {
-        var request = Resources.LoadAsync<Sprite>(imagePath);
-        yield return request;
-
-        if (request.asset != null)
+        try
         {
-            preloadedQuestionImage = request.asset as Sprite;
-            tcs.SetResult(true);
+            // Preview mode: lê de Resources usando o path legado do C# database.
+            if (AppContext.ImageSync == null)
+            {
+                Texture2D resourceTexture = Resources.Load<Texture2D>(imagePath);
+                if (resourceTexture == null)
+                {
+                    Debug.LogWarning($"[QuestionUIManager] Preload preview mode — imagem não encontrada em Resources: '{imagePath}'.");
+                    preloadedQuestionImage = null;
+                    return;
+                }
+                preloadedQuestionImage = Sprite.Create(
+                    resourceTexture,
+                    new Rect(0, 0, resourceTexture.width, resourceTexture.height),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+                return;
+            }
+
+            // Dev/Prod mode: imagePath é storage key, já armazenada assim no Firestore.
+            Texture2D texture = await AppContext.ImageSync.GetImageAsync(imagePath);
+            if (texture == null)
+            {
+                Debug.LogWarning($"[QuestionUIManager] Preload: imagem '{imagePath}' não disponível.");
+                preloadedQuestionImage = null;
+                return;
+            }
+
+            preloadedQuestionImage = Sprite.Create(
+                texture,
+                new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
         }
-        else
+        catch (System.Exception e)
         {
-            Debug.LogWarning($"Failed to preload question image at path: {imagePath}");
+            Debug.LogError($"[QuestionUIManager] Erro no preload: {e.Message}");
             preloadedQuestionImage = null;
-            tcs.SetResult(false);
+        }
+        finally
+        {
+            isPreloading = false;
         }
     }
 
     public void ClearPreloadedResources()
     {
-        preloadedQuestionImage = null;
+        if (preloadedQuestionImage != null)
+        {
+            DestroySpriteAndTexture(preloadedQuestionImage);
+            preloadedQuestionImage = null;
+        }
+    }
+
+    // ── Atribuição/limpeza segura de sprites próprios ──────────────────────────
+
+    private void AssignSprite(Sprite sprite)
+    {
+        if (questionImage == null) return;
+
+        var previous = questionImage.sprite;
+        questionImage.sprite = sprite;
+        questionImage.gameObject.SetActive(true);
+
+        if (previous != null && previous != sprite)
+            DestroySpriteAndTexture(previous);
+    }
+
+    private void DestroySpriteAndTexture(Sprite sprite)
+    {
+        if (sprite == null) return;
+        var tex = sprite.texture;
+        Destroy(sprite);
+        if (tex != null) Destroy(tex);
+    }
+
+    private void CancelActiveLoad()
+    {
+        if (_activeLoadCts == null) return;
+        try { _activeLoadCts.Cancel(); } catch { /* noop */ }
+        _activeLoadCts.Dispose();
+        _activeLoadCts = null;
+    }
+
+    private void OnDestroy()
+    {
+        CancelActiveLoad();
+        ClearPreloadedResources();
+
+        if (questionImage != null && questionImage.sprite != null)
+            DestroySpriteAndTexture(questionImage.sprite);
     }
 }

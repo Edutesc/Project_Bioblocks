@@ -7,26 +7,40 @@ using Firebase.Auth;
 public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 {
     private FirebaseAuth _auth;
-    private IFirestoreRepository _firestore;
+
+    private IFirestoreUserRepository     _usersRemote;
+    private INicknameRepository          _nicknames;
+    private IUserRealtimeListenerService _userRealtimeListeners;
+
     private bool isInitialized;
+
     public bool IsInitialized => isInitialized;
+
     public string CurrentUserId => _auth?.CurrentUser?.UserId;
 
     // -------------------------------------------------------
-    // Inicialização
+    // Inicialização / Injeção
     // -------------------------------------------------------
-    public void InjectDependencies(IFirestoreRepository firestore)
+
+    public void InjectDependencies(
+        IFirestoreUserRepository usersRemote,
+        INicknameRepository nicknames,
+        IUserRealtimeListenerService userRealtimeListeners = null)
     {
-        _firestore = firestore;
+        _usersRemote = usersRemote ?? throw new ArgumentNullException(nameof(usersRemote));
+        _nicknames = nicknames ?? throw new ArgumentNullException(nameof(nicknames));
+        _userRealtimeListeners = userRealtimeListeners;
     }
 
     public async Task InitializeAsync()
     {
-        if (isInitialized) return;
+        if (isInitialized)
+            return;
 
         try
         {
             var app = Firebase.FirebaseApp.DefaultInstance;
+
             if (app == null)
             {
                 Debug.Log("[AuthRepository] Creating Firebase App");
@@ -35,7 +49,9 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
             _auth = FirebaseAuth.DefaultInstance;
             isInitialized = true;
+
             Debug.Log("[AuthRepository] Firebase Authentication initialized successfully");
+            await Task.CompletedTask;
         }
         catch (Exception e)
         {
@@ -47,6 +63,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     // -------------------------------------------------------
     // IAuthRepository
     // -------------------------------------------------------
+
     public bool IsUserLoggedIn()
     {
         var user = _auth?.CurrentUser;
@@ -60,22 +77,22 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
     public async Task<UserData> SignInWithEmailAsync(string email, string password)
     {
-        if (!isInitialized) throw new Exception("Firebase não inicializado");
-        if (_auth == null) throw new Exception("FirebaseAuth não inicializado");
-        if (_firestore == null) throw new Exception("FirestoreRepository não injetado");
+        EnsureInitialized();
+        EnsureRepositoriesInjected();
 
         try
         {
             var result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+
             if (result?.User == null)
-                throw new Exception("Login falhou: resultado ou usuário nulo");
+                throw new Exception("Login falhou: resultado ou usuário nulo.");
 
             string uid = result.User.UserId;
-            UserData userData = await _firestore.GetUserData(uid).ConfigureAwait(false);
-            await Task.Yield();
+
+            UserData userData = await _usersRemote.GetUserData(uid);
 
             if (userData == null)
-                throw new Exception("Dados do usuário não encontrados");
+                throw new Exception("Dados do usuário não encontrados.");
 
             UserDataStore.CurrentUserData = userData;
             return userData;
@@ -87,14 +104,31 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
         }
     }
 
-    public async Task<UserData> RegisterUserAsync(string name, string nickName, string email, string password)
+    public async Task<UserData> RegisterUserAsync(
+        string name,
+        string nickName,
+        string email,
+        string password)
     {
-        if (_firestore == null) throw new Exception("FirestoreRepository não injetado");
+        EnsureInitialized();
+        EnsureRepositoriesInjected();
 
         try
         {
+            bool nicknameTaken = await _nicknames.AreNicknameTaken(nickName);
+
+            if (nicknameTaken)
+                throw new Exception("Este nickname já está em uso. Por favor, escolha outro.");
+
             var result = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
+
+            if (result?.User == null)
+                throw new Exception("Registro falhou: resultado ou usuário nulo.");
+
             string token = await result.User.TokenAsync(forceRefresh: true);
+
+            if (string.IsNullOrWhiteSpace(token))
+                throw new Exception("Token vazio após criação do usuário.");
 
             var user = new UserData
             {
@@ -104,14 +138,19 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
                 Email = email,
                 ProfileImageUrl = "",
                 Score = 0,
+                WeekScore = 0,
                 QuestionTypeProgress = 0,
                 CreatedTime = DateTime.UtcNow,
                 IsUserRegistered = true,
                 AnsweredQuestions = new Dictionary<string, List<int>>()
             };
 
-            await _firestore.CreateUserDocument(user).ConfigureAwait(false);
-            await Task.Yield();
+            await _usersRemote.CreateUserDocument(user);
+
+            // Mantém o comportamento antigo do FirestoreRepository.CreateUserDocument:
+            // além de criar Users/{userId}, também reserva Nicknames/{nickName}.
+            await _nicknames.ReserveNickname(nickName, user.UserId);
+
             UserDataStore.CurrentUserData = user;
             return user;
         }
@@ -124,13 +163,18 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
     public async Task LogoutAsync()
     {
+        EnsureInitialized();
+
         try
         {
-            if (!isInitialized) throw new Exception("Firebase não inicializado");
-            AppContext.Firestore?.StopListening();
+            _userRealtimeListeners?.StopListening();
+            AppContext.UserRealtimeListeners?.StopListening();
+
             _auth.SignOut();
             UserDataStore.CurrentUserData = null;
+
             await Task.CompletedTask;
+
             Debug.Log("[AuthRepository] Usuário deslogado com sucesso");
         }
         catch (Exception e)
@@ -143,7 +187,10 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     public async Task ReloadCurrentUserAsync()
     {
         var user = _auth?.CurrentUser;
-        if (user == null) throw new Exception("Nenhum usuário logado");
+
+        if (user == null)
+            throw new Exception("Nenhum usuário logado.");
+
         await user.ReloadAsync();
     }
 
@@ -151,20 +198,23 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     {
         try
         {
-            if (!isInitialized) throw new Exception("Firebase não inicializado");
+            EnsureInitialized();
 
             var user = _auth.CurrentUser;
-            if (user == null) throw new Exception("Usuário não está autenticado");
+
+            if (user == null)
+                throw new Exception("Usuário não está autenticado.");
 
             await user.ReloadAsync();
+
             string token = await user.TokenAsync(true);
 
             if (string.IsNullOrEmpty(token))
-                throw new ReauthenticationRequiredException("Token inválido");
+                throw new ReauthenticationRequiredException("Token inválido.");
 
             Debug.Log("[AuthRepository] Token atualizado com sucesso");
         }
-        catch (Firebase.FirebaseException e) when (e.Message.Contains("recent authentication"))
+        catch (Firebase.FirebaseException e) when (IsRecentAuthenticationRequired(e))
         {
             Debug.LogError("[AuthRepository] É necessário reautenticar");
             throw new ReauthenticationRequiredException("É necessário reautenticar para prosseguir");
@@ -180,22 +230,27 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     {
         try
         {
-            if (!isInitialized) throw new Exception("Firebase não inicializado");
+            EnsureInitialized();
 
             var user = _auth.CurrentUser;
-            if (user == null) throw new Exception("Usuário não está autenticado");
+
+            if (user == null)
+                throw new Exception("Usuário não está autenticado.");
 
             await user.ReloadAsync();
+
             string token = await user.TokenAsync(true);
 
             if (string.IsNullOrEmpty(token))
-                throw new ReauthenticationRequiredException("Token inválido");
+                throw new ReauthenticationRequiredException("Token inválido.");
 
             Debug.Log("[AuthRepository] Token atualizado, tentando deletar usuário...");
+
             await user.DeleteAsync();
+
             Debug.Log("[AuthRepository] Usuário deletado com sucesso do Authentication");
         }
-        catch (Firebase.FirebaseException e) when (e.Message.Contains("requires recent authentication"))
+        catch (Firebase.FirebaseException e) when (IsRecentAuthenticationRequired(e))
         {
             Debug.LogError("[AuthRepository] É necessário reautenticar para deletar o usuário");
             throw new ReauthenticationRequiredException("É necessário reautenticar para deletar a conta");
@@ -211,14 +266,17 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     {
         try
         {
-            if (!isInitialized) throw new Exception("Firebase não inicializado");
-            if (_auth == null) throw new Exception("FirebaseAuth não inicializado");
+            EnsureInitialized();
 
             var user = _auth.CurrentUser;
-            if (user == null) throw new Exception("Usuário não está autenticado");
+
+            if (user == null)
+                throw new Exception("Usuário não está autenticado.");
 
             Credential credential = EmailAuthProvider.GetCredential(email, password);
+
             await user.ReauthenticateAsync(credential);
+
             Debug.Log("[AuthRepository] Usuário reautenticado com sucesso");
         }
         catch (Exception e)
@@ -227,4 +285,35 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
             throw;
         }
     }
-}  
+
+    // -------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------
+
+    private void EnsureInitialized()
+    {
+        if (!isInitialized)
+            throw new Exception("Firebase não inicializado.");
+
+        if (_auth == null)
+            throw new Exception("FirebaseAuth não inicializado.");
+    }
+
+    private static bool IsRecentAuthenticationRequired(Firebase.FirebaseException exception)
+    {
+        string message = exception.Message?.ToLowerInvariant() ?? string.Empty;
+        return message.Contains("recent authentication")
+            || message.Contains("requires-recent-login")
+            || message.Contains("requires recent login")
+            || (message.Contains("recent") && (message.Contains("auth") || message.Contains("login")));
+    }
+
+    private void EnsureRepositoriesInjected()
+    {
+        if (_usersRemote == null)
+            throw new Exception("IFirestoreUserRepository não injetado.");
+
+        if (_nicknames == null)
+            throw new Exception("INicknameRepository não injetado.");
+    }
+}

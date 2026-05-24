@@ -1,5 +1,6 @@
 using QuestionSystem;
-using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,10 @@ public class QuestionAnswerManager : MonoBehaviour
     private TextMeshProUGUI[] buttonTexts;
     private int currentQuestionLevel = 1;
     private bool currentIsImageAnswer = false;
+
+    private CancellationTokenSource _activeLoadCts;
+    private Sprite[] _ownedAnswerSprites;
+    private bool[] _ownedAnswerSpriteTextures;
 
     public event System.Action<int> OnAnswerSelected;
 
@@ -84,10 +89,10 @@ public class QuestionAnswerManager : MonoBehaviour
         }
 
         currentQuestionLevel = question.questionLevel;
-        currentIsImageAnswer = question.isImageAnswer;
-        ApplyTheme(question.questionLevel, question.isImageAnswer);
+        currentIsImageAnswer = question.answerType == AnswerType.Image;
+        ApplyTheme(question.questionLevel, question.answerType == AnswerType.Image);
 
-        if (question.isImageAnswer)
+        if (question.answerType == AnswerType.Image)
         {
             SetupImageAnswers(question);
         }
@@ -200,30 +205,160 @@ public class QuestionAnswerManager : MonoBehaviour
 
     private void SetupImageAnswers(Question question)
     {
-        for (int i = 0; i < imageAnswerButtons.Length && i < question.answers.Length; i++)
+        // Cancela qualquer carga anterior e libera as sprites próprias antes de
+        // disparar as novas requisições assíncronas.
+        CancelActiveLoad();
+        DisposeOwnedSprites();
+
+        _activeLoadCts = new CancellationTokenSource();
+        _ownedAnswerSprites = new Sprite[imageAnswerButtons.Length];
+        _ownedAnswerSpriteTextures = new bool[imageAnswerButtons.Length];
+
+        int count = Mathf.Min(imageAnswerButtons.Length, question.answers?.Length ?? 0);
+
+        for (int i = 0; i < count; i++)
         {
-            if (imageAnswerButtons[i] != null && imageButtonContents[i] != null)
+            if (imageAnswerButtons[i] == null)
             {
-                Sprite sprite = Resources.Load<Sprite>(question.answers[i]);
-                if (sprite != null)
+                Debug.LogError($"imageAnswerButtons[{i}] é null!");
+                continue;
+            }
+            if (imageButtonContents[i] == null)
+            {
+                Debug.LogError($"imageButtonContents[{i}] é null!");
+                continue;
+            }
+
+            string imagePath = question.answers[i];
+            if (!QuestionStorageKeys.LooksLikeImagePath(imagePath))
+            {
+                Debug.LogWarning($"Resposta {i} não parece um path de imagem: '{imagePath}'.");
+                continue;
+            }
+
+            // imagePath já é:
+            //   - Preview mode: path legado do C# database (ex: "AnswerImages/AminoacidsDB/.../isoleucina")
+            //   - Dev/Prod mode: storage key do Firestore (ex: "aminoacids/isoleucina")
+            // LoadAnswerImageAsync distingue os dois casos via AppContext.ImageSync.
+            int buttonIndex = i;  // captura para o lambda
+            imageAnswerButtons[i].interactable = false;
+            _ = LoadAnswerImageAsync(buttonIndex, imagePath, _activeLoadCts.Token);
+        }
+    }
+
+    private async Task LoadAnswerImageAsync(int buttonIndex, string imagePath, CancellationToken ct)
+    {
+        Texture2D texture = null;
+        bool ownsTexture = false;
+
+        try
+        {
+            // Preview mode: AppContext.ImageSync é null — lê direto de Resources.
+            // imagePath é o path legado do C# database (ex: "AnswerImages/AminoacidsDB/.../isoleucina").
+            if (AppContext.ImageSync == null)
+            {
+                texture = Resources.Load<Texture2D>(imagePath);
+                if (texture == null)
                 {
-                    imageButtonContents[i].sprite = sprite;
-                    imageAnswerButtons[i].interactable = true;
-                    Debug.Log($"Imagem carregada para o botão {i}: {question.answers[i]}");
-                }
-                else
-                {
-                    Debug.LogError($"Falha ao carregar imagem: {question.answers[i]}");
+                    Debug.LogWarning($"[QuestionAnswerManager] Preview mode — imagem não encontrada em Resources: '{imagePath}'.");
+                    return;
                 }
             }
             else
             {
-                if (imageAnswerButtons[i] == null)
-                    Debug.LogError($"imageAnswerButtons[{i}] é null!");
-                if (imageButtonContents[i] == null)
-                    Debug.LogError($"imageButtonContents[{i}] é null!");
+                // Dev/Prod mode: imagePath é storage key (ex: "aminoacids/isoleucina").
+                texture = await AppContext.ImageSync.GetImageAsync(imagePath, ct);
+                ownsTexture = true;
+                if (ct.IsCancellationRequested || texture == null)
+                {
+                    if (texture != null) Destroy(texture);
+                    return;
+                }
             }
+
+            // Pode ter caído fora do range se a UI foi reconfigurada nesse meio tempo.
+            if (buttonIndex >= imageButtonContents.Length || imageButtonContents[buttonIndex] == null)
+            {
+                if (AppContext.ImageSync != null) Destroy(texture); // não destruir textures de Resources
+                return;
+            }
+
+            var sprite = Sprite.Create(
+                texture,
+                new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                100f);
+
+            // Limpa a sprite anterior (se a tivermos criado nós mesmos)
+            if (_ownedAnswerSprites != null &&
+                buttonIndex < _ownedAnswerSprites.Length &&
+                _ownedAnswerSprites[buttonIndex] != null)
+            {
+                bool destroyTexture = _ownedAnswerSpriteTextures != null &&
+                                      buttonIndex < _ownedAnswerSpriteTextures.Length &&
+                                      _ownedAnswerSpriteTextures[buttonIndex];
+                DestroySpriteAndTexture(_ownedAnswerSprites[buttonIndex], destroyTexture);
+            }
+
+            imageButtonContents[buttonIndex].sprite = sprite;
+            if (_ownedAnswerSprites != null && buttonIndex < _ownedAnswerSprites.Length)
+            {
+                _ownedAnswerSprites[buttonIndex] = sprite;
+                if (_ownedAnswerSpriteTextures != null && buttonIndex < _ownedAnswerSpriteTextures.Length)
+                    _ownedAnswerSpriteTextures[buttonIndex] = ownsTexture;
+            }
+
+            if (buttonIndex < imageAnswerButtons.Length && imageAnswerButtons[buttonIndex] != null)
+                imageAnswerButtons[buttonIndex].interactable = true;
+
+            Debug.Log($"Imagem carregada para o botão {buttonIndex}: {imagePath}");
         }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Erro ao carregar imagem da resposta '{imagePath}': {e.Message}");
+        }
+    }
+
+    private void CancelActiveLoad()
+    {
+        if (_activeLoadCts == null) return;
+        try { _activeLoadCts.Cancel(); } catch { /* noop */ }
+        _activeLoadCts.Dispose();
+        _activeLoadCts = null;
+    }
+
+    private void DisposeOwnedSprites()
+    {
+        if (_ownedAnswerSprites == null) return;
+        for (int i = 0; i < _ownedAnswerSprites.Length; i++)
+        {
+            if (_ownedAnswerSprites[i] != null)
+            {
+                bool destroyTexture = _ownedAnswerSpriteTextures != null &&
+                                      i < _ownedAnswerSpriteTextures.Length &&
+                                      _ownedAnswerSpriteTextures[i];
+                DestroySpriteAndTexture(_ownedAnswerSprites[i], destroyTexture);
+            }
+            _ownedAnswerSprites[i] = null;
+            if (_ownedAnswerSpriteTextures != null && i < _ownedAnswerSpriteTextures.Length)
+                _ownedAnswerSpriteTextures[i] = false;
+        }
+        _ownedAnswerSprites = null;
+        _ownedAnswerSpriteTextures = null;
+    }
+
+    private void DestroySpriteAndTexture(Sprite sprite, bool destroyTexture)
+    {
+        if (sprite == null) return;
+        var tex = sprite.texture;
+        Destroy(sprite);
+        if (destroyTexture && tex != null) Destroy(tex);
+    }
+
+    private void OnDestroy()
+    {
+        CancelActiveLoad();
+        DisposeOwnedSprites();
     }
 
     private void SetupTextAnswers(Question question)

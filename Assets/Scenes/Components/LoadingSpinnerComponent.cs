@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using System.Collections;
+using TMPro;
 
 public class LoadingSpinnerComponent : MonoBehaviour
 {
@@ -9,277 +8,123 @@ public class LoadingSpinnerComponent : MonoBehaviour
     [SerializeField] private GameObject spinnerContainer;
     [SerializeField] private Image spinnerBackground;
     [SerializeField] private Image spinnerBorder;
+    [SerializeField] private TMP_Text messageLabel;
 
     [Header("Configuration")]
     [SerializeField] private float rotationSpeed = 100f;
     [SerializeField] private bool rotateBackground = false;
+    [SerializeField] private bool showOnAwake = false;
 
-    private static LoadingSpinnerComponent _instance;
-    private bool waitForSceneLoad = false;
-    private string sceneToWaitFor = string.Empty;
-    private bool isInitialized = false;
-
-    public static LoadingSpinnerComponent Instance
-    {
-        get
-        {
-            // Only create a new instance if one doesn't exist
-            if (_instance == null)
-            {
-                // First try to find an existing instance
-                _instance = FindFirstObjectByType<LoadingSpinnerComponent>();
-
-                // If still null, create one
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("GlobalLoadingSpinner");
-                    _instance = go.AddComponent<LoadingSpinnerComponent>();
-                    DontDestroyOnLoad(go);
-                }
-            }
-
-            return _instance;
-        }
-    }
+    private CanvasGroup canvasGroup;
+    private GraphicRaycaster graphicRaycaster;
 
     private void Awake()
     {
-        // Handle singleton pattern
-        if (_instance != null && _instance != this)
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
         {
-            Destroy(gameObject);
-            return;
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
+        graphicRaycaster = GetComponent<GraphicRaycaster>();
 
-        // Only initialize if not already initialized
-        if (!isInitialized)
+        if (spinnerContainer == null)
         {
-            SafeInitialize();
+            Debug.LogError("[LoadingSpinner] spinnerContainer não foi vinculado no prefab.");
         }
-    }
 
-    private void SafeInitialize()
-    {
-        try
+        if (showOnAwake)
         {
-            // Create the UI components if they don't exist
-            if (spinnerContainer == null || spinnerBackground == null || spinnerBorder == null)
-            {
-                CreateSpinnerUI();
-            }
-            
-            isInitialized = true;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Error initializing LoadingSpinnerComponent: {e.Message}");
-        }
-    }
-
-    private void CreateSpinnerUI()
-    {
-        // Create canvas if needed
-        Canvas canvas = GetComponent<Canvas>();
-        if (canvas == null)
-        {
-            canvas = gameObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 10000;
+            ShowSpinner();
         }
         else
         {
-            canvas.sortingOrder = 10000;
+            HideSpinner();
         }
-
-        // Add canvas scaler
-        CanvasScaler scaler = GetComponent<CanvasScaler>();
-        if (scaler == null)
-        {
-            scaler = gameObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1080, 1920);
-        }
-
-        // Add raycaster
-        GraphicRaycaster raycaster = GetComponent<GraphicRaycaster>();
-        if (raycaster == null)
-        {
-            raycaster = gameObject.AddComponent<GraphicRaycaster>();
-        }
-
-        // Create container
-        spinnerContainer = new GameObject("SpinnerContainer");
-        spinnerContainer.transform.SetParent(transform, false);
-
-        // Create background
-        GameObject background = new GameObject("DarkBackground");
-        background.transform.SetParent(spinnerContainer.transform, false);
-
-        Image bgImage = background.AddComponent<Image>();
-        bgImage.color = new Color(0, 0, 0, 0.5f);
-        bgImage.raycastTarget = true;
-        
-        CanvasGroup canvasGroup = background.AddComponent<CanvasGroup>();
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
-
-        RectTransform bgRect = background.GetComponent<RectTransform>();
-        bgRect.anchorMin = Vector2.zero;
-        bgRect.anchorMax = Vector2.one;
-        bgRect.offsetMin = Vector2.zero;
-        bgRect.offsetMax = Vector2.zero;
-
-        // Create spinner background
-        GameObject centerObj = new GameObject("SpinnerBackground");
-        centerObj.transform.SetParent(spinnerContainer.transform, false);
-        spinnerBackground = centerObj.AddComponent<Image>();
-
-        // Try to load sprite or use fallback color
-        Sprite backgroundSprite = Resources.Load<Sprite>("UI/TEC_spinnerImage_300x300");
-        if (backgroundSprite != null)
-        {
-            spinnerBackground.sprite = backgroundSprite;
-        }
-        else
-        {
-            spinnerBackground.color = new Color(1f, 0.84f, 0f);
-        }
-
-        RectTransform centerRect = centerObj.GetComponent<RectTransform>();
-        centerRect.anchorMin = new Vector2(0.5f, 0.5f);
-        centerRect.anchorMax = new Vector2(0.5f, 0.5f);
-        centerRect.sizeDelta = new Vector2(150, 150);
-
-        // Create spinner border
-        GameObject borderObj = new GameObject("SpinnerBorder");
-        borderObj.transform.SetParent(spinnerContainer.transform, false);
-        spinnerBorder = borderObj.AddComponent<Image>();
-
-        // Try to load sprite or use fallback color
-        Sprite borderSprite = Resources.Load<Sprite>("UI/miniLogo_bioBlocks_border");
-        if (borderSprite != null)
-        {
-            spinnerBorder.sprite = borderSprite;
-        }
-        else
-        {
-            spinnerBorder.color = new Color(0.8f, 0.2f, 0.2f);
-        }
-
-        RectTransform borderRect = borderObj.GetComponent<RectTransform>();
-        borderRect.anchorMin = new Vector2(0.5f, 0.5f);
-        borderRect.anchorMax = new Vector2(0.5f, 0.5f);
-        borderRect.sizeDelta = new Vector2(200, 200);
-        
-        // Hide spinner initially
-        spinnerContainer.SetActive(false);
-    }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void Update()
     {
-        if (spinnerContainer != null && spinnerContainer.activeSelf)
-        {
-            // Rotate border
-            if (spinnerBorder != null)
-            {
-                spinnerBorder.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
-            }
+        if (spinnerContainer == null || !spinnerContainer.activeSelf)
+            return;
 
-            // Rotate background if enabled
-            if (rotateBackground && spinnerBackground != null)
-            {
-                spinnerBackground.transform.Rotate(0, 0, rotationSpeed * 0.2f * Time.deltaTime);
-            }
-        }
-    }
-
-    // Safe method to verify and fix spinner visibility
-    public void VerifyAndFixSpinnerVisibility()
-    {
-        // If not initialized or components are missing, initialize again
-        if (!isInitialized || spinnerContainer == null || spinnerBackground == null || spinnerBorder == null)
+        if (spinnerBorder != null)
         {
-            SafeInitialize();
+            spinnerBorder.transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
         }
 
-        // Only proceed if we have valid components
-        if (spinnerContainer != null)
+        if (rotateBackground && spinnerBackground != null)
         {
-            spinnerContainer.SetActive(true);
-
-            // Ensure spinner components are visible
-            if (spinnerBackground != null)
-            {
-                spinnerBackground.gameObject.SetActive(true);
-            }
-
-            if (spinnerBorder != null)
-            {
-                spinnerBorder.gameObject.SetActive(true);
-            }
+            spinnerBackground.transform.Rotate(0, 0, rotationSpeed * 0.2f * Time.deltaTime);
         }
-        else
-        {
-            Debug.LogWarning("Unable to show spinner - container is null after initialization");
-        }
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (waitForSceneLoad && scene.name == sceneToWaitFor)
-        {
-            StartCoroutine(HideSpinnerDelayed(0.2f));
-        }
-    }
-
-    private IEnumerator HideSpinnerDelayed(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        HideSpinner();
-    }
-
-    public void ShowSpinnerUntilSceneLoaded(string sceneName)
-    {
-        waitForSceneLoad = true;
-        sceneToWaitFor = sceneName;
-        ShowSpinner();
     }
 
     public void ShowSpinner()
     {
-        VerifyAndFixSpinnerVisibility();
+        if (spinnerContainer != null)
+        {
+            spinnerContainer.SetActive(true);
+        }
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+
+        if (graphicRaycaster != null)
+        {
+            graphicRaycaster.enabled = true;
+        }
+
+        SetRaycastTargets(true);
+
+        Debug.Log("[LoadingSpinner] Spinner local mostrado.");
     }
 
     public void HideSpinner()
     {
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+
+        if (graphicRaycaster != null)
+        {
+            graphicRaycaster.enabled = false;
+        }
+
+        SetRaycastTargets(false);
+
         if (spinnerContainer != null)
         {
             spinnerContainer.SetActive(false);
-            waitForSceneLoad = false;
-            sceneToWaitFor = string.Empty;
+        }
+
+        Debug.Log("[LoadingSpinner] Spinner local escondido.");
+    }
+
+    public void SetMessage(string message)
+    {
+        if (messageLabel != null)
+        {
+            messageLabel.text = message;
         }
     }
 
-    private void OnDrawGizmos()
+    private void SetRaycastTargets(bool enabled)
     {
-        if (spinnerContainer != null && spinnerContainer.activeSelf)
+        if (spinnerContainer == null)
+            return;
+
+        Graphic[] graphics = spinnerContainer.GetComponentsInChildren<Graphic>(true);
+
+        foreach (Graphic graphic in graphics)
         {
-            // Draw a gizmo when the spinner is active
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, 1f);
+            graphic.raycastTarget = enabled;
         }
     }
 }

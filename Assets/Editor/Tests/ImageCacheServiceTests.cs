@@ -1,21 +1,22 @@
 // Assets/Editor/Tests/ImageCacheServiceTests.cs
 // Testes unitários para ImageCacheService — cobrindo apenas a lógica pura.
 //
-// O que É testado aqui (sem filesystem nem Texture2D):
+// O que É testado aqui (sem Texture2D):
 //   - GetCachedImagePath: URL nula/vazia, cache não inicializado, cache expirado,
-//     entrada inexistente no DB
-//   - GetCachedImagesCount e GetTotalCacheSize: com entradas no FakeLiteDB
-//   - ClearAllCache: esvazia a coleção no DB
+//     entrada inexistente em disco
+//   - GetCachedImagesCount e GetTotalCacheSize: com arquivos reais no cache isolado
+//   - ClearAllCache: remove os arquivos do cache isolado
 //   - IsInitialized: estado após InjectDependencies
 //
-// O que NÃO é testado aqui (requer Play Mode ou filesystem real):
+// O que NÃO é testado aqui (requer Play Mode):
 //   - SaveImageToCache (depende de Texture2D.EncodeToPNG e File.WriteAllBytes)
 //   - LoadImageFromCache (depende de File.ReadAllBytes e Texture2D.LoadImage)
-//   - GetCachedImagePath com arquivo em disco (depende de File.Exists)
 //   - ResizeTexture (depende de RenderTexture e Graphics.Blit)
 
 using NUnit.Framework;
 using System;
+using System.IO;
+using System.Reflection;
 using UnityEngine;
 
 [TestFixture]
@@ -25,49 +26,77 @@ public class ImageCacheServiceTests
     // Fixtures
     // -------------------------------------------------------
 
-    private FakeLiteDBManager  _db;
     private ImageCacheService  _service;
     private GameObject         _serviceGO;
+    private string             _testCacheDirectory;
+
+    private static readonly byte[] PngSignature =
+    {
+        0x89, 0x50, 0x4E, 0x47,
+        0x0D, 0x0A, 0x1A, 0x0A
+    };
 
     [SetUp]
     public void Setup()
     {
-        _db = new FakeLiteDBManager();
-
         _serviceGO = new GameObject("ImageCacheService");
         _service   = _serviceGO.AddComponent<ImageCacheService>();
-        _service.InjectDependencies(_db);
+        _service.InjectDependencies();
+
+        _testCacheDirectory = Path.Combine(
+            Path.GetTempPath(),
+            "BioBlocks_ImageCacheServiceTests_" + Guid.NewGuid().ToString("N")
+        );
+
+        Directory.CreateDirectory(_testCacheDirectory);
+        SetCacheDirectory(_service, _testCacheDirectory);
     }
 
     [TearDown]
     public void TearDown()
     {
-        _db.Close();
         if (_serviceGO != null)
             UnityEngine.Object.DestroyImmediate(_serviceGO);
+
+        if (!string.IsNullOrEmpty(_testCacheDirectory) && Directory.Exists(_testCacheDirectory))
+            Directory.Delete(_testCacheDirectory, recursive: true);
     }
 
     // -------------------------------------------------------
-    // Helper: insere uma entrada diretamente no FakeLiteDB
-    // sem passar pelo filesystem
+    // Helper: salva bytes PNG diretamente no cache isolado do teste.
     // -------------------------------------------------------
 
-    private void InsertCacheEntry(
+    private string SaveCacheEntry(
         string url,
         long   sizeBytes,
-        bool   expired     = false,
-        string localPath   = "/fake/path/img.png")
+        bool   expired     = false)
     {
-        _db.CachedImages.Upsert(new CachedImageDB
+        byte[] bytes = MakePngLikeBytes(sizeBytes);
+        _service.SaveImageBytesToCache(url, bytes);
+
+        string localPath = _service.GetCachedImagePath(url);
+
+        if (expired && localPath != null)
         {
-            ImageUrl      = url,
-            LocalPath     = localPath,
-            CachedAt      = DateTime.UtcNow.AddDays(-1),
-            ExpiresAt     = expired
-                                ? DateTime.UtcNow.AddDays(-1)   // já expirou
-                                : DateTime.UtcNow.AddDays(7),   // válido por 7 dias
-            FileSizeBytes = sizeBytes
-        });
+            File.SetLastWriteTimeUtc(localPath, DateTime.UtcNow.AddDays(-8));
+        }
+
+        return localPath;
+    }
+
+    private static byte[] MakePngLikeBytes(long sizeBytes)
+    {
+        int size = (int)Math.Max(PngSignature.Length, sizeBytes);
+        byte[] bytes = new byte[size];
+        Array.Copy(PngSignature, bytes, PngSignature.Length);
+        return bytes;
+    }
+
+    private static void SetCacheDirectory(ImageCacheService service, string path)
+    {
+        typeof(ImageCacheService)
+            .GetField("_cacheDirectory", BindingFlags.Instance | BindingFlags.NonPublic)
+            .SetValue(service, path);
     }
 
     // =======================================================
@@ -110,9 +139,8 @@ public class ImageCacheServiceTests
     }
 
     [Test]
-    public void GetCachedImagePath_EntradaInexistenteNoDB_RetornaNull()
+    public void GetCachedImagePath_EntradaInexistenteEmDisco_RetornaNull()
     {
-        // Nenhuma entrada no FakeLiteDB para esta URL
         var result = _service.GetCachedImagePath("https://example.com/foto.png");
         Assert.IsNull(result);
     }
@@ -120,10 +148,7 @@ public class ImageCacheServiceTests
     [Test]
     public void GetCachedImagePath_EntradaExpirada_RetornaNull()
     {
-        // Entrada existe no DB mas já passou do ExpiresAt
-        // File.Exists retornará false para "/fake/path" — o comportamento
-        // de expiração também cobre este caso (ExpiresAt < UtcNow → remove e retorna null)
-        InsertCacheEntry("https://example.com/foto.png", sizeBytes: 1024, expired: true);
+        SaveCacheEntry("https://example.com/foto.png", sizeBytes: 1024, expired: true);
 
         var result = _service.GetCachedImagePath("https://example.com/foto.png");
 
@@ -131,15 +156,14 @@ public class ImageCacheServiceTests
     }
 
     [Test]
-    public void GetCachedImagePath_EntradaExpirada_RemoveDoDb()
+    public void GetCachedImagePath_EntradaExpirada_RemoveArquivo()
     {
-        InsertCacheEntry("https://example.com/foto.png", sizeBytes: 1024, expired: true);
+        string localPath = SaveCacheEntry("https://example.com/foto.png", sizeBytes: 1024, expired: true);
 
         _service.GetCachedImagePath("https://example.com/foto.png");
 
-        // Após retornar null por expiração, a entrada deve ter sido removida do DB
-        Assert.AreEqual(0, _db.CachedImages.Count(),
-            "Entrada expirada deve ser removida do DB ao ser acessada");
+        Assert.IsFalse(File.Exists(localPath),
+            "Arquivo expirado deve ser removido do cache ao ser acessado");
     }
 
     // =======================================================
@@ -147,7 +171,7 @@ public class ImageCacheServiceTests
     // =======================================================
 
     [Test]
-    public void GetCachedImagesCount_DBVazio_RetornaZero()
+    public void GetCachedImagesCount_CacheVazio_RetornaZero()
     {
         Assert.AreEqual(0, _service.GetCachedImagesCount());
     }
@@ -155,8 +179,8 @@ public class ImageCacheServiceTests
     [Test]
     public void GetCachedImagesCount_ComDuasEntradas_RetornaDois()
     {
-        InsertCacheEntry("https://example.com/img1.png", sizeBytes: 1024);
-        InsertCacheEntry("https://example.com/img2.png", sizeBytes: 2048);
+        SaveCacheEntry("https://example.com/img1.png", sizeBytes: 1024);
+        SaveCacheEntry("https://example.com/img2.png", sizeBytes: 2048);
 
         Assert.AreEqual(2, _service.GetCachedImagesCount());
     }
@@ -178,7 +202,7 @@ public class ImageCacheServiceTests
     // =======================================================
 
     [Test]
-    public void GetTotalCacheSize_DBVazio_RetornaZero()
+    public void GetTotalCacheSize_CacheVazio_RetornaZero()
     {
         Assert.AreEqual(0L, _service.GetTotalCacheSize());
     }
@@ -186,9 +210,9 @@ public class ImageCacheServiceTests
     [Test]
     public void GetTotalCacheSize_SomaCorretamente()
     {
-        InsertCacheEntry("https://example.com/img1.png", sizeBytes: 1_000_000);
-        InsertCacheEntry("https://example.com/img2.png", sizeBytes: 2_000_000);
-        InsertCacheEntry("https://example.com/img3.png", sizeBytes:   500_000);
+        SaveCacheEntry("https://example.com/img1.png", sizeBytes: 1_000_000);
+        SaveCacheEntry("https://example.com/img2.png", sizeBytes: 2_000_000);
+        SaveCacheEntry("https://example.com/img3.png", sizeBytes:   500_000);
 
         long total = _service.GetTotalCacheSize();
 
@@ -211,29 +235,29 @@ public class ImageCacheServiceTests
     // =======================================================
 
     [Test]
-    public void ClearAllCache_DBVazio_NaoLancaExcecao()
+    public void ClearAllCache_CacheVazio_NaoLancaExcecao()
     {
         Assert.DoesNotThrow(() => _service.ClearAllCache());
     }
 
     [Test]
-    public void ClearAllCache_ComEntradas_EsvaziaCachedImagesNoDB()
+    public void ClearAllCache_ComArquivos_RemoveTodosDoCache()
     {
-        InsertCacheEntry("https://example.com/img1.png", sizeBytes: 1024);
-        InsertCacheEntry("https://example.com/img2.png", sizeBytes: 2048);
-        InsertCacheEntry("https://example.com/img3.png", sizeBytes: 512);
+        SaveCacheEntry("https://example.com/img1.png", sizeBytes: 1024);
+        SaveCacheEntry("https://example.com/img2.png", sizeBytes: 2048);
+        SaveCacheEntry("https://example.com/img3.png", sizeBytes: 512);
 
         _service.ClearAllCache();
 
-        Assert.AreEqual(0, _db.CachedImages.Count(),
-            "ClearAllCache deve remover todas as entradas do DB");
+        Assert.AreEqual(0, _service.GetCachedImagesCount(),
+            "ClearAllCache deve remover todos os arquivos do cache");
     }
 
     [Test]
     public void ClearAllCache_GetCachedImagesCountVoltaAZero()
     {
-        InsertCacheEntry("https://example.com/img1.png", sizeBytes: 1024);
-        InsertCacheEntry("https://example.com/img2.png", sizeBytes: 2048);
+        SaveCacheEntry("https://example.com/img1.png", sizeBytes: 1024);
+        SaveCacheEntry("https://example.com/img2.png", sizeBytes: 2048);
 
         _service.ClearAllCache();
 
@@ -243,7 +267,7 @@ public class ImageCacheServiceTests
     [Test]
     public void ClearAllCache_GetTotalCacheSizeVoltaAZero()
     {
-        InsertCacheEntry("https://example.com/img1.png", sizeBytes: 1_000_000);
+        SaveCacheEntry("https://example.com/img1.png", sizeBytes: 1_000_000);
 
         _service.ClearAllCache();
 

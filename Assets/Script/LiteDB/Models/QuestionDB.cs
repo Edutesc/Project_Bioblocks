@@ -20,8 +20,8 @@ public class QuestionDB
     public string[] Answers               { get; set; }
     public int      CorrectIndex          { get; set; }
     public int      QuestionNumber        { get; set; }
-    public bool     IsImageAnswer         { get; set; }
-    public bool     IsImageQuestion       { get; set; }
+    public AnswerType   AnswerType   { get; set; }
+    public QuestionType QuestionType { get; set; }
     public string   QuestionImagePath     { get; set; }
     public int      QuestionLevel         { get; set; }
     public bool     QuestionInDevelopment { get; set; }
@@ -30,7 +30,7 @@ public class QuestionDB
     public string       Topic        { get; set; }
     public string       DisplayName  { get; set; }
     public string       Subtopic     { get; set; }
-    public string       BloomLevel   { get; set; }
+    public BloomLevel   BloomLevel   { get; set; }
     public List<string> ConceptTags  { get; set; }
     public List<string> Prerequisites{ get; set; }
 
@@ -63,15 +63,15 @@ public class QuestionDB
             Answers               = q.answers               ?? new string[0],
             CorrectIndex          = q.correctIndex,
             QuestionNumber        = q.questionNumber,
-            IsImageAnswer         = q.isImageAnswer,
-            IsImageQuestion       = q.isImageQuestion,
+            AnswerType            = q.answerType,
+            QuestionType          = q.questionType,
             QuestionImagePath     = q.questionImagePath     ?? "",
             QuestionLevel         = q.questionLevel,
             QuestionInDevelopment = q.questionInDevelopment,
             Topic                 = q.topic                 ?? "",
             DisplayName           = q.displayName           ?? "",
             Subtopic              = q.subtopic              ?? "",
-            BloomLevel            = q.bloomLevel            ?? "unclassified",
+            BloomLevel            = q.bloomLevel,
             ConceptTags           = q.conceptTags           ?? new List<string>(),
             Prerequisites         = q.prerequisites         ?? new List<string>(),
             HintImagePath         = q.questionHint?.imagePath ?? "",
@@ -92,8 +92,8 @@ public class QuestionDB
             answers               = Answers ?? new string[0],
             correctIndex          = CorrectIndex,
             questionNumber        = QuestionNumber,
-            isImageAnswer         = IsImageAnswer,
-            isImageQuestion       = IsImageQuestion,
+            answerType            = AnswerType,
+            questionType          = QuestionType,
             questionImagePath     = QuestionImagePath,
             questionLevel         = QuestionLevel,
             questionInDevelopment = QuestionInDevelopment,
