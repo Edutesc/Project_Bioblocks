@@ -126,6 +126,10 @@ public static class FirestoreUserDataMapper
             { "WeekScore",            userData.WeekScore },
             { "QuestionTypeProgress", userData.QuestionTypeProgress },
             { "IsUserRegistered",     userData.IsUserRegistered },
+            { "PlayerLevel",          userData.PlayerLevel },
+            { "TotalValidQuestionsAnswered",  userData.TotalValidQuestionsAnswered },
+            { "TotalQuestionsInAllDatabanks", userData.TotalQuestionsInAllDatabanks },
+            { "LevelSnapshotDenominator",     userData.LevelSnapshotDenominator },
             { "CreatedTime",          Timestamp.FromDateTime(
                 DateTime.SpecifyKind(userData.CreatedTime, DateTimeKind.Utc)) },
             { "ProfileImageUrl",      userData.ProfileImageUrl },

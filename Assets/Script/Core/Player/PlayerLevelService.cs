@@ -178,6 +178,37 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             if (snapshot <= 0)
             {
                 int currentTotal = GetTotalQuestionsCount();
+                if (currentTotal <= 0)
+                {
+                    Debug.LogWarning("[PlayerLevelService] Snapshot pendente: total canônico ainda indisponível. Migração será retomada quando houver total válido.");
+
+                    if (answeredMismatch)
+                    {
+                        AppContext.UserDataLocal?.UpdateUser(_currentUserData);
+
+                        if (Application.internetReachability != NetworkReachability.NotReachable)
+                        {
+                            try
+                            {
+                                await _firestore.UpdateUserField(_currentUserData.UserId,
+                                    "TotalValidQuestionsAnswered", correctedTotal);
+                                AppContext.UserDataLocal?.MarkAsSynced(_currentUserData.UserId);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogWarning($"[PlayerLevelService] Firestore offline na migração parcial: {e.Message}");
+                                AppContext.UserDataLocal?.MarkAsDirty(_currentUserData.UserId);
+                            }
+                        }
+                        else
+                        {
+                            AppContext.UserDataLocal?.MarkAsDirty(_currentUserData.UserId);
+                        }
+                    }
+
+                    return;
+                }
+
                 snapshot = ComputeInitialSnapshotForLevel(storedLevel, correctedTotal, currentTotal);
                 _currentUserData.LevelSnapshotDenominator = snapshot;
                 Debug.Log($"[PlayerLevelService] Snapshot inicial derivado: storedLevel={storedLevel}, answered={correctedTotal}, currentTotal={currentTotal} → snapshot={snapshot}");
@@ -257,7 +288,10 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     /// </summary>
     private int ComputeInitialSnapshotForLevel(int storedLevel, int answered, int currentTotal)
     {
-        int safeCurrentTotal = Mathf.Max(1, currentTotal);
+        if (currentTotal <= 0)
+            return 0;
+
+        int safeCurrentTotal = currentTotal;
 
         if (storedLevel <= 1 || answered <= 0)
             return safeCurrentTotal;
@@ -465,12 +499,17 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         if (denominator <= 0) return 0f;
 
         int currentLevel   = _currentUserData.PlayerLevel;
-        var threshold      = PlayerLevelConfig.GetThresholdForLevel(currentLevel);
+        var currentThreshold = PlayerLevelConfig.GetThresholdForLevel(currentLevel);
+        int levelStart = currentThreshold.GetMinRequiredQuestions(denominator);
+        int levelEnd = currentLevel >= PlayerLevelConfig.MaxLevel
+            ? denominator
+            : PlayerLevelConfig.GetThresholdForLevel(currentLevel + 1)
+                .GetMinRequiredQuestions(denominator);
 
-        float currentPercentage = (float)_currentUserData.TotalValidQuestionsAnswered / denominator;
-        float levelRange        = threshold.MaxPercentage - threshold.MinPercentage;
-        if (levelRange <= 0f) return 1f;
-        float progressInLevel   = (currentPercentage - threshold.MinPercentage) / levelRange;
+        int levelRange = levelEnd - levelStart;
+        if (levelRange <= 0) return 1f;
+
+        float progressInLevel = (float)(_currentUserData.TotalValidQuestionsAnswered - levelStart) / levelRange;
 
         return Mathf.Clamp01(progressInLevel);
     }
@@ -518,6 +557,8 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         int answered     = _currentUserData?.TotalValidQuestionsAnswered ?? 0;
         int storedLevel  = _currentUserData?.PlayerLevel ?? 1;
         int currentTotal = GetTotalQuestionsCount();
+        if (currentTotal <= 0) return 0;
+
         return ComputeInitialSnapshotForLevel(storedLevel, answered, currentTotal);
     }
 

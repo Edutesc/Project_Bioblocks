@@ -57,26 +57,6 @@ public static class PlayerLevelConfig
             return CeilExact(totalQuestions, MinPercentage);
         }
 
-        // Mathf.CeilToInt(total * pct) e mesmo (double)total * (double)pct sofrem
-        // de off-by-one por imprecisão de float: ex. 100 * 0.60f = 60.0000023 →
-        // Ceiling = 61. Um epsilon absoluto não resolve porque o drift escala com
-        // o total (para total=1e6 o erro chega a ~1.5e-3, estourando epsilons
-        // pequenos) e porque 0.10f drifta no sentido positivo (0.10000000149...),
-        // o que faz 100 * 0.10f = 10.00000015 → Ceiling = 11.
-        //
-        // Solução robusta: converter a porcentagem para permille (milésimos) via
-        // Round — isso colapsa a imprecisão de float para o inteiro mais próximo
-        // (0.60f → 600, 0.10f → 100) — e fazer o resto em aritmética inteira pura.
-        // ceil(a/b) = (a + b - 1) / b para inteiros positivos.
-        private static int CeilExact(int totalQuestions, float percentage)
-        {
-            if (totalQuestions <= 0) return 0;
-            if (percentage <= 0f)    return 0;
-
-            int permille = (int)System.Math.Round((double)percentage * 1000.0);
-            long numerator = (long)totalQuestions * (long)permille;
-            return (int)((numerator + 999L) / 1000L);
-        }
     }
 
     /// <summary>
@@ -103,12 +83,8 @@ public static class PlayerLevelConfig
         if (totalQuestions <= 0)      return 1;
         if (questionsAnswered <= 0)   return 1;
 
-        // Clamp em [0, 1] — defensivo contra denominadores inconsistentes.
         float percentage = Mathf.Clamp01((float)questionsAnswered / totalQuestions);
 
-        // Se todas as questões foram respondidas, vai para o nível máximo.
-        // Necessário porque a faixa do último nível é [0.90, 1.00) — exclusive
-        // no limite superior, então 1.0f não casa no foreach abaixo.
         if (percentage >= 1.0f) return MaxLevel;
 
         foreach (var threshold in LEVEL_THRESHOLDS)
@@ -117,7 +93,6 @@ public static class PlayerLevelConfig
                 return threshold.Level;
         }
 
-        // Teoricamente inatingível após o clamp; fallback defensivo para nível 1.
         return 1;
     }
 
@@ -157,5 +132,16 @@ public static class PlayerLevelConfig
                 return threshold;
         }
         return LEVEL_THRESHOLDS[0];
+    }
+
+    private static int CeilExact(int totalQuestions, float percentage)
+    {
+        if (totalQuestions <= 0) return 0;
+        if (percentage <= 0f) return 0;
+
+        // Evita off-by-one de float fazendo ceil em permille com inteiros.
+        int permille = (int)System.Math.Round((double)percentage * 1000.0);
+        long numerator = (long)totalQuestions * (long)permille;
+        return (int)((numerator + 999L) / 1000L);
     }
 }
