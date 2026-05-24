@@ -72,7 +72,7 @@ public class HalfViewComponent : MonoBehaviour
 
     private void OnEnable()
     {
-        SetupButtonListeners();
+        SetupButtonListenersIfAllowed();
     }
 
     private void Start()
@@ -85,7 +85,7 @@ public class HalfViewComponent : MonoBehaviour
             menuPanel.anchoredPosition = hiddenPosition;
         }
 
-        SetupButtonListeners();
+        SetupButtonListenersIfAllowed();
         SetupOverlay();
         CollectInteractableElements();
 
@@ -151,6 +151,26 @@ public class HalfViewComponent : MonoBehaviour
         visiblePosition = new Vector2(0, 0);
     }
 
+    private void SetupButtonListenersIfAllowed()
+    {
+        if (preventButtonReconfiguration)
+        {
+            SetupTriggerButtonListener();
+            return;
+        }
+
+        SetupButtonListeners();
+    }
+
+    private void SetupTriggerButtonListener()
+    {
+        if (triggerButton == null) return;
+
+        triggerButton.onClick.RemoveListener(ToggleMenu);
+        triggerButton.onClick.AddListener(ToggleMenu);
+        Debug.Log("[HalfViewComponent] Trigger button configurado");
+    }
+
     private void SetupButtonListeners()
     {
         if (_primaryButton != null)
@@ -204,12 +224,7 @@ public class HalfViewComponent : MonoBehaviour
             Debug.Log("[HalfViewComponent] Close button configurado");
         }
 
-        if (triggerButton != null)
-        {
-            triggerButton.onClick.RemoveListener(ToggleMenu);
-            triggerButton.onClick.AddListener(ToggleMenu);
-            Debug.Log("[HalfViewComponent] Trigger button configurado");
-        }
+        SetupTriggerButtonListener();
     }
 
     private void SetupOverlay()

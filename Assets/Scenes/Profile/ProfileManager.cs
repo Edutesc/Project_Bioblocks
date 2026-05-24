@@ -353,9 +353,7 @@ public class ProfileManager : MonoBehaviour
         if (deleteAccountDarkOverlay != null)
             deleteAccountDarkOverlay.SetActive(false);
 
-        // Restaura os callbacks do HalfView, que são sobrescritos pelo
-        // SetupButtonListeners() interno quando preventButtonReconfiguration
-        // volta a false após HideMenu().
+        // Restaura os callbacks do HalfView depois do fluxo de confirmação.
         ConfigureHalfView();
 
         GameObject halfViewOverlay = GameObject.Find("HalfViewDarkOverlay");
@@ -392,6 +390,9 @@ public class ProfileManager : MonoBehaviour
 
         string userId    = currentUserData.UserId;
         string nickName  = currentUserData.NickName;
+        string nicknameDocumentId = string.IsNullOrEmpty(nickName)
+            ? string.Empty
+            : nickName.ToLowerInvariant();
 
         try
         {
@@ -437,11 +438,11 @@ public class ProfileManager : MonoBehaviour
             }
 
             // 1c. Deletar nickname na coleção Nicknames
-            if (!string.IsNullOrEmpty(nickName))
+            if (!string.IsNullOrEmpty(nicknameDocumentId))
             {
                 try
                 {
-                    await _firestore.DeleteDocument("Nicknames", nickName);
+                    await _firestore.DeleteDocument("Nicknames", nicknameDocumentId);
                     Debug.Log("[DeleteAccount] Nicknames: deletado com sucesso");
                 }
                 catch (Exception ex)
@@ -455,10 +456,7 @@ public class ProfileManager : MonoBehaviour
             string[] additionalCollections =
             {
                 "QuestionSceneBonus",
-                "UserBonus",
-                "UserFeedback",
-                "UserLevelProgress",
-                "UserRetries"
+                "UserBonus"
             };
 
             foreach (string collection in additionalCollections)
@@ -581,8 +579,6 @@ public class ProfileManager : MonoBehaviour
     {
         if (deleteAccountDarkOverlay != null)
         {
-            Canvas overlayCanvas = deleteAccountDarkOverlay.GetComponent<Canvas>();
-            if (overlayCanvas != null) Destroy(overlayCanvas);
             deleteAccountDarkOverlay.SetActive(false);
         }
 

@@ -15,7 +15,7 @@ public class FirestoreNicknameRepository : INicknameRepository
     public async Task<bool> AreNicknameTaken(string nickName)
     {
         DocumentSnapshot snapshot = await _db.Collection("Nicknames")
-            .Document(nickName.ToLower())
+            .Document(nickName.ToLowerInvariant())
             .GetSnapshotAsync();
 
         return snapshot.Exists;
@@ -24,7 +24,7 @@ public class FirestoreNicknameRepository : INicknameRepository
     public async Task ReserveNickname(string nickName, string userId)
     {
         await _db.Collection("Nicknames")
-            .Document(nickName.ToLower())
+            .Document(nickName.ToLowerInvariant())
             .SetAsync(new Dictionary<string, object>
             {
                 { "userId", userId }

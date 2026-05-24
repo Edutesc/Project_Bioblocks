@@ -15,6 +15,9 @@ public abstract class BarsManager : MonoBehaviour
 
     protected virtual void Awake()
     {
+        currentScene = SceneManager.GetActiveScene().name;
+        HideVisualsForPublicScene(currentScene);
+
         // Preview Mode — barras de navegação desabilitadas (sem usuário, sem sessão real).
         var envCfg = EnvironmentConfig.Load();
         if (envCfg != null && envCfg.QuestionPreviewMode)
@@ -32,6 +35,23 @@ public abstract class BarsManager : MonoBehaviour
         {
             AppContext.OnReady += InitializeBar;
         }
+    }
+
+    private void HideVisualsForPublicScene(string sceneName)
+    {
+        if (sceneName != "Initialization" &&
+            sceneName != "LoginView" &&
+            sceneName != "RegisterView" &&
+            sceneName != "ResetDatabaseView")
+        {
+            return;
+        }
+
+        Transform barChild = transform.Find(BarChildName);
+        if (barChild != null)
+            barChild.gameObject.SetActive(false);
+
+        UpdateCanvasElements(false);
     }
 
     private void InitializeBar()

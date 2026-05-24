@@ -29,7 +29,8 @@ public class NavigationBottomBarManager : BarsManager
         "LoginView",
         "RegisterView",
         "QuestionScene",
-        "ResetDatabaseView"
+        "ResetDatabaseView",
+        "Initialization"
     };
 
     private List<NavButton> allButtons = new List<NavButton>();

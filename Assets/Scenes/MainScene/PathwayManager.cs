@@ -21,15 +21,35 @@ public class PathwayManager : MonoBehaviour
         _statistics = AppContext.Statistics;
         _navigation = AppContext.Navigation;
 
+        var envCfg = EnvironmentConfig.Load();
+        bool isPreviewMode = envCfg != null && envCfg.QuestionPreviewMode;
+
         if (UserDataStore.CurrentUserData == null)
         {
-            SceneManager.LoadScene("Login");
-            return;
+            if (!isPreviewMode)
+            {
+                SceneManager.LoadScene("LoginView");
+                return;
+            }
+
+            Debug.Log("[PathwayManager] Preview Mode — seguindo sem UserData.");
         }
 
         InitializeTopBar();
 
         AnsweredQuestionsManager.OnAnsweredQuestionsUpdated += HandleAnsweredQuestionsUpdated;
+
+        if (isPreviewMode)
+        {
+            Debug.Log("[PathwayManager] Preview Mode — estatísticas/progresso ignorados.");
+            return;
+        }
+
+        if (_statistics == null)
+        {
+            Debug.LogWarning("[PathwayManager] Statistics não registrado no AppContext.");
+            return;
+        }
 
         // AppContext.Statistics já foi inicializado antes de IsReady = true.
         // Se por algum motivo ainda não estiver pronto, inicializa e aguarda.

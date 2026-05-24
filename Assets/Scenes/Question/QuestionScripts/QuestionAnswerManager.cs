@@ -29,6 +29,7 @@ public class QuestionAnswerManager : MonoBehaviour
 
     private CancellationTokenSource _activeLoadCts;
     private Sprite[] _ownedAnswerSprites;
+    private bool[] _ownedAnswerSpriteTextures;
 
     public event System.Action<int> OnAnswerSelected;
 
@@ -211,6 +212,7 @@ public class QuestionAnswerManager : MonoBehaviour
 
         _activeLoadCts = new CancellationTokenSource();
         _ownedAnswerSprites = new Sprite[imageAnswerButtons.Length];
+        _ownedAnswerSpriteTextures = new bool[imageAnswerButtons.Length];
 
         int count = Mathf.Min(imageAnswerButtons.Length, question.answers?.Length ?? 0);
 
@@ -247,6 +249,7 @@ public class QuestionAnswerManager : MonoBehaviour
     private async Task LoadAnswerImageAsync(int buttonIndex, string imagePath, CancellationToken ct)
     {
         Texture2D texture = null;
+        bool ownsTexture = false;
 
         try
         {
@@ -265,6 +268,7 @@ public class QuestionAnswerManager : MonoBehaviour
             {
                 // Dev/Prod mode: imagePath é storage key (ex: "aminoacids/isoleucina").
                 texture = await AppContext.ImageSync.GetImageAsync(imagePath, ct);
+                ownsTexture = true;
                 if (ct.IsCancellationRequested || texture == null)
                 {
                     if (texture != null) Destroy(texture);
@@ -290,12 +294,19 @@ public class QuestionAnswerManager : MonoBehaviour
                 buttonIndex < _ownedAnswerSprites.Length &&
                 _ownedAnswerSprites[buttonIndex] != null)
             {
-                DestroySpriteAndTexture(_ownedAnswerSprites[buttonIndex]);
+                bool destroyTexture = _ownedAnswerSpriteTextures != null &&
+                                      buttonIndex < _ownedAnswerSpriteTextures.Length &&
+                                      _ownedAnswerSpriteTextures[buttonIndex];
+                DestroySpriteAndTexture(_ownedAnswerSprites[buttonIndex], destroyTexture);
             }
 
             imageButtonContents[buttonIndex].sprite = sprite;
             if (_ownedAnswerSprites != null && buttonIndex < _ownedAnswerSprites.Length)
+            {
                 _ownedAnswerSprites[buttonIndex] = sprite;
+                if (_ownedAnswerSpriteTextures != null && buttonIndex < _ownedAnswerSpriteTextures.Length)
+                    _ownedAnswerSpriteTextures[buttonIndex] = ownsTexture;
+            }
 
             if (buttonIndex < imageAnswerButtons.Length && imageAnswerButtons[buttonIndex] != null)
                 imageAnswerButtons[buttonIndex].interactable = true;
@@ -322,18 +333,26 @@ public class QuestionAnswerManager : MonoBehaviour
         for (int i = 0; i < _ownedAnswerSprites.Length; i++)
         {
             if (_ownedAnswerSprites[i] != null)
-                DestroySpriteAndTexture(_ownedAnswerSprites[i]);
+            {
+                bool destroyTexture = _ownedAnswerSpriteTextures != null &&
+                                      i < _ownedAnswerSpriteTextures.Length &&
+                                      _ownedAnswerSpriteTextures[i];
+                DestroySpriteAndTexture(_ownedAnswerSprites[i], destroyTexture);
+            }
             _ownedAnswerSprites[i] = null;
+            if (_ownedAnswerSpriteTextures != null && i < _ownedAnswerSpriteTextures.Length)
+                _ownedAnswerSpriteTextures[i] = false;
         }
         _ownedAnswerSprites = null;
+        _ownedAnswerSpriteTextures = null;
     }
 
-    private void DestroySpriteAndTexture(Sprite sprite)
+    private void DestroySpriteAndTexture(Sprite sprite, bool destroyTexture)
     {
         if (sprite == null) return;
         var tex = sprite.texture;
         Destroy(sprite);
-        if (tex != null) Destroy(tex);
+        if (destroyTexture && tex != null) Destroy(tex);
     }
 
     private void OnDestroy()

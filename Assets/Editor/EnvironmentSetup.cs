@@ -12,8 +12,8 @@ public class EnvironmentSetup : IPreprocessBuildWithReport, IPostprocessBuildWit
     // === AJUSTE ESSAS CONSTANTES PARA OS SEUS VALORES REAIS ===
     private const string ProdBundleIdAndroid = "com.halbus.labedu"; 
     private const string ProdBundleIdiOS     = "com.halbus.labedu"; 
-    private const string DevBundleIdAndroid  = "com.edutesc.bioblocks_dev";
-    private const string DevBundleIdiOS      = "com.edutesc.bioblocks-dev";
+    private const string DevBundleIdAndroid  = "com.edutesc.bioblocks.dev";
+    private const string DevBundleIdiOS      = "com.edutesc.bioblocks.dev";
 
     private const string ProdProductName = "BioBlocks";
     private const string DevProductName  = "BioBlocks Dev";

@@ -53,8 +53,8 @@ public class InitializationManager : MonoBehaviour
             if (elapsedPreview < minimumLoadingTime)
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsedPreview) * 1000));
 
+            loadingSpinner?.HideSpinner();
             SceneManager.LoadScene("PathwayScene", LoadSceneMode.Single);
-            SceneManager.LoadScene("PathwayScene");
             return;
         }
 
@@ -79,6 +79,9 @@ public class InitializationManager : MonoBehaviour
 
             if (_auth == null)
                 throw new Exception("[InitManager] AppContext.Auth está null após AppContext.IsReady=true.");
+
+            ResetSessionIfFirebaseEnvironmentChanged(envCfg);
+
             bool isAuthenticated = await CheckAuthentication();
             // ── Usuário não autenticado: ir imediatamente para LoginView ─────────
             if (!isAuthenticated)
@@ -199,7 +202,7 @@ public class InitializationManager : MonoBehaviour
 
         try
         {
-            await _auth.ReloadCurrentUserAsync();
+            await WithTimeout(_auth.ReloadCurrentUserAsync(), 8000, "Validação da sessão Firebase excedeu o tempo limite.");
             Debug.Log("[InitializationManager] Sessão validada com o servidor.");
             return true;
         }
@@ -241,7 +244,10 @@ public class InitializationManager : MonoBehaviour
             //   - cache stale        → busca Firestore → atualiza LiteDB
             //   - cache válido       → carrega LiteDB direto
             //   - Firestore offline  → usa LiteDB como fallback
-            await _userDataSync.TrySyncPendingData(userId);
+            await WithTimeout(
+                _userDataSync.TrySyncPendingData(userId),
+                12000,
+                "Carregamento/sincronização de UserData excedeu o tempo limite.");
 
             if (UserDataStore.CurrentUserData == null)
             {
@@ -283,6 +289,8 @@ public class InitializationManager : MonoBehaviour
 
         if (!Application.CanStreamedLevelBeLoaded(targetScene))
         {
+            Debug.LogError($"[InitManager] Cena não está carregável pela build: {targetScene}. Verifique Build Settings.");
+            loadingSpinner?.SetMessage($"Cena {targetScene} não encontrada na build.");
             return;
         }
 
@@ -355,6 +363,46 @@ public class InitializationManager : MonoBehaviour
         catch { }
 
         NavigateAfterInit(false);
+    }
+
+    private void ResetSessionIfFirebaseEnvironmentChanged(EnvironmentConfig envCfg)
+    {
+        if (envCfg == null) return;
+
+        const string envKey = "FirebaseEnvironment";
+        string currentEnv = envCfg.FirebaseEnvironment.ToString();
+        string previousEnv = PlayerPrefs.GetString(envKey, "");
+
+        if (!string.IsNullOrEmpty(previousEnv) && previousEnv != currentEnv)
+        {
+            Debug.LogWarning($"[InitManager] Ambiente Firebase mudou de {previousEnv} para {currentEnv}. Limpando sessão local.");
+
+            try
+            {
+                FirebaseAuth.DefaultInstance.SignOut();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[InitManager] Erro ao limpar sessão ao trocar ambiente: {e.Message}");
+            }
+
+            UserDataStore.CurrentUserData = null;
+            PlayerPrefs.DeleteKey("UserId");
+            PlayerPrefs.DeleteKey("UserEmail");
+            PlayerPrefs.DeleteKey("UserNickname");
+        }
+
+        PlayerPrefs.SetString(envKey, currentEnv);
+        PlayerPrefs.Save();
+    }
+
+    private static async Task WithTimeout(Task task, int timeoutMillis, string timeoutMessage)
+    {
+        Task completed = await Task.WhenAny(task, Task.Delay(timeoutMillis));
+        if (completed != task)
+            throw new TimeoutException(timeoutMessage);
+
+        await task;
     }
 
     private void ShowError(string message)

@@ -33,7 +33,7 @@ public class FirestoreAdminRepository : IFirestoreAdminRepository
                     Debug.Log($"Documento {documentId} deletado com sucesso da coleção {collection}");
                     return;
                 }
-                catch (Exception e) when (i < maxRetries - 1)
+                catch (Exception e) when (i < maxRetries - 1 && !IsPermissionDenied(e))
                 {
                     Debug.LogWarning($"Tentativa {i + 1} falhou: {e.Message}. Tentando novamente...");
                     await Task.Delay(1000);
@@ -48,6 +48,13 @@ public class FirestoreAdminRepository : IFirestoreAdminRepository
             Debug.LogError($"[FirestoreAdminRepository] Erro ao deletar documento: {e.Message}");
             throw;
         }
+    }
+
+    private static bool IsPermissionDenied(Exception exception)
+    {
+        string message = exception.Message?.ToLowerInvariant() ?? string.Empty;
+        return message.Contains("permission denied")
+            || message.Contains("missing or insufficient permissions");
     }
 
     public async Task EnsureWeekScoreField()

@@ -214,7 +214,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
             Debug.Log("[AuthRepository] Token atualizado com sucesso");
         }
-        catch (Firebase.FirebaseException e) when (e.Message.Contains("recent authentication"))
+        catch (Firebase.FirebaseException e) when (IsRecentAuthenticationRequired(e))
         {
             Debug.LogError("[AuthRepository] É necessário reautenticar");
             throw new ReauthenticationRequiredException("É necessário reautenticar para prosseguir");
@@ -250,7 +250,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
             Debug.Log("[AuthRepository] Usuário deletado com sucesso do Authentication");
         }
-        catch (Firebase.FirebaseException e) when (e.Message.Contains("requires recent authentication"))
+        catch (Firebase.FirebaseException e) when (IsRecentAuthenticationRequired(e))
         {
             Debug.LogError("[AuthRepository] É necessário reautenticar para deletar o usuário");
             throw new ReauthenticationRequiredException("É necessário reautenticar para deletar a conta");
@@ -297,6 +297,15 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
         if (_auth == null)
             throw new Exception("FirebaseAuth não inicializado.");
+    }
+
+    private static bool IsRecentAuthenticationRequired(Firebase.FirebaseException exception)
+    {
+        string message = exception.Message?.ToLowerInvariant() ?? string.Empty;
+        return message.Contains("recent authentication")
+            || message.Contains("requires-recent-login")
+            || message.Contains("requires recent login")
+            || (message.Contains("recent") && (message.Contains("auth") || message.Contains("login")));
     }
 
     private void EnsureRepositoriesInjected()

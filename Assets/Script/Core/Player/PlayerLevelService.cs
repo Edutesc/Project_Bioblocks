@@ -29,6 +29,14 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     {
         Debug.Log("[PlayerLevelService] Start() chamado");
 
+        var envCfg = EnvironmentConfig.Load();
+        if (envCfg != null && envCfg.QuestionPreviewMode)
+        {
+            Debug.Log("[PlayerLevelService] Preview Mode — inicialização ignorada.");
+            _isInitialized = true;
+            return;
+        }
+
         if (!AppContext.IsReady)
         {
             Debug.LogWarning("[PlayerLevelService] AppContext não está pronto. Aguardando...");
@@ -42,6 +50,15 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     private void OnAppContextReady()
     {
         AppContext.OnReady -= OnAppContextReady;
+
+        var envCfg = EnvironmentConfig.Load();
+        if (envCfg != null && envCfg.QuestionPreviewMode)
+        {
+            Debug.Log("[PlayerLevelService] Preview Mode — inicialização ignorada após AppContextReady.");
+            _isInitialized = true;
+            return;
+        }
+
         InitializeDependencies();
     }
 

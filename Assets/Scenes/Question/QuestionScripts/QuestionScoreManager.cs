@@ -13,9 +13,18 @@ public class QuestionScoreManager : MonoBehaviour
     private UserHeaderManager _userHeaderManager;
     private IPlayerLevelService _playerLevel;
     private IUserDataSyncService _userDataSync;
+    private bool _isPreviewMode;
 
     private void Start()
     {
+        _isPreviewMode = IsPreviewMode();
+        if (_isPreviewMode)
+        {
+            Debug.Log("[QuestionScoreManager] Preview Mode — score/autenticação ignorados.");
+            questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
+            return;
+        }
+
         if (!AppContext.IsReady)
         {
             Debug.LogWarning("[QuestionScoreManager] AppContext não está pronto. Aguardando...");
@@ -29,6 +38,15 @@ public class QuestionScoreManager : MonoBehaviour
     private void OnAppContextReady()
     {
         AppContext.OnReady -= OnAppContextReady;
+
+        _isPreviewMode = IsPreviewMode();
+        if (_isPreviewMode)
+        {
+            Debug.Log("[QuestionScoreManager] Preview Mode — score/autenticação ignorados após AppContextReady.");
+            questionBonusManager = FindFirstObjectByType<QuestionBonusManager>();
+            return;
+        }
+
         InitializeDependencies();
     }
 
@@ -57,6 +75,13 @@ public class QuestionScoreManager : MonoBehaviour
 
     public async Task UpdateScore(int scoreChange, bool isCorrect, Question answeredQuestion, IQuestionDatabase database = null)
     {
+        if (_isPreviewMode || IsPreviewMode())
+        {
+            Debug.Log("[QuestionScoreManager] Preview Mode — UpdateScore ignorado.");
+            await Task.CompletedTask;
+            return;
+        }
+
         if (_userDataSync == null) _userDataSync = AppContext.UserDataSync;
         if (_auth == null)         _auth         = AppContext.Auth;
         if (_playerLevel == null)  _playerLevel  = AppContext.PlayerLevel;
@@ -206,6 +231,12 @@ public class QuestionScoreManager : MonoBehaviour
             return -currentScore;
 
         return scoreChange;
+    }
+
+    private static bool IsPreviewMode()
+    {
+        var envCfg = EnvironmentConfig.Load();
+        return envCfg != null && envCfg.QuestionPreviewMode;
     }
    
 }   
