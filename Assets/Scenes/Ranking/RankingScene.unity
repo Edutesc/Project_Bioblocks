@@ -160,8 +160,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1255}
-  m_SizeDelta: {x: 1050, y: 1562.0527}
+  m_AnchoredPosition: {x: 0, y: -1195.8857}
+  m_SizeDelta: {x: 1050, y: 1450.7427}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &116777144
 MonoBehaviour:
@@ -362,7 +362,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.0005493164}
   m_SizeDelta: {x: 0.000030517578, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &431101025
@@ -516,6 +516,7 @@ MonoBehaviour:
   rankingRowPrefab: {fileID: 6012304303780838637, guid: 7e1212cc31544411896384538035f60d, type: 3}
   rankingTableContent: {fileID: 431101023}
   scrollRect: {fileID: 116777144}
+  rankingLimit: 20
   weekResetCountdownText: {fileID: 1522409590}
   loadingIndicator: {fileID: 0}
   lastUpdateText: {fileID: 0}
@@ -1242,7 +1243,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 790866062}
   m_HandleRect: {fileID: 790866061}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1671,8 +1672,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.144}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.0977, y: -771.03}
-  m_SizeDelta: {x: 1040, y: 1542.1}
+  m_AnchoredPosition: {x: -0.2491, y: -710.87}
+  m_SizeDelta: {x: 1040, y: 1445.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1995433348
 MonoBehaviour:

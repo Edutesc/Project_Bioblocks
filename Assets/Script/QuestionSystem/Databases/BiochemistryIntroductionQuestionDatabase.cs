@@ -6,25 +6,25 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
     private bool databaseInDevelopment = false;
     private List<Question> questions = new List<Question>
     {
-        // // Questão 08
+        // // Questão 01
         // new Question
         // {
         //     questionDatabankName = "BiochemistryIntroductionQuestionDatabase",
-        //     questionText = "Identifique a estrutura que representa um hidrocarboneto ramificado",
+        //     questionText = "Um estudante afirma que todas as opções abaixo descrevem características de seres vivos. Identifique a afirmação INCORRETA",
         //     answers = new string[] {
-        //         "AnswerImages/IntroductionDB/benzeno",
-        //         "AnswerImages/IntroductionDB/2-butanol",
-        //         "AnswerImages/IntroductionDB/2-3-dimetil-pentano",
-        //         "AnswerImages/IntroductionDB/propanamina"
+        //         "Utilizam energia do ambiente para manter suas funções",
+        //         "Possuem organização molecular e celular",
+        //         "São capazes de se autorreplicar",
+        //         "São indiferentes a mudanças no ambiente"
         //     },
-        //     correctIndex = 2,
-        //     questionNumber = 8,
-        //     answerType = AnswerType.Image,
+        //     correctIndex = 3,
+        //     questionNumber = 1,
+        //     answerType = AnswerType.Text,
         //     questionType = QuestionType.Text,
         //     questionImagePath = "",
-        //     questionLevel = 2,
+        //     questionLevel = 1,
         //     questionInDevelopment = false,
-        //     globalId = "biochem_008",
+        //     globalId = "biochem_001",
         //     topic = "biochem",
         //     subtopic = null,
         //     displayName = "Introdução à Bioquímica",
@@ -33,14 +33,13 @@ public class BiochemistryIntroductionQuestionDatabase : IQuestionDatabase
         //     prerequisites = null,
         //     questionHint = new QuestionHint
         //     {
-        //         text = "Hidrocarboneto: molécula formada apenas por carbono e hidrogênio (sem outros elementos como O, N ou S). Ramificado: a cadeia carbônica principal possui ramificações (carbonos que saem da cadeia principal). Elimine: benzeno (aromático, não ramificado), 2-butanol (tem -OH, não é hidrocarboneto), propanamina (tem N, não é hidrocarboneto). 2,3-dimetilpentano: é apenas C e H, com grupos metil saindo da cadeia principal — hidrocarboneto ramificado.",
+        //         text = "Seres vivos possuem propriedades fundamentais que os distinguem da matéria inanimada. Entre essas propriedades estão: organização molecular e celular, metabolismo (uso de energia), reprodução e resposta a estímulos do ambiente. A capacidade de detectar e responder a mudanças no ambiente (irritabilidade) é essencial para a sobrevivência. Um ser vivo que não respondesse a nenhuma mudança ambiental não conseguiria se adaptar nem sobreviver.",
         //         imagePath = null,
         //         videoUrl = null,
         //         link = null
         //     }
         // },
-
-        
+   
     };
 
     public List<Question> GetQuestions() => questions;

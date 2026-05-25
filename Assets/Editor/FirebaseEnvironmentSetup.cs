@@ -18,6 +18,9 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
     private const string FirebaseIOSSourceDevPath  = "Firebase/Dev/GoogleService-Info.plist";
     private const string FirebaseIOSSourceProdPath = "Firebase/Prod/GoogleService-Info.plist";
     private const string FirebaseIOSTargetPath     = "Assets/GoogleService-Info.plist";
+    private const string FirebaseDesktopSourceDevPath  = "Firebase/Dev/google-services-desktop.json";
+    private const string FirebaseDesktopSourceProdPath = "Firebase/Prod/google-services-desktop.json";
+    private const string FirebaseDesktopTargetPath     = "Assets/StreamingAssets/google-services-desktop.json";
 
     private const string DevProjectId   = "microlearning-dev-79c0c";
     private const string ProdProjectId  = "microlearning-33132";
@@ -55,6 +58,9 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
         string iosSourcePath = Path.Combine(Application.dataPath, "..",
             cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? FirebaseIOSSourceProdPath : FirebaseIOSSourceDevPath);
         string iosTargetPath = Path.Combine(Application.dataPath, "GoogleService-Info.plist");
+        string desktopSourcePath = Path.Combine(Application.dataPath, "..",
+            cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? FirebaseDesktopSourceProdPath : FirebaseDesktopSourceDevPath);
+        string desktopTargetPath = Path.Combine(Application.dataPath, "StreamingAssets", "google-services-desktop.json");
         string expectedProjectId = cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? ProdProjectId : DevProjectId;
 
         try
@@ -84,6 +90,19 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
                     $"Build iOS com Firebase pode falhar ou usar configuração incorreta.");
             }
 
+            if (File.Exists(desktopSourcePath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(desktopTargetPath));
+                File.Copy(desktopSourcePath, desktopTargetPath, overwrite: true);
+                Debug.Log($"[FirebaseEnvironmentSetup] ✓ google-services-desktop.json copiado de Firebase/{environment}/");
+            }
+            else
+            {
+                Debug.LogWarning(
+                    $"[FirebaseEnvironmentSetup] google-services-desktop.json não encontrado: {desktopSourcePath}\n" +
+                    $"Unity Editor/Device Simulator pode usar configuração Firebase incorreta.");
+            }
+
             // 3. Validar conteúdo (verificar project_id)
             string content = File.ReadAllText(targetPath);
             if (!content.Contains(expectedProjectId))
@@ -98,6 +117,8 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
             AssetDatabase.ImportAsset("Assets/google-services.json", ImportAssetOptions.ForceUpdate);
             if (File.Exists(iosTargetPath))
                 AssetDatabase.ImportAsset("Assets/GoogleService-Info.plist", ImportAssetOptions.ForceUpdate);
+            if (File.Exists(desktopTargetPath))
+                AssetDatabase.ImportAsset("Assets/StreamingAssets/google-services-desktop.json", ImportAssetOptions.ForceUpdate);
             Debug.Log($"[FirebaseEnvironmentSetup] ✓ Assets reimportados.");
 
             // 5. Log final

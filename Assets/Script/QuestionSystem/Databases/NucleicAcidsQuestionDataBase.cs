@@ -33,7 +33,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         //         link = null
         //     }
         // },
-       
+
     };
 
     public List<Question> GetQuestions() => questions;

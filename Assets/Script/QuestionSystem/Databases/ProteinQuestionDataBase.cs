@@ -33,7 +33,7 @@ public class ProteinQuestionDatabase : IQuestionDatabase
         //     prerequisites = null,
         //     questionHint = null
         // },
-        // 
+
     };
 
     public List<Question> GetQuestions() => questions;
