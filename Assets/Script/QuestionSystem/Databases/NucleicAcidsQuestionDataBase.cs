@@ -25,21 +25,17 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         //     bloomLevel = BloomLevel.Remember,
         //     conceptTags = null,
         //     prerequisites = null,
-        //     questionHint = new QuestionHint
-        //     {
-        //         text = "O cientista suíço Friedrich Miescher foi o primeiro pesquisador a isolar o ácido nucléico, em 1868. Durante seus estudos com células presentes em pus coletado de bandagens cirúrgicas, ele identificou uma substância rica em fósforo localizada no núcleo celular, que chamou de “nucleína”. Posteriormente, essa substância passou a ser conhecida como ácido nucleico, componente fundamental do DNA e do RNA.",
-        //         imagePath = null,
-        //         videoUrl = null,
-        //         link = null
-        //     }
+        //     questionHint = new QuestionHint { text = "O cientista suíço Friedrich Miescher foi o primeiro pesquisador a isolar o ácido nucléico, em 1868. Durante seus estudos com células presentes em pus coletado de bandagens cirúrgicas, ele identificou uma substância rica em fósforo localizada no núcleo celular, que chamou de “nucleína”. Posteriormente, essa substância passou a ser conhecida como ácido nucleico, componente fundamental do DNA e do RNA." }
         // },
-       
+
     };
 
     public List<Question> GetQuestions() => questions;
+
     public QuestionSet GetQuestionSetType() => QuestionSet.nucleicAcids;
+
     public string GetDatabankName()  => "NucleicAcidsQuestionDatabase";
     public string GetDisplayName()   => "Ácidos Nucleicos";
-    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
 
+    public bool IsDatabaseInDevelopment() => databaseInDevelopment;
 }
