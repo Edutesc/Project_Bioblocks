@@ -122,19 +122,19 @@ public class UserDataSyncServiceTests
     }
 
     [UnityTest]
-    public IEnumerator SyncFromFirestore_IsSyncing_SegundaChamadaEhIgnorada()
+    public IEnumerator SyncFromFirestore_IsSyncing_FicaTrueDuranteChamadaEmAndamento()
     {
-        // Sinaliza que já está em andamento antes da segunda chamada
         var remoteUser = MakeUser("u1", score: 100);
         _firestore.SetFakeUser(remoteUser);
+        _firestore.HoldGetUserData();
 
-        // Dispara primeira chamada e imediatamente verifica o guard
         var task1 = _syncService.SyncFromFirestore("u1");
+        yield return new WaitUntil(() => _syncService.IsSyncing);
 
-        // Durante a primeira chamada IsSyncing deve ser true
         Assert.IsTrue(_syncService.IsSyncing,
             "IsSyncing deve ser true enquanto o primeiro sync está em andamento");
 
+        _firestore.ReleaseGetUserData();
         yield return new WaitUntil(() => task1.IsCompleted);
 
         Assert.IsFalse(_syncService.IsSyncing,
@@ -282,7 +282,7 @@ public class UserDataSyncServiceTests
     // Helper privado
     // =======================================================
 
-    // Obtém o usuário do FakeFirestore de forma síncrona (já é Task.FromResult)
+    // Obtém o usuário do FakeFirestore de forma síncrona para asserts simples.
     private static UserData await_fake(FakeFirestoreRepository fake, string userId)
         => fake.GetUserData(userId).Result;
 }

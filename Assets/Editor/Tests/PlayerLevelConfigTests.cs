@@ -86,6 +86,18 @@ public class PlayerLevelConfigTests
     }
 
     [Test]
+    public void CalculateLevel_Total705_UsaPercentuaisDiretos()
+    {
+        // Cada nível usa seu percentual direto sobre o total:
+        // nível 2 em 10%, nível 3 em 20%, ..., nível 10 em 90%.
+        Assert.AreEqual(1,  PlayerLevelConfig.CalculateLevel(70, 705));
+        Assert.AreEqual(2,  PlayerLevelConfig.CalculateLevel(71, 705));
+        Assert.AreEqual(3,  PlayerLevelConfig.CalculateLevel(141, 705));
+        Assert.AreEqual(9,  PlayerLevelConfig.CalculateLevel(634, 705));
+        Assert.AreEqual(10, PlayerLevelConfig.CalculateLevel(635, 705));
+    }
+
+    [Test]
     public void CalculateLevel_100PorCento_RetornaDez()
     {
         // 100% respondidas → nível máximo (10)
@@ -261,6 +273,14 @@ public class PlayerLevelConfigTests
         var t = PlayerLevelConfig.GetThresholdForLevel(10);
         // 90% de 100 = 90
         Assert.AreEqual(90, t.GetMinRequiredQuestions(100));
+    }
+
+    [Test]
+    public void GetMinRequiredQuestions_Total705_UsaPercentuaisDiretos()
+    {
+        Assert.AreEqual(71,  PlayerLevelConfig.GetThresholdForLevel(2).GetMinRequiredQuestions(705));
+        Assert.AreEqual(141, PlayerLevelConfig.GetThresholdForLevel(3).GetMinRequiredQuestions(705));
+        Assert.AreEqual(635, PlayerLevelConfig.GetThresholdForLevel(10).GetMinRequiredQuestions(705));
     }
 
     // =======================================================

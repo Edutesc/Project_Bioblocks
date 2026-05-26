@@ -6,7 +6,7 @@
 //   ✅ 1a — Deleta documento na coleção Users
 //   ✅ 1b — Deleta entrada na coleção Rankings
 //   ✅ 1c — Deleta nickname na coleção Nicknames
-//   ✅ 1d — Deleta de todas as coleções adicionais (UserBonus, UserFeedback, etc.)
+//   ✅ 1d — Deleta de todas as coleções adicionais ativas (UserBonus, etc.)
 //   ✅ Navega para LoginView após deleção completa bem-sucedida
 //   ✅ Limpa UserDataStore.CurrentUserData após deleção
 //   ✅ Reautenticação necessária → exibe ReAuthUI e interrompe navegação
@@ -173,8 +173,8 @@ public class ProfileManagerDeleteAccountTests
         yield return new WaitUntil(() => task.IsCompleted);
 
         Assert.IsTrue(
-            _fakeFirestore.WasDocumentDeleted("Nicknames", NickName),
-            $"Deve deletar o nickname '{NickName}' na coleção 'Nicknames'.");
+            _fakeFirestore.WasDocumentDeleted("Nicknames", NickName.ToLowerInvariant()),
+            $"Deve deletar o documento normalizado do nickname '{NickName}' na coleção 'Nicknames'.");
 
         Object.DestroyImmediate(go);
     }
@@ -192,10 +192,7 @@ public class ProfileManagerDeleteAccountTests
         string[] additionalCollections =
         {
             "QuestionSceneBonus",
-            "UserBonus",
-            "UserFeedback",
-            "UserLevelProgress",
-            "UserRetries"
+            "UserBonus"
         };
 
         foreach (string collection in additionalCollections)

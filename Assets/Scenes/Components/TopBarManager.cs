@@ -31,7 +31,7 @@ public class TopBarManager : BarsManager
 
     private List<string> scenesWithoutTopBar = new List<string>()
     {
-        "LoginView", "RegisterView", "ResetDatabaseView"
+        "LoginView", "RegisterView", "ResetDatabaseView", "Initialization"
     };
 
     private Dictionary<string, TopButton> buttonsByName = new Dictionary<string, TopButton>();

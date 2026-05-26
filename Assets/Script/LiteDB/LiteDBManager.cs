@@ -1,31 +1,34 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using LiteDB;
 
 public class LiteDBManager : MonoBehaviour, ILiteDBManager
 {
     private LiteDatabase _db;
+    private readonly SemaphoreSlim _dbGate = new SemaphoreSlim(1, 1);
+
     private const string DB_NAME = "app_cache.db";
+
     public bool IsInitialized { get; private set; }
 
     public LiteDatabase Database
     {
         get
         {
-            if (_db == null) throw new Exception("[LiteDatabaseManager] Banco não inicializado.");
+            if (_db == null)
+                throw new Exception("[LiteDBManager] Banco não inicializado.");
+
             return _db;
         }
     }
 
-    // ── Collections existentes ─────────────────────────────────────────────────
-    public ILiteCollection<UserDataDB>      Users          => Database.GetCollection<UserDataDB>("users");
-    public ILiteCollection<RankingDB>       Rankings       => Database.GetCollection<RankingDB>("rankings");
-    public ILiteCollection<CachedImageDB>   CachedImages   => Database.GetCollection<CachedImageDB>("cached_images");
-
-    // ── Collection nova: questões ──────────────────────────────────────────────
-    public ILiteCollection<QuestionDB>      Questions      => Database.GetCollection<QuestionDB>("questions");
-
-    // ── Inicialização ──────────────────────────────────────────────────────────
+    // Mantenha por enquanto, mas evite usar diretamente fora do LiteDBManager.
+    public ILiteCollection<UserDataDB>    Users        => Database.GetCollection<UserDataDB>("users");
+    public ILiteCollection<RankingDB>     Rankings     => Database.GetCollection<RankingDB>("rankings");
+    public ILiteCollection<CachedImageDB> CachedImages => Database.GetCollection<CachedImageDB>("cached_images");
+    public ILiteCollection<QuestionDB>    Questions    => Database.GetCollection<QuestionDB>("questions");
 
     public void Initialize()
     {
@@ -33,49 +36,146 @@ public class LiteDBManager : MonoBehaviour, ILiteDBManager
 
         string path = System.IO.Path.Combine(Application.persistentDataPath, DB_NAME);
 
+        _dbGate.Wait();
+
         try
         {
-            OpenDatabase(path);
-        }
-        catch (Exception e)
-        {
-            // Banco corrompido (ex: arquivo de log órfão após deleção manual).
-            // Deleta todos os arquivos relacionados e cria banco limpo.
-            Debug.LogWarning($"[LiteDBManager] Banco corrompido ({e.Message}) — recriando banco limpo...");
-            DeleteDatabaseFiles(path);
-
             try
             {
                 OpenDatabase(path);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[LiteDBManager] Banco corrompido ({e.Message}) — recriando banco limpo...");
+
+                SafeDisposeDatabase();
+                DeleteDatabaseFiles(path);
+
+                OpenDatabase(path);
                 Debug.Log("[LiteDBManager] Banco recriado com sucesso.");
             }
-            catch (Exception e2)
-            {
-                Debug.LogError($"[LiteDBManager] Falha ao recriar banco: {e2.Message}");
-                throw;
-            }
+        }
+        finally
+        {
+            _dbGate.Release();
+        }
+    }
+
+    public async Task ExecuteWriteAsync(Action<LiteDatabase> action, CancellationToken ct = default)
+    {
+        await _dbGate.WaitAsync(ct);
+
+        try
+        {
+            EnsureInitialized();
+            action(Database);
+        }
+        finally
+        {
+            _dbGate.Release();
+        }
+    }
+
+    public async Task<T> ExecuteReadAsync<T>(Func<LiteDatabase, T> action, CancellationToken ct = default)
+    {
+        await _dbGate.WaitAsync(ct);
+
+        try
+        {
+            EnsureInitialized();
+            return action(Database);
+        }
+        finally
+        {
+            _dbGate.Release();
+        }
+    }
+
+    public void ExecuteWrite(Action<LiteDatabase> action)
+    {
+        _dbGate.Wait();
+
+        try
+        {
+            EnsureInitialized();
+            action(Database);
+        }
+        finally
+        {
+            _dbGate.Release();
+        }
+    }
+
+    public T ExecuteRead<T>(Func<LiteDatabase, T> action)
+    {
+        _dbGate.Wait();
+
+        try
+        {
+            EnsureInitialized();
+            return action(Database);
+        }
+        finally
+        {
+            _dbGate.Release();
         }
     }
 
     private void OpenDatabase(string path)
     {
         var mapper = new BsonMapper();
+
         mapper.ResolveMember += (type, memberInfo, memberMapper) =>
         {
             if (memberMapper.DataType == typeof(DateTime))
             {
-                memberMapper.Serialize   = (obj, m) => new BsonValue(((DateTime)obj).ToUniversalTime());
-                memberMapper.Deserialize = (val, m) => DateTime.SpecifyKind(val.AsDateTime, DateTimeKind.Utc);
+                memberMapper.Serialize = (obj, m) =>
+                    new BsonValue(((DateTime)obj).ToUniversalTime());
+
+                memberMapper.Deserialize = (val, m) =>
+                    DateTime.SpecifyKind(val.AsDateTime, DateTimeKind.Utc);
             }
         };
 
-        // Fecha handle anterior antes de abrir novo (evita leaks no recovery)
-        _db?.Dispose();
-        _db = null;
+        SafeDisposeDatabase();
 
         _db = new LiteDatabase(path, mapper);
+
         EnsureIndexes();
+
         IsInitialized = true;
+    }
+
+    private void EnsureIndexes()
+    {
+        Users.EnsureIndex(x => x.UserId, unique: true);
+
+        CachedImages.EnsureIndex(x => x.ImageUrl, unique: true);
+        CachedImages.EnsureIndex(x => x.Topic);
+
+        Rankings.EnsureIndex(x => x.Score);
+        Rankings.EnsureIndex(x => x.WeekScore);
+
+        Questions.EnsureIndex(x => x.QuestionDatabankName);
+        Questions.EnsureIndex(x => x.Topic);
+        Questions.EnsureIndex(x => x.CachedAt);
+    }
+
+    private void EnsureInitialized()
+    {
+        if (!IsInitialized || _db == null)
+            throw new InvalidOperationException("[LiteDBManager] Banco não inicializado.");
+    }
+
+    private void SafeDisposeDatabase()
+    {
+        if (_db != null)
+        {
+            _db.Dispose();
+            _db = null;
+        }
+
+        IsInitialized = false;
     }
 
     private static void DeleteDatabaseFiles(string dbPath)
@@ -86,6 +186,7 @@ public class LiteDBManager : MonoBehaviour, ILiteDBManager
             dbPath.Replace(".db", "-log.db"),
             dbPath.Replace(".db", "-tmp.db")
         };
+
         foreach (var file in relatedFiles)
         {
             if (System.IO.File.Exists(file))
@@ -96,31 +197,27 @@ public class LiteDBManager : MonoBehaviour, ILiteDBManager
         }
     }
 
-    private void EnsureIndexes()
-    {
-        // Índices existentes
-        Users.EnsureIndex(x => x.UserId, unique: true);
-        CachedImages.EnsureIndex(x => x.ImageUrl, unique: true);
-        Rankings.EnsureIndex(x => x.Score);
-        Rankings.EnsureIndex(x => x.WeekScore);
+    private void OnDestroy() => Close();
 
-        // Índices novos para questões
-        Questions.EnsureIndex(x => x.QuestionDatabankName);   // busca por banco (hot path)
-        Questions.EnsureIndex(x => x.Topic);                  // busca por tópico (futuro)
-        Questions.EnsureIndex(x => x.CachedAt);               // verificação de staleness
-    }
-
-    private void OnDestroy()          => Close();
     private void OnApplicationQuit() => Close();
 
     public void Close()
     {
-        if (_db != null)
+        _dbGate.Wait();
+
+        try
         {
-            _db.Dispose();
-            _db = null;
-            IsInitialized = false;
-            Debug.Log("[LiteDatabaseManager] Banco fechado.");
+            if (_db != null)
+            {
+                _db.Dispose();
+                _db = null;
+                IsInitialized = false;
+                Debug.Log("[LiteDBManager] Banco fechado.");
+            }
+        }
+        finally
+        {
+            _dbGate.Release();
         }
     }
 }

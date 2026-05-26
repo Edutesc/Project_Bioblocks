@@ -9,18 +9,13 @@ using QuestionSystem;
 ///
 /// Cenários suportados:
 ///   - Cache vazio (estado inicial padrão)
-///   - Cache populado (via SetQuestions ou SetQuestionsSavedAt)
+///   - Cache populado (via SetQuestions ou ReplaceAllQuestions)
 ///   - Cache com timestamp configurável (para testar lógica de staleness)
-///   - Lançamento de exceção em SaveQuestions (simula disco cheio, corrupção, etc.)
+///   - Lançamento de exceção em SaveQuestions ou ReplaceAllQuestions
 ///
-/// Como usar:
-///   var fakeLocal = new FakeQuestionLocalRepository();
-///   fakeLocal.SetQuestions(QuestionTestHelpers.MakeQuestions(10), savedDaysAgo: 1);
-///   // → cache válido com 10 questões salvas há 1 dia
-///
-///   var fakeLocal = new FakeQuestionLocalRepository();
-///   fakeLocal.SetQuestions(QuestionTestHelpers.MakeQuestions(5), savedDaysAgo: 30);
-///   // → cache expirado com 5 questões
+/// Observação:
+///   - SaveQuestions() simula upsert incremental.
+///   - ReplaceAllQuestions() simula substituição atômica do cache inteiro.
 /// </summary>
 public class FakeQuestionLocalRepository : IQuestionLocalRepository
 {
@@ -32,24 +27,43 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
     private DateTime _latestCacheTimestamp = DateTime.MinValue;
 
     // ── Comportamento de erro configurável ────────────────────────────────────
+
     /// <summary>Se true, SaveQuestions() lança ExceptionToThrow.</summary>
     public bool ShouldThrowOnSave { get; set; } = false;
+
+    /// <summary>Se true, ReplaceAllQuestions() lança ExceptionToThrow.</summary>
+    public bool ShouldThrowOnReplace { get; set; } = false;
 
     public Exception ExceptionToThrow { get; set; } =
         new Exception("Simulated local storage error");
 
-    // ── Rastreamento de chamadas ───────────────────────────────────────────────
-    public int SaveQuestionsCallCount { get; private set; }
-    public int ClearAllCallCount      { get; private set; }
+    // ── Versão do cache em memória ─────────────────────────────────────────────
+    private long _cachedVersion = -1L;
 
-    /// <summary>Número total de questões passadas para SaveQuestions nas últimas chamadas.</summary>
-    public int LastSaveCount          { get; private set; }
+    // ── Rastreamento de chamadas ───────────────────────────────────────────────
+    public int SaveQuestionsCallCount       { get; private set; }
+    public int ReplaceAllQuestionsCallCount { get; private set; }
+    public int ClearAllCallCount            { get; private set; }
+    public int SaveCachedVersionCallCount   { get; private set; }
+    public int GetCachedVersionCallCount    { get; private set; }
+
+    /// <summary>Número total de questões passadas para SaveQuestions na última chamada.</summary>
+    public int LastSaveCount { get; private set; }
+
+    /// <summary>Número total de questões passadas para ReplaceAllQuestions na última chamada.</summary>
+    public int LastReplaceCount { get; private set; }
+
+    /// <summary>Última versão passada para SaveCachedVersion, para asserções em testes.</summary>
+    public long LastSavedVersion { get; private set; } = -1L;
 
     // ── Configuração de cenários ───────────────────────────────────────────────
 
     /// <summary>
     /// Popula o cache com as questões fornecidas, como se tivessem sido salvas
     /// há <paramref name="savedDaysAgo"/> dias.
+    ///
+    /// Este método configura estado inicial de teste e não incrementa contadores
+    /// de SaveQuestions/ReplaceAllQuestions.
     /// </summary>
     public void SetQuestions(List<Question> questions, double savedDaysAgo = 0)
     {
@@ -61,12 +75,7 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
             return;
         }
 
-        foreach (var q in questions)
-        {
-            if (!_storage.ContainsKey(q.questionDatabankName))
-                _storage[q.questionDatabankName] = new List<Question>();
-            _storage[q.questionDatabankName].Add(q);
-        }
+        AddOrUpdateQuestions(questions);
 
         _latestCacheTimestamp = DateTime.UtcNow.AddDays(-savedDaysAgo);
     }
@@ -80,7 +89,21 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
         _latestCacheTimestamp = timestamp;
     }
 
-    // ── IQuestionLocalRepository ───────────────────────────────────────────────
+    /// <summary>
+    /// Define a versão do cache diretamente, sem incrementar SaveCachedVersionCallCount.
+    /// Útil para configurar o estado inicial de um teste.
+    /// </summary>
+    public void SetCachedVersion(long version)
+    {
+        _cachedVersion = version;
+    }
+
+    // ── Escrita ────────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Simula upsert incremental de questões no cache.
+    /// Não remove questões antigas que não estejam na lista recebida.
+    /// </summary>
     public void SaveQuestions(List<Question> questions)
     {
         SaveQuestionsCallCount++;
@@ -89,29 +112,50 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
         if (ShouldThrowOnSave)
             throw ExceptionToThrow;
 
-        if (questions == null || questions.Count == 0) return;
+        if (questions == null || questions.Count == 0)
+            return;
 
-        foreach (var q in questions)
-        {
-            if (!_storage.ContainsKey(q.questionDatabankName))
-                _storage[q.questionDatabankName] = new List<Question>();
-
-            // Upsert por questionNumber dentro do banco
-            var existing = _storage[q.questionDatabankName]
-                .FindIndex(x => x.questionNumber == q.questionNumber);
-            if (existing >= 0)
-                _storage[q.questionDatabankName][existing] = q;
-            else
-                _storage[q.questionDatabankName].Add(q);
-        }
+        AddOrUpdateQuestions(questions);
 
         _latestCacheTimestamp = DateTime.UtcNow;
     }
 
+    /// <summary>
+    /// Simula substituição atômica do cache inteiro.
+    /// Diferente de ClearAll() + SaveQuestions(), este método possui contador próprio
+    /// e não incrementa ClearAllCallCount nem SaveQuestionsCallCount.
+    /// </summary>
+    public void ReplaceAllQuestions(List<Question> questions)
+    {
+        ReplaceAllQuestionsCallCount++;
+        LastReplaceCount = questions?.Count ?? 0;
+
+        if (ShouldThrowOnReplace || ShouldThrowOnSave)
+            throw ExceptionToThrow;
+
+        _storage.Clear();
+
+        if (questions == null || questions.Count == 0)
+        {
+            _latestCacheTimestamp = DateTime.MinValue;
+            return;
+        }
+
+        AddOrUpdateQuestions(questions);
+
+        _latestCacheTimestamp = DateTime.UtcNow;
+    }
+
+    // ── Leitura ────────────────────────────────────────────────────────────────
+
     public List<Question> GetQuestionsByDatabankName(string databankName)
     {
+        if (string.IsNullOrEmpty(databankName))
+            return new List<Question>();
+
         if (_storage.TryGetValue(databankName, out var questions))
             return new List<Question>(questions);
+
         return new List<Question>();
     }
 
@@ -121,6 +165,8 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
                        .SelectMany(list => list)
                        .ToList();
     }
+
+    // ── Metadados de cache ─────────────────────────────────────────────────────
 
     public bool HasAnyQuestions()
     {
@@ -132,6 +178,8 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
         return _latestCacheTimestamp;
     }
 
+    // ── Limpeza ────────────────────────────────────────────────────────────────
+
     public void ClearAll()
     {
         ClearAllCallCount++;
@@ -139,15 +187,65 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
         _latestCacheTimestamp = DateTime.MinValue;
     }
 
-    // ── Utilitário ─────────────────────────────────────────────────────────────
+    // ── Versão do cache ────────────────────────────────────────────────────────
+
+    public long GetCachedVersion()
+    {
+        GetCachedVersionCallCount++;
+        return _cachedVersion;
+    }
+
+    public void SaveCachedVersion(long version)
+    {
+        SaveCachedVersionCallCount++;
+        LastSavedVersion = version;
+        _cachedVersion   = version;
+    }
+
+    // ── Utilitários de teste ───────────────────────────────────────────────────
+
     /// <summary>Zera tudo para reutilização entre testes.</summary>
     public void Reset()
     {
         _storage.Clear();
-        _latestCacheTimestamp   = DateTime.MinValue;
-        ShouldThrowOnSave       = false;
-        SaveQuestionsCallCount  = 0;
-        ClearAllCallCount       = 0;
-        LastSaveCount           = 0;
+
+        _latestCacheTimestamp = DateTime.MinValue;
+        _cachedVersion        = -1L;
+
+        ShouldThrowOnSave    = false;
+        ShouldThrowOnReplace = false;
+
+        SaveQuestionsCallCount       = 0;
+        ReplaceAllQuestionsCallCount = 0;
+        ClearAllCallCount            = 0;
+        SaveCachedVersionCallCount   = 0;
+        GetCachedVersionCallCount    = 0;
+
+        LastSaveCount    = 0;
+        LastReplaceCount = 0;
+        LastSavedVersion = -1L;
+    }
+
+    private void AddOrUpdateQuestions(List<Question> questions)
+    {
+        foreach (var q in questions)
+        {
+            if (q == null)
+                continue;
+
+            string databankName = q.questionDatabankName ?? string.Empty;
+
+            if (!_storage.ContainsKey(databankName))
+                _storage[databankName] = new List<Question>();
+
+            // Upsert por questionNumber dentro do banco.
+            var existing = _storage[databankName]
+                .FindIndex(x => x.questionNumber == q.questionNumber);
+
+            if (existing >= 0)
+                _storage[databankName][existing] = q;
+            else
+                _storage[databankName].Add(q);
+        }
     }
 }
