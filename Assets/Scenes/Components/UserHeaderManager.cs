@@ -69,6 +69,8 @@ public class UserHeaderManager : BarsManager
     [SerializeField]
     private List<string> scenesWithUserTopBar = new List<string>()
     {
+        "PathwayScene",
+        "ProfileScene",
         "QuestionScene",
         "HomeScene"
     };
@@ -106,19 +108,47 @@ public class UserHeaderManager : BarsManager
 
     protected override void OnAwake()
     {
-        base.scenesWithoutBar = new List<string>(scenesWithoutUserTopBar);
+        EnsureHiddenSceneConfigured("LoginView");
+        EnsureHiddenSceneConfigured("RegisterView");
+        EnsureHiddenSceneConfigured("ResetDatabaseView");
+        EnsureHiddenSceneConfigured("Initialization");
+        EnsureVisibleSceneConfigured("PathwayScene");
+        EnsureVisibleSceneConfigured("ProfileScene");
+        EnsureVisibleSceneConfigured("QuestionScene");
+        EnsureVisibleSceneConfigured("HomeScene");
 
-        foreach (var scene in scenesWithoutUserTopBar)
-        {
-            if (!base.scenesWithoutBar.Contains(scene))
-            {
-                base.scenesWithoutBar.Add(scene);
-            }
-        }
+        base.scenesWithoutBar = new List<string>(scenesWithoutUserTopBar);
 
         InitializeAvatarManager();
         InitializeBonusSystem();
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void EnsureHiddenSceneConfigured(string sceneName)
+    {
+        if (!scenesWithoutUserTopBar.Contains(sceneName))
+        {
+            scenesWithoutUserTopBar.Add(sceneName);
+        }
+    }
+
+    private void EnsureVisibleSceneConfigured(string sceneName)
+    {
+        if (!scenesWithUserTopBar.Contains(sceneName))
+        {
+            scenesWithUserTopBar.Add(sceneName);
+        }
+    }
+
+    protected override void SetBarVisibility(bool visible)
+    {
+        Transform barChild = transform.Find(BarChildName);
+        if (barChild != null)
+        {
+            barChild.gameObject.SetActive(visible);
+        }
+
+        UpdateCanvasElements(visible);
     }
 
     protected override void OnStart()
