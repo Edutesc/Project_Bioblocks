@@ -6,32 +6,32 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
     private bool databaseInDevelopment = false;
     
     private List<Question> questions = new List<Question>
-    {
-        //new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Qual a fórmula geral dos monossacarídeos?",
-        //    answers = new string[] {
-        //        "(CH<sub>2</sub> O)<sub>n</sub>",
-        //        "C<sub>n</sub> H<sub>2n</sub> O<sub>n</sub>",
-        //        "C<sub>n</sub> H<sub>2n-2</sub> O<sub>n</sub>",
-        //        "C<sub>n</sub> H<sub>2n+2</sub> O<sub>n</sub>"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 1,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_001",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+    //{
+    //    new Question {
+    //        questionDatabankName = "CarbohydratesQuestionDatabase",
+    //        questionText = "Qual a fórmula geral dos monossacarídeos?",
+    //        answers = new string[] {
+    //            "(CH<sub>2</sub> O)<sub>n</sub>",
+    //            "C<sub>n</sub> H<sub>2n</sub> O<sub>n</sub>",
+    //            "C<sub>n</sub> H<sub>2n-2</sub> O<sub>n</sub>",
+    //            "C<sub>n</sub> H<sub>2n+2</sub> O<sub>n</sub>"
+    //        },
+    //        correctIndex = 0,
+    //        questionNumber = 1,
+    //        isImageAnswer = false,
+    //        isImageQuestion = false,
+    //        questionImagePath = "",
+    //        questionLevel = 2,
+    //        questionInDevelopment = false,
+    //        globalId = "carbohydrates_001",
+    //        topic = "carbohydrates",
+    //        subtopic = null,
+    //        displayName = "Carboidratos",
+    //        bloomLevel = "unclassified",
+    //        conceptTags = null,
+    //        prerequisites = null,
+    //        questionHint = null
+    //    },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "O que diferencia uma aldose de uma cetose?",
@@ -250,26 +250,30 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
            prerequisites = null,
            questionHint = null
         },
-        //new Question {
-        //    questionDatabankName = "CarbohydratesQuestionDatabase",
-        //    questionText = "Qual dissacarídeo é o açúcar do leite?",
-        //    answers = new string[] {"Maltose", "Lactose", "Sacarose", "Celobiose"},
-        //    correctIndex = 1,
-        //    questionNumber = 11,
-        //    isImageAnswer = false,
-        //    isImageQuestion = false,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "carbohydrates_011",
-        //    topic = "carbohydrates",
-        //    subtopic = null,
-        //    displayName = "Carboidratos",
-        //    bloomLevel = "unclassified",
-        //    conceptTags = null,
-        //    prerequisites = null,
-        //    questionHint = null
-        //},
+        new Question {
+            questionDatabankName = "CarbohydratesQuestionDatabase",
+            questionText = "Qual dissacarídeo é o açúcar do leite?",
+            answers = new string[] {
+            "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer11_1",
+            "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer11_2",
+            "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer11_3",
+            "AnswerImages/CarbohydrateDB/carbohydrateDB_ImageAnswer11_4"},
+            correctIndex = 1,
+            questionNumber = 11,
+            isImageAnswer = true,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 2,
+            questionInDevelopment = false,
+            globalId = "carbohydrates_011",
+            topic = "carbohydrates",
+            subtopic = null,
+            displayName = "Carboidratos",
+            bloomLevel = "unclassified",
+            conceptTags = null,
+            prerequisites = null,
+            questionHint = null
+        },
         //new Question {
         //    questionDatabankName = "CarbohydratesQuestionDatabase",
         //    questionText = "Qual o tipo de ligação que une os monossacarídeos em um dissacarídeo?",
