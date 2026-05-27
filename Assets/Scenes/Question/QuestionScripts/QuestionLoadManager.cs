@@ -74,6 +74,22 @@ public class QuestionLoadManager : MonoBehaviour
             Debug.Log($"\n📚 PASSO 1: LITEDB");
             Debug.Log($"  Banco: {databankName} | Total: {allQuestions.Count}");
 
+            // Preview Mode — retorna todas as questões de todos os níveis,
+            // sem filtrar por questionInDevelopment, respondidas ou nível atual.
+            var envCfg = EnvironmentConfig.Load();
+            if (envCfg != null && envCfg.QuestionPreviewMode)
+            {
+                Debug.Log($"[QuestionLoadManager] Preview Mode — {allQuestions.Count} questões de todos os níveis carregadas.");
+                questions = allQuestions;
+                return questions;
+            }
+
+            allQuestions = allQuestions
+                .Where(q => q != null && !q.questionInDevelopment)
+                .ToList();
+
+            Debug.Log($"[QuestionLoadManager] Questões em desenvolvimento filtradas. Visíveis: {allQuestions.Count}");
+
             int totalQuestions = allQuestions.Count;
             QuestionBankStatistics.SetTotalQuestions(databankName, totalQuestions);
 
@@ -82,16 +98,6 @@ public class QuestionLoadManager : MonoBehaviour
 
             foreach (var kvp in questionsByLevel.OrderBy(x => x.Key))
                 Debug.Log($"    Nível {kvp.Key}: {kvp.Value} questões");
-
-            // Preview Mode — retorna todas as questões de todos os níveis,
-            // sem filtrar por respondidas ou nível atual.
-            var envCfg = EnvironmentConfig.Load();
-            if (envCfg != null && envCfg.QuestionPreviewMode)
-            {
-                Debug.Log($"[QuestionLoadManager] Preview Mode — {allQuestions.Count} questões de todos os níveis carregadas.");
-                questions = allQuestions;
-                return questions;
-            }
 
             string userId = UserDataStore.CurrentUserData?.UserId;
 

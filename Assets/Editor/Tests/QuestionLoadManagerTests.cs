@@ -73,6 +73,9 @@ public class QuestionLoadManagerTests
         _fakeSync.SetQuestionsForDatabankName(DB_NAME, questions);
     }
 
+    private void SetupLiteDBWithQuestions(List<Question> questions)
+        => _fakeSync.SetQuestionsForDatabankName(DB_NAME, questions);
+
     // =======================================================
     // Guard: LiteDB vazio
     // =======================================================
@@ -188,6 +191,29 @@ public class QuestionLoadManagerTests
     }
 
     [UnityTest]
+    public IEnumerator LoadQuestionsForSet_NormalMode_OcultaQuestionInDevelopment()
+    {
+        // Arrange
+        _fakeAnswered.SetAnsweredQuestions(DB_NAME, new List<string>());
+        SetupLiteDBWithQuestions(new List<Question>
+        {
+            QuestionTestHelpers.MakeQuestion(1, level: 1, databankName: DB_NAME, inDevelopment: false),
+            QuestionTestHelpers.MakeQuestion(2, level: 1, databankName: DB_NAME, inDevelopment: true),
+            QuestionTestHelpers.MakeQuestion(3, level: 1, databankName: DB_NAME, inDevelopment: false),
+        });
+
+        // Act
+        var task = _loadManager.LoadQuestionsForSet(TARGET_SET);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        // Assert
+        Assert.AreEqual(2, task.Result.Count);
+        Assert.IsFalse(task.Result.Any(q => q.questionInDevelopment),
+            "Questões com questionInDevelopment=true não devem aparecer fora do preview mode");
+        CollectionAssert.AreEquivalent(new[] { 1, 3 }, task.Result.Select(q => q.questionNumber));
+    }
+
+    [UnityTest]
     public IEnumerator LoadQuestionsForSet_TodosRespondidos_RetornaListaVazia()
     {
         // Arrange
@@ -274,6 +300,28 @@ public class QuestionLoadManagerTests
         // Assert
         Assert.AreEqual(6, task.Result.Count,
             "Preview Mode não deve filtrar questões já respondidas");
+    }
+
+    [UnityTest]
+    public IEnumerator LoadQuestionsForSet_PreviewMode_NaoFiltraQuestionInDevelopment()
+    {
+        // Arrange
+        EnvironmentConfig.OverridePreviewModeForTests(true);
+        SetupLiteDBWithQuestions(new List<Question>
+        {
+            QuestionTestHelpers.MakeQuestion(1, level: 1, databankName: DB_NAME, inDevelopment: false),
+            QuestionTestHelpers.MakeQuestion(2, level: 1, databankName: DB_NAME, inDevelopment: true),
+            QuestionTestHelpers.MakeQuestion(3, level: 2, databankName: DB_NAME, inDevelopment: true),
+        });
+
+        // Act
+        var task = _loadManager.LoadQuestionsForSet(TARGET_SET);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        // Assert
+        Assert.AreEqual(3, task.Result.Count,
+            "Preview Mode deve mostrar todas as questões hardcoded, inclusive questionInDevelopment=true");
+        Assert.AreEqual(2, task.Result.Count(q => q.questionInDevelopment));
     }
 
     [UnityTest]

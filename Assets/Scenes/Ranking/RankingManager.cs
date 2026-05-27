@@ -26,13 +26,11 @@ public class RankingManager : MonoBehaviour
 
     // ─── Estado interno ───────────────────────────────────────
     protected IRankingSyncService _rankingSyncService;
-    protected IFirestoreRankingRepository  _debugRankingRepository;
     protected List<Ranking>       _rankings = new List<Ranking>();
 
     private INavigationService _navigation;
     private DateTime           _lastFetchTime = DateTime.MinValue;
     private bool               _isFetching    = false;
-    private bool               _debugMode     = false;
 
     // ─────────────────────────────────────────────────────────
     // Unity lifecycle
@@ -66,33 +64,23 @@ public class RankingManager : MonoBehaviour
 
     protected virtual void InitializeRepository()
     {
-        _debugMode = BioBlocksSettings.Instance != null
-                  && BioBlocksSettings.Instance.IsDebugMode();
+        _rankingSyncService = AppContext.RankingSync;
 
-        if (_debugMode)
+        if (_rankingSyncService == null)
         {
-            _debugRankingRepository = new FakeRankingRepository();
+            Debug.LogWarning("[RankingManager] AppContext.RankingSync está nulo. Ranking usará fallback remoto direto se possível.");
         }
         else
         {
-            _rankingSyncService = AppContext.RankingSync;
+            // Popula a tabela imediatamente com cache LiteDB.
+            // Não acessa Firestore aqui.
+            _rankings = _rankingSyncService.GetCachedRankings(rankingLimit);
 
-            if (_rankingSyncService == null)
+            if (_rankings != null && _rankings.Count > 0)
             {
-                Debug.LogWarning("[RankingManager] AppContext.RankingSync está nulo. Ranking usará fallback remoto direto se possível.");
-            }
-            else
-            {
-                // Popula a tabela imediatamente com cache LiteDB.
-                // Não acessa Firestore aqui.
-                _rankings = _rankingSyncService.GetCachedRankings(rankingLimit);
-
-                if (_rankings != null && _rankings.Count > 0)
-                {
-                    _lastFetchTime = _rankingSyncService.GetLastSyncedAt();
-                    UpdateRankingTable();
-                    UpdateLastFetchLabel();
-                }
+                _lastFetchTime = _rankingSyncService.GetLastSyncedAt();
+                UpdateRankingTable();
+                UpdateLastFetchLabel();
             }
         }
 
@@ -136,11 +124,7 @@ public class RankingManager : MonoBehaviour
 
             List<Ranking> result;
 
-            if (_debugMode)
-            {
-                result = await FetchDebugRankings();
-            }
-            else if (_rankingSyncService != null)
+            if (_rankingSyncService != null)
             {
                 result = await _rankingSyncService.GetRankingsWithFallback(rankingLimit);
                 _lastFetchTime = _rankingSyncService.GetLastSyncedAt();
@@ -172,17 +156,6 @@ public class RankingManager : MonoBehaviour
             ShowLoadingIndicator(false);
             UpdateLastFetchLabel();
         }
-    }
-
-    private async Task<List<Ranking>> FetchDebugRankings()
-    {
-        if (_debugRankingRepository == null)
-            _debugRankingRepository = new FakeRankingRepository();
-
-        var result = await _debugRankingRepository.GetRankingsAsync(rankingLimit);
-        _lastFetchTime = DateTime.UtcNow;
-
-        return result ?? new List<Ranking>();
     }
 
     // ─────────────────────────────────────────────────────────
@@ -270,12 +243,6 @@ public class RankingManager : MonoBehaviour
         try
         {
             ShowLoadingIndicator(true);
-
-            if (_debugMode)
-            {
-                await FetchRankings();
-                return;
-            }
 
             if (_rankingSyncService == null)
             {
