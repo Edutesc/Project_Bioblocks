@@ -6,7 +6,7 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
     private bool databaseInDevelopment = false;
     
     private List<Question> questions = new List<Question>
-    //{
+    {
     //    new Question {
     //        questionDatabankName = "CarbohydratesQuestionDatabase",
     //        questionText = "Qual a fórmula geral dos monossacarídeos?",
