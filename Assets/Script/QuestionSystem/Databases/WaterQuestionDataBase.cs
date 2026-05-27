@@ -4,7 +4,7 @@ using QuestionSystem;
 public class WaterQuestionDatabase : IQuestionDatabase
 {
     private bool databaseInDevelopment = false;
-    
+
     private List<Question> questions = new List<Question>
     {
         // new Question
@@ -22,18 +22,18 @@ public class WaterQuestionDatabase : IQuestionDatabase
         //     answerType = AnswerType.Text,
         //     questionType = QuestionType.Text,
         //     questionImagePath = "",
-        //     questionLevel = 2,
+        //     questionLevel = 1,
         //     questionInDevelopment = false,
         //     globalId = "water_001",
         //     topic = "water",
         //     subtopic = null,
         //     displayName = "Água",
-        //     bloomLevel = BloomLevel.Unclassified,
+        //     bloomLevel = BloomLevel.Understand,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
- 
+
     };
 
     public List<Question> GetQuestions() => questions;

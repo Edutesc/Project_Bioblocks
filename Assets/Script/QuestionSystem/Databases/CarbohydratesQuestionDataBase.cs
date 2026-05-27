@@ -21,7 +21,7 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //     answerType = AnswerType.Text,
         //     questionType = QuestionType.Text,
         //     questionImagePath = "",
-        //     questionLevel = 2,
+        //     questionLevel = 1,
         //     questionInDevelopment = false,
         //     globalId = "carbohydrates_001",
         //     topic = "carbohydrates",
@@ -31,7 +31,7 @@ public class CarbohydratesQuestionDatabase : IQuestionDatabase
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = new QuestionHint { text = "Os monossacarídeos, por serem hidratos de carbono simples, seguem a fórmula empírica (CH2O)n. A alternativa correta mostra exatamente essa proporção de um carbono para cada molécula de água." }
-        // }
+        // },
 
     };
 
