@@ -28,12 +28,12 @@ public class LipidsQuestionDatabase : IQuestionDatabase
         //     topic = "lipids",
         //     subtopic = null,
         //     displayName = "Lipídeos",
-        //     bloomLevel = BloomLevel.Unclassified,
+        //     bloomLevel = BloomLevel.Understand,
         //     conceptTags = null,
         //     prerequisites = null,
         //     questionHint = null
         // },
-        // 
+
     };
 
     public List<Question> GetQuestions() => questions;

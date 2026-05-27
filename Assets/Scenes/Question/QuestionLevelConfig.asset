@@ -15,8 +15,8 @@ MonoBehaviour:
   levelThemes:
   - level: 1
     levelName: "b\xE1sico"
-    questionBackground: {fileID: 21300000, guid: dde326f2963f9ea409f6a48c71068543, type: 3}
-    questionImageBackground: {fileID: 21300000, guid: dde326f2963f9ea409f6a48c71068543, type: 3}
+    questionBackground: {fileID: 21300000, guid: c7dde122f97ed47ab96ba2c16d470e11, type: 3}
+    questionImageBackground: {fileID: 21300000, guid: c7dde122f97ed47ab96ba2c16d470e11, type: 3}
     answerButtonBackground: {fileID: 21300000, guid: 985d726f1845411468c68ceb4c18be2c, type: 3}
     answerImageButtonBackground: {fileID: 21300000, guid: cf441a32a3fd948c19873a9daf036190, type: 3}
     correctAnswerBackground: {fileID: 21300000, guid: 57f452de434d04901a56bfde695f0a2d, type: 3}
@@ -29,8 +29,8 @@ MonoBehaviour:
     feedbackIncorrectColor: {r: 1, g: 0, b: 0, a: 1}
   - level: 2
     levelName: "intermedi\xE1rio"
-    questionBackground: {fileID: 21300000, guid: dd89b34796f39ab4da3b7f2ee158110d, type: 3}
-    questionImageBackground: {fileID: 21300000, guid: dd89b34796f39ab4da3b7f2ee158110d, type: 3}
+    questionBackground: {fileID: 21300000, guid: 249141eeadba243d6a33a274be44a803, type: 3}
+    questionImageBackground: {fileID: 21300000, guid: 249141eeadba243d6a33a274be44a803, type: 3}
     answerButtonBackground: {fileID: 21300000, guid: 5d3bcbd9f25e87a429b977453eeec48a, type: 3}
     answerImageButtonBackground: {fileID: 21300000, guid: 1acbec49477c94393b007fe784f5eb46, type: 3}
     correctAnswerBackground: {fileID: 21300000, guid: 95c20cd077623470fb3e9490e7fd7736, type: 3}
@@ -43,8 +43,8 @@ MonoBehaviour:
     feedbackIncorrectColor: {r: 1, g: 0, b: 0, a: 1}
   - level: 3
     levelName: "avan\xE7ado"
-    questionBackground: {fileID: 21300000, guid: 988960ed3f4297c4794f0b44f7274393, type: 3}
-    questionImageBackground: {fileID: 21300000, guid: 988960ed3f4297c4794f0b44f7274393, type: 3}
+    questionBackground: {fileID: 21300000, guid: 3306d20a5f553485a830a4c845503e99, type: 3}
+    questionImageBackground: {fileID: 21300000, guid: 3306d20a5f553485a830a4c845503e99, type: 3}
     answerButtonBackground: {fileID: 21300000, guid: 97dad18e7fb02c642add423b57d9f5c2, type: 3}
     answerImageButtonBackground: {fileID: 21300000, guid: 0710412f2ee94403db988c429eccc7f0, type: 3}
     correctAnswerBackground: {fileID: 21300000, guid: ff3e01cb3b83346db8c84387318a0fde, type: 3}

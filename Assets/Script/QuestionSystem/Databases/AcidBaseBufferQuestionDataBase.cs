@@ -33,7 +33,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //     prerequisites = null,
         //     questionHint = new QuestionHint { text = "Segundo Arrhenius, a definição foca na água: um ácido é aquela substância química que, quando dissolvida em solução aquosa, sofre ionização e libera íons H+ (ou hidroxônio, H3O+)." }
         // },
-                
+
     };
 
     public List<Question> GetQuestions() => questions;
