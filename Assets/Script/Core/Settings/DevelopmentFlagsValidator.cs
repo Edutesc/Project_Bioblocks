@@ -129,16 +129,16 @@ public class DevelopmentFlagsValidator : IPreprocessBuildWithReport
                 if (isProdFirebase)
                 {
                     // Prod Firebase + databaseInDevelopment=true: nunca faz sentido em qualquer
-                    // tipo de build. Usuários de Prod só veriam as questões marcadas como em edição.
+                    // tipo de build. A flag só deve existir como ferramenta de validação/editor.
                     errors.Add($"❌ Database '{databaseName}' com databaseInDevelopment=true apontando para " +
                                "Prod Firebase. Essa combinação não tem uso válido.");
                 }
                 else if (!isDevelopmentBuild)
                 {
                     // Dev Firebase + Release Build + databaseInDevelopment=true: incomum mas
-                    // intencional (ex: release de Dev para testar somente as questões em edição).
+                    // intencional para sinalizar que o banco ainda está sob validação.
                     warnings.Add($"⚠️  Database '{databaseName}' com databaseInDevelopment=true em Release Build de Dev. " +
-                                 "Apenas questões com questionInDevelopment=true serão visíveis.");
+                                 "Questões com questionInDevelopment=true continuam ocultas fora do Preview Mode.");
                 }
                 else
                 {
@@ -150,8 +150,8 @@ public class DevelopmentFlagsValidator : IPreprocessBuildWithReport
 
             // Nota: GetQuestions() é usado diretamente para encontrar questões em desenvolvimento
             // em qualquer banco, independentemente do estado de databaseInDevelopment.
-            // QuestionFilterService.FilterQuestions() excluiria essas questões quando
-            // databaseInDevelopment=false, tornando o aviso inútil.
+            // QuestionFilterService.FilterQuestions() exclui essas questões em modo normal,
+            // independentemente de databaseInDevelopment.
             List<Question> allQuestions = database.GetQuestions();
             var devQuestions = allQuestions.Where(q => q.questionInDevelopment).ToList();
 
