@@ -2676,8 +2676,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3579,6 +3579,10 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 669811562223568470, guid: 70b1bd1d9a7d06a409d5d5a4b86af9cb, type: 3}
+      propertyPath: m_text
+      value: Luciano
+      objectReference: {fileID: 0}
+    - target: {fileID: 669811562223568470, guid: 70b1bd1d9a7d06a409d5d5a4b86af9cb, type: 3}
       propertyPath: m_fontSize
       value: 60
       objectReference: {fileID: 0}
@@ -4410,7 +4414,6 @@ SceneRoots:
   - {fileID: 563844265}
   - {fileID: 1157095391}
   - {fileID: 1467229983}
-  - {fileID: 294296617}
   - {fileID: 564396344}
   - {fileID: 1379775355}
   - {fileID: 1398554299}

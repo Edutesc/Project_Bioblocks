@@ -62,7 +62,7 @@ public class QuestionUIManager : MonoBehaviour
 
     private void ShowImageQuestion(Question question)
     {
-        questionText.text = question.questionText;
+        questionText.text = ChemicalFormatter.Format(question.questionText);
 
         if (preloadedQuestionImage != null && !string.IsNullOrEmpty(question.questionImagePath))
         {
@@ -77,14 +77,13 @@ public class QuestionUIManager : MonoBehaviour
             return;
         }
 
-        // Sem preload: dispara fetch async e mantém escondido enquanto baixa.
         questionImage.gameObject.SetActive(false);
         _ = LoadQuestionImageAsync(question);
     }
 
     private void ShowTextQuestion(Question question)
     {
-        questionText.text = question.questionText;
+        questionText.text = ChemicalFormatter.Format(question.questionText);
         questionImage.gameObject.SetActive(false);
     }
 
@@ -96,8 +95,6 @@ public class QuestionUIManager : MonoBehaviour
 
         string imagePath = question.questionImagePath;
 
-        // Preview mode: AppContext.ImageSync não está disponível — lê direto de Resources.
-        // O path no C# database é um caminho Resources.Load válido (ex: "QuestionImages/AminoacidsDB/...").
         if (AppContext.ImageSync == null)
         {
             Texture2D resourceTexture = Resources.Load<Texture2D>(imagePath);
@@ -115,8 +112,6 @@ public class QuestionUIManager : MonoBehaviour
             return;
         }
 
-        // Dev/Prod mode: imagePath é uma storage key (ex: "aminoacids/aminoacidDB_ImageQuestionContainer10").
-        // O Firestore já armazena storage keys após a migração do UploadQuestionBanksEditor.
         try
         {
             Texture2D texture = await AppContext.ImageSync.GetImageAsync(imagePath, ct);
