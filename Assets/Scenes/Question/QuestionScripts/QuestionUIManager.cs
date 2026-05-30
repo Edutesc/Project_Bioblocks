@@ -83,6 +83,8 @@ public class QuestionUIManager : MonoBehaviour
 
     private void ShowTextQuestion(Question question)
     {
+        Debug.Log("ChemicalFormatter.Format(question.questionText)");
+        Debug.Log(ChemicalFormatter.Format(question.questionText));
         questionText.text = ChemicalFormatter.Format(question.questionText);
         questionImage.gameObject.SetActive(false);
     }

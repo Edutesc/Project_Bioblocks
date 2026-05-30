@@ -367,7 +367,7 @@ public class QuestionAnswerManager : MonoBehaviour
         {
             if (textAnswerButtons[i] != null && buttonTexts[i] != null)
             {
-                buttonTexts[i].text = question.answers[i];
+                buttonTexts[i].text = ChemicalFormatter.Format(question.answers[i]);
                 textAnswerButtons[i].interactable = true;
                 Debug.Log($"Botão {i} configurado com texto: {question.answers[i]}");
             }

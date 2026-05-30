@@ -8035,7 +8035,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "Teste18:2<sup>\u22069, 12</sup>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b4f080307749e4fef89e48d46c37f6af, type: 2}
   m_sharedMaterial: {fileID: -969081218096265377, guid: b4f080307749e4fef89e48d46c37f6af, type: 2}
