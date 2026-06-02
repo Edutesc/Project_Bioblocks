@@ -7,34 +7,44 @@ public class AminoacidQuestionDatabase : IQuestionDatabase
 
     private List<Question> questions = new List<Question>
     {
-           // // Question Example
-        // new Question
-        // {
-        //     questionDatabankName = "AminoacidQuestionDatabase",
-        //     questionText = "O que define um aminoácido?",
-        //     answers = new string[] {
-        //         "Uma molécula orgânica com um grupo amino e um grupo carboxila.",
-        //         "Uma molécula inorgânica com um grupo amino e um grupo carboxila.",
-        //         "Uma molécula orgânica com apenas um grupo amino.",
-        //         "Uma molécula inorgânica com apenas um grupo carboxila."
-        //     },
-        //     correctIndex = 0,
-        //     questionNumber = 1,
-        //     isImageAnswer = false,
-        //     isImageQuestion = false,
-        //     questionImagePath = "",
-        //     questionLevel = 2,
-        //     questionInDevelopment = false,
-        //     globalId = "aminoacids_001",
-        //     topic = "aminoacids",
-        //     subtopic = null,
-        //     displayName = "Aminoácidos e peptídeos",
-        //     bloomLevel = "unclassified",
-        //     conceptTags = null,
-        //     prerequisites = null,
-        //     questionHint = null
-        // },
-
+        new Question
+        {
+            questionDatabankName = "AminoacidQuestionDatabase",
+            questionText = "O que é um aminoácido?",
+            answers = new string[0],
+            correctIndex = 0,
+            questionNumber = 1,
+            questionType = QuestionType.Text,
+            answerType = AnswerType.Open,
+            isImageAnswer = false,
+            isImageQuestion = false,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false,
+            globalId = "aminoacids_001",
+            topic = "aminoacids",
+            subtopic = "amino acid structure",
+            displayName = "Aminoácidos e peptídeos",
+            bloomLevel = BloomLevel.Understand,
+            conceptTags = new List<string>
+            {
+                "amino acids",
+                "protein building blocks",
+                "functional groups"
+            },
+            prerequisites = new List<string>
+            {
+                "Identificar aminoácidos como moléculas orgânicas.",
+                "Citar a presença de um grupo amino.",
+                "Citar a presença de um grupo carboxila.",
+                "Reconhecer que aminoácidos são unidades formadoras de proteínas ou peptídeos.",
+                "Mencionar que a cadeia lateral ou grupo R diferencia os aminoácidos."
+            },
+            questionHint = new QuestionHint
+            {
+                text = "Pense nos grupos funcionais comuns e no papel dos aminoácidos nas proteínas."
+            }
+        },
     };
 
     public List<Question> GetQuestions() => questions;

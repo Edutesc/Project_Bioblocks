@@ -28,6 +28,12 @@ public class FeedbackUIElements : MonoBehaviour
     [SerializeField] private Sprite feedbackOpenAnswerSubmitted;
     [Tooltip("Imagem: 'Resposta enviada para avaliação!'")]
 
+    [Header("Feedback de Resposta Aberta")]
+    [SerializeField] private CanvasGroup openAnswerFeedbackGroup;
+    [SerializeField] private Image openAnswerFeedbackPanel;
+    [SerializeField] private TextMeshProUGUI openAnswerGradeText;
+    [SerializeField] private TextMeshProUGUI openAnswerScoreText;
+
     [Header("Feedback Completo (Conclusão de Nível)")]
     [SerializeField] private CanvasGroup levelCompletionFeedbackGroup;
     [SerializeField] private TextMeshProUGUI levelCompletionTitle;
@@ -77,6 +83,14 @@ public class FeedbackUIElements : MonoBehaviour
         if (feedbackPanel != null)
         {
             feedbackPanel.gameObject.SetActive(false);
+        }
+
+        if (openAnswerFeedbackGroup != null)
+        {
+            openAnswerFeedbackGroup.alpha = 0f;
+            openAnswerFeedbackGroup.interactable = false;
+            openAnswerFeedbackGroup.blocksRaycasts = false;
+            openAnswerFeedbackGroup.gameObject.SetActive(false);
         }
 
         // Esconde o texto antigo (obsoleto)
@@ -136,6 +150,12 @@ public class FeedbackUIElements : MonoBehaviour
     /// </summary>
     public void ShowOpenAnswerGrade(string gradeText, string scoreText)
     {
+        if (openAnswerFeedbackGroup != null)
+        {
+            ShowOpenAnswerGradeDedicatedLayout(gradeText, scoreText);
+            return;
+        }
+
         if (feedbackPanel == null)
         {
             Debug.LogError("[FeedbackUIElements] FeedbackPanel não atribuído!");
@@ -168,6 +188,60 @@ public class FeedbackUIElements : MonoBehaviour
 
         if (useAnimation)
             currentFeedbackCoroutine = StartCoroutine(AnimateOpenAnswerGrade());
+    }
+
+    private void ShowOpenAnswerGradeDedicatedLayout(string gradeText, string scoreText)
+    {
+        if (currentFeedbackCoroutine != null)
+            StopCoroutine(currentFeedbackCoroutine);
+
+        if (openAnswerGradeText != null)
+        {
+            openAnswerGradeText.text = gradeText;
+        }
+
+        if (openAnswerScoreText != null)
+        {
+            openAnswerScoreText.text = scoreText;
+        }
+
+        openAnswerFeedbackGroup.gameObject.SetActive(true);
+        openAnswerFeedbackGroup.interactable = false;
+        openAnswerFeedbackGroup.blocksRaycasts = false;
+
+        if (useAnimation)
+            currentFeedbackCoroutine = StartCoroutine(AnimateOpenAnswerDedicatedLayout());
+        else
+            openAnswerFeedbackGroup.alpha = 1f;
+    }
+
+    private IEnumerator AnimateOpenAnswerDedicatedLayout()
+    {
+        openAnswerFeedbackGroup.alpha = 0f;
+
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            openAnswerFeedbackGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        openAnswerFeedbackGroup.alpha = 1f;
+
+        yield return new WaitForSeconds(displayDuration);
+
+        elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            openAnswerFeedbackGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        openAnswerFeedbackGroup.alpha = 0f;
+        openAnswerFeedbackGroup.gameObject.SetActive(false);
+        currentFeedbackCoroutine = null;
     }
 
     private IEnumerator AnimateOpenAnswerGrade()
@@ -335,6 +409,12 @@ public class FeedbackUIElements : MonoBehaviour
         {
             feedbackPanel.gameObject.SetActive(false);
         }
+
+        if (openAnswerFeedbackGroup != null)
+        {
+            openAnswerFeedbackGroup.alpha = 0f;
+            openAnswerFeedbackGroup.gameObject.SetActive(false);
+        }
     }
 
     // ========================================
@@ -481,6 +561,15 @@ public class FeedbackUIElements : MonoBehaviour
 
         if (levelCompletionFeedbackGroup == null)
             Debug.LogWarning("[FeedbackUIElements] LevelCompletionFeedbackGroup não atribuído (feedback de nível)");
+
+        if (openAnswerFeedbackGroup != null)
+        {
+            if (openAnswerGradeText == null)
+                Debug.LogWarning("[FeedbackUIElements] OpenAnswerGradeText não atribuído");
+
+            if (openAnswerScoreText == null)
+                Debug.LogWarning("[FeedbackUIElements] OpenAnswerScoreText não atribuído");
+        }
 
         if (hasErrors)
         {
