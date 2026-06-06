@@ -2,10 +2,10 @@
 // Testes unitários para QuestionLoadManager — fluxo de carregamento de questões.
 //
 // O que É testado:
-//   - LoadQuestionsForSet: leitura do LiteDB, filtragem, cálculo de nível
+//   - LoadQuestionsForSet: leitura do LiteDB, filtragem, seleção de sessão
 //   - Integração com QuestionBankStatistics (SetTotalQuestions, SetQuestionsPerLevel)
 //   - Guards: LiteDB vazio, usuário sem UserId
-//   - Progressão de níveis: sem respondidas → nível 1, nível 1 completo → nível 2
+//   - Seleção mista: sem respondidas → inclui níveis disponíveis na sessão
 //   - Remoção de questões já respondidas do resultado
 
 using NUnit.Framework;
@@ -137,23 +137,24 @@ public class QuestionLoadManagerTests
     }
 
     // =======================================================
-    // Progressão de níveis
+    // Seleção de sessão
     // =======================================================
     [UnityTest]
-    public IEnumerator LoadQuestionsForSet_SemRespondidas_RetornaNivel1()
+    public IEnumerator LoadQuestionsForSet_SemRespondidas_RetornaSessaoMista()
     {
         // Arrange
         _fakeAnswered.SetAnsweredQuestions(DB_NAME, new List<string>());
-        SetupLiteDBWithQuestions(nivel1: 3, nivel2: 3);
+        SetupLiteDBWithQuestions(nivel1: 10, nivel2: 10, nivel3: 10);
 
         // Act
         var task = _loadManager.LoadQuestionsForSet(TARGET_SET);
         yield return new WaitUntil(() => task.IsCompleted);
 
         // Assert
-        Assert.IsTrue(task.Result.All(q => q.questionLevel == 1),
-            "Sem respondidas, todas as questões retornadas devem ser de nível 1");
-        Assert.AreEqual(3, task.Result.Count);
+        Assert.AreEqual(10, task.Result.Count);
+        Assert.AreEqual(5, task.Result.Count(q => q.questionLevel == 1));
+        Assert.AreEqual(3, task.Result.Count(q => q.questionLevel == 2));
+        Assert.AreEqual(2, task.Result.Count(q => q.questionLevel == 3));
     }
 
     [UnityTest]

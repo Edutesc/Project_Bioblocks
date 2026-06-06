@@ -117,30 +117,22 @@ public class QuestionLoadManager : MonoBehaviour
             if (answeredQuestionsFromFirebase.Count > 0 && answeredQuestionsFromFirebase.Count <= 20)
                 Debug.Log($"  IDs: [{string.Join(", ", answeredQuestionsFromFirebase)}]");
 
-            Debug.Log($"\n🔢 PASSO 3: CÁLCULO DO NÍVEL ATUAL");
+            Debug.Log($"\n🎯 PASSO 3: MONTAR SESSÃO MISTA");
 
-            int currentLevel = LevelCalculator.CalculateCurrentLevel(
-                allQuestions, answeredQuestionsFromFirebase);
+            List<Question> selectedQuestions = QuestionSessionSelector.SelectQuestionsForSession(
+                allQuestions,
+                answeredQuestionsFromFirebase);
 
-            HashSet<string> answeredSet = new HashSet<string>(answeredQuestionsFromFirebase);
+            Debug.Log($"  Tamanho máximo da sessão: {QuestionSessionSelector.DefaultSessionSize}");
+            Debug.Log($"  Questões selecionadas: {selectedQuestions.Count}");
 
-            List<Question> questionsNotAnswered = allQuestions
-                .Where(q => !answeredSet.Contains(q.questionNumber.ToString()))
-                .ToList();
+            var selectedByLevel = GetQuestionCountByLevel(selectedQuestions);
+            foreach (var kvp in selectedByLevel.OrderBy(x => x.Key))
+                Debug.Log($"    Nível {kvp.Key}: {kvp.Value} questões na sessão");
 
-            Debug.Log($"\n🗑️ PASSO 4: REMOVER QUESTÕES RESPONDIDAS");
-            Debug.Log($"  Questões restantes: {questionsNotAnswered.Count}");
-
-            List<Question> questionsForCurrentLevel = questionsNotAnswered
-                .Where(q => GetQuestionLevel(q) == currentLevel)
-                .ToList();
-
-            Debug.Log($"\n✅ PASSO 5: FILTRAR POR NÍVEL {currentLevel}");
-            Debug.Log($"  Questões disponíveis: {questionsForCurrentLevel.Count}");
-
-            if (questionsForCurrentLevel.Count > 0)
+            if (selectedQuestions.Count > 0)
             {
-                var questionNumbers = questionsForCurrentLevel
+                var questionNumbers = selectedQuestions
                     .Select(q => q.questionNumber)
                     .OrderBy(n => n)
                     .ToList();
@@ -152,7 +144,7 @@ public class QuestionLoadManager : MonoBehaviour
             }
             else
             {
-                Debug.Log($"  ⚠️ NENHUMA questão disponível no nível {currentLevel}!");
+                Debug.Log("  ⚠️ NENHUMA questão disponível para a sessão!");
 
                 var stats = LevelCalculator.GetLevelStats(allQuestions, answeredQuestionsFromFirebase);
                 Debug.Log($"\n📊 ESTATÍSTICAS:");
@@ -162,7 +154,7 @@ public class QuestionLoadManager : MonoBehaviour
 
             Debug.Log($"╚══════════════════════════════════════════════════════╝\n");
 
-            questions = questionsForCurrentLevel;
+            questions = selectedQuestions;
             return questions;
         }
         catch (Exception e)
