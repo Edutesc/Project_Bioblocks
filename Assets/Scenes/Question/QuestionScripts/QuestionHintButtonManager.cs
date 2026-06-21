@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using QuestionSystem;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class QuestionHintButtonManager : MonoBehaviour
@@ -27,6 +28,7 @@ public class QuestionHintButtonManager : MonoBehaviour
     private Vector2 _visibleAnchoredPosition;
     private Coroutine _animationRoutine;
     private bool _hasCachedVisiblePosition;
+    private bool _isOpeningHintScene;
 
     private void Awake()
     {
@@ -80,15 +82,50 @@ public class QuestionHintButtonManager : MonoBehaviour
         if (!HasHint(_currentQuestion))
             return;
 
+        if (_isOpeningHintScene)
+            return;
+
+        StartCoroutine(OpenHintSceneRoutine());
+    }
+
+    private IEnumerator OpenHintSceneRoutine()
+    {
+        _isOpeningHintScene = true;
+
         var sceneData = new Dictionary<string, object>
         {
             { "question", _currentQuestion }
         };
 
-        if (AppContext.Navigation != null)
-            AppContext.Navigation.NavigateTo(hintSceneName, sceneData);
+        if (AppContext.SceneData != null)
+            AppContext.SceneData.SetData(sceneData);
         else
-            Debug.LogError("[QuestionHintButtonManager] Navigation não disponível no AppContext.");
+            Debug.LogError("[QuestionHintButtonManager] SceneData não disponível no AppContext.");
+
+        Scene loadedHintScene = SceneManager.GetSceneByName(hintSceneName);
+        if (loadedHintScene.IsValid() && loadedHintScene.isLoaded)
+        {
+            RefreshOpenHintScene(loadedHintScene);
+            _isOpeningHintScene = false;
+            yield break;
+        }
+
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(hintSceneName, LoadSceneMode.Additive);
+        if (loadOperation == null)
+        {
+            Debug.LogError($"[QuestionHintButtonManager] Não foi possível carregar a cena '{hintSceneName}'.");
+            _isOpeningHintScene = false;
+            yield break;
+        }
+
+        while (!loadOperation.isDone)
+            yield return null;
+
+        Scene hintScene = SceneManager.GetSceneByName(hintSceneName);
+        if (hintScene.IsValid())
+            RefreshOpenHintScene(hintScene);
+
+        _isOpeningHintScene = false;
     }
 
     private IEnumerator AnimateDropIn()
@@ -133,6 +170,16 @@ public class QuestionHintButtonManager : MonoBehaviour
 
         hintButton.onClick.RemoveListener(OpenHintScene);
         hintButton.onClick.AddListener(OpenHintScene);
+    }
+
+    private void RefreshOpenHintScene(Scene hintScene)
+    {
+        foreach (GameObject root in hintScene.GetRootGameObjects())
+        {
+            QuestionHintManager[] managers = root.GetComponentsInChildren<QuestionHintManager>(true);
+            foreach (QuestionHintManager manager in managers)
+                manager.ShowAsModal(_currentQuestion);
+        }
     }
 
     private void ResolveReferences()

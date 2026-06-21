@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using QuestionSystem;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
@@ -22,6 +24,14 @@ public class QuestionHintManager : MonoBehaviour
     [SerializeField] private Button linkButton;
     [SerializeField] private TextMeshProUGUI linkText;
 
+    [Header("Modal")]
+    [SerializeField] private RectTransform modalRoot;
+    [SerializeField] private CanvasGroup modalCanvasGroup;
+    [SerializeField] private Canvas modalCanvas;
+    [SerializeField] private float modalAnimationDuration = 0.35f;
+    [SerializeField] private float modalHiddenOffsetY = 2300f;
+    [SerializeField] private int modalSortingOrder = 500;
+
     [Header("Video")]
     [SerializeField] private bool playVideoOnLoad;
 
@@ -29,9 +39,15 @@ public class QuestionHintManager : MonoBehaviour
     private Sprite _loadedImageSprite;
     private bool _loadedImageOwnsTexture;
     private string _currentLink;
+    private Vector2 _modalVisiblePosition;
+    private Coroutine _modalAnimationRoutine;
+    private bool _hasModalVisiblePosition;
 
     private void Awake()
     {
+        ResolveModalReferences();
+        ConfigureAsAdditiveModal();
+        PrepareModalHidden();
         HideAllHintViews();
         ConfigureLinkButton();
     }
@@ -39,6 +55,21 @@ public class QuestionHintManager : MonoBehaviour
     private void Start()
     {
         PopulateFromSceneData();
+        PlayOpenAnimation();
+    }
+
+    public void ShowAsModal(Question question)
+    {
+        Populate(question);
+        PlayOpenAnimation();
+    }
+
+    public void CloseModal()
+    {
+        if (_modalAnimationRoutine != null)
+            StopCoroutine(_modalAnimationRoutine);
+
+        _modalAnimationRoutine = StartCoroutine(CloseModalRoutine());
     }
 
     public void Populate(Question question)
@@ -72,6 +103,27 @@ public class QuestionHintManager : MonoBehaviour
         _ = ShowImageAsync(hint.imagePath, sourceQuestion);
         ShowVideo(hint.videoUrl);
         ShowLink(hint.link);
+    }
+
+    private void PlayOpenAnimation()
+    {
+        ResolveModalReferences();
+        CacheModalVisiblePosition();
+
+        if (modalRoot == null || modalCanvasGroup == null)
+            return;
+
+        if (_modalAnimationRoutine != null)
+            StopCoroutine(_modalAnimationRoutine);
+
+        gameObject.SetActive(true);
+        modalRoot.gameObject.SetActive(true);
+        _modalAnimationRoutine = StartCoroutine(AnimateModal(
+            _modalVisiblePosition + Vector2.down * modalHiddenOffsetY,
+            _modalVisiblePosition,
+            0f,
+            1f,
+            unloadSceneWhenFinished: false));
     }
 
     private void PopulateFromSceneData()
@@ -240,6 +292,145 @@ public class QuestionHintManager : MonoBehaviour
         linkButton.onClick.AddListener(OpenCurrentLink);
     }
 
+    private void ResolveModalReferences()
+    {
+        if (modalRoot == null)
+            modalRoot = FindRectTransformInScene("MainBackground");
+
+        if (modalRoot == null)
+            modalRoot = FindObjectOfType<Canvas>()?.transform as RectTransform;
+
+        if (modalCanvas == null)
+            modalCanvas = modalRoot != null
+                ? modalRoot.GetComponentInParent<Canvas>()
+                : FindObjectOfType<Canvas>();
+
+        if (modalCanvasGroup == null && modalRoot != null)
+            modalCanvasGroup = modalRoot.GetComponent<CanvasGroup>();
+
+        if (modalCanvasGroup == null && modalRoot != null)
+            modalCanvasGroup = modalRoot.gameObject.AddComponent<CanvasGroup>();
+    }
+
+    private void ConfigureAsAdditiveModal()
+    {
+        if (modalCanvas != null)
+        {
+            modalCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            modalCanvas.overrideSorting = true;
+            modalCanvas.sortingOrder = modalSortingOrder;
+        }
+    }
+
+    private void PrepareModalHidden()
+    {
+        CacheModalVisiblePosition();
+
+        if (modalRoot != null)
+            modalRoot.anchoredPosition = _modalVisiblePosition + Vector2.down * modalHiddenOffsetY;
+
+        if (modalCanvasGroup != null)
+        {
+            modalCanvasGroup.alpha = 0f;
+            modalCanvasGroup.interactable = false;
+            modalCanvasGroup.blocksRaycasts = false;
+        }
+    }
+
+    private IEnumerator CloseModalRoutine()
+    {
+        ResolveModalReferences();
+        CacheModalVisiblePosition();
+
+        if (modalRoot == null || modalCanvasGroup == null)
+        {
+            UnloadThisSceneIfAdditive();
+            yield break;
+        }
+
+        yield return AnimateModal(
+            modalRoot.anchoredPosition,
+            _modalVisiblePosition + Vector2.down * modalHiddenOffsetY,
+            modalCanvasGroup.alpha,
+            0f,
+            unloadSceneWhenFinished: true);
+    }
+
+    private IEnumerator AnimateModal(
+        Vector2 fromPosition,
+        Vector2 toPosition,
+        float fromAlpha,
+        float toAlpha,
+        bool unloadSceneWhenFinished)
+    {
+        float elapsed = 0f;
+        float duration = Mathf.Max(0.01f, modalAnimationDuration);
+
+        modalRoot.anchoredPosition = fromPosition;
+        modalCanvasGroup.alpha = fromAlpha;
+        modalCanvasGroup.interactable = false;
+        modalCanvasGroup.blocksRaycasts = false;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float eased = Mathf.SmoothStep(0f, 1f, t);
+
+            modalRoot.anchoredPosition = Vector2.LerpUnclamped(fromPosition, toPosition, eased);
+            modalCanvasGroup.alpha = Mathf.LerpUnclamped(fromAlpha, toAlpha, eased);
+
+            yield return null;
+        }
+
+        modalRoot.anchoredPosition = toPosition;
+        modalCanvasGroup.alpha = toAlpha;
+        modalCanvasGroup.interactable = !unloadSceneWhenFinished;
+        modalCanvasGroup.blocksRaycasts = !unloadSceneWhenFinished;
+        _modalAnimationRoutine = null;
+
+        if (unloadSceneWhenFinished)
+            UnloadThisSceneIfAdditive();
+    }
+
+    private void CacheModalVisiblePosition()
+    {
+        if (_hasModalVisiblePosition || modalRoot == null)
+            return;
+
+        _modalVisiblePosition = modalRoot.anchoredPosition;
+        _hasModalVisiblePosition = true;
+    }
+
+    private RectTransform FindRectTransformInScene(string objectName)
+    {
+        Scene currentScene = gameObject.scene;
+
+        foreach (GameObject root in currentScene.GetRootGameObjects())
+        {
+            Transform[] transforms = root.GetComponentsInChildren<Transform>(true);
+            foreach (Transform candidate in transforms)
+            {
+                if (candidate.name == objectName && candidate is RectTransform rectTransform)
+                    return rectTransform;
+            }
+        }
+
+        return null;
+    }
+
+    private void UnloadThisSceneIfAdditive()
+    {
+        if (SceneManager.sceneCount > 1)
+        {
+            SceneManager.UnloadSceneAsync(gameObject.scene);
+            return;
+        }
+
+        if (modalRoot != null)
+            modalRoot.gameObject.SetActive(false);
+    }
+
     private void HideAllHintViews()
     {
         if (hintText != null)
@@ -341,6 +532,9 @@ public class QuestionHintManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (_modalAnimationRoutine != null)
+            StopCoroutine(_modalAnimationRoutine);
+
         CancelImageLoad();
         ClearLoadedImage();
 
