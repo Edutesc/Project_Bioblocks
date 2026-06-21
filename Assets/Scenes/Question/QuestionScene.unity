@@ -7781,8 +7781,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hintButton: {fileID: 1753261177}
+  hintButtonImage: {fileID: 0}
   canvasGroup: {fileID: 1753261180}
   buttonRectTransform: {fileID: 1753261176}
+  level1ButtonSprite: {fileID: 21300000, guid: 740ecede63a9448b6a756c8bf22f7518, type: 3}
+  level2ButtonSprite: {fileID: 21300000, guid: 03d875728ec384e6c99261d63ab2bd36, type: 3}
+  level3ButtonSprite: {fileID: 21300000, guid: 09941954cdc164677879f62a06e2c598, type: 3}
   hintSceneName: QuestionHintScene
   dropOffsetY: 80
   animationDuration: 0.35

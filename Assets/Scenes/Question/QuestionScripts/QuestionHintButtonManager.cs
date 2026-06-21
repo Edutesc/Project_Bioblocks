@@ -7,9 +7,19 @@ using UnityEngine.UI;
 public class QuestionHintButtonManager : MonoBehaviour
 {
     [SerializeField] private Button hintButton;
+    [SerializeField] private Image hintButtonImage;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform buttonRectTransform;
+
+    [Header("Sprites por nível")]
+    [SerializeField] private Sprite level1ButtonSprite;
+    [SerializeField] private Sprite level2ButtonSprite;
+    [SerializeField] private Sprite level3ButtonSprite;
+
+    [Header("Navigation")]
     [SerializeField] private string hintSceneName = "QuestionHintScene";
+
+    [Header("Animation")]
     [SerializeField] private float dropOffsetY = 80f;
     [SerializeField] private float animationDuration = 0.35f;
 
@@ -20,17 +30,7 @@ public class QuestionHintButtonManager : MonoBehaviour
 
     private void Awake()
     {
-        if (hintButton == null)
-            hintButton = GetComponent<Button>();
-
-        if (canvasGroup == null)
-            canvasGroup = GetComponent<CanvasGroup>();
-
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
-
-        if (buttonRectTransform == null)
-            buttonRectTransform = transform as RectTransform;
+        ResolveReferences();
 
         CacheVisiblePosition();
         ConfigureButton();
@@ -67,6 +67,8 @@ public class QuestionHintButtonManager : MonoBehaviour
 
         _currentQuestion = question;
         CacheVisiblePosition();
+        ResolveButtonImageReference();
+        ApplySpriteForQuestionLevel(question.questionLevel);
 
         gameObject.SetActive(true);
         StopActiveAnimation();
@@ -131,6 +133,62 @@ public class QuestionHintButtonManager : MonoBehaviour
 
         hintButton.onClick.RemoveListener(OpenHintScene);
         hintButton.onClick.AddListener(OpenHintScene);
+    }
+
+    private void ResolveReferences()
+    {
+        if (hintButton == null)
+            hintButton = GetComponent<Button>();
+
+        ResolveButtonImageReference();
+
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
+
+        if (canvasGroup == null)
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
+        if (buttonRectTransform == null)
+            buttonRectTransform = transform as RectTransform;
+    }
+
+    private void ResolveButtonImageReference()
+    {
+        if (hintButtonImage != null)
+            return;
+
+        if (hintButton != null && hintButton.targetGraphic is Image targetImage)
+        {
+            hintButtonImage = targetImage;
+            return;
+        }
+
+        if (hintButton != null)
+            hintButtonImage = hintButton.GetComponent<Image>();
+
+        if (hintButtonImage == null)
+            hintButtonImage = GetComponent<Image>();
+    }
+
+    private void ApplySpriteForQuestionLevel(int questionLevel)
+    {
+        if (hintButtonImage == null)
+            return;
+
+        Sprite sprite = GetSpriteForQuestionLevel(questionLevel);
+        if (sprite != null)
+            hintButtonImage.sprite = sprite;
+    }
+
+    private Sprite GetSpriteForQuestionLevel(int questionLevel)
+    {
+        return questionLevel switch
+        {
+            1 => level1ButtonSprite,
+            2 => level2ButtonSprite,
+            3 => level3ButtonSprite,
+            _ => level1ButtonSprite
+        };
     }
 
     private void CacheVisiblePosition()
