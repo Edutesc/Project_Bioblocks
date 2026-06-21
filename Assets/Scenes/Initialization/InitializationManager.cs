@@ -198,7 +198,11 @@ public class InitializationManager : MonoBehaviour
     private async Task<bool> CheckAuthentication()
     {
         if (!_auth.HasLocalSession())
-            return false;
+        {
+            bool restored = await WaitForLocalSessionRestore(2000);
+            if (!restored)
+                return TryLoadOfflineUserFromCache("Sem sessão Firebase restaurada.");
+        }
 
         try
         {
@@ -224,16 +228,78 @@ public class InitializationManager : MonoBehaviour
                 }
             }
 
-            await ForceLogoutAndGoToLoginAsync("Sessão Firebase inválida e sem UserData local.");
+            if (TryLoadOfflineUserFromCache("Sessão Firebase não validada."))
+                return true;
+
+            Debug.LogWarning("[InitializationManager] Sessão não validada online e sem UserData local. Indo para LoginView sem limpar a sessão Firebase.");
             return false;
         }
+    }
+
+    private async Task<bool> WaitForLocalSessionRestore(int timeoutMillis)
+    {
+        if (_auth.HasLocalSession())
+            return true;
+
+        var auth = FirebaseAuth.DefaultInstance;
+        var restored = new TaskCompletionSource<bool>(
+            TaskCreationOptions.RunContinuationsAsynchronously
+        );
+
+        EventHandler handler = null;
+        handler = (_, __) =>
+        {
+            if (_auth.HasLocalSession())
+                restored.TrySetResult(true);
+        };
+
+        auth.StateChanged += handler;
+
+        try
+        {
+            if (_auth.HasLocalSession())
+                return true;
+
+            Task completed = await Task.WhenAny(restored.Task, Task.Delay(timeoutMillis));
+            return completed == restored.Task && _auth.HasLocalSession();
+        }
+        finally
+        {
+            auth.StateChanged -= handler;
+        }
+    }
+
+    private bool TryLoadOfflineUserFromCache(string reason)
+    {
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+            return false;
+
+        string lastUserId = PlayerPrefs.GetString("UserId", string.Empty);
+        if (string.IsNullOrEmpty(lastUserId) || _userDataLocal == null)
+        {
+            Debug.LogWarning($"[InitializationManager] Offline sem último usuário local. Motivo: {reason}");
+            return false;
+        }
+
+        var cached = _userDataLocal.GetUser(lastUserId);
+        if (cached == null)
+        {
+            Debug.LogWarning($"[InitializationManager] Offline, mas UserData local não foi encontrado para {lastUserId}. Motivo: {reason}");
+            return false;
+        }
+
+        UserDataStore.CurrentUserData = cached;
+        Debug.LogWarning($"[InitializationManager] Offline — usando UserData local para {lastUserId}. Motivo: {reason}");
+        return true;
     }
 
     private async Task<bool> LoadUserData()
     {
         try
         {
-            if (!_auth.HasLocalSession()) return false;
+            if (!_auth.HasLocalSession())
+                return UserDataStore.CurrentUserData != null
+                    || TryLoadOfflineUserFromCache("Carregamento sem sessão Firebase.");
 
             string userId = _auth.CurrentUserId;
             if (string.IsNullOrEmpty(userId)) return false;

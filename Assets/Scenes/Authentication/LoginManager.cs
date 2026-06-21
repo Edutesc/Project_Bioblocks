@@ -18,6 +18,7 @@ public class LoginManager : MonoBehaviour
 
     private IAuthRepository   _auth;
     private INavigationService _navigation;
+    private IUserDataLocalRepository _userDataLocal;
 
     private Dictionary<string, LoginAttempt> loginAttempts = new Dictionary<string, LoginAttempt>();
     private const int MAX_ATTEMPTS    = 5;
@@ -28,6 +29,7 @@ public class LoginManager : MonoBehaviour
     {
         _auth       = AppContext.Auth;
         _navigation = AppContext.Navigation;
+        _userDataLocal = AppContext.UserDataLocal;
 
         loginButton.onClick.AddListener(HandleLogin);
         registerButton.onClick.AddListener(HandleRegisterNavigation);
@@ -68,6 +70,7 @@ public class LoginManager : MonoBehaviour
                 loginAttempts[email].Reset();
 
             UserDataStore.CurrentUserData = userData;
+            CacheUserDataLocally(userData);
             await AppContext.AnsweredQuestions?.ForceUpdate();
           //  loadingSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
             _navigation.NavigateTo("PathwayScene");
@@ -114,6 +117,26 @@ public class LoginManager : MonoBehaviour
         registerButton.interactable = interactable;
         emailInput.interactable = interactable;
         passwordInput.interactable = interactable;
+    }
+
+    private void CacheUserDataLocally(UserData userData)
+    {
+        if (userData == null || string.IsNullOrEmpty(userData.UserId) || _userDataLocal == null)
+            return;
+
+        try
+        {
+            _userDataLocal.UpdateUser(userData);
+            _userDataLocal.MarkAsSynced(userData.UserId);
+            PlayerPrefs.SetString("UserId", userData.UserId);
+            PlayerPrefs.SetString("UserEmail", userData.Email ?? string.Empty);
+            PlayerPrefs.SetString("UserNickname", userData.NickName ?? string.Empty);
+            PlayerPrefs.Save();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[LoginManager] Falha ao salvar UserData no cache local: {e.Message}");
+        }
     }
 
     // -------------------------------------------------------
