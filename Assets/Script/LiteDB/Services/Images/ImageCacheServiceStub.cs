@@ -8,7 +8,11 @@ public class ImageCacheServiceStub : IImageCacheService
 
     public string GetCachedImagePath(string imageUrl) => null;
 
-    public void SaveImageToCache(string imageUrl, Texture2D texture) { }
+    public void SaveImageToCache(string imageUrl, Texture2D texture,
+                                 string topic = null, string sha256 = null) { }
+
+    public void SaveImageBytesToCache(string imageUrl, byte[] pngBytes,
+                                      string topic = null, string sha256 = null) { }
 
     public Texture2D LoadImageFromCache(string localPath) => null;
 

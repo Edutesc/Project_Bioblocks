@@ -322,6 +322,41 @@ public class PlayerLevelServiceTests
     }
 
     [UnityTest]
+    public IEnumerator CheckAndHandleLevelUp_SnapshotAusenteSemTotal_NaoCongelaDenominadorUm()
+    {
+        // Regressão da conta nova: se Config/QuestionStats ainda não carregou,
+        // o serviço não pode usar fallback 1 como denominador, senão 1 acerto
+        // satisfaz todos os thresholds e o jogador salta para o nível 10.
+        SetPrivateField("_currentUserData", MakeUser(level: 1, totalAnswered: 1, totalInAllBanks: 0));
+        SetCachedTotalQuestions(0);
+        SetPrivateField("_statistics", null);
+
+        var task = _playerLevel.CheckAndHandleLevelUp();
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        var userData = (UserData)typeof(PlayerLevelService)
+            .GetField("_currentUserData", BindingFlags.NonPublic | BindingFlags.Instance)
+            .GetValue(_playerLevel);
+
+        Assert.AreEqual(1, userData.PlayerLevel);
+        Assert.AreEqual(0, userData.LevelSnapshotDenominator,
+            "Snapshot deve continuar pendente até existir total canônico válido.");
+    }
+
+    [UnityTest]
+    public IEnumerator CheckAndHandleLevelUp_Total705_SobeNoThresholdPercentual()
+    {
+        SetPrivateField("_currentUserData", MakeUser(level: 1, totalAnswered: 71, totalInAllBanks: 705));
+        SetCachedTotalQuestions(705);
+
+        var task = _playerLevel.CheckAndHandleLevelUp();
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        Assert.AreEqual(2, _playerLevel.GetCurrentLevel(),
+            "Com 71/705, jogador deve ir para level 2 pela regra de 10%.");
+    }
+
+    [UnityTest]
     public IEnumerator CheckAndHandleLevelUp_JaNoNivelCorreto_NaoDisparaEvento()
     {
         // CalculateLevel(15,100) = 2 e usuário já está no nível 2 → sem level up

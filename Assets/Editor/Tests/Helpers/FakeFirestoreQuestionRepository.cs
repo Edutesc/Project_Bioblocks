@@ -46,13 +46,24 @@ public class FakeFirestoreQuestionRepository : IFirestoreQuestionRepository
     /// <summary>Se true, GetQuestionsByDatabankName() lança ExceptionToThrow.</summary>
     public bool ShouldThrowOnGetByDatabankName { get; set; } = false;
 
+    /// <summary>Se true, GetRemoteVersion() lança ExceptionToThrow.</summary>
+    public bool ShouldThrowOnGetRemoteVersion { get; set; } = false;
+
     /// <summary>Exceção lançada quando ShouldThrow* é true. Padrão: erro de rede genérico.</summary>
     public Exception ExceptionToThrow { get; set; } =
         new Exception("Simulated Firestore network error");
 
+    // ── Versão remota configurável ─────────────────────────────────────────────
+    /// <summary>
+    /// Versão retornada por GetRemoteVersion(). Padrão: 1.
+    /// Use -1 para simular indisponibilidade de rede (sem lançar exceção).
+    /// </summary>
+    public long RemoteVersion { get; set; } = 1L;
+
     // ── Rastreamento de chamadas ───────────────────────────────────────────────
     public int GetAllQuestionsCallCount             { get; private set; }
     public int GetQuestionsByDatabankNameCallCount  { get; private set; }
+    public int GetRemoteVersionCallCount            { get; private set; }
 
     /// <summary>Lista de argumentos databankName passados para GetQuestionsByDatabankName.</summary>
     public List<string> DatabankNamesRequested      { get; private set; } = new List<string>();
@@ -84,16 +95,29 @@ public class FakeFirestoreQuestionRepository : IFirestoreQuestionRepository
         return Task.FromResult(filtered);
     }
 
+    public Task<long> GetRemoteVersion()
+    {
+        GetRemoteVersionCallCount++;
+
+        if (ShouldThrowOnGetRemoteVersion)
+            throw ExceptionToThrow;
+
+        return Task.FromResult(RemoteVersion);
+    }
+
     // ── Utilitário ─────────────────────────────────────────────────────────────
 
     /// <summary>Zera contadores e configurações de erro para reutilização entre testes.</summary>
     public void Reset()
     {
         _questions.Clear();
-        ShouldThrowOnGetAll            = false;
-        ShouldThrowOnGetByDatabankName = false;
-        GetAllQuestionsCallCount       = 0;
+        ShouldThrowOnGetAll               = false;
+        ShouldThrowOnGetByDatabankName    = false;
+        ShouldThrowOnGetRemoteVersion     = false;
+        RemoteVersion                     = 1L;
+        GetAllQuestionsCallCount          = 0;
         GetQuestionsByDatabankNameCallCount = 0;
+        GetRemoteVersionCallCount         = 0;
         DatabankNamesRequested.Clear();
     }
 }

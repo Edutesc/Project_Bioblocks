@@ -4,68 +4,36 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Firebase.Auth;
 
 public class InitializationManager : MonoBehaviour
 {
-    [Header("UI References")]
-    [SerializeField] private GameObject retryPanel;
-    [SerializeField] private TMP_Text statusText;
-    [SerializeField] private Image progressBar;
-    [SerializeField] private TMP_Text errorText;
-
     [Header("Configuration")]
     [SerializeField] private float minimumLoadingTime = 2.0f;
 
-    [Header("Global Loading Spinner")]
-    [SerializeField] private GameObject globalSpinnerPrefab;
+[   Header("Initialization Loading Spinner")]
+    [SerializeField] private LoadingSpinnerComponent loadingSpinner;
 
     private IFirestoreRepository _firestore;
     private IAuthRepository _auth;
     private IUserDataSyncService _userDataSync;
     private IUserDataLocalRepository _userDataLocal;
 
-    private LoadingSpinnerComponent globalSpinner;
-
     private void Awake()
     {
-        InitializeGlobalSpinner();
+        if (loadingSpinner == null)
+        {
+            Debug.LogError("[InitializationManager] LoadingSpinnerComponent não foi vinculado no Inspector.");
+            return;
+        }
+
+        loadingSpinner.ShowSpinner();
+        loadingSpinner.SetMessage("Inicializando...");
     }
 
     private void Start()
     {
-        SetupUI();
         StartInitialization();
-    }
-
-    private void InitializeGlobalSpinner()
-    {
-        try
-        {
-            globalSpinner = LoadingSpinnerComponent.Instance;
-
-            if (globalSpinner == null && globalSpinnerPrefab != null)
-            {
-                Canvas mainCanvas = FindObjectOfType<Canvas>();
-                GameObject spinnerObject = mainCanvas != null
-                    ? Instantiate(globalSpinnerPrefab, mainCanvas.transform)
-                    : Instantiate(globalSpinnerPrefab);
-
-                spinnerObject.name = "GlobalLoadingSpinner";
-                DontDestroyOnLoad(spinnerObject);
-                globalSpinner = spinnerObject.GetComponent<LoadingSpinnerComponent>();
-            }
-            globalSpinner?.ShowSpinner();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[InitializationManager] Erro ao inicializar spinner: {e.Message}");
-        }
-    }
-
-    private void SetupUI()
-    {
-        if (retryPanel != null) retryPanel.SetActive(false);
-        if (progressBar != null) progressBar.fillAmount = 0f;
     }
 
     private async void StartInitialization()
@@ -81,12 +49,12 @@ public class InitializationManager : MonoBehaviour
             UpdateStatus("Modo preview ativo...");
             await WaitForAppContext();
 
-            float elapsed = Time.time - startTime;
-            if (elapsed < minimumLoadingTime)
-                await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
+            float elapsedPreview = Time.time - startTime;
+            if (elapsedPreview < minimumLoadingTime)
+                await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsedPreview) * 1000));
 
-            globalSpinner?.ShowSpinnerUntilSceneLoaded("PathwayScene");
-            SceneManager.LoadScene("PathwayScene");
+            loadingSpinner?.HideSpinner();
+            SceneManager.LoadScene("PathwayScene", LoadSceneMode.Single);
             return;
         }
 
@@ -109,49 +77,102 @@ public class InitializationManager : MonoBehaviour
             _userDataSync  = AppContext.UserDataSync;
             _userDataLocal = AppContext.UserDataLocal;
 
-            UpdateProgress(0.3f);
-            UpdateStatus("Verificando autenticação...");
-            Debug.Log("[InitManager] Verificando autenticação...");
-            bool isAuthenticated = await CheckAuthentication();
-            Debug.Log($"[InitManager] isAuthenticated={isAuthenticated}");
-            UpdateProgress(0.5f);
+            if (_auth == null)
+                throw new Exception("[InitManager] AppContext.Auth está null após AppContext.IsReady=true.");
 
+            ResetSessionIfFirebaseEnvironmentChanged(envCfg);
+
+            bool isAuthenticated = await CheckAuthentication();
+            // ── Usuário não autenticado: ir imediatamente para LoginView ─────────
+            if (!isAuthenticated)
+            {
+                UpdateStatus("Redirecionando para login...");
+                Debug.Log("[InitManager] Usuário não autenticado. Navegando imediatamente para LoginView.");
+
+                try
+                {
+                    loadingSpinner?.HideSpinner();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[InitManager] Erro ao esconder spinner antes da LoginView: {e.Message}");
+                }
+
+                NavigateAfterInit(false);
+                return;
+            }
+
+            // ── A partir daqui, só continua se estiver autenticado ────────────────
             bool userDataLoaded = false;
 
-            if (isAuthenticated)
+            UpdateStatus("Carregando dados do usuário...");
+            Debug.Log("[InitManager] Carregando dados...");
+
+            userDataLoaded = await LoadUserData();
+
+            if (userDataLoaded)
             {
-                UpdateStatus("Carregando dados do usuário...");
-                Debug.Log("[InitManager] Carregando dados...");
-                userDataLoaded = await LoadUserData();
-                Debug.Log($"[InitManager] userDataLoaded={userDataLoaded}");
-                UpdateProgress(0.7f);
+                UpdateStatus("Carregando bancos de questões...");
 
-                if (userDataLoaded)
+                if (AppContext.QuestionSync != null)
                 {
-                    UpdateStatus("Carregando bancos de questões...");
-                    await (AppContext.Statistics as DatabaseStatisticsManager)?.Initialize();
-                    UpdateProgress(0.85f);
+                    bool questionsReady = await AppContext.QuestionSync.InitializeAsync();
 
-                    UpdateStatus("Configurando sistema de níveis...");
-                    InitializePlayerLevelService();
-                    UpdateProgress(0.9f);
+                    if (!questionsReady)
+                    {
+                        Debug.LogWarning("[InitManager] Questões indisponíveis após inicialização.");
+
+                        // Aqui você decide a política:
+                        // 1) permitir seguir mesmo assim, se houver cache parcial;
+                        // 2) mostrar tela de erro/retry;
+                        // 3) voltar para LoginView.
+                    }
                 }
+                else
+                {
+                    Debug.LogError("[InitManager] AppContext.QuestionSync está null.");
+                }
+
+                var statsManager = AppContext.Statistics as DatabaseStatisticsManager;
+                if (statsManager != null)
+                {
+                    await statsManager.Initialize();
+                }
+                else
+                {
+                    Debug.LogWarning("[InitManager] AppContext.Statistics não é DatabaseStatisticsManager ou está null.");
+                }
+
+                UpdateStatus("Configurando sistema de níveis...");
+                InitializePlayerLevelService();
+            }
+            else
+            {
+                Debug.LogWarning("[InitManager] Usuário autenticado, mas dados do usuário não foram carregados.");
+                await ForceLogoutAndGoToLoginAsync("Usuário autenticado, mas documento/UserData não encontrado.");
+                return;
             }
 
             float elapsed = Time.time - startTime;
             if (elapsed < minimumLoadingTime)
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
 
-            NavigateAfterInit(isAuthenticated && userDataLoaded);
+            NavigateAfterInit(userDataLoaded);
         }
         catch (Exception ex)
         {
             Debug.LogError($"[InitializationManager] Falha: {ex.GetType().Name}: {ex.Message}");
             Debug.LogError($"[InitializationManager] StackTrace: {ex.StackTrace}");
+
             if (ex.InnerException != null)
                 Debug.LogError($"[InitializationManager] InnerException: {ex.InnerException.Message}");
 
-            try { globalSpinner?.HideSpinner(); } catch { }
+            try
+            {
+                loadingSpinner?.HideSpinner();
+            }
+            catch { }
+
             ShowError($"Falha na inicialização: {ex.Message}");
         }
     }
@@ -176,18 +197,35 @@ public class InitializationManager : MonoBehaviour
 
     private async Task<bool> CheckAuthentication()
     {
-        if (!_auth.HasLocalSession()) return false;
+        if (!_auth.HasLocalSession())
+            return false;
 
         try
         {
-            await _auth.ReloadCurrentUserAsync();
+            await WithTimeout(_auth.ReloadCurrentUserAsync(), 8000, "Validação da sessão Firebase excedeu o tempo limite.");
             Debug.Log("[InitializationManager] Sessão validada com o servidor.");
             return true;
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"[InitializationManager] Validação online falhou, entrando offline: {e.Message}");
-            return _auth.HasLocalSession();
+            Debug.LogWarning($"[InitializationManager] Falha ao validar sessão Firebase: {e.Message}");
+
+            string userId = _auth.CurrentUserId;
+
+            if (!string.IsNullOrEmpty(userId) && _userDataLocal != null)
+            {
+                var cached = _userDataLocal.GetUser(userId);
+
+                if (cached != null)
+                {
+                    UserDataStore.CurrentUserData = cached;
+                    Debug.LogWarning("[InitializationManager] Sessão não validada online, mas há UserData local. Permitindo modo offline.");
+                    return true;
+                }
+            }
+
+            await ForceLogoutAndGoToLoginAsync("Sessão Firebase inválida e sem UserData local.");
+            return false;
         }
     }
 
@@ -206,7 +244,10 @@ public class InitializationManager : MonoBehaviour
             //   - cache stale        → busca Firestore → atualiza LiteDB
             //   - cache válido       → carrega LiteDB direto
             //   - Firestore offline  → usa LiteDB como fallback
-            await _userDataSync.TrySyncPendingData(userId);
+            await WithTimeout(
+                _userDataSync.TrySyncPendingData(userId),
+                12000,
+                "Carregamento/sincronização de UserData excedeu o tempo limite.");
 
             if (UserDataStore.CurrentUserData == null)
             {
@@ -242,16 +283,26 @@ public class InitializationManager : MonoBehaviour
 
     private void NavigateAfterInit(bool authenticated)
     {
+        string targetScene = authenticated ? "PathwayScene" : "LoginView";
+
+        Debug.Log($"[InitManager] NavigateAfterInit chamado. authenticated={authenticated}, targetScene={targetScene}");
+
+        if (!Application.CanStreamedLevelBeLoaded(targetScene))
+        {
+            Debug.LogError($"[InitManager] Cena não está carregável pela build: {targetScene}. Verifique Build Settings.");
+            loadingSpinner?.SetMessage($"Cena {targetScene} não encontrada na build.");
+            return;
+        }
+
         try
         {
-            string targetScene = authenticated ? "PathwayScene" : "LoginView";
-            globalSpinner?.ShowSpinnerUntilSceneLoaded(targetScene);
-            SceneManager.LoadScene(targetScene);
+            SceneManager.LoadScene(targetScene, LoadSceneMode.Single);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            string targetScene = authenticated ? "PathwayScene" : "LoginView";
-            SceneManager.LoadScene(targetScene);
+            Debug.LogError($"[InitManager] Erro ao carregar cena {targetScene}: {e.GetType().Name}: {e.Message}");
+            Debug.LogError(e.StackTrace);
+            loadingSpinner?.SetMessage($"Erro ao carregar {targetScene}.");
         }
     }
 
@@ -267,28 +318,102 @@ public class InitializationManager : MonoBehaviour
 
     private void UpdateStatus(string message)
     {
-        if (statusText != null) statusText.text = message;
+        loadingSpinner?.SetMessage(message);
     }
 
-    private void UpdateProgress(float progress)
+    private async Task ForceLogoutAndGoToLoginAsync(string reason)
     {
-        if (progressBar != null) progressBar.fillAmount = progress;
+        Debug.LogWarning($"[InitializationManager] Limpando sessão e voltando para LoginView. Motivo: {reason}");
+
+        try
+        {
+            FirebaseAuth.DefaultInstance.SignOut();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Erro ao fazer Firebase SignOut: {e.Message}");
+        }
+
+        try
+        {
+            UserDataStore.CurrentUserData = null;
+        }
+        catch { }
+
+        try
+        {
+            PlayerPrefs.DeleteKey("UserId");
+            PlayerPrefs.DeleteKey("UserEmail");
+            PlayerPrefs.DeleteKey("UserNickname");
+            PlayerPrefs.Save();
+
+            loadingSpinner?.HideSpinner();
+            await Task.Yield();
+            NavigateAfterInit(false);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Erro ao limpar PlayerPrefs: {e.Message}");
+        }
+
+        try
+        {
+            loadingSpinner?.HideSpinner();
+        }
+        catch { }
+
+        NavigateAfterInit(false);
+    }
+
+    private void ResetSessionIfFirebaseEnvironmentChanged(EnvironmentConfig envCfg)
+    {
+        if (envCfg == null) return;
+
+        const string envKey = "FirebaseEnvironment";
+        string currentEnv = envCfg.FirebaseEnvironment.ToString();
+        string previousEnv = PlayerPrefs.GetString(envKey, "");
+
+        if (!string.IsNullOrEmpty(previousEnv) && previousEnv != currentEnv)
+        {
+            Debug.LogWarning($"[InitManager] Ambiente Firebase mudou de {previousEnv} para {currentEnv}. Limpando sessão local.");
+
+            try
+            {
+                FirebaseAuth.DefaultInstance.SignOut();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[InitManager] Erro ao limpar sessão ao trocar ambiente: {e.Message}");
+            }
+
+            UserDataStore.CurrentUserData = null;
+            PlayerPrefs.DeleteKey("UserId");
+            PlayerPrefs.DeleteKey("UserEmail");
+            PlayerPrefs.DeleteKey("UserNickname");
+        }
+
+        PlayerPrefs.SetString(envKey, currentEnv);
+        PlayerPrefs.Save();
+    }
+
+    private static async Task WithTimeout(Task task, int timeoutMillis, string timeoutMessage)
+    {
+        Task completed = await Task.WhenAny(task, Task.Delay(timeoutMillis));
+        if (completed != task)
+            throw new TimeoutException(timeoutMessage);
+
+        await task;
     }
 
     private void ShowError(string message)
     {
-        // Esconde o spinner explicitamente aqui também
-        try { globalSpinner?.HideSpinner(); } catch { }
+        Debug.LogError($"[InitManager] {message}");
 
-        if (retryPanel != null)
+        try
         {
-            retryPanel.SetActive(true);
-            if (errorText != null) errorText.text = message;
+            loadingSpinner?.ShowSpinner();
+            loadingSpinner?.SetMessage(message);
         }
-        else
-        {
-            // retryPanel não configurado — loga para identificar no Xcode
-            Debug.LogError($"[InitManager] retryPanel é null. Mensagem de erro: {message}");
-        }
+        catch { }
     }
 }

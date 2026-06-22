@@ -106,9 +106,9 @@ public class ResetTargetDatabaseScene : MonoBehaviour
             if (resetButtonText != null) resetButtonText.text = "Resetando...";
 
             string userId = currentUserData.UserId;
-            await _firestore.ResetAnsweredQuestions(userId, databankName).ConfigureAwait(false);
-            await _firestore.UpdateUserField(userId, $"ResetDatabankFlags.{databankName}", true).ConfigureAwait(false);
-            await Task.Yield();
+            await _firestore.ResetAnsweredQuestions(userId, databankName);
+            await _firestore.UpdateUserField(userId, $"ResetDatabankFlags.{databankName}", true);
+
             UserDataStore.MarkDatabankAsReset(databankName, true);
             AnsweredQuestionsListStore.UpdateAnsweredQuestionsCount(userId, databankName, 0);
 

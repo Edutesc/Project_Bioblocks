@@ -29,6 +29,14 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     {
         Debug.Log("[PlayerLevelService] Start() chamado");
 
+        var envCfg = EnvironmentConfig.Load();
+        if (envCfg != null && envCfg.QuestionPreviewMode)
+        {
+            Debug.Log("[PlayerLevelService] Preview Mode — inicialização ignorada.");
+            _isInitialized = true;
+            return;
+        }
+
         if (!AppContext.IsReady)
         {
             Debug.LogWarning("[PlayerLevelService] AppContext não está pronto. Aguardando...");
@@ -42,6 +50,15 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     private void OnAppContextReady()
     {
         AppContext.OnReady -= OnAppContextReady;
+
+        var envCfg = EnvironmentConfig.Load();
+        if (envCfg != null && envCfg.QuestionPreviewMode)
+        {
+            Debug.Log("[PlayerLevelService] Preview Mode — inicialização ignorada após AppContextReady.");
+            _isInitialized = true;
+            return;
+        }
+
         InitializeDependencies();
     }
 
@@ -161,6 +178,37 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             if (snapshot <= 0)
             {
                 int currentTotal = GetTotalQuestionsCount();
+                if (currentTotal <= 0)
+                {
+                    Debug.LogWarning("[PlayerLevelService] Snapshot pendente: total canônico ainda indisponível. Migração será retomada quando houver total válido.");
+
+                    if (answeredMismatch)
+                    {
+                        AppContext.UserDataLocal?.UpdateUser(_currentUserData);
+
+                        if (Application.internetReachability != NetworkReachability.NotReachable)
+                        {
+                            try
+                            {
+                                await _firestore.UpdateUserField(_currentUserData.UserId,
+                                    "TotalValidQuestionsAnswered", correctedTotal);
+                                AppContext.UserDataLocal?.MarkAsSynced(_currentUserData.UserId);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogWarning($"[PlayerLevelService] Firestore offline na migração parcial: {e.Message}");
+                                AppContext.UserDataLocal?.MarkAsDirty(_currentUserData.UserId);
+                            }
+                        }
+                        else
+                        {
+                            AppContext.UserDataLocal?.MarkAsDirty(_currentUserData.UserId);
+                        }
+                    }
+
+                    return;
+                }
+
                 snapshot = ComputeInitialSnapshotForLevel(storedLevel, correctedTotal, currentTotal);
                 _currentUserData.LevelSnapshotDenominator = snapshot;
                 Debug.Log($"[PlayerLevelService] Snapshot inicial derivado: storedLevel={storedLevel}, answered={correctedTotal}, currentTotal={currentTotal} → snapshot={snapshot}");
@@ -183,17 +231,17 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
                     if (answeredMismatch)
                     {
                         await _firestore.UpdateUserField(_currentUserData.UserId,
-                            "TotalValidQuestionsAnswered", correctedTotal).ConfigureAwait(false);
+                            "TotalValidQuestionsAnswered", correctedTotal);
                     }
                     if (newLevel != storedLevel)
                     {
                         await _firestore.UpdateUserField(_currentUserData.UserId,
-                            "PlayerLevel", newLevel).ConfigureAwait(false);
+                            "PlayerLevel", newLevel);
                     }
                     if (snapshotMissing)
                     {
                         await _firestore.UpdateUserField(_currentUserData.UserId,
-                            "LevelSnapshotDenominator", snapshot).ConfigureAwait(false);
+                            "LevelSnapshotDenominator", snapshot);
                     }
                     AppContext.UserDataLocal?.MarkAsSynced(_currentUserData.UserId);
                 }
@@ -210,11 +258,9 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             }
 
             var captured = _currentUserData;
-            MainThreadDispatcher.Enqueue(() =>
-            {
-                UserDataStore.CurrentUserData = captured;
-                Debug.Log($"[PlayerLevelService] Migração concluída. Level: {newLevel}, Questões: {correctedTotal}, Snapshot: {snapshot}");
-            });
+            UserDataStore.CurrentUserData = captured;
+            Debug.Log($"[PlayerLevelService] Migração concluída. Level: {newLevel}, Questões: {correctedTotal}, Snapshot: {snapshot}");
+
         }
         catch (Exception e)
         {
@@ -242,7 +288,10 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     /// </summary>
     private int ComputeInitialSnapshotForLevel(int storedLevel, int answered, int currentTotal)
     {
-        int safeCurrentTotal = Mathf.Max(1, currentTotal);
+        if (currentTotal <= 0)
+            return 0;
+
+        int safeCurrentTotal = currentTotal;
 
         if (storedLevel <= 1 || answered <= 0)
             return safeCurrentTotal;
@@ -297,7 +346,7 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             try
             {
                 await _firestore.UpdateUserField(userId,
-                    "TotalValidQuestionsAnswered", total).ConfigureAwait(false);
+                    "TotalValidQuestionsAnswered", total);
                 AppContext.UserDataLocal?.MarkAsSynced(userId);
             }
             catch (Exception e)
@@ -312,11 +361,8 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             AppContext.UserDataLocal?.MarkAsDirty(userId);
         }
 
-        MainThreadDispatcher.Enqueue(() =>
-        {
-            UserDataStore.UpdateTotalValidQuestionsAnswered(total);
-            OnLevelProgressUpdated?.Invoke(total);
-        });
+        UserDataStore.UpdateTotalValidQuestionsAnswered(total);
+        OnLevelProgressUpdated?.Invoke(total);
     }
 
     public async Task CheckAndHandleLevelUp()
@@ -372,10 +418,8 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         {
             try
             {
-                await _firestore.UpdateUserField(userId, "PlayerLevel", newLevel)
-                                .ConfigureAwait(false);
-                await _firestore.UpdateUserField(userId, "LevelSnapshotDenominator", effectiveSnapshot)
-                                .ConfigureAwait(false);
+                await _firestore.UpdateUserField(userId, "PlayerLevel", newLevel);
+                await _firestore.UpdateUserField(userId, "LevelSnapshotDenominator", effectiveSnapshot);
                 AppContext.UserDataLocal?.MarkAsSynced(userId);
             }
             catch (Exception e)
@@ -390,13 +434,8 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             AppContext.UserDataLocal?.MarkAsDirty(userId);
         }
 
-        int capturedOld = oldLevel;
-        int capturedNew = newLevel;
-        MainThreadDispatcher.Enqueue(() =>
-        {
-            UserDataStore.UpdatePlayerLevel(capturedNew);
-            OnLevelChanged?.Invoke(capturedOld, capturedNew);
-        });
+        UserDataStore.UpdatePlayerLevel(newLevel);
+        OnLevelChanged?.Invoke(oldLevel, newLevel);
     }
 
     public async Task RecalculateTotalAnswered()
@@ -424,7 +463,7 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             try
             {
                 await _firestore.UpdateUserField(userId,
-                    "TotalValidQuestionsAnswered", realTotal).ConfigureAwait(false);
+                    "TotalValidQuestionsAnswered", realTotal);
                 AppContext.UserDataLocal?.MarkAsSynced(userId);
             }
             catch (Exception e)
@@ -439,14 +478,9 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             AppContext.UserDataLocal?.MarkAsDirty(userId);
         }
 
-        int capturedReal = realTotal;
-        int capturedOld  = oldTotal;
-        MainThreadDispatcher.Enqueue(() =>
-        {
-            UserDataStore.UpdateTotalValidQuestionsAnswered(capturedReal);
-            OnLevelProgressUpdated?.Invoke(capturedReal);
-            Debug.Log($"[PlayerLevelService] Recalculado: {capturedOld} → {capturedReal}");
-        });
+        UserDataStore.UpdateTotalValidQuestionsAnswered(realTotal);
+        OnLevelProgressUpdated?.Invoke(realTotal);
+        Debug.Log($"[PlayerLevelService] Recalculado: {oldTotal} → {realTotal}");
     }
 
     // -------------------------------------------------------
@@ -465,12 +499,17 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         if (denominator <= 0) return 0f;
 
         int currentLevel   = _currentUserData.PlayerLevel;
-        var threshold      = PlayerLevelConfig.GetThresholdForLevel(currentLevel);
+        var currentThreshold = PlayerLevelConfig.GetThresholdForLevel(currentLevel);
+        int levelStart = currentThreshold.GetMinRequiredQuestions(denominator);
+        int levelEnd = currentLevel >= PlayerLevelConfig.MaxLevel
+            ? denominator
+            : PlayerLevelConfig.GetThresholdForLevel(currentLevel + 1)
+                .GetMinRequiredQuestions(denominator);
 
-        float currentPercentage = (float)_currentUserData.TotalValidQuestionsAnswered / denominator;
-        float levelRange        = threshold.MaxPercentage - threshold.MinPercentage;
-        if (levelRange <= 0f) return 1f;
-        float progressInLevel   = (currentPercentage - threshold.MinPercentage) / levelRange;
+        int levelRange = levelEnd - levelStart;
+        if (levelRange <= 0) return 1f;
+
+        float progressInLevel = (float)(_currentUserData.TotalValidQuestionsAnswered - levelStart) / levelRange;
 
         return Mathf.Clamp01(progressInLevel);
     }
@@ -518,6 +557,8 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         int answered     = _currentUserData?.TotalValidQuestionsAnswered ?? 0;
         int storedLevel  = _currentUserData?.PlayerLevel ?? 1;
         int currentTotal = GetTotalQuestionsCount();
+        if (currentTotal <= 0) return 0;
+
         return ComputeInitialSnapshotForLevel(storedLevel, answered, currentTotal);
     }
 
@@ -533,10 +574,11 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         await _userDataSync.UpdateUserScores(
             _currentUserData.UserId,
             bonusPoints,
-            0, "", false
+            0, 
+            "", 
+            false
         );
 
-        // UpdateUserScores já retorna no main thread (tem await Task.Yield internamente)
         UserDataStore.CurrentUserData = _currentUserData;
         Debug.Log($"[PlayerLevelService] Bônus concedido: {bonusPoints} pontos");
     }

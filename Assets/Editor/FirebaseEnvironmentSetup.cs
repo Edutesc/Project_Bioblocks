@@ -15,6 +15,9 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
     private const string FirebaseSourceDevPath    = "Firebase/Dev/google-services.json";
     private const string FirebaseSourceProdPath   = "Firebase/Prod/google-services.json";
     private const string FirebaseTargetPath       = "Assets/google-services.json";
+    private const string FirebaseIOSSourceDevPath  = "Firebase/Dev/GoogleService-Info.plist";
+    private const string FirebaseIOSSourceProdPath = "Firebase/Prod/GoogleService-Info.plist";
+    private const string FirebaseIOSTargetPath     = "Assets/GoogleService-Info.plist";
 
     private const string DevProjectId   = "microlearning-dev-79c0c";
     private const string ProdProjectId  = "microlearning-33132";
@@ -49,6 +52,9 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
         string sourceDir = Path.Combine(Application.dataPath, "..", 
             cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? FirebaseSourceProdPath : FirebaseSourceDevPath);
         string targetPath = Path.Combine(Application.dataPath, "google-services.json");
+        string iosSourcePath = Path.Combine(Application.dataPath, "..",
+            cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? FirebaseIOSSourceProdPath : FirebaseIOSSourceDevPath);
+        string iosTargetPath = Path.Combine(Application.dataPath, "GoogleService-Info.plist");
         string expectedProjectId = cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? ProdProjectId : DevProjectId;
 
         try
@@ -66,6 +72,18 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
             File.Copy(sourceDir, targetPath, overwrite: true);
             Debug.Log($"[FirebaseEnvironmentSetup] ✓ google-services.json copiado de Firebase/{environment}/");
 
+            if (File.Exists(iosSourcePath))
+            {
+                File.Copy(iosSourcePath, iosTargetPath, overwrite: true);
+                Debug.Log($"[FirebaseEnvironmentSetup] ✓ GoogleService-Info.plist copiado de Firebase/{environment}/");
+            }
+            else
+            {
+                Debug.LogWarning(
+                    $"[FirebaseEnvironmentSetup] GoogleService-Info.plist não encontrado: {iosSourcePath}\n" +
+                    $"Build iOS com Firebase pode falhar ou usar configuração incorreta.");
+            }
+
             // 3. Validar conteúdo (verificar project_id)
             string content = File.ReadAllText(targetPath);
             if (!content.Contains(expectedProjectId))
@@ -78,6 +96,8 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
 
             // 4. Marcar para reimportação
             AssetDatabase.ImportAsset("Assets/google-services.json", ImportAssetOptions.ForceUpdate);
+            if (File.Exists(iosTargetPath))
+                AssetDatabase.ImportAsset("Assets/GoogleService-Info.plist", ImportAssetOptions.ForceUpdate);
             Debug.Log($"[FirebaseEnvironmentSetup] ✓ Assets reimportados.");
 
             // 5. Log final

@@ -156,7 +156,7 @@ public class ReAuthenticationUI : MonoBehaviour
     public async void OnAuthenticateClick()
     {
         Debug.Log("OnAuthenticateClick chamado");
-        LoadingSpinnerComponent.Instance.ShowSpinner();
+    //    LoadingSpinnerComponent.Instance.ShowSpinner();
 
         if (passwordInput == null || string.IsNullOrEmpty(passwordInput.text))
         {
@@ -164,7 +164,7 @@ public class ReAuthenticationUI : MonoBehaviour
             {
                 errorText.text = "Por favor, insira sua senha";
             }
-            LoadingSpinnerComponent.Instance.HideSpinner();
+     //       LoadingSpinnerComponent.Instance.HideSpinner();
             return;
         }
 
@@ -190,7 +190,7 @@ public class ReAuthenticationUI : MonoBehaviour
             if (errorText != null) errorText.text = "Senha incorreta. Por favor, tente novamente.";
             if (authenticateButton != null) authenticateButton.interactable = true;
             if (authenticateButtonText != null) authenticateButtonText.text = "Confirmar";
-            LoadingSpinnerComponent.Instance.HideSpinner();
+          //  LoadingSpinnerComponent.Instance.HideSpinner();
         }
     }
 
@@ -198,7 +198,7 @@ public class ReAuthenticationUI : MonoBehaviour
     {
         Debug.Log("OnCancelClick chamado");
         HideReAuthPanel();
-        LoadingSpinnerComponent.Instance.HideSpinner(); 
+     //   LoadingSpinnerComponent.Instance.HideSpinner(); 
         
         GameObject deleteAccountDarkOverlay = GameObject.Find("DeleteAccountDarkOverlay");
         if (deleteAccountDarkOverlay != null)

@@ -10,6 +10,7 @@ public class FakeAuthRepository : IAuthRepository
     private bool _reloadShouldFail;
     private bool _checkAuthShouldFail;
     private bool _signInShouldFail;
+    private bool _registerShouldReturnNull;
 
     // Dados configuráveis
     private string   _userIdForNextRegistration;
@@ -82,6 +83,12 @@ public class FakeAuthRepository : IAuthRepository
     public void SetSignInShouldFail(bool shouldFail)
         => _signInShouldFail = shouldFail;
 
+    /// <summary>
+    /// Faz RegisterUserAsync retornar null, simulando falha após criação/autenticação.
+    /// </summary>
+    public void SetRegisterShouldReturnNull(bool shouldReturnNull)
+        => _registerShouldReturnNull = shouldReturnNull;
+
     // -------------------------------------------------------
     // IAuthRepository
     // -------------------------------------------------------
@@ -132,6 +139,10 @@ public class FakeAuthRepository : IAuthRepository
     public Task<UserData> RegisterUserAsync(string name, string nickName, string email, string password)
     {
         RegisterCallCount++;
+
+        if (_registerShouldReturnNull)
+            return Task.FromResult<UserData>(null);
+
         _currentUserId   = _userIdForNextRegistration ?? "new-fake-user-id";
         _isLoggedIn      = true;
         _hasLocalSession = true;

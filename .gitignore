@@ -132,3 +132,22 @@ audit-dryrun-*.json
 audit-apply-*.json
 Assets/Editor/FirebaseSecrets.json
 Assets/Editor/FirebaseSecrets.json.meta
+
+# ===========================
+# Firebase App Check debug token (Editor only)
+# Cada dev gera um UUID local, registra no Firebase Console e coloca aqui.
+# Nunca commitar.
+# ===========================
+firebase_app_check_debug_token.txt
+
+# Storage scripts
+/Python_Local_Scripts/
+FIREBASE_REORGANIZE_README.md
+FIREBASE_UPLOAD_README.md
+check_storage_images.py
+reorganize_firebase_storage.py
+run_check_storage.sh
+run_reorganize.sh
+run_upload.sh
+upload_images_to_firebase.py
+

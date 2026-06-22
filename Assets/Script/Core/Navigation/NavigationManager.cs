@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NavigationManager : MonoBehaviour, INavigationService
 {
@@ -58,6 +59,8 @@ public class NavigationManager : MonoBehaviour, INavigationService
         if (debugLogs)
             Debug.Log($"[NavigationManager] Cena carregada: {scene.name}");
 
+        CleanupPublicSceneVisualState(scene.name);
+
         OnSceneChanged?.Invoke(scene.name);
         OnNavigationComplete?.Invoke(scene.name);
     }
@@ -107,5 +110,64 @@ public class NavigationManager : MonoBehaviour, INavigationService
     public void AddButtonSceneMapping(string buttonName, string sceneName)
     {
         buttonSceneMapping[buttonName] = sceneName;
+    }
+
+    private void CleanupPublicSceneVisualState(string sceneName)
+    {
+        if (sceneName != "LoginView" &&
+            sceneName != "RegisterView" &&
+            sceneName != "ResetDatabaseView" &&
+            sceneName != "Initialization")
+        {
+            return;
+        }
+
+        string[] hiddenObjects =
+        {
+            "PersistentTopBar",
+            "PersistentBottomBar",
+            "DarkOverlay",
+            "DeleteAccountDarkOverlay",
+            "HalfViewDarkOverlay",
+            "Overlay",
+            "BlockerPanel"
+        };
+
+        foreach (string objectName in hiddenObjects)
+        {
+            GameObject obj = GameObject.Find(objectName);
+            if (obj != null)
+                obj.SetActive(false);
+        }
+
+        Canvas[] canvases = FindObjectsOfType<Canvas>(true);
+        foreach (Canvas canvas in canvases)
+        {
+            if (canvas == null) continue;
+
+            string objectName = canvas.gameObject.name;
+            bool isBlockingOverlay =
+                objectName.Contains("Overlay") ||
+                objectName.Contains("Blocker") ||
+                objectName.Contains("Dark") ||
+                objectName.Contains("HalfView");
+
+            if (isBlockingOverlay && canvas.sortingOrder >= 100)
+            {
+                GraphicRaycaster raycaster = canvas.GetComponent<GraphicRaycaster>();
+                if (raycaster != null)
+                    raycaster.enabled = false;
+
+                CanvasGroup group = canvas.GetComponent<CanvasGroup>();
+                if (group != null)
+                {
+                    group.alpha = 0f;
+                    group.interactable = false;
+                    group.blocksRaycasts = false;
+                }
+
+                canvas.gameObject.SetActive(false);
+            }
+        }
     }
 }

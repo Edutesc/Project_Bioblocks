@@ -2,10 +2,10 @@
 // Testes unitários para QuestionLoadManager — fluxo de carregamento de questões.
 //
 // O que É testado:
-//   - LoadQuestionsForSet: leitura do LiteDB, filtragem, cálculo de nível
+//   - LoadQuestionsForSet: leitura do LiteDB, filtragem, seleção de sessão
 //   - Integração com QuestionBankStatistics (SetTotalQuestions, SetQuestionsPerLevel)
 //   - Guards: LiteDB vazio, usuário sem UserId
-//   - Progressão de níveis: sem respondidas → nível 1, nível 1 completo → nível 2
+//   - Seleção mista: sem respondidas → inclui níveis disponíveis na sessão
 //   - Remoção de questões já respondidas do resultado
 
 using NUnit.Framework;
@@ -73,6 +73,9 @@ public class QuestionLoadManagerTests
         _fakeSync.SetQuestionsForDatabankName(DB_NAME, questions);
     }
 
+    private void SetupLiteDBWithQuestions(List<Question> questions)
+        => _fakeSync.SetQuestionsForDatabankName(DB_NAME, questions);
+
     // =======================================================
     // Guard: LiteDB vazio
     // =======================================================
@@ -134,23 +137,24 @@ public class QuestionLoadManagerTests
     }
 
     // =======================================================
-    // Progressão de níveis
+    // Seleção de sessão
     // =======================================================
     [UnityTest]
-    public IEnumerator LoadQuestionsForSet_SemRespondidas_RetornaNivel1()
+    public IEnumerator LoadQuestionsForSet_SemRespondidas_RetornaSessaoMista()
     {
         // Arrange
         _fakeAnswered.SetAnsweredQuestions(DB_NAME, new List<string>());
-        SetupLiteDBWithQuestions(nivel1: 3, nivel2: 3);
+        SetupLiteDBWithQuestions(nivel1: 10, nivel2: 10, nivel3: 10);
 
         // Act
         var task = _loadManager.LoadQuestionsForSet(TARGET_SET);
         yield return new WaitUntil(() => task.IsCompleted);
 
         // Assert
-        Assert.IsTrue(task.Result.All(q => q.questionLevel == 1),
-            "Sem respondidas, todas as questões retornadas devem ser de nível 1");
-        Assert.AreEqual(3, task.Result.Count);
+        Assert.AreEqual(10, task.Result.Count);
+        Assert.AreEqual(5, task.Result.Count(q => q.questionLevel == 1));
+        Assert.AreEqual(3, task.Result.Count(q => q.questionLevel == 2));
+        Assert.AreEqual(2, task.Result.Count(q => q.questionLevel == 3));
     }
 
     [UnityTest]
@@ -185,6 +189,29 @@ public class QuestionLoadManagerTests
         bool temQ1 = task.Result.Any(q => q.questionNumber == 1);
         Assert.IsFalse(temQ1, "Questão já respondida não deve aparecer no resultado");
         Assert.AreEqual(2, task.Result.Count);
+    }
+
+    [UnityTest]
+    public IEnumerator LoadQuestionsForSet_NormalMode_OcultaQuestionInDevelopment()
+    {
+        // Arrange
+        _fakeAnswered.SetAnsweredQuestions(DB_NAME, new List<string>());
+        SetupLiteDBWithQuestions(new List<Question>
+        {
+            QuestionTestHelpers.MakeQuestion(1, level: 1, databankName: DB_NAME, inDevelopment: false),
+            QuestionTestHelpers.MakeQuestion(2, level: 1, databankName: DB_NAME, inDevelopment: true),
+            QuestionTestHelpers.MakeQuestion(3, level: 1, databankName: DB_NAME, inDevelopment: false),
+        });
+
+        // Act
+        var task = _loadManager.LoadQuestionsForSet(TARGET_SET);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        // Assert
+        Assert.AreEqual(2, task.Result.Count);
+        Assert.IsFalse(task.Result.Any(q => q.questionInDevelopment),
+            "Questões com questionInDevelopment=true não devem aparecer fora do preview mode");
+        CollectionAssert.AreEquivalent(new[] { 1, 3 }, task.Result.Select(q => q.questionNumber));
     }
 
     [UnityTest]
@@ -274,6 +301,28 @@ public class QuestionLoadManagerTests
         // Assert
         Assert.AreEqual(6, task.Result.Count,
             "Preview Mode não deve filtrar questões já respondidas");
+    }
+
+    [UnityTest]
+    public IEnumerator LoadQuestionsForSet_PreviewMode_NaoFiltraQuestionInDevelopment()
+    {
+        // Arrange
+        EnvironmentConfig.OverridePreviewModeForTests(true);
+        SetupLiteDBWithQuestions(new List<Question>
+        {
+            QuestionTestHelpers.MakeQuestion(1, level: 1, databankName: DB_NAME, inDevelopment: false),
+            QuestionTestHelpers.MakeQuestion(2, level: 1, databankName: DB_NAME, inDevelopment: true),
+            QuestionTestHelpers.MakeQuestion(3, level: 2, databankName: DB_NAME, inDevelopment: true),
+        });
+
+        // Act
+        var task = _loadManager.LoadQuestionsForSet(TARGET_SET);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        // Assert
+        Assert.AreEqual(3, task.Result.Count,
+            "Preview Mode deve mostrar todas as questões hardcoded, inclusive questionInDevelopment=true");
+        Assert.AreEqual(2, task.Result.Count(q => q.questionInDevelopment));
     }
 
     [UnityTest]

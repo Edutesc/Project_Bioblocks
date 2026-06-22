@@ -118,9 +118,10 @@ public class QuestionSyncServiceTests
     [UnityTest]
     public IEnumerator InitializeAsync_CacheValido_NaoChamaFirestore()
     {
-        // Arrange — cache salvo há 1 dia (válido)
+        // Arrange — cache salvo há 1 dia (válido) com versão sincronizada ao remoto
         var questions = QuestionTestHelpers.MakeQuestions(nivel1: 5, databankName: "TestDB");
         _fakeLocal.SetQuestions(questions, savedDaysAgo: 1);
+        _fakeLocal.SetCachedVersion(_fakeFirestore.RemoteVersion); // versão local == remota → sem refresh
 
         // Act
         var task = _syncService.InitializeAsync();
@@ -305,7 +306,7 @@ public class QuestionSyncServiceTests
             number: 1,
             databankName: "TestDB",
             topic: "acidsBase",
-            bloomLevel: "understand");
+            bloomLevel: BloomLevel.Understand);
 
         // Act
         repo.SaveQuestions(new List<Question> { question });
@@ -314,9 +315,9 @@ public class QuestionSyncServiceTests
         // Assert
         Assert.AreEqual(1, result.Count);
         var saved = result[0];
-        Assert.AreEqual("TestDB_001",  saved.globalId,   "globalId deve ser preservado.");
-        Assert.AreEqual("acidsBase",   saved.topic,      "topic deve ser preservado.");
-        Assert.AreEqual("understand",  saved.bloomLevel, "bloomLevel deve ser preservado.");
+        Assert.AreEqual("TestDB_001",          saved.globalId,   "globalId deve ser preservado.");
+        Assert.AreEqual("acidsBase",           saved.topic,      "topic deve ser preservado.");
+        Assert.AreEqual(BloomLevel.Understand, saved.bloomLevel, "bloomLevel deve ser preservado.");
         Assert.IsNotNull(saved.conceptTags,              "conceptTags não deve ser null.");
         Assert.IsNotNull(saved.questionHint,             "questionHint não deve ser null.");
 

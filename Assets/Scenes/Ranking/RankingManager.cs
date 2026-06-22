@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +13,9 @@ public class RankingManager : MonoBehaviour
     [SerializeField] protected RectTransform rankingTableContent;
     [SerializeField] protected ScrollRect    scrollRect;
 
+    [Header("Ranking")]
+    [SerializeField] private int rankingLimit = 20;
+
     [Header("Week Reset Information")]
     [SerializeField] private TMP_Text weekResetCountdownText;
     private WeekResetCountdown _resetCountdown;
@@ -23,8 +25,8 @@ public class RankingManager : MonoBehaviour
     [SerializeField] private TMP_Text   lastUpdateText;
 
     // ─── Estado interno ───────────────────────────────────────
-    protected IRankingRepository _rankingRepository;
-    protected List<Ranking>      _rankings;
+    protected IRankingSyncService _rankingSyncService;
+    protected List<Ranking>       _rankings = new List<Ranking>();
 
     private INavigationService _navigation;
     private DateTime           _lastFetchTime = DateTime.MinValue;
@@ -50,6 +52,7 @@ public class RankingManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     // Inicialização
     // ─────────────────────────────────────────────────────────
+
     private void InitializeWeekResetCountdown()
     {
         if (weekResetCountdownText != null)
@@ -61,23 +64,26 @@ public class RankingManager : MonoBehaviour
 
     protected virtual void InitializeRepository()
     {
-        bool debugMode = BioBlocksSettings.Instance != null
-                    && BioBlocksSettings.Instance.IsDebugMode();
+        _rankingSyncService = AppContext.RankingSync;
 
-        _rankingRepository = debugMode
-            ? (IRankingRepository) new FakeRankingRepository()
-            : new RankingRepository(AppContext.Firestore);
-
-        // Popula a tabela imediatamente com o cache — sem await, sem flash
-        var syncService = AppContext.RankingSync;
-        if (syncService != null)
+        if (_rankingSyncService == null)
         {
-            _rankings = syncService.GetCachedRankings();
+            Debug.LogWarning("[RankingManager] AppContext.RankingSync está nulo. Ranking usará fallback remoto direto se possível.");
+        }
+        else
+        {
+            // Popula a tabela imediatamente com cache LiteDB.
+            // Não acessa Firestore aqui.
+            _rankings = _rankingSyncService.GetCachedRankings(rankingLimit);
+
             if (_rankings != null && _rankings.Count > 0)
+            {
+                _lastFetchTime = _rankingSyncService.GetLastSyncedAt();
                 UpdateRankingTable();
+                UpdateLastFetchLabel();
+            }
         }
 
-        // Verifica staleness e atualiza em background
         _ = InitializeAsync();
     }
 
@@ -85,18 +91,7 @@ public class RankingManager : MonoBehaviour
     {
         try
         {
-            var syncService = AppContext.RankingSync;
-            if (syncService != null)
-            {
-                var fresh = await syncService.GetRankingsWithFallback();
-                if (fresh != null && fresh.Count > 0)
-                {
-                    _rankings = fresh;
-                    UpdateRankingTable();
-                }
-            }
-            else
-                await FetchRankings();
+            await FetchRankings();
         }
         catch (Exception e)
         {
@@ -111,6 +106,7 @@ public class RankingManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     // Fetch
     // ─────────────────────────────────────────────────────────
+
     public virtual async Task FetchRankings()
     {
         if (_isFetching)
@@ -121,16 +117,33 @@ public class RankingManager : MonoBehaviour
 
         try
         {
-            _isFetching    = true;
-            ShowLoadingIndicator(true);
+            _isFetching = true;
 
-            _rankings      = await _rankingRepository.GetRankingsAsync(limit: 50);
-            _lastFetchTime = DateTime.UtcNow;
+            if (_rankings == null || _rankings.Count == 0)
+                ShowLoadingIndicator(true);
 
-            if (_rankings != null && _rankings.Count > 0)
-                UpdateRankingTable();
+            List<Ranking> result;
+
+            if (_rankingSyncService != null)
+            {
+                result = await _rankingSyncService.GetRankingsWithFallback(rankingLimit);
+                _lastFetchTime = _rankingSyncService.GetLastSyncedAt();
+            }
             else
+            {
+                Debug.LogWarning("[RankingManager] RankingSyncService indisponível — retornando lista vazia.");
+                result = new List<Ranking>();
+            }
+
+            if (result != null && result.Count > 0)
+            {
+                _rankings = result;
+                UpdateRankingTable();
+            }
+            else
+            {
                 Debug.LogWarning("[RankingManager] Ranking retornou vazio.");
+            }
         }
         catch (Exception e)
         {
@@ -148,37 +161,50 @@ public class RankingManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     // UI
     // ─────────────────────────────────────────────────────────
+
     protected virtual void UpdateRankingTable()
     {
-        if (rankingTableContent == null) return;
+        if (rankingTableContent == null)
+            return;
 
         foreach (Transform child in rankingTableContent)
             Destroy(child.gameObject);
 
-        var top20 = _rankings.Take(20).ToList();
+        var top = (_rankings ?? new List<Ranking>())
+            .Take(rankingLimit)
+            .ToList();
 
-        for (int i = 0; i < top20.Count; i++)
+        for (int i = 0; i < top.Count; i++)
         {
-            CreateRankingRow(i + 1, top20[i], false);
+            CreateRankingRow(i + 1, top[i], false);
         }
 
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(rankingTableContent);
+    }
 
-    }    
-    
     protected virtual void CreateRankingRow(int rank, Ranking ranking, bool isCurrentUser)
     {
         GameObject rowGO = Instantiate(rankingRowPrefab, rankingTableContent);
         var rowUI = rowGO.GetComponent<RankingRowUI>();
 
         if (rowUI != null)
-            rowUI.Setup(rank, ranking.userName,
-                        ranking.userScore, ranking.userWeekScore,
-                        ranking.profileImageUrl);
+        {
+            rowUI.Setup(
+                rank,
+                ranking.userName,
+                ranking.userScore,
+                ranking.userWeekScore,
+                ranking.profileImageUrl
+            );
+        }
         else
+        {
             Debug.LogError("[RankingManager] RankingRowUI não encontrado no prefab!");
-    }    private void ShowLoadingIndicator(bool show)
+        }
+    }
+
+    private void ShowLoadingIndicator(bool show)
     {
         if (loadingIndicator != null)
             loadingIndicator.SetActive(show);
@@ -186,11 +212,12 @@ public class RankingManager : MonoBehaviour
 
     private void UpdateLastFetchLabel()
     {
-        if (lastUpdateText == null) return;
+        if (lastUpdateText == null)
+            return;
 
         lastUpdateText.text = _lastFetchTime == DateTime.MinValue
             ? "Nunca atualizado"
-            : FormatElapsedTime(DateTime.UtcNow - _lastFetchTime);
+            : FormatElapsedTime(DateTime.UtcNow - _lastFetchTime.ToUniversalTime());
     }
 
     private string FormatElapsedTime(TimeSpan elapsed)
@@ -204,12 +231,52 @@ public class RankingManager : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     // Botões / navegação
     // ─────────────────────────────────────────────────────────
+
     public async void OnRefreshButtonClicked()
     {
-        try   { await FetchRankings(); }
-        catch (Exception e) { Debug.LogError($"[RankingManager] Refresh falhou: {e.Message}"); }
+        if (_isFetching)
+        {
+            Debug.LogWarning("[RankingManager] Refresh ignorado — busca já em andamento.");
+            return;
+        }
+
+        try
+        {
+            ShowLoadingIndicator(true);
+
+            if (_rankingSyncService == null)
+            {
+                Debug.LogWarning("[RankingManager] RankingSyncService indisponível — refresh cancelado.");
+                return;
+            }
+
+            bool refreshed = await _rankingSyncService.ForceRefresh(rankingLimit);
+
+            if (!refreshed)
+            {
+                Debug.LogWarning("[RankingManager] Refresh remoto falhou — mantendo ranking atual/cache.");
+            }
+
+            _rankings = _rankingSyncService.GetCachedRankings(rankingLimit);
+            _lastFetchTime = _rankingSyncService.GetLastSyncedAt();
+
+            if (_rankings != null && _rankings.Count > 0)
+                UpdateRankingTable();
+
+            UpdateLastFetchLabel();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[RankingManager] Refresh falhou: {e.Message}");
+        }
+        finally
+        {
+            ShowLoadingIndicator(false);
+        }
     }
 
     public virtual void Navigate(string sceneName)
-        => _navigation.NavigateTo(sceneName);
+    {
+        _navigation.NavigateTo(sceneName);
+    }
 }
