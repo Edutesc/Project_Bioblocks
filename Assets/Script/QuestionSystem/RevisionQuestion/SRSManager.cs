@@ -18,26 +18,26 @@ public class SRSManager : MonoBehaviour, ISRSManager
         public DateTime nextRevisionDate;
     }
     
-    private void Awake()
-    {
-        CreateDictionary();
-    }
+    // private void Awake()
+    // {
+    //     CreateDictionary();
+    // }
  
-    private void CreateDictionary()
-    {
-        foreach (var subject in grafo.nodes)
-        {
-            userProgress[subject.id] = new SubjectData
-            {
-                subjectId = subject.id,
-                questionCounter = 0,
-                easeFactor = 2.5f,
-                currentInterval = 1,
-                lastCompletionDate = DateTime.MinValue,
-                nextRevisionDate = DateTime.MinValue
-            };
-        }
-    }
+    // private void CreateDictionary()
+    // {
+    //     foreach (var subject in grafo.nodes)
+    //     {
+    //         userProgress[subject.id] = new SubjectData
+    //         {
+    //             subjectId = subject.id,
+    //             questionCounter = 0,
+    //             easeFactor = 2.5f,
+    //             currentInterval = 1,
+    //             lastCompletionDate = DateTime.MinValue,
+    //             nextRevisionDate = DateTime.MinValue
+    //         };
+    //     }
+    // }
  
     public void ScheduleRevision(string subjectId)
     {
