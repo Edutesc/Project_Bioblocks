@@ -19,6 +19,12 @@ public class QuestionHintManager : MonoBehaviour
     [SerializeField] private Image hintImage;
     [SerializeField] private VideoPlayer hintVideo;
 
+    [Header("Hint Containers")]
+    [SerializeField] private GameObject hintTextContainer;
+    [SerializeField] private GameObject hintImageContainer;
+    [SerializeField] private GameObject hintVideoContainer;
+    [SerializeField] private GameObject hintLinkContainer;
+
     [Header("Optional Link UI")]
     [SerializeField] private GameObject linkContainer;
     [SerializeField] private Button linkButton;
@@ -28,8 +34,12 @@ public class QuestionHintManager : MonoBehaviour
     [SerializeField] private RectTransform modalRoot;
     [SerializeField] private CanvasGroup modalCanvasGroup;
     [SerializeField] private Canvas modalCanvas;
+    [SerializeField] private RectTransform modalContent;
     [SerializeField] private float modalAnimationDuration = 0.35f;
     [SerializeField] private float modalHiddenOffsetY = 2300f;
+    [SerializeField] private float modalMinHeight = 520f;
+    [SerializeField] private float modalMaxHeight = 1800f;
+    [SerializeField] private float modalVerticalPadding = 280f;
     [SerializeField] private int modalSortingOrder = 500;
 
     [Header("Video")]
@@ -41,11 +51,11 @@ public class QuestionHintManager : MonoBehaviour
     private string _currentLink;
     private Vector2 _modalVisiblePosition;
     private Coroutine _modalAnimationRoutine;
-    private bool _hasModalVisiblePosition;
 
     private void Awake()
     {
         ResolveModalReferences();
+        ResolveContainerReferences();
         ConfigureAsAdditiveModal();
         PrepareModalHidden();
         HideAllHintViews();
@@ -103,12 +113,14 @@ public class QuestionHintManager : MonoBehaviour
         _ = ShowImageAsync(hint.imagePath, sourceQuestion);
         ShowVideo(hint.videoUrl);
         ShowLink(hint.link);
+        RefreshModalSize();
     }
 
     private void PlayOpenAnimation()
     {
         ResolveModalReferences();
-        CacheModalVisiblePosition();
+        ResolveContainerReferences();
+        RefreshModalSize();
 
         if (modalRoot == null || modalCanvasGroup == null)
             return;
@@ -156,14 +168,18 @@ public class QuestionHintManager : MonoBehaviour
 
     private void ShowText(string text)
     {
-        if (hintText == null)
-            return;
+        bool hasText = !string.IsNullOrWhiteSpace(text);
+        SetContainerVisible(hintTextContainer, hasText);
 
-        if (string.IsNullOrWhiteSpace(text))
+        if (!hasText)
         {
-            hintText.gameObject.SetActive(false);
+            if (hintText != null)
+                hintText.gameObject.SetActive(false);
             return;
         }
+
+        if (hintText == null)
+            return;
 
         hintText.text = ChemicalFormatter.Format(text);
         hintText.gameObject.SetActive(true);
@@ -171,17 +187,22 @@ public class QuestionHintManager : MonoBehaviour
 
     private async Task ShowImageAsync(string imagePath, Question sourceQuestion)
     {
-        if (hintImage == null)
-            return;
-
         CancelImageLoad();
         ClearLoadedImage();
 
         if (string.IsNullOrWhiteSpace(imagePath))
         {
-            hintImage.gameObject.SetActive(false);
+            SetContainerVisible(hintImageContainer, false);
+            if (hintImage != null)
+                hintImage.gameObject.SetActive(false);
             return;
         }
+
+        SetContainerVisible(hintImageContainer, true);
+        RefreshModalSize();
+
+        if (hintImage == null)
+            return;
 
         _imageLoadCts = new CancellationTokenSource();
         CancellationToken ct = _imageLoadCts.Token;
@@ -216,6 +237,8 @@ public class QuestionHintManager : MonoBehaviour
             {
                 Debug.LogWarning($"[QuestionHintManager] Imagem de hint não encontrada: '{resolvedImagePath}'.");
                 hintImage.gameObject.SetActive(false);
+                SetContainerVisible(hintImageContainer, false);
+                RefreshModalSize();
                 return;
             }
 
@@ -233,15 +256,20 @@ public class QuestionHintManager : MonoBehaviour
         {
             Debug.LogError($"[QuestionHintManager] Erro ao carregar imagem de hint '{resolvedImagePath}': {e.Message}");
             hintImage.gameObject.SetActive(false);
+            SetContainerVisible(hintImageContainer, false);
+            RefreshModalSize();
         }
     }
 
     private void ShowVideo(string videoUrl)
     {
+        bool hasVideo = !string.IsNullOrWhiteSpace(videoUrl);
+        SetContainerVisible(hintVideoContainer, hasVideo);
+
         if (hintVideo == null)
             return;
 
-        if (string.IsNullOrWhiteSpace(videoUrl))
+        if (!hasVideo)
         {
             hintVideo.Stop();
             hintVideo.gameObject.SetActive(false);
@@ -261,17 +289,20 @@ public class QuestionHintManager : MonoBehaviour
     private void ShowLink(string link)
     {
         _currentLink = string.IsNullOrWhiteSpace(link) ? null : link.Trim();
+        bool hasLink = !string.IsNullOrEmpty(_currentLink);
 
-        if (linkContainer != null)
-            linkContainer.SetActive(!string.IsNullOrEmpty(_currentLink));
+        SetContainerVisible(hintLinkContainer, hasLink);
+
+        if (linkContainer != null && linkContainer != hintLinkContainer)
+            linkContainer.SetActive(hasLink);
 
         if (linkButton != null)
-            linkButton.gameObject.SetActive(!string.IsNullOrEmpty(_currentLink));
+            linkButton.gameObject.SetActive(hasLink);
 
         if (linkText != null)
         {
             linkText.text = _currentLink ?? "";
-            linkText.gameObject.SetActive(!string.IsNullOrEmpty(_currentLink));
+            linkText.gameObject.SetActive(hasLink);
         }
     }
 
@@ -295,7 +326,13 @@ public class QuestionHintManager : MonoBehaviour
     private void ResolveModalReferences()
     {
         if (modalRoot == null)
+            modalRoot = FindRectTransformInScene("ModalPanel");
+
+        if (modalRoot == null)
             modalRoot = FindRectTransformInScene("MainBackground");
+
+        if (modalContent == null)
+            modalContent = FindRectTransformInScene("Content");
 
         if (modalRoot == null)
             modalRoot = FindObjectOfType<Canvas>()?.transform as RectTransform;
@@ -312,6 +349,21 @@ public class QuestionHintManager : MonoBehaviour
             modalCanvasGroup = modalRoot.gameObject.AddComponent<CanvasGroup>();
     }
 
+    private void ResolveContainerReferences()
+    {
+        if (hintTextContainer == null)
+            hintTextContainer = FindGameObjectInScene("HintTextContainer");
+
+        if (hintImageContainer == null)
+            hintImageContainer = FindGameObjectInScene("HintImageContainer");
+
+        if (hintVideoContainer == null)
+            hintVideoContainer = FindGameObjectInScene("HintVideoContainer");
+
+        if (hintLinkContainer == null)
+            hintLinkContainer = linkContainer;
+    }
+
     private void ConfigureAsAdditiveModal()
     {
         if (modalCanvas != null)
@@ -324,10 +376,10 @@ public class QuestionHintManager : MonoBehaviour
 
     private void PrepareModalHidden()
     {
-        CacheModalVisiblePosition();
+        RefreshModalSize();
 
         if (modalRoot != null)
-            modalRoot.anchoredPosition = _modalVisiblePosition + Vector2.down * modalHiddenOffsetY;
+            modalRoot.anchoredPosition = GetModalVisiblePosition() + Vector2.down * modalHiddenOffsetY;
 
         if (modalCanvasGroup != null)
         {
@@ -340,7 +392,7 @@ public class QuestionHintManager : MonoBehaviour
     private IEnumerator CloseModalRoutine()
     {
         ResolveModalReferences();
-        CacheModalVisiblePosition();
+        RefreshModalSize();
 
         if (modalRoot == null || modalCanvasGroup == null)
         {
@@ -350,7 +402,7 @@ public class QuestionHintManager : MonoBehaviour
 
         yield return AnimateModal(
             modalRoot.anchoredPosition,
-            _modalVisiblePosition + Vector2.down * modalHiddenOffsetY,
+            GetModalVisiblePosition() + Vector2.down * modalHiddenOffsetY,
             modalCanvasGroup.alpha,
             0f,
             unloadSceneWhenFinished: true);
@@ -393,13 +445,74 @@ public class QuestionHintManager : MonoBehaviour
             UnloadThisSceneIfAdditive();
     }
 
-    private void CacheModalVisiblePosition()
+    private void RefreshModalSize()
     {
-        if (_hasModalVisiblePosition || modalRoot == null)
+        if (modalRoot == null)
             return;
 
-        _modalVisiblePosition = modalRoot.anchoredPosition;
-        _hasModalVisiblePosition = true;
+        if (modalContent != null)
+        {
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(modalContent);
+        }
+
+        float contentHeight = GetContentPreferredHeight();
+        float targetHeight = Mathf.Clamp(
+            contentHeight + modalVerticalPadding,
+            modalMinHeight,
+            modalMaxHeight);
+
+        modalRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+        Canvas.ForceUpdateCanvases();
+
+        _modalVisiblePosition = GetModalVisiblePosition();
+    }
+
+    private float GetContentPreferredHeight()
+    {
+        if (modalContent == null)
+            return 0f;
+
+        float preferredHeight = LayoutUtility.GetPreferredHeight(modalContent);
+        if (preferredHeight > 0f)
+            return preferredHeight;
+
+        float fallbackHeight = 0f;
+        VerticalLayoutGroup layoutGroup = modalContent.GetComponent<VerticalLayoutGroup>();
+        float spacing = layoutGroup != null ? layoutGroup.spacing : 0f;
+        int visibleChildren = 0;
+
+        for (int i = 0; i < modalContent.childCount; i++)
+        {
+            RectTransform child = modalContent.GetChild(i) as RectTransform;
+            if (child == null || !child.gameObject.activeSelf)
+                continue;
+
+            fallbackHeight += child.rect.height;
+            visibleChildren++;
+        }
+
+        if (visibleChildren > 1)
+            fallbackHeight += spacing * (visibleChildren - 1);
+
+        if (layoutGroup != null)
+            fallbackHeight += layoutGroup.padding.top + layoutGroup.padding.bottom;
+
+        return fallbackHeight;
+    }
+
+    private Vector2 GetModalVisiblePosition()
+    {
+        if (modalRoot == null)
+            return Vector2.zero;
+
+        return new Vector2(modalRoot.anchoredPosition.x, 0f);
+    }
+
+    private void SetContainerVisible(GameObject container, bool visible)
+    {
+        if (container != null)
+            container.SetActive(visible);
     }
 
     private RectTransform FindRectTransformInScene(string objectName)
@@ -413,6 +526,23 @@ public class QuestionHintManager : MonoBehaviour
             {
                 if (candidate.name == objectName && candidate is RectTransform rectTransform)
                     return rectTransform;
+            }
+        }
+
+        return null;
+    }
+
+    private GameObject FindGameObjectInScene(string objectName)
+    {
+        Scene currentScene = gameObject.scene;
+
+        foreach (GameObject root in currentScene.GetRootGameObjects())
+        {
+            Transform[] transforms = root.GetComponentsInChildren<Transform>(true);
+            foreach (Transform candidate in transforms)
+            {
+                if (candidate.name == objectName)
+                    return candidate.gameObject;
             }
         }
 
@@ -433,6 +563,13 @@ public class QuestionHintManager : MonoBehaviour
 
     private void HideAllHintViews()
     {
+        ResolveContainerReferences();
+
+        SetContainerVisible(hintTextContainer, false);
+        SetContainerVisible(hintImageContainer, false);
+        SetContainerVisible(hintVideoContainer, false);
+        SetContainerVisible(hintLinkContainer, false);
+
         if (hintText != null)
             hintText.gameObject.SetActive(false);
 
