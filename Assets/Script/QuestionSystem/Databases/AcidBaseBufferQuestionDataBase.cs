@@ -175,11 +175,11 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    questionHint = new QuestionHint { text = "O conceito de pares conjugados é fundamental. Quando um ácido (como o HCl) perde seu próton (H+), a espécie resultante (Cl-) tem a capacidade de receber o próton de volta, atuando como base conjugada." }
         //},
 
-        //// QUESTION 007
+        // QUESTION 007
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "A figura mostra NH3 recebendo um próton (H^+). Qual espécie corresponde ao ácido conjugado da amônia?",
         //    answers = new string[] {
         //        "H^+",
         //        "OH^-",
@@ -189,8 +189,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    correctIndex = 2,
         //    questionNumber = 7,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer7",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_007",
@@ -287,22 +287,22 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    questionHint = new QuestionHint { text = "A constante de equilíbrio (Keq) quantifica o estado final de uma reação reversível. Ela nos dá a exata proporção matemática entre as concentrações dos produtos e as dos reagentes quando a reação se estabiliza." }
         //},
 
-        //// QUESTION 011
+        // QUESTION 011
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "A figura mostra uma reação com Keq < 1. O que isso indica sobre a composição no equilíbrio?",
         //    answers = new string[] {
-        //        "No equilíbrio, há mais reagentes do que produtos.",
-        //        "No equilíbrio, há mais produtos do que reagentes.",
-        //        "No equilíbrio, reagentes e produtos estão em quantidades iguais.",
+        //        "Há mais reagentes do que produtos.",
+        //        "Há mais produtos do que reagentes.",
+        //        "Reagentes e produtos estão em quantidades iguais.",
         //        "A reação ocorre apenas no sentido direto."
         //    },
         //    correctIndex = 0,
         //    questionNumber = 11,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseDB_ImageQuestionContainer11",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_011",
@@ -315,22 +315,22 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    questionHint = new QuestionHint { text = "Se a constante Keq é menor que 1, significa que o numerador (produtos) é menor que o denominador (reagentes). Portanto, o equilíbrio tende fortemente à esquerda, não ocorrendo dissociação total." }
         //},
 
-        //// QUESTION 012
+        // QUESTION 012
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "A figura mostra uma reação com Keq > 1. O que isso indica sobre a composição no equilíbrio?",
         //    answers = new string[] {
-        //        "No equilíbrio, há mais reagentes do que produtos.",
-        //        "No equilíbrio, há mais produtos do que reagentes.",
-        //        "No equilíbrio, reagentes e produtos estão em quantidades iguais.",
-        //        "A reação ocorre apenas no sentido direto."
+        //        "Há mais reagentes do que produtos.",
+        //        "Há mais produtos do que reagentes.",
+        //        "Reagentes e produtos estão em quantidades iguais.",
+        //        "A reação ocorre apenas no sentido inverso."
         //    },
         //    correctIndex = 1,
         //    questionNumber = 12,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseDB_ImageQuestionContainer12",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_012",
@@ -343,11 +343,11 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    questionHint = new QuestionHint { text = "Se Keq é bem maior que 1, a reação é muito favorável no sentido direto. Isso indica que quase todos os reagentes foram convertidos e o sistema se estabiliza com alta concentração de produtos." }
         //},
 
-        //// QUESTION 013
+        // QUESTION 013
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "A figura mostra a expressão de Ka para a dissociação de um ácido fraco. O que o valor de Ka permite analisar?",
         //    answers = new string[] {
         //        "A força da base.",
         //        "A força do ácido.",
@@ -357,8 +357,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    correctIndex = 1,
         //    questionNumber = 13,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseDB_ImageQuestionContainer13",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_013",
@@ -371,11 +371,11 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    questionHint = new QuestionHint { text = "A constante de acidez (Ka) é a medida oficial da força de um ácido. Trata-se da constante de equilíbrio aplicada especificamente para a reação de dissociação do ácido em água." }
         //},
 
-        //// QUESTION 014
+        // QUESTION 014
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "A figura mostra a expressão de Kb para a reação de uma base fraca com água. O que o valor de Kb permite analisar?",
         //    answers = new string[] {
         //        "A força da base.",
         //        "A força do ácido.",
@@ -385,8 +385,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    correctIndex = 0,
         //    questionNumber = 14,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseDB_ImageQuestionContainer14",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_014",
@@ -718,7 +718,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "acids" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Lembrando da escala padrão em água a 25 °C (de 0 a 14), o ponto central neutro é 7. Qualquer valor inferior a isso representa uma abundância de íons H+, caracterizando um ambiente ácido." }
@@ -745,7 +745,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "bases" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Na mesma escala de 0 a 14, se o pH for superior a 7, os íons hidroxila (OH-) estão em maior número que os de hidrogênio. Isso define quimicamente uma solução básica ou alcalina." }
@@ -772,7 +772,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "neutral_solutions" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "O pH é 7 (neutro) quando o sistema atinge o equilíbrio perfeito, em que as concentrações molares de hidrogênio (H+) e hidroxila (OH-) estão em quantidades rigorosamente iguais na água." }
@@ -831,11 +831,11 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Na autoionização da água sob temperatura de 25 °C, existe uma relação matemática fechada de Kw: a soma numérica entre o pH e o pOH de qualquer solução será sempre e obrigatoriamente 14." }
         //},
-        //// QUESTION 031
+        // QUESTION 031
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "°C?",
+        //    questionText = "Qual é o valor de Kw, o produto iônico da água, a 25 °C?",
         //    answers = new string[] {
         //        "10^{-7} ",
         //        "10^{-14} ",
@@ -853,16 +853,16 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "poh_kw",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "water_autoionization" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "A constante Kw representa o produto iônico da água. Na temperatura de 25 °C, a multiplicação das concentrações [H+] x [OH-] gera sempre o valor constante de 10 elevado a -14." }
         //},
-        //// QUESTION 032
+        // //QUESTION 032
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "Em água pura a 25 °C, se Kw = 1×10^-14 e [H^+] = [OH^-], qual é a concentração de H^+?",
         //    answers = new string[] {
         //        "10^{-14} M",
         //        "10^{-7} M",
@@ -872,24 +872,24 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    correctIndex = 1,
         //    questionNumber = 32,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer32",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_032",
         //    topic = "acidsBase",
         //    subtopic = "ph_calculations",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "ph_scale", "hydrogen_ion_concentration" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Se a solução for pura e neutra, [H+] e [OH-] devem ser idênticos. Como o produto deles dá 10^-14, a única possibilidade matemática é que cada um seja igual a 10^-7 molar." }
         //},
         //// QUESTION 033
-        //new Question
+        ////new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "Em água pura a 25 °C, se Kw = 1×10^-14 e [H^+] = [OH^-], qual é a concentração de OH^-?",
         //    answers = new string[] {
         //        "10^{-14} M",
         //        "10^{-7} M",
@@ -899,15 +899,15 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    correctIndex = 1,
         //    questionNumber = 33,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer33",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 2,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_033",
         //    topic = "acidsBase",
         //    subtopic = "poh_kw",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "hydroxide_ion_concentration", "water_autoionization" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "O mesmo raciocínio do H+ se aplica ao ânion hidroxila: na neutralidade pura a 25 °C, não há predomínio, e a concentração de OH- será de 10^-7 mol por litro." }
@@ -966,11 +966,11 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Igualmente à definição de Sørensen para o ácido, o pOH é calculado aplicando-se o logaritmo negativo na base 10 sobre a concentração dos íons hidroxila: pOH = -log10[OH-]." }
         //},
-        //// QUESTION 036
+        // QUESTION 036
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual o valor mínimo de pH possível?",
+        //    questionText = "Na escala didática usual de pH entre 0 e 14, qual valor representa a extremidade mais ácida?",
         //    answers = new string[] {
         //        "0",
         //        "7",
@@ -988,7 +988,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string>(),
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Se usarmos concentrações molares de referência (como 1 mol/L para ácidos fortes), a escala vai bater no limite teórico inferior de 0 para a acidez máxima rotineira." }
@@ -997,7 +997,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual o valor máximo de pH possível?",
+        //    questionText = "Na escala didática usual de pH entre 0 e 14, qual valor representa a extremidade mais básica?",
         //    answers = new string[] {
         //        "0",
         //        "7",
@@ -1015,7 +1015,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string>(),
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Na outra ponta dessa escala de referência usual baseada em 1 mol/L (ex: hidróxido de sódio concentrado), o pH máximo da basicidade rotineira atingirá o topo marcando 14." }
@@ -1024,7 +1024,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual o pH de uma solução neutra?",
+        //    questionText = "Uma solução aquosa a 25 °C apresenta [H+] = 1×10^-7 M. Qual é o pH dessa solução?",
         //    answers = new string[] {
         //        "0",
         //        "7",
@@ -1042,7 +1042,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "neutral_solutions" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "O número 7 é o marco exato no meio da escala logarítmica e atesta a neutralidade para soluções aquosas comuns submetidas a 25 °C de temperatura ambiente." }
@@ -1051,7 +1051,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Uma solução com pH abaixo de 7 é:",
+        //    questionText = "Um peagâmetro indica pH 6,2 para uma amostra aquosa a 25 °C. Como essa solução deve ser classificada?",
         //    answers = new string[] {
         //        "Neutra",
         //        "Básica",
@@ -1069,16 +1069,16 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "acids" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Para facilitar o dia a dia laboratorial: viu um valor medido no peagômetro que cravou abaixo de 7? Não tenha dúvida de que há excesso de prótons e a solução é ácida." }
         //},
-        //// QUESTION 040
+        // QUESTION 040
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Uma solução com pH acima de 7 é:",
+        //    questionText = "Um peagâmetro indica pH 8,5 para uma amostra aquosa a 25 °C. Como essa solução deve ser classificada?",
         //    answers = new string[] {
         //        "Ácida",
         //        "Neutra",
@@ -1096,7 +1096,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "bases" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Da mesma forma, qualquer leitura eletrônica que entregue um número superior a 7 atesta um excesso de hidroxilas (OH-), revelando que o meio está sob domínio básico." }
@@ -1128,16 +1128,16 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "As reações de neutralização são aquelas que anulam a agressividade das partes envolvidas: os H+ do ácido encontram os OH- da base, gerando moléculas de água e um sal dissolvido." }
         //},
-        //// QUESTION 042
+        // QUESTION 042
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Durante uma titulação, o ponto de equivalência é atingido quando:",
+        //    questionText = "Durante uma titulação ácido-base, o ponto de equivalência é atingido quando:",
         //    answers = new string[] {
-        //        "A concentração de H^+ é igual à concentração de OH^-. ",
-        //        "O pH é igual a 0.",
-        //        "O pH é igual a 7.",
-        //        "O pH é igual a 14."
+        //        "A quantidade estequiométrica de ácido e base reagiu.",
+        //        "O pH é sempre igual a 0.",
+        //        "O pH é sempre igual a 7.",
+        //        "O pH é sempre igual a 14."
         //    },
         //    correctIndex = 0,
         //    questionNumber = 42,
@@ -1263,18 +1263,18 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Analise a equação: pH = pKa + log([A-]/[HA]). Se as concentrações do ácido e da base forem iguais, o termo log se torna log(1), que vale zero. O resultado é o pico da eficiência: pH igual ao pKa." }
         //},
-        //// QUESTION 047
+        // QUESTION 047
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "A faixa de tamponamento de uma solução-tampão é aproximadamente:",
+        //    questionText = "Um tampão com pKa = 6,8 será usado em uma solução que deve permanecer em pH 8,5. Qual avaliação é mais adequada?",
         //    answers = new string[] {
-        //        "Igual ao pKa",
-        //        "± 1 unidade de pH em relação ao pKa",
-        //        "± 2 unidades de pH em relação ao pKa",
-        //        "± 3 unidades de pH em relação ao pKa"
+        //        "Está fora da faixa ideal e terá baixa eficiência.",
+        //        "Está exatamente no ponto de máxima eficiência.",
+        //        "Funcionará melhor quanto mais distante estiver do pKa.",
+        //        "Será eficiente apenas se o ácido for forte."
         //    },
-        //    correctIndex = 1,
+        //    correctIndex = 0,
         //    questionNumber = 47,
         //    answerType = AnswerType.Text,
         //    questionType = QuestionType.Text,
@@ -1285,7 +1285,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "buffers",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Analyze,
         //    conceptTags = new List<string> { "ka_pka", "henderson_hasselbalch" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Enquanto o bicarbonato toma conta do sangue extracelular, o interior de nossas células usa o sistema tampão fosfato (HPO4 / H2PO4). Seu pKa próximo a 6.8 o torna ideal para a proteção do citosol." }
@@ -1317,18 +1317,18 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "A ventilação excessiva dos pulmões funciona como uma bomba sugadora de CO2. Removendo esse componente, o ácido carbônico se converte de volta, o H+ sanguíneo desaparece, e o pH sobe na alcalose." }
         //},
-        //// QUESTION 049
+        // QUESTION 049
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "O principal sistema tampão do sangue é o sistema:",
+        //    questionText = "A reação CO2 + H2O ⇌ H2CO3 ⇌ H^+ + HCO3^- representa principalmente qual sistema tampão do sangue?",
         //    answers = new string[] {
         //        "Fosfato",
         //        "Acetato",
         //        "Bicarbonato",
         //        "Hemoglobina"
         //    },
-        //    correctIndex = 1,
+        //    correctIndex = 2,
         //    questionNumber = 49,
         //    answerType = AnswerType.Text,
         //    questionType = QuestionType.Text,
@@ -1339,7 +1339,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "blood_buffer_system",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Understand,
+        //    bloomLevel = BloomLevel.Analyze,
         //    conceptTags = new List<string> { "buffers" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Se ocorre uma hipoventilação pulmonar (asma grave, por exemplo), o CO2 se acumula e força a água a criar ácido carbônico no sangue. O banho de novos íons H+ abaixa o pH gerando acidose." }
@@ -1375,12 +1375,12 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Segundo Arrhenius, um ácido é toda substância que em solução aquosa libera:",
+        //    questionText = "Segundo Arrhenius, um ácido é toda substância que, em solução aquosa libera:",
         //    answers = new string[] {
-        //        "OH⁻",
-        //        "H⁺ (prótons)",
-        //        "Na⁺",
-        //        "Cl⁻"
+        //        "OH^⁻",
+        //        "H^⁺ (prótons)",
+        //        "Na^⁺",
+        //        "Cl^⁻"
         //    },
         //    correctIndex = 1,
         //    questionNumber = 51,
@@ -1425,16 +1425,16 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Termodinâmica importa: as constantes de dissociação (pKa, Ka, Kw) foram padronizadas na literatura. Qualquer variação de temperatura muda esses números. A maioria das tabelas crava o padrão em 25 °C." }
         //},
-        //// QUESTION 053
+        // QUESTION 053
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "A escala de pH mede:",
+        //    questionText = "Uma solução apresenta [H^+] = 1×10^-4 M. Qual é o pH dessa solução?",
         //    answers = new string[] {
-        //        "A concentração de oxigênio em uma solução",
-        //        "A concentração de prótons (H⁺) em uma solução",
-        //        "A quantidade de sais dissolvidos",
-        //        "A densidade da água"
+        //        "3",
+        //        "4",
+        //        "7",
+        //        "10"
         //    },
         //    correctIndex = 1,
         //    questionNumber = 53,
@@ -1456,7 +1456,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Uma solução com pH menor que 7 é considerada:",
+        //    questionText = "Uma amostra apresenta pH = 5. Como ela deve ser classificada?",
         //    answers = new string[] {
         //        "Neutra",
         //        "Ácida",
@@ -1483,7 +1483,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Uma solução com pH maior que 7 é considerada:",
+        //    questionText = "Uma amostra apresenta pH = 9. Como ela deve ser classificada?",
         //    answers = new string[] {
         //        "Ácida",
         //        "Neutra",
@@ -1510,12 +1510,12 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "O pH de uma solução neutra (como água pura, a 25 °C) é:",
+        //    questionText = "Uma solução a 25 °C tem pOH = 8. Qual é seu pH?",
         //    answers = new string[] {
-        //        "0",
+        //        "4",
+        //        "6",
         //        "7",
-        //        "10",
-        //        "14"
+        //        "8"
         //    },
         //    correctIndex = 1,
         //    questionNumber = 56,
@@ -1537,7 +1537,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Os sistemas tampão (buffers) no organismo têm como principal função:",
+        //    questionText = "Após pequena adição de HCl a uma solução, o pH quase não se altera. Qual função do tampão foi observada?",
         //    answers = new string[] {
         //        "Regular a temperatura corporal",
         //        "Transportar oxigênio",
@@ -1564,11 +1564,11 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual par funciona como sistema tampão importante no sangue?",
+        //    questionText = "Qual par ácido/base conjugado é mais adequado para representar o tampão bicarbonato do sangue?",
         //    answers = new string[] {
         //        "Glicose/Insulina",
         //        "Hemoglobina/O₂",
-        //        "H₂CO₃/HCO₃⁻ (ácido carbônico/bicarbonato)",
+        //        "H₂CO₃/HCO₃^⁻ (ácido carbônico/bicarbonato)",
         //        "DNA/RNA"
         //    },
         //    correctIndex = 2,
@@ -1591,14 +1591,14 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Uma solução com alta concentração de íons OH⁻ é classificada como:",
+        //    questionText = "Por que uma solução com alta concentração de OH^- é classificada como básica?",
         //    answers = new string[] {
-        //        "Ácida",
-        //        "Neutra",
-        //        "Básica",
-        //        "Isotônica"
+        //        "Porque há predomínio de OH^- em relação a H^+.",
+        //        "Porque todo OH^- é um ácido forte.",
+        //        "Porque o pH necessariamente é igual a 7.",
+        //        "Porque não há íons na solução."
         //    },
-        //    correctIndex = 2,
+        //    correctIndex = 0,
         //    questionNumber = 59,
         //    answerType = AnswerType.Text,
         //    questionType = QuestionType.Text,
@@ -1609,7 +1609,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Understand,
         //    conceptTags = new List<string> { "bases", "hydroxide_ion_concentration" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "O comportamento neutro se altera! Em temperaturas muito mais quentes, as moléculas da água tremem e sofrem maior autoionização (aumenta o Kw), fazendo o ponto da neutralidade cair para algo como 6.1." }
@@ -1618,14 +1618,14 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual indicador muda de cor para identificar se uma solução é ácida ou básica?",
+        //    questionText = "Por que indicadores como fenolftaleína ou papel de tornassol são úteis em testes ácido-base?",
         //    answers = new string[] {
-        //        "Cloreto de sódio",
-        //        "Fenolftaleína ou papel de tornassol",
-        //        "Glicose",
-        //        "Albumina"
+        //        "Porque mudam de cor em faixas específicas de pH.",
+        //        "Porque neutralizam qualquer ácido.",
+        //        "Porque mantêm o pH constante.",
+        //        "Porque impedem a dissociação da água."
         //    },
-        //    correctIndex = 1,
+        //    correctIndex = 0,
         //    questionNumber = 60,
         //    answerType = AnswerType.Text,
         //    questionType = QuestionType.Text,
@@ -1645,7 +1645,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual das substâncias abaixo é considerada uma base de Arrhenius?",
+        //    questionText = "Qual substância abaixo, ao se dissolver em água, libera OH- e pode ser classificada como base de Arrhenius?",
         //    answers = new string[] {
         //        "HCl",
         //        "NaOH",
@@ -1663,7 +1663,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "arrhenius_theory",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "bases", "aqueous_solutions" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Para fazer do bicarbonato um tampão genial, o sangue possui os glóbulos vermelhos lotados com uma das enzimas mais rápidas que a natureza inventou: a anidrase carbônica." }
@@ -1672,7 +1672,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "",
+        //    questionText = "Na reação NH4^+ ⇌ NH3 + H^+, como é classificado o par NH4^+/NH3?",
         //    answers = new string[] {
         //        "Par conjugado",
         //        "Par isotópico",
@@ -1682,15 +1682,15 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    correctIndex = 0,
         //    questionNumber = 62,
         //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Image,
-        //    questionImagePath = "QuestionImages/AcidBaseBufferDB/AcidBaseBufferDB_ImageQuestionContainer62",
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
         //    questionLevel = 1,
         //    questionInDevelopment = false,
         //    globalId = "acidsBase_062",
         //    topic = "acidsBase",
         //    subtopic = "conjugate_acid_base_pairs",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Apply,
         //    conceptTags = new List<string> { "bronsted_lowry_theory" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Os rins são a resposta lenta e teimosa do corpo. Eles compensam anomalias metabólicas e respiratórias longas secretando H+ diretamente na urina e conservando valioso bicarbonato de volta ao sangue." }
@@ -1722,45 +1722,45 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Os pulmões, ao invés de excretarem íons líquidos, resolvem a acidez soprando-a para o ambiente na forma de gás carbônico. É o ajuste de curto prazo mais potente que temos." }
         //},
-        // QUESTION 064
-        new Question
-        {
-            questionDatabankName = "AcidBaseBufferQuestionDatabase",
-            questionText = "Se o pOH de uma solução a 25 °C é 5, qual é seu pH?",
-            answers = new string[] {
-                "5",
-                "7",
-                "9",
-                "11"
-            },
-            correctIndex = 2,
-            questionNumber = 64,
-            answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
-            questionLevel = 1,
-            questionInDevelopment = false,
-            globalId = "acidsBase_064",
-            topic = "acidsBase",
-            subtopic = "ph_calculations",
-            displayName = "Ácidos, Bases e Tampões",
-            bloomLevel = BloomLevel.Understand,
-            conceptTags = new List<string> { "ph_scale" },
-            prerequisites = null,
-            questionHint = new QuestionHint { text = "Enquanto o corpo luta para estabilizar o plasma alcalino em ~7.4, toda a porcaria ácida não volátil tem que ir para algum lugar. Por isso, as reações renais forçam a urina a ser tipicamente mais ácida (pH ~6)." }
-        },
+        //// QUESTION 064
+        //new Question
+        //{
+        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
+        //    questionText = "Se o pOH de uma solução a 25 °C é 5, qual é seu pH?",
+        //    answers = new string[] {
+        //        "5",
+        //        "7",
+        //        "9",
+        //        "11"
+        //    },
+        //    correctIndex = 2,
+        //    questionNumber = 64,
+        //    answerType = AnswerType.Text,
+        //    questionType = QuestionType.Text,
+        //    questionImagePath = "",
+        //    questionLevel = 1,
+        //    questionInDevelopment = false,
+        //    globalId = "acidsBase_064",
+        //    topic = "acidsBase",
+        //    subtopic = "ph_calculations",
+        //    displayName = "Ácidos, Bases e Tampões",
+        //    bloomLevel = BloomLevel.Understand,
+        //    conceptTags = new List<string> { "ph_scale" },
+        //    prerequisites = null,
+        //    questionHint = new QuestionHint { text = "Enquanto o corpo luta para estabilizar o plasma alcalino em ~7.4, toda a porcaria ácida não volátil tem que ir para algum lugar. Por isso, as reações renais forçam a urina a ser tipicamente mais ácida (pH ~6)." }
+        //},
         //// QUESTION 065
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "O ácido clorídrico (HCl) é classificado como:",
+        //    questionText = "Por que o HCl é classificado como ácido forte em água?",
         //    answers = new string[] {
-        //        "Ácido fraco",
-        //        "Base fraca",
-        //        "Ácido forte",
-        //        "Base forte"
+        //        "Porque se ioniza quase completamente.",
+        //        "Porque recebe H^+ da água.",
+        //        "Porque libera OH^-.",
+        //        " Porque tem pH sempre igual a 7."
         //    },
-        //    correctIndex = 2,
+        //    correctIndex = 0,
         //    questionNumber = 65,
         //    answerType = AnswerType.Text,
         //    questionType = QuestionType.Text,
@@ -1771,7 +1771,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "acid_base_strength",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Understand,
         //    conceptTags = new List<string> { "strong_acids", "arrhenius_theory" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Um ácido poliprótico possui múltiplos hidrogênios desprendíveis em sua fórmula (como o fosfórico H3PO4). Eles se ionizam em estágios e cada molécula ejetada de H+ apresenta um pKa exclusivo." }
@@ -1780,14 +1780,14 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //new Question
         //{
         //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual destas soluções apresenta caráter básico?",
+        //    questionText = "Por que uma solução com pH = 12 apresenta caráter básico?",
         //    answers = new string[] {
-        //        "pH = 2",
-        //        "pH = 6",
-        //        "pH = 7",
-        //        "pH = 12"
+        //        "Porque pH maior que 7 indica predomínio relativo de OH^-.",
+        //        "Porque pH maior que 7 indica excesso de H^+. ",
+        //        "Porque pH 12 é neutro a 25 °C.",
+        //        "Porque pH não se relaciona com acidez."
         //    },
-        //    correctIndex = 3,
+        //    correctIndex = 0,
         //    questionNumber = 66,
         //    answerType = AnswerType.Text,
         //    questionType = QuestionType.Text,
@@ -1798,7 +1798,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    topic = "acidsBase",
         //    subtopic = "ph_scale",
         //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Remember,
+        //    bloomLevel = BloomLevel.Understand,
         //    conceptTags = new List<string> { "bases" },
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "Quanto mais você tira prótons de um ácido poliprótico, mais a carga negativa da molécula segura os prótons remanescentes. Ou seja, ionizações seguintes requerem muito mais força, logo seu pKa aumenta muito." }
