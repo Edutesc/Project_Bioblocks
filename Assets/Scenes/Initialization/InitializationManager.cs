@@ -80,7 +80,7 @@ public class InitializationManager : MonoBehaviour
             if (_auth == null)
                 throw new Exception("[InitManager] AppContext.Auth está null após AppContext.IsReady=true.");
 
-            ResetSessionIfFirebaseEnvironmentChanged(envCfg);
+            RecordFirebaseEnvironment(envCfg);
 
             bool isAuthenticated = await CheckAuthentication();
             // ── Usuário não autenticado: ir imediatamente para LoginView ─────────
@@ -149,7 +149,7 @@ public class InitializationManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("[InitManager] Usuário autenticado, mas dados do usuário não foram carregados.");
-                await ForceLogoutAndGoToLoginAsync("Usuário autenticado, mas documento/UserData não encontrado.");
+                await GoToLoginPreservingLocalSessionAsync("Usuário autenticado, mas documento/UserData não encontrado.");
                 return;
             }
 
@@ -387,18 +387,9 @@ public class InitializationManager : MonoBehaviour
         loadingSpinner?.SetMessage(message);
     }
 
-    private async Task ForceLogoutAndGoToLoginAsync(string reason)
+    private async Task GoToLoginPreservingLocalSessionAsync(string reason)
     {
-        Debug.LogWarning($"[InitializationManager] Limpando sessão e voltando para LoginView. Motivo: {reason}");
-
-        try
-        {
-            FirebaseAuth.DefaultInstance.SignOut();
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[InitializationManager] Erro ao fazer Firebase SignOut: {e.Message}");
-        }
+        Debug.LogWarning($"[InitializationManager] Voltando para LoginView sem limpar sessão/cache local. Motivo: {reason}");
 
         try
         {
@@ -408,18 +399,14 @@ public class InitializationManager : MonoBehaviour
 
         try
         {
-            PlayerPrefs.DeleteKey("UserId");
-            PlayerPrefs.DeleteKey("UserEmail");
-            PlayerPrefs.DeleteKey("UserNickname");
-            PlayerPrefs.Save();
-
             loadingSpinner?.HideSpinner();
             await Task.Yield();
             NavigateAfterInit(false);
+            return;
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"[InitializationManager] Erro ao limpar PlayerPrefs: {e.Message}");
+            Debug.LogWarning($"[InitializationManager] Erro ao navegar para LoginView: {e.Message}");
         }
 
         try
@@ -431,7 +418,7 @@ public class InitializationManager : MonoBehaviour
         NavigateAfterInit(false);
     }
 
-    private void ResetSessionIfFirebaseEnvironmentChanged(EnvironmentConfig envCfg)
+    private void RecordFirebaseEnvironment(EnvironmentConfig envCfg)
     {
         if (envCfg == null) return;
 
@@ -440,23 +427,7 @@ public class InitializationManager : MonoBehaviour
         string previousEnv = PlayerPrefs.GetString(envKey, "");
 
         if (!string.IsNullOrEmpty(previousEnv) && previousEnv != currentEnv)
-        {
-            Debug.LogWarning($"[InitManager] Ambiente Firebase mudou de {previousEnv} para {currentEnv}. Limpando sessão local.");
-
-            try
-            {
-                FirebaseAuth.DefaultInstance.SignOut();
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[InitManager] Erro ao limpar sessão ao trocar ambiente: {e.Message}");
-            }
-
-            UserDataStore.CurrentUserData = null;
-            PlayerPrefs.DeleteKey("UserId");
-            PlayerPrefs.DeleteKey("UserEmail");
-            PlayerPrefs.DeleteKey("UserNickname");
-        }
+            Debug.LogWarning($"[InitManager] Ambiente Firebase mudou de {previousEnv} para {currentEnv}. Preservando sessão/cache local.");
 
         PlayerPrefs.SetString(envKey, currentEnv);
         PlayerPrefs.Save();

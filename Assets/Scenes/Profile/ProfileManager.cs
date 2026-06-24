@@ -574,6 +574,8 @@ public class ProfileManager : MonoBehaviour
 
             // Limpa dados locais
             UserDataStore.OnUserDataChanged -= OnUserDataChanged;
+            ClearLocalUserData(userId);
+            ClearLastUserPrefs();
             UserDataStore.CurrentUserData    = null;
             AppContext.AnsweredQuestions?.ResetManager();
             AnsweredQuestionsListStore.ClearAll();

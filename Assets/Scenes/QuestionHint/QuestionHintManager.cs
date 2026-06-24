@@ -35,12 +35,28 @@ public class QuestionHintManager : MonoBehaviour
     [SerializeField] private CanvasGroup modalCanvasGroup;
     [SerializeField] private Canvas modalCanvas;
     [SerializeField] private RectTransform modalContent;
+    [SerializeField] private RectTransform modalBackground;
+    [SerializeField] private RectTransform modalHeader;
+    [SerializeField] private RectTransform contentScrollView;
     [SerializeField] private float modalAnimationDuration = 0.35f;
     [SerializeField] private float modalHiddenOffsetY = 2300f;
     [SerializeField] private float modalMinHeight = 520f;
     [SerializeField] private float modalMaxHeight = 1800f;
-    [SerializeField] private float modalVerticalPadding = 280f;
+    [SerializeField] private float modalHeightMultiplier = 1.2f;
+    [SerializeField] private float modalTopPadding = 50f;
+    [SerializeField] private float modalHeaderContentSpacing = 20f;
+    [SerializeField] private float modalBottomPadding = 60f;
     [SerializeField] private int modalSortingOrder = 500;
+
+    [Header("Content Layout")]
+    [SerializeField] private float contentTopPadding = 20f;
+    [SerializeField] private float contentSpacing = 32f;
+    [SerializeField] private float contentBottomPadding = 20f;
+    [SerializeField] private float textContainerMinHeight = 210f;
+    [SerializeField] private float textContainerMaxHeight = 900f;
+    [SerializeField] private float textContainerTopPadding = 26f;
+    [SerializeField] private float textContainerBottomPadding = 64f;
+    [SerializeField] private float textInset = 20f;
 
     [Header("Video")]
     [SerializeField] private bool playVideoOnLoad;
@@ -183,6 +199,7 @@ public class QuestionHintManager : MonoBehaviour
 
         hintText.text = ChemicalFormatter.Format(text);
         hintText.gameObject.SetActive(true);
+        RefreshHintLayout();
     }
 
     private async Task ShowImageAsync(string imagePath, Question sourceQuestion)
@@ -251,6 +268,7 @@ public class QuestionHintManager : MonoBehaviour
             hintImage.sprite = _loadedImageSprite;
             hintImage.preserveAspect = true;
             hintImage.gameObject.SetActive(true);
+            RefreshHintLayout();
         }
         catch (System.Exception e)
         {
@@ -333,6 +351,15 @@ public class QuestionHintManager : MonoBehaviour
 
         if (modalContent == null)
             modalContent = FindRectTransformInScene("Content");
+
+        if (modalBackground == null)
+            modalBackground = FindRectTransformInScene("MainBackground");
+
+        if (modalHeader == null)
+            modalHeader = FindRectTransformInScene("Header");
+
+        if (contentScrollView == null)
+            contentScrollView = FindRectTransformInScene("ContentScrollView");
 
         if (modalRoot == null)
             modalRoot = FindObjectOfType<Canvas>()?.transform as RectTransform;
@@ -450,6 +477,8 @@ public class QuestionHintManager : MonoBehaviour
         if (modalRoot == null)
             return;
 
+        RefreshHintLayout();
+
         if (modalContent != null)
         {
             Canvas.ForceUpdateCanvases();
@@ -457,15 +486,130 @@ public class QuestionHintManager : MonoBehaviour
         }
 
         float contentHeight = GetContentPreferredHeight();
+        float headerHeight = modalHeader != null
+            ? Mathf.Max(modalHeader.rect.height, modalHeader.sizeDelta.y)
+            : 0f;
+        float measuredHeight = modalTopPadding + headerHeight + modalHeaderContentSpacing + contentHeight + modalBottomPadding;
         float targetHeight = Mathf.Clamp(
-            contentHeight + modalVerticalPadding,
+            measuredHeight * modalHeightMultiplier,
             modalMinHeight,
             modalMaxHeight);
+        float scrollViewHeight = Mathf.Max(
+            0f,
+            targetHeight - modalTopPadding - headerHeight - modalHeaderContentSpacing - modalBottomPadding);
 
         modalRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+        RefreshModalFrameLayout(targetHeight, headerHeight, scrollViewHeight);
         Canvas.ForceUpdateCanvases();
 
         _modalVisiblePosition = GetModalVisiblePosition();
+    }
+
+    private void RefreshModalFrameLayout(float modalHeight, float headerHeight, float scrollViewHeight)
+    {
+        if (modalBackground != null)
+        {
+            modalBackground.anchorMin = new Vector2(0.5f, 0.5f);
+            modalBackground.anchorMax = new Vector2(0.5f, 0.5f);
+            modalBackground.pivot = new Vector2(0.5f, 0.5f);
+            modalBackground.anchoredPosition = Vector2.zero;
+            modalBackground.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, modalHeight);
+        }
+
+        if (modalHeader != null)
+        {
+            modalHeader.anchorMin = new Vector2(0.5f, 1f);
+            modalHeader.anchorMax = new Vector2(0.5f, 1f);
+            modalHeader.pivot = new Vector2(0.5f, 0.5f);
+            modalHeader.anchoredPosition = new Vector2(0f, -(modalTopPadding + headerHeight * 0.5f));
+        }
+
+        if (contentScrollView == null)
+            return;
+
+        float scrollViewWidth = Mathf.Max(contentScrollView.rect.width, contentScrollView.sizeDelta.x);
+        contentScrollView.anchorMin = new Vector2(0.5f, 1f);
+        contentScrollView.anchorMax = new Vector2(0.5f, 1f);
+        contentScrollView.pivot = new Vector2(0.5f, 1f);
+        contentScrollView.anchoredPosition = new Vector2(
+            0f,
+            -(modalTopPadding + headerHeight + modalHeaderContentSpacing));
+        contentScrollView.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollViewWidth);
+        contentScrollView.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scrollViewHeight);
+    }
+
+    private void RefreshHintLayout()
+    {
+        if (modalContent == null)
+            modalContent = FindRectTransformInScene("Content");
+
+        float cursorY = -contentTopPadding;
+        float widestChild = modalContent != null ? modalContent.rect.width : 0f;
+
+        LayoutTextHint();
+        PositionVisibleHintContainer(hintTextContainer, ref cursorY, ref widestChild);
+        PositionVisibleHintContainer(hintImageContainer, ref cursorY, ref widestChild);
+        PositionVisibleHintContainer(hintVideoContainer, ref cursorY, ref widestChild);
+        PositionVisibleHintContainer(hintLinkContainer, ref cursorY, ref widestChild);
+
+        if (modalContent == null)
+            return;
+
+        float contentHeight = Mathf.Max(0f, -cursorY - contentSpacing + contentBottomPadding);
+        modalContent.anchorMin = new Vector2(0f, 1f);
+        modalContent.anchorMax = new Vector2(1f, 1f);
+        modalContent.pivot = new Vector2(0f, 1f);
+        modalContent.anchoredPosition = Vector2.zero;
+        modalContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentHeight);
+    }
+
+    private void LayoutTextHint()
+    {
+        if (hintTextContainer == null || hintText == null || !hintTextContainer.activeSelf)
+            return;
+
+        RectTransform containerRect = hintTextContainer.transform as RectTransform;
+        RectTransform textRect = hintText.rectTransform;
+        if (containerRect == null || textRect == null)
+            return;
+
+        float containerWidth = Mathf.Max(containerRect.rect.width, containerRect.sizeDelta.x);
+        float textWidth = Mathf.Max(1f, containerWidth - textInset * 2f);
+        float preferredTextHeight = hintText.GetPreferredValues(hintText.text, textWidth, 0f).y;
+        float targetHeight = Mathf.Clamp(
+            preferredTextHeight + textContainerTopPadding + textContainerBottomPadding,
+            textContainerMinHeight,
+            textContainerMaxHeight);
+
+        containerRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+
+        textRect.anchorMin = new Vector2(0f, 0f);
+        textRect.anchorMax = new Vector2(1f, 1f);
+        textRect.pivot = new Vector2(0.5f, 0.5f);
+        textRect.anchoredPosition = Vector2.zero;
+        textRect.offsetMin = new Vector2(textInset, textContainerBottomPadding);
+        textRect.offsetMax = new Vector2(-textInset, -textContainerTopPadding);
+    }
+
+    private void PositionVisibleHintContainer(GameObject container, ref float cursorY, ref float widestChild)
+    {
+        if (container == null || !container.activeSelf)
+            return;
+
+        RectTransform rectTransform = container.transform as RectTransform;
+        if (rectTransform == null)
+            return;
+
+        float height = Mathf.Max(0f, rectTransform.rect.height);
+        float width = Mathf.Max(rectTransform.rect.width, rectTransform.sizeDelta.x);
+
+        rectTransform.anchorMin = new Vector2(0.5f, 1f);
+        rectTransform.anchorMax = new Vector2(0.5f, 1f);
+        rectTransform.pivot = new Vector2(0.5f, 1f);
+        rectTransform.anchoredPosition = new Vector2(0f, cursorY);
+
+        cursorY -= height + contentSpacing;
+        widestChild = Mathf.Max(widestChild, width);
     }
 
     private float GetContentPreferredHeight()
