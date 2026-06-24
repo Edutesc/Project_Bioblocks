@@ -7,6 +7,7 @@
 Assets/StreamingAssets/google-services-desktop
 **/google-services.json.meta
 **/GoogleService-Info.plist.meta
+Assets/Resources/Secrets*
 
 # StreamingAssets com credenciais
 Assets/StreamingAssets/google-services-desktop.json
