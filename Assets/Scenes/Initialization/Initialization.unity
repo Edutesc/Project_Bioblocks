@@ -3006,9 +3006,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpinnerContainerPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 4018110861965076145, guid: 341ce1c9344774dd1b6cad9c64a21ec9, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018110861965076145, guid: 341ce1c9344774dd1b6cad9c64a21ec9, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018110861965076145, guid: 341ce1c9344774dd1b6cad9c64a21ec9, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4383872208139217246, guid: 341ce1c9344774dd1b6cad9c64a21ec9, type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5177011848349520923, guid: 341ce1c9344774dd1b6cad9c64a21ec9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327698628100027740, guid: 341ce1c9344774dd1b6cad9c64a21ec9, type: 3}
       propertyPath: m_Pivot.x

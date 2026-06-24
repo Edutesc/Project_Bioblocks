@@ -430,9 +430,12 @@ public class QuestionManager : MonoBehaviour
 
     private async void HandleTimeUp()
     {
+        var currentQuestion = currentSession.GetCurrentQuestion();
+
         answerManager.DisableAllButtons();
         feedbackElements.ShowTimeout();
-        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
+        await scoreManager.UpdateScore(-1, false, currentQuestion);
+        hintButtonManager?.ShowForQuestion(currentQuestion);
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();
     }

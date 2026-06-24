@@ -5,6 +5,8 @@ using QuestionSystem;
 
 public class QuestionTimerManager : MonoBehaviour
 {
+    private const float PreviewModeDuration = 5f;
+
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject timePanel; // Referência ao TimePanel
     [SerializeField] private float initialTime = 30f;
@@ -14,6 +16,21 @@ public class QuestionTimerManager : MonoBehaviour
     public event System.Action OnTimerComplete;
 
     public static float GetDurationForQuestionLevel(int questionLevel)
+    {
+        return GetDurationForQuestionLevel(questionLevel, isPreviewMode: false);
+    }
+
+    public static float GetDurationForQuestionLevel(int questionLevel, bool isPreviewMode)
+    {
+        if (isPreviewMode)
+        {
+            return PreviewModeDuration;
+        }
+
+        return GetDefaultDurationForQuestionLevel(questionLevel);
+    }
+
+    private static float GetDefaultDurationForQuestionLevel(int questionLevel)
     {
         return questionLevel switch
         {
@@ -52,7 +69,11 @@ public class QuestionTimerManager : MonoBehaviour
 
     public void StartTimerForQuestion(Question question)
     {
-        StartTimer(GetDurationForQuestionLevel(question.questionLevel));
+        var envConfig = EnvironmentConfig.Load();
+        StartTimer(GetDurationForQuestionLevel(
+            question.questionLevel,
+            envConfig != null && envConfig.QuestionPreviewMode
+        ));
     }
 
     public void StartTimer(float duration)
