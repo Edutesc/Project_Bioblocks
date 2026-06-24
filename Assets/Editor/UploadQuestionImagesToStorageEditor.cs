@@ -333,15 +333,16 @@ public class UploadQuestionImagesToStorageEditor : EditorWindow
                 string skipFlag = skipExisting ? " -n" : "";
                 var result = RunProcess("gsutil", $"cp{skipFlag} -a public-read \"{job.LocalPath}\" \"{destPath}\"");
 
-                if (result.ExitCode == 0)
-                {
-                    success++;
-                    statusLog += $"✅ {job.StorageKey}\n";
-                }
-                else if (skipExisting && result.StdOut.Contains("Skipping"))
+                string processOutput = $"{result.StdOut}\n{result.StdErr}";
+                if (skipExisting && processOutput.Contains("Skipping"))
                 {
                     skipped++;
                     statusLog += $"⏭  {job.StorageKey} (já existe)\n";
+                }
+                else if (result.ExitCode == 0)
+                {
+                    success++;
+                    statusLog += $"✅ {job.StorageKey}\n";
                 }
                 else
                 {
