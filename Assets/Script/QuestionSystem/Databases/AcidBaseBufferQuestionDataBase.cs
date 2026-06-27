@@ -1830,303 +1830,629 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
         //    prerequisites = null,
         //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
         //}
-        //// QUESTION 068
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Você precisa preparar um tampão para uma enzima que atua melhor em pH 7,4. Qual opção é mais adequada?",
-        //    answers = new string[] {
-        //        "Ácido acético/acetato, pKa 4,8",
-        //        "Fosfato, pKa próximo de 7,2",
-        //        "Amônia/amônio, pKa 9,2",
-        //        "HCl/Cl-, ácido forte"
-        //    },
-        //    correctIndex = 1,
-        //    questionNumber = 68,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_068",
-        //    topic = "acidsBase",
-        //    subtopic = "buffers",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 069
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Em uma titulação, a curva apresenta região de tamponamento antes do ponto de equivalência e pH de equivalência maior que 7. Que tipo de sistema é mais compatível com essa curva?",
-        //    answers = new string[] {
-        //        "Ácido forte titulado com base forte",
-        //        "Ácido fraco titulado com base forte",
-        //        "Base forte titulada com ácido forte",
-        //        "Água pura titulada com água"
-        //    },
-        //    correctIndex = 1,
-        //    questionNumber = 69,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_069",
-        //    topic = "acidsBase",
-        //    subtopic = "titration",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 070
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Um paciente apresenta pH sanguíneo baixo e concentração elevada de CO2. Qual interpretação é mais coerente?",
-        //    answers = new string[] {
-        //        "Acidose respiratória por retenção de CO2",
-        //        "Alcalose respiratória por perda de CO2",
-        //        "Acidose metabólica por perda de bicarbonato",
-        //        "Alcalose metabólica por excesso de bicarbonato"
-        //    },
-        //    correctIndex = 1,
-        //    questionNumber = 70,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_070",
-        //    topic = "acidsBase",
-        //    subtopic = "acid_base_homeostasis",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 071
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Durante exercício intenso, há aumento de H+ no sangue. Qual resposta ajuda a deslocar o equilíbrio do tampão bicarbonato para reduzir a acidez?",
-        //    answers = new string[] {
-        //        "Aumentar a ventilação para eliminar CO2",
-        //        "Diminuir a ventilação para reter CO2 ",
-        //        "Bloquear a formação de bicarbonato ",
-        //        "Impedir a saída de CO2 pelos pulmões"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 71,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_071",
-        //    topic = "acidsBase",
-        //    subtopic = "acid_base_homeostasis",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
+        // QUESTION 068
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Você precisa preparar um tampão para uma enzima que atua melhor em pH 7,4. Qual opção é mais adequada?",
+           answers = new string[] {
+               "Ácido acético/acetato, pKa 4,8",
+               "Fosfato, pKa próximo de 7,2",
+               "Amônia/amônio, pKa 9,2",
+               "HCl/Cl^-, ácido forte"
+           },
+           correctIndex = 1,
+           questionNumber = 68,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_068",
+           topic = "acidsBase",
+           subtopic = "buffers",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 069
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Em uma titulação, a curva apresenta região de tamponamento antes do ponto de equivalência e pH de equivalência maior que 7. Que tipo de sistema é mais compatível com essa curva?",
+           answers = new string[] {
+               "Ácido forte titulado com base forte",
+               "Ácido fraco titulado com base forte",
+               "Base forte titulada com ácido forte",
+               "Água pura titulada com água"
+           },
+           correctIndex = 1,
+           questionNumber = 69,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_069",
+           topic = "acidsBase",
+           subtopic = "titration",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 070
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Um paciente apresenta pH sanguíneo baixo e concentração elevada de CO2. Qual interpretação é mais coerente?",
+           answers = new string[] {
+               "Acidose respiratória por retenção de CO2",
+               "Alcalose respiratória por perda de CO2",
+               "Acidose metabólica por perda de bicarbonato",
+               "Alcalose metabólica por excesso de bicarbonato"
+           },
+           correctIndex = 0,
+           questionNumber = 70,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_070",
+           topic = "acidsBase",
+           subtopic = "acid_base_homeostasis",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 071
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Durante exercício intenso, há aumento de H^+ no sangue. Qual resposta ajuda a deslocar o equilíbrio do tampão bicarbonato para reduzir a acidez?",
+           answers = new string[] {
+               "Aumentar a ventilação para eliminar CO2",
+               "Diminuir a ventilação para reter CO2 ",
+               "Bloquear a formação de bicarbonato ",
+               "Impedir a saída de CO2 pelos pulmões"
+           },
+           correctIndex = 0,
+           questionNumber = 71,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_071",
+           topic = "acidsBase",
+           subtopic = "acid_base_homeostasis",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
     };  //// QUESTION 072
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Em um tampão, o pH medido é igual ao pKa do ácido fraco. O que se pode concluir sobre [A^-]/[HA]?",
-        //    answers = new string[] {
-        //        "A razão é 1",
-        //        "A razão é 10",
-        //        "A razão é 0,1",
-        //        "Não há ácido fraco no sistema"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 71,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_072",
-        //    topic = "acidsBase",
-        //    subtopic = "henderson_hasselbalch",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 073
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Ao adicionar pequena quantidade de ácido forte a um tampão HA/A-, qual componente reage diretamente com o H+ adicionado?",
-        //    answers = new string[] {
-        //        "A base conjugada A- ",
-        //        "O ácido fraco HA",
-        //        " A água como produto final exclusivo",
-        //        "O sal neutro sem participação ácido-base"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 73,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_073",
-        //    topic = "acidsBase",
-        //    subtopic = "buffers",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 074
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Se a ventilação aumenta e mais CO2 é eliminado, qual tendência é esperada para o equilíbrio CO2 + H2O ⇌ H2CO3 ⇌ H^+ + HCO3^-?",
-        //    answers = new string[] {
-        //        "Diminuição de H+ e aumento do pH ",
-        //        "Aumento de H+ e diminuição do pH",
-        //        "Conversão completa de bicarbonato em glicose",
-        //        "Ausência de efeito sobre o pH"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 74,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_074",
-        //    topic = "acidsBase",
-        //    subtopic = "blood_buffer_system",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 075
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Três ácidos têm pKa 3,8; 7,2; e 9,5. Qual deles é o mais forte?",
-        //    answers = new string[] {
-        //        "O de pKa 3,8 ",
-        //        "O de pKa 7,2",
-        //        "O de pKa 9,5",
-        //        "Todos têm a mesma força"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 75,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 2,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_075",
-        //    topic = "acidsBase",
-        //    subtopic = "blood_buffer_system",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 076
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Qual escolha de tampão é mais defensável para um experimento enzimático em pH 7,2?",
-        //    answers = new string[] {
-        //        "Um tampão com pKa próximo de 7,2",
-        //        "Um tampão com pKa 2,0, pois será mais ácido",
-        //        "Um ácido forte sem base conjugada",
-        //        "Água pura, pois sempre mantém pH constante"
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 76,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 3,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_076",
-        //    topic = "acidsBase",
-        //    subtopic = "blood_buffer_system",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        //// QUESTION 077
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Um estudante afirma: 'toda solução neutra tem pH exatamente 7'. Qual avaliação é mais correta?",
-        //    answers = new string[] {
-        //        "A afirmação é uma aproximação válida para água a 25 °C, mas não é universal.",
-        //        "A afirmação é sempre correta em qualquer temperatura.",
-        //        "A afirmação é falsa porque neutralidade significa pH 0.",
-        //        "A afirmação é falsa porque neutralidade significa pH 14."
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 77,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 3,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_077",
-        //    topic = "acidsBase",
-        //    subtopic = "blood_buffer_system",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
-        // QUESTION 078
-        //new Question
-        //{
-        //    questionDatabankName = "AcidBaseBufferQuestionDatabase",
-        //    questionText = "Um aluno diz que 'quanto maior o pKa, mais forte é o ácido'. Como você avaliaria essa afirmação?",
-        //    answers = new string[] {
-        //        "Incorreta: ácidos mais fortes têm menor pKa.",
-        //        "Correta: pKa e força ácida aumentam juntos.",
-        //        "Correta apenas para bases fortes.",
-        //        "A afirmação é falsa porque neutralidade significa pH 14."
-        //    },
-        //    correctIndex = 0,
-        //    questionNumber = 78,
-        //    answerType = AnswerType.Text,
-        //    questionType = QuestionType.Text,
-        //    questionImagePath = "",
-        //    questionLevel = 3,
-        //    questionInDevelopment = false,
-        //    globalId = "acidsBase_077",
-        //    topic = "acidsBase",
-        //    subtopic = "blood_buffer_system",
-        //    displayName = "Ácidos, Bases e Tampões",
-        //    bloomLevel = BloomLevel.Analyze,
-        //    conceptTags = new List<string> { "water_autoionization" },
-        //    prerequisites = null,
-        //    questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        //}
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Em um tampão, o pH medido é igual ao pKa do ácido fraco. O que se pode concluir sobre [A^-]/[HA]?",
+           answers = new string[] {
+               "Não há ácido fraco no sistema",
+               "A razão é 10",
+               "A razão é 0,1",
+               "A razão é 1"
+           },
+           correctIndex = 3,
+           questionNumber = 72,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_072",
+           topic = "acidsBase",
+           subtopic = "henderson_hasselbalch",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 073
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Ao adicionar pequena quantidade de ácido forte a um tampão HA/A-, qual componente reage diretamente com o H+ adicionado?",
+           answers = new string[] {
+               "A base conjugada A- ",
+               "O ácido fraco HA",
+               " A água como produto final exclusivo",
+               "O sal neutro sem participação ácido-base"
+           },
+           correctIndex = 0,
+           questionNumber = 73,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_073",
+           topic = "acidsBase",
+           subtopic = "buffers",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 074
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Se a ventilação aumenta e mais CO2 é eliminado, qual tendência é esperada para o equilíbrio CO2 + H2O ⇌ H2CO3 ⇌ H^+ + HCO3^-?",
+           answers = new string[] {
+               "Aumento de H+ e diminuição do pH",
+               "Diminuição de H+ e aumento do pH ",
+               "Conversão completa de bicarbonato em glicose",
+               "Ausência de efeito sobre o pH"
+           },
+           correctIndex = 1,
+           questionNumber = 74,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_074",
+           topic = "acidsBase",
+           subtopic = "blood_buffer_system",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 075
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Três ácidos têm pKa 3,8; 7,2; e 9,5. Qual deles é o mais forte?",
+           answers = new string[] {
+               "O de pKa 3,8 ",
+               "O de pKa 7,2",
+               "O de pKa 9,5",
+               "Todos têm a mesma força"
+           },
+           correctIndex = 0,
+           questionNumber = 75,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 2,
+           questionInDevelopment = false,
+           globalId = "acidsBase_075",
+           topic = "acidsBase",
+           subtopic = "blood_buffer_system",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Analyze,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 076
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Qual escolha de tampão é mais defensável para um experimento enzimático em pH 7,2?",
+           answers = new string[] {
+               "Um ácido forte sem base conjugada",
+               "Um tampão com pKa 2,0, pois será mais ácido",
+               "Um tampão com pKa próximo de 7,2",
+               "Água pura, pois sempre mantém pH constante"
+           },
+           correctIndex = 2,
+           questionNumber = 76,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_076",
+           topic = "acidsBase",
+           subtopic = "buffers",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        // QUESTION 077
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Um estudante afirma: 'toda solução neutra tem pH exatamente 7'. Qual avaliação é mais correta?",
+           answers = new string[] {
+               "A afirmação é sempre correta em qualquer temperatura.",
+               "A afirmação é uma aproximação válida para água a 25 °C, mas não é universal.",
+               "A afirmação é falsa porque neutralidade significa pH 0.",
+               "A afirmação é falsa porque neutralidade significa pH 14."
+           },
+           correctIndex = 1,
+           questionNumber = 77,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_077",
+           topic = "acidsBase",
+           subtopic = "ph_scale",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 078
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "O pH sanguíneo de 7,4 deve ser interpretado como:",
+           answers = new string[] {
+               "Levemente básico em relação à neutralidade da água a 25 °C, mas fisiológico.",
+               "Fortemente ácido e incompatível com a vida.",
+               "Neutro porque todo fluido corporal tem pH 7.",
+               "Sem relação com concentração de H+."
+           },
+           correctIndex = 0,
+           questionNumber = 78,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_078",
+           topic = "acidsBase",
+           subtopic = "acid_base_homeostasis",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 079
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Um aluno diz que 'quanto maior o pKa, mais forte é o ácido'. Como você avaliaria essa afirmação?",
+           answers = new string[] {
+               "Correta apenas para bases fortes.",
+               "Correta: pKa e força ácida aumentam juntos.",
+               "Incorreta: ácidos mais fortes têm menor pKa.",
+               "A afirmação é falsa porque neutralidade significa pH 14."
+           },
+           correctIndex = 2,
+           questionNumber = 79,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_079",
+           topic = "acidsBase",
+           subtopic = "ka_pka",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 080
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Em uma titulação cujo ponto final ocorre em faixa básica, qual decisão é mais adequada?",
+           answers = new string[] {
+               "Escolher qualquer indicador, pois todos viram em pH 7.",
+               "Evitar indicadores, pois eles neutralizam a solução.",
+               "Escolher um indicador cuja viragem ocorra na faixa de pH do ponto final.",
+               "Usar apenas indicadores que mudam em pH 0."
+           },
+           correctIndex = 2,
+           questionNumber = 80,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_080",
+           topic = "acidsBase",
+           subtopic = "indicators",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 081
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "A mistura HCl/Cl^- é uma boa solução-tampão? Qual avaliação é mais adequada?",
+           answers = new string[] {
+               "Sim, porque todo ácido com seu ânion forma bom tampão.",
+               "Sim, porque HCl mantém pH constante em qualquer concentração.",
+               "Não, porque Cl- é sempre ácido forte.",
+               "Não, porque HCl é ácido forte e Cl- tem basicidade conjugada desprezível. "
+           },
+           correctIndex = 3,
+           questionNumber = 81,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_081",
+           topic = "acidsBase",
+           subtopic = "buffers",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 082
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Um colega usa pH + pOH = 14 sem especificar temperatura. Qual correção é mais adequada?",
+           answers = new string[] {
+               "A relação é sempre 14 em qualquer solvente e temperatura.",
+               "A relação correta é sempre pH + pOH = 7.",
+               "A relação 14 é a forma usual para soluções aquosas a 25 °C.",
+               " A relação não tem ligação com Kw."
+           },
+           correctIndex = 2,
+           questionNumber = 82,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_082",
+           topic = "acidsBase",
+           subtopic = "poh_kw",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 083
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Ao diluir uma solução ácida forte, o pH aumenta de 2 para 3. Qual interpretação é mais adequada?",
+           answers = new string[] {
+               "A concentração de H^+ aumentou 10 vezes.",
+               "A concentração de H^+ diminuiu 10 vezes. ",
+               "A solução se tornou necessariamente neutra.",
+               "O pH aumentou de forma linear com [H^+]."
+           },
+           correctIndex = 1,
+           questionNumber = 83,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_083",
+           topic = "acidsBase",
+           subtopic = "ph_scale",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 084
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Um paciente tem pH baixo e CO2 elevado por hipoventilação. Qual intervenção fisiológica seria mais diretamente compensatória a curto prazo?",
+           answers = new string[] {
+               "Reduzir a ventilação para acumular CO2.",
+               "Aumentar a ventilação para eliminar CO2.",
+               "Adicionar ácido lático ao sangue.",
+               "Bloquear o sistema bicarbonato."
+           },
+           correctIndex = 1,
+           questionNumber = 84,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_084",
+           topic = "acidsBase",
+           subtopic = "acid_base_homeostasis",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 085
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Após vômitos intensos, há perda de HCl gástrico. Qual avaliação ácido-base é mais provável?",
+           answers = new string[] {
+               "Tendência à acidose respiratória.",
+               "Tendência à acidose por excesso de CO2.",
+               "Nenhuma alteração possível no pH.",
+               "Tendência à alcalose metabólica. "
+           },
+           correctIndex = 3,
+           questionNumber = 85,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_085",
+           topic = "acidsBase",
+           subtopic = "acid_base_homeostasis",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 086
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Qual argumento melhor justifica a eficiência do tampão bicarbonato no sangue?",
+           answers = new string[] {
+               " Ele funciona porque bicarbonato é ácido forte.",
+               "Ele independe da ventilação.",
+               "Ele está acoplado à eliminação de CO2 pelos pulmões.",
+               "Ele atua apenas em pH 0."
+           },
+           correctIndex = 2,
+           questionNumber = 86,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_086",
+           topic = "acidsBase",
+           subtopic = "blood_buffer_system",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 087
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Dois tampões têm pH = pKa, mas um contém 0,1 M de HA/A- e outro 0,001 M. Qual deve resistir melhor à adição de ácido?",
+           answers = new string[] {
+               "O de 0,001 M, por menor concentração.",
+               "O de 0,1 M, por maior capacidade tamponante. ",
+               "Ambos resistem igualmente a qualquer quantidade de ácido.",
+               "Nenhum, pois pH = pKa elimina o tampão."
+           },
+           correctIndex = 1,
+           questionNumber = 87,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_087",
+           topic = "acidsBase",
+           subtopic = "buffers",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 088
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Ao escolher um tampão para pH 5,0, qual critério é mais adequado?",
+           answers = new string[] {
+               "Selecionar o ácido com menor pKa possível.",
+               "Selecionar sempre um ácido forte.",
+               " Ignorar pKa e usar apenas a cor do indicador.",
+               "Selecionar um ácido fraco com pKa próximo de 5,0."
+           },
+           correctIndex = 3,
+           questionNumber = 88,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_088",
+           topic = "acidsBase",
+           subtopic = "henderson_hasselbalch",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 089
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Qual justificativa é cientificamente melhor para classificar uma solução de pH 2 como ácida?",
+           answers = new string[] {
+               "Ela tem sabor azedo, portanto é ácido por definição.",
+               "Ela tem pH menor que 14, portanto toda solução assim é ácida.",
+               "Ela tem concentração de H+ maior que uma solução neutra. ",
+               "Ela não contém água."
+           },
+           correctIndex = 2,
+           questionNumber = 89,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_089",
+           topic = "acidsBase",
+           subtopic = "ph_scale",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        }
+        QUESTION 090
+        new Question
+        {
+           questionDatabankName = "AcidBaseBufferQuestionDatabase",
+           questionText = "Um aluno afirma que todo ponto de equivalência em titulação ácido-base ocorre em pH 7. Qual avaliação é correta?",
+           answers = new string[] {
+               "Correta para qualquer titulação ácido-base.",
+               "Incorreta: o pH no ponto de equivalência depende da força do ácido e da base.",
+               "Correta apenas quando há indicador colorido.",
+               "Incorreta porque ponto de equivalência sempre ocorre em pH 0."
+           },
+           correctIndex = 1,
+           questionNumber = 90,
+           answerType = AnswerType.Text,
+           questionType = QuestionType.Text,
+           questionImagePath = "",
+           questionLevel = 3,
+           questionInDevelopment = false,
+           globalId = "acidsBase_090",
+           topic = "titration",
+           subtopic = "ph_scale",
+           displayName = "Ácidos, Bases e Tampões",
+           bloomLevel = BloomLevel.Evaluate,
+           conceptTags = new List<string> { "water_autoionization" },
+           prerequisites = null,
+           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        },
+};
+
     public List<Question> GetQuestions() => questions;
     public QuestionSet GetQuestionSetType() => QuestionSet.acidsBase;
     public string GetDatabankName() => "AcidBaseBufferQuestionDatabase";
