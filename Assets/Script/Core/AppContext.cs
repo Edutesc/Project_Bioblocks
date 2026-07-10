@@ -17,6 +17,7 @@ public class AppContext : MonoBehaviour
     public static IUserRealtimeListenerService      UserRealtimeListeners   { get; private set; }
     public static IFirestoreRankingRepository       RankingRemote           { get; private set; }
     public static IRankingLocalRepository           RankingLocal            { get; private set; }
+    public static IFirestoreAssessmentRepository    FirestoreAssessment     { get; private set; }
 
     // ── Fachada legada Firestore ───────────────────────────────────────────────
     // Mantida temporariamente para compatibilidade com classes que ainda recebem
@@ -220,6 +221,7 @@ public class AppContext : MonoBehaviour
             var userRealtimeListenerService  = new UserRealtimeListenerService(firestoreDb);
             var rankingRemoteRepository      = new FirestoreRankingRepository(firestoreDb);
             var rankingLocalRepository       = new RankingLocalRepository(liteDBMgr);
+            var assessmentRepository         = new FirestoreAssessmentRepository();
 
             // ── 4. Dependências cruzadas Firebase ─────────────────────────────
             // Ainda usa a fachada IFirestoreRepository por compatibilidade.
@@ -295,6 +297,7 @@ public class AppContext : MonoBehaviour
             UserRealtimeListeners = userRealtimeListenerService;
             RankingRemote         = rankingRemoteRepository;
             RankingLocal          = rankingLocalRepository;
+            FirestoreAssessment   = assessmentRepository;
 
             // ── 12. Expõe serviços existentes ──────────────────────────────────
             Auth              = authRepo;
@@ -369,6 +372,7 @@ public class AppContext : MonoBehaviour
         IUserRealtimeListenerService      userRealtimeListeners   = null,
         IFirestoreRankingRepository       rankingRemote           = null,
         IRankingLocalRepository           rankingLocal            = null,
+        IFirestoreAssessmentRepository    firestoreAssessment     = null,
         RankingSyncService                rankingSync             = null,
         ConnectivityMonitor               connectivity            = null,
         IAuthRepository                   auth                    = null,
@@ -398,6 +402,7 @@ public class AppContext : MonoBehaviour
         if (userRealtimeListeners != null) UserRealtimeListeners = userRealtimeListeners;
         if (rankingRemote         != null) RankingRemote         = rankingRemote;
         if (rankingLocal          != null) RankingLocal          = rankingLocal;
+        if (firestoreAssessment   != null) FirestoreAssessment   = firestoreAssessment;
         if (rankingSync           != null) RankingSync           = rankingSync;
         if (connectivity          != null) Connectivity          = connectivity;
 

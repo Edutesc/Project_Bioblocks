@@ -1084,6 +1084,10 @@ MonoBehaviour:
   - RegisterView
   - QuestionScene
   - ResetDatabaseView
+  - Initialization
+  - QuestionHintScene
+  - AssessmentRegisterScene
+  - AssessmentScene
 --- !u!1 &8634253958893738647
 GameObject:
   m_ObjectHideFlags: 0

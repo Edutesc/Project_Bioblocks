@@ -13,6 +13,7 @@ project_bioblocks/
 │      └── google-services.json
 ├── Assets (já existe...)
 │
+```
 
 ## Passo a Passo
 
@@ -48,6 +49,7 @@ Firebase/Dev/google-services.json
 3. Abra o projeto
 
 Ao entrar no editor:
+
 - `FirebaseEnvironmentSetup` será executado automaticamente
 - O arquivo `google-services.json` correto será copiado para `Assets/`
 - O console mostrará: `✓ Firebase Dev (microlearning-dev-79c0c) configurado`
@@ -56,11 +58,12 @@ Ao entrar no editor:
 
 1. Na cena **Initialization**, clique em **Play**
 2. O app detectará automaticamente o ambiente (Dev por padrão)
-3. Você será levado à **LoginViewClique em **Registrar** para criar uma nova conta
+3. Você será levado à **LoginViewClique** em **Registrar** para criar uma nova conta
 
 ## Configuração de Ambiente
 
 Por padrão, o projeto é configurado para **Dev**:
+
 - **Arquivo padrão:** `Assets/Resources/EnvironmentConfig.asset`
 - **Firebase:** `microlearning-dev-79c0c`
 
@@ -71,6 +74,7 @@ Por padrão, o projeto é configurado para **Dev**:
 **Causa:** Arquivo não foi colocado em `Firebase/Dev/` ou está com o nome errado.
 
 **Solução:**
+
 1. Verifique se o arquivo existe em `Firebase/Dev/google-services.json`
 2. Verifique o nome exato (case-sensitive)
 3. Feche e reabra o Unity Editor
@@ -80,6 +84,7 @@ Por padrão, o projeto é configurado para **Dev**:
 **Causa:** Arquivo `.json` está corrompido ou contém projeto Firebase errado.
 
 **Solução:**
+
 1. Verifique que o projeto Firebase é `microlearning-dev-79c0c` (Dev)
 2. Baixe novamente o arquivo do Firebase Console
 3. Substitua o arquivo
@@ -89,6 +94,7 @@ Por padrão, o projeto é configurado para **Dev**:
 **Causa:** Firebase não está configurado corretamente ou não há acesso à internet.
 
 **Solução:**
+
 1. Verifique conexão com a internet
 2. Verifique console do Unity: procure por `Firebase disponível` e `Firebase {Dev|Prod} configurado`
 3. Se o erro persistir, verifique que `AppContext` foi inicializado com sucesso
@@ -109,17 +115,18 @@ LoginView (se não autenticado) ou PathwayScene (se autenticado)
 
 ## Referência Rápida
 
-| Variável | Dev |
-|----------|-----|
-| **Firebase Project** | `microlearning-dev-79c0c` |
-| **Bundle ID (Android)** | `com.edutesc.bioblocks_dev` |
-| **Bundle ID (iOS)** | `com.edutesc.bioblocks-dev` | 
-| **App Name** | BioBlocks Dev | BioBlocks |
-| **Arquivo Padrão** | `Firebase/Dev/google-services.json` |
+| Variável                | Dev                                 |
+| ----------------------- | ----------------------------------- |
+| **Firebase Project**    | `microlearning-dev-79c0c`           |
+| **Bundle ID (Android)** | `com.edutesc.bioblocks_dev`         |
+| **Bundle ID (iOS)**     | `com.edutesc.bioblocks-dev`         |
+| **App Name**            | BioBlocks Dev \| BioBlocks          |
+| **Arquivo Padrão**      | `Firebase/Dev/google-services.json` |
 
 ## Dúvidas?
 
 Se encontrar problemas durante o setup, verifique:
+
 1. Se o arquivo `.json` está no lugar correto
 2. Se o projeto Firebase corresponde ao ambiente
 3. Se há conexão com a internet

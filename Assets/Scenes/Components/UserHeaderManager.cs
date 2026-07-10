@@ -20,6 +20,7 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private Image bonusBarImage;
     [SerializeField] private Image fireIcon;
     [SerializeField] private TMP_Text bonusText;
+    [SerializeField] private Button assessmentBellButton;
 
     [Header("Avatar Catalog")]
     [SerializeField] private AvatarCatalogPanelController avatarCatalogPanel;
@@ -112,6 +113,8 @@ public class UserHeaderManager : BarsManager
         EnsureHiddenSceneConfigured("RegisterView");
         EnsureHiddenSceneConfigured("ResetDatabaseView");
         EnsureHiddenSceneConfigured("Initialization");
+        EnsureHiddenSceneConfigured("AssessmentRegisterScene");
+        EnsureHiddenSceneConfigured("AssessmentScene");
         EnsureVisibleSceneConfigured("PathwayScene");
         EnsureVisibleSceneConfigured("ProfileScene");
         EnsureVisibleSceneConfigured("QuestionScene");
@@ -121,7 +124,18 @@ public class UserHeaderManager : BarsManager
 
         InitializeAvatarManager();
         InitializeBonusSystem();
+        
+        if (assessmentBellButton != null)
+        {
+            assessmentBellButton.onClick.AddListener(OpenAssessmentRegister);
+        }
+
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public void OpenAssessmentRegister()
+    {
+        SceneManager.LoadScene("AssessmentRegisterScene");
     }
 
     private void EnsureHiddenSceneConfigured(string sceneName)

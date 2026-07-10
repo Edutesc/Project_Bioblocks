@@ -30,7 +30,10 @@ public class NavigationBottomBarManager : BarsManager
         "RegisterView",
         "QuestionScene",
         "ResetDatabaseView",
-        "Initialization"
+        "Initialization",
+        "QuestionHintScene",
+        "AssessmentRegisterScene",
+        "AssessmentScene"
     };
 
     private List<NavButton> allButtons = new List<NavButton>();
