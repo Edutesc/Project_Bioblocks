@@ -11,6 +11,7 @@ public class AssessmentManager : MonoBehaviour
     [Header("UI Managers")]
     [SerializeField] private QuestionUIManager questionUIManager;
     [SerializeField] private QuestionAnswerManager answerManager;
+    [SerializeField] private QuestionCanvasGroupManager canvasGroupManager;
     [SerializeField] private TMP_Text progressText;
 
     private void Start()
@@ -53,6 +54,15 @@ public class AssessmentManager : MonoBehaviour
         answerManager.SetupAnswerButtons(question);
     
         answerManager.EnableAllButtons();
+
+        if (canvasGroupManager != null)
+        {
+            canvasGroupManager.ShowQuestion(
+                isImageQuestion: question.questionType == QuestionType.Image,
+                isImageAnswer: question.answerType == AnswerType.Image,
+                questionLevel: question.questionLevel
+            );
+        }
     }
 
     private async void HandleAnswerSelected(int selectedIndex)

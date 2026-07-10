@@ -5047,7 +5047,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1447288712}
-  - component: {fileID: 1447288713}
   - component: {fileID: 1447288714}
   m_Layer: 0
   m_Name: AssessmentManager
@@ -5071,28 +5070,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1447288713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447288710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa34ba06f7a6948cf95f2f13bcc640e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  questionBottomBarManager: {fileID: 456835105}
-  questionUIManager: {fileID: 1195999853}
-  questionCanvasGroupManager: {fileID: 352627692}
-  feedbackElements: {fileID: 1811949009}
-  transitionManager: {fileID: 126876615}
-  hintButtonManager: {fileID: 1753261181}
-  timerManager: {fileID: 1076770286}
-  loadManager: {fileID: 1545084459}
-  answerManager: {fileID: 1071030024}
-  scoreManager: {fileID: 1220732513}
 --- !u!114 &1447288714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5107,6 +5084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionUIManager: {fileID: 1195999853}
   answerManager: {fileID: 1071030024}
+  canvasGroupManager: {fileID: 352627692}
   progressText: {fileID: 1996799134}
 --- !u!1 &1459695066
 GameObject:
