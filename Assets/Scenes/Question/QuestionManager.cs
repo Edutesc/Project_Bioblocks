@@ -21,7 +21,8 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionLoadManager loadManager;
     [SerializeField] private QuestionAnswerManager answerManager;
     [SerializeField] private QuestionScoreManager scoreManager;
-
+    [SerializeField] private TopicReviewManager reviewManagerComponent;
+    private ITopicReviewManager reviewmanager;
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
     private List<Question> allDatabaseQuestions;
@@ -29,14 +30,19 @@ public class QuestionManager : MonoBehaviour
     private INavigationService _navigation;
     private ISceneDataService _sceneData;
 
+
+
+    
+
+
     // -------------------------------------------------------
     // Ciclo de vida
     // -------------------------------------------------------
     private void Start()
     {
         _navigation = AppContext.Navigation;
-        _sceneData  = AppContext.SceneData;
-
+        _sceneData = AppContext.SceneData;
+        reviewmanager = reviewManagerComponent;
         if (!ValidateManagers())
         {
             Debug.LogError("Falha na validação dos managers necessários.");
@@ -45,6 +51,8 @@ public class QuestionManager : MonoBehaviour
 
         InitializeAndStartSession();
     }
+
+    
 
     private async void InitializeAndStartSession()
     {
@@ -343,6 +351,26 @@ public class QuestionManager : MonoBehaviour
         }
         else
         {
+            string userId = UserDataStore.CurrentUserData?.UserId;
+
+            if (!string.IsNullOrEmpty(userId) && reviewmanager != null)
+            {
+                try
+                {
+                    List<TopicReviewData> dueReviews =
+                        await reviewmanager.GetDueTopicReviewsAsync(userId);
+
+                    Debug.Log($"[TopicReviewManager] Há {dueReviews.Count} revisões pendentes.");
+
+                    // aqui você pode, por exemplo, guardar dueReviews num campo
+                    // da classe para usar depois (ex: mostrar um prompt de revisão)
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[QuestionManager] Erro ao buscar revisões pendentes: {e.Message}");
+                }
+            }
+
             var envCfg = EnvironmentConfig.Load();
             if (envCfg != null && envCfg.QuestionPreviewMode)
             {
@@ -357,6 +385,7 @@ public class QuestionManager : MonoBehaviour
                 nextQuestionToShow = null;
             }
         }
+
     }
 
     private async Task PreloadQuestionResources(Question question)
