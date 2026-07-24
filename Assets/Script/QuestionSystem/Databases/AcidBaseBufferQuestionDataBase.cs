@@ -1856,7 +1856,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 069
         new Question
         {
@@ -1883,7 +1883,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 070
         new Question
         {
@@ -1910,7 +1910,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 071
         new Question
         {
@@ -1937,8 +1937,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-    };  //// QUESTION 072
+        },
+      //// QUESTION 072
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -1964,7 +1964,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 073
         new Question
         {
@@ -1991,7 +1991,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 074
         new Question
         {
@@ -2018,7 +2018,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 075
         new Question
         {
@@ -2045,7 +2045,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 076
         new Question
         {
@@ -2072,7 +2072,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
+        },
         // QUESTION 077
         new Question
         {
@@ -2099,8 +2099,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 078
+        },
+        //QUESTION 078
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2126,8 +2126,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 079
+        },
+        //QUESTION 079
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2153,8 +2153,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 080
+        },
+       //QUESTION 080
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2180,8 +2180,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 081
+        },
+        //QUESTION 081
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2207,8 +2207,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 082
+        },
+        //QUESTION 082
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2234,8 +2234,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 083
+        },
+        //QUESTION 083
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2261,8 +2261,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 084
+        },
+        //QUESTION 084
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2288,8 +2288,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 085
+        },
+        //QUESTION 085
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2315,8 +2315,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 086
+        },
+        //QUESTION 086
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2342,8 +2342,8 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 087
+        },
+        //QUESTION 087
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2369,62 +2369,62 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 088
+        },
+        //QUESTION 088
         new Question
         {
-           questionDatabankName = "AcidBaseBufferQuestionDatabase",
-           questionText = "Ao escolher um tampão para pH 5,0, qual critério é mais adequado?",
-           answers = new string[] {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Ao escolher um tampão para pH 5,0, qual critério é mais adequado?",
+            answers = new string[] {
                "Selecionar o ácido com menor pKa possível.",
                "Selecionar sempre um ácido forte.",
                " Ignorar pKa e usar apenas a cor do indicador.",
                "Selecionar um ácido fraco com pKa próximo de 5,0."
            },
-           correctIndex = 3,
-           questionNumber = 88,
-           answerType = AnswerType.Text,
-           questionType = QuestionType.Text,
-           questionImagePath = "",
-           questionLevel = 3,
-           questionInDevelopment = false,
-           globalId = "acidsBase_088",
-           topic = "acidsBase",
-           subtopic = "henderson_hasselbalch",
-           displayName = "Ácidos, Bases e Tampões",
-           bloomLevel = BloomLevel.Evaluate,
-           conceptTags = new List<string> { "water_autoionization" },
-           prerequisites = null,
-           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 089
+            correctIndex = 3,
+            questionNumber = 88,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Text,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "acidsBase_088",
+            topic = "acidsBase",
+            subtopic = "henderson_hasselbalch",
+            displayName = "Ácidos, Bases e Tampões",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string> { "water_autoionization" },
+            prerequisites = null,
+            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        },
+        //QUESTION 089
         new Question
         {
-           questionDatabankName = "AcidBaseBufferQuestionDatabase",
-           questionText = "Qual justificativa é cientificamente melhor para classificar uma solução de pH 2 como ácida?",
-           answers = new string[] {
+            questionDatabankName = "AcidBaseBufferQuestionDatabase",
+            questionText = "Qual justificativa é cientificamente melhor para classificar uma solução de pH 2 como ácida?",
+            answers = new string[] {
                "Ela tem sabor azedo, portanto é ácido por definição.",
                "Ela tem pH menor que 14, portanto toda solução assim é ácida.",
                "Ela tem concentração de H+ maior que uma solução neutra. ",
                "Ela não contém água."
            },
-           correctIndex = 2,
-           questionNumber = 89,
-           answerType = AnswerType.Text,
-           questionType = QuestionType.Text,
-           questionImagePath = "",
-           questionLevel = 3,
-           questionInDevelopment = false,
-           globalId = "acidsBase_089",
-           topic = "acidsBase",
-           subtopic = "ph_scale",
-           displayName = "Ácidos, Bases e Tampões",
-           bloomLevel = BloomLevel.Evaluate,
-           conceptTags = new List<string> { "water_autoionization" },
-           prerequisites = null,
-           questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        }
-        QUESTION 090
+            correctIndex = 2,
+            questionNumber = 89,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Text,
+            questionImagePath = "",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "acidsBase_089",
+            topic = "acidsBase",
+            subtopic = "ph_scale",
+            displayName = "Ácidos, Bases e Tampões",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string> { "water_autoionization" },
+            prerequisites = null,
+            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
+        },
+        //QUESTION 090
         new Question
         {
            questionDatabankName = "AcidBaseBufferQuestionDatabase",
@@ -2450,7 +2450,7 @@ public class AcidBaseBufferQuestionDatabase : IQuestionDatabase
            conceptTags = new List<string> { "water_autoionization" },
            prerequisites = null,
            questionHint = new QuestionHint { text = "O Produto Iônico, apelidado de Kw (onde o w significa water), é a constante universal da autoionização da água sob 25 °C. Ele dita as regras e sempre cravou a marca estática de 1 x 10^-14." }
-        },
+        }
 };
 
     public List<Question> GetQuestions() => questions;
