@@ -7,6 +7,8 @@
 Assets/StreamingAssets/google-services-desktop
 **/google-services.json.meta
 **/GoogleService-Info.plist.meta
+Assets/Resources/Secrets*
+FirebaseSecrets-Local/
 
 # StreamingAssets com credenciais
 Assets/StreamingAssets/google-services-desktop.json
@@ -150,4 +152,3 @@ run_check_storage.sh
 run_reorganize.sh
 run_upload.sh
 upload_images_to_firebase.py
-

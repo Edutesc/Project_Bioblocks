@@ -16,7 +16,21 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
     public bool IsInitialized => isInitialized;
 
-    public string CurrentUserId => _auth?.CurrentUser?.UserId;
+    public string CurrentUserId
+    {
+        get
+        {
+            string firebaseUserId = _auth?.CurrentUser?.UserId;
+            if (!string.IsNullOrEmpty(firebaseUserId))
+                return firebaseUserId;
+
+            string cachedUserId = UserDataStore.CurrentUserData?.UserId;
+            if (!string.IsNullOrEmpty(cachedUserId))
+                return cachedUserId;
+
+            return PlayerPrefs.GetString("UserId", string.Empty);
+        }
+    }
 
     // -------------------------------------------------------
     // Inicialização / Injeção
@@ -67,12 +81,21 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     public bool IsUserLoggedIn()
     {
         var user = _auth?.CurrentUser;
-        return user != null && !user.IsAnonymous;
+        if (user != null && !user.IsAnonymous)
+            return true;
+
+        return HasCachedUserSession();
     }
 
     public bool HasLocalSession()
     {
-        return _auth?.CurrentUser != null;
+        return _auth?.CurrentUser != null || HasCachedUserSession();
+    }
+
+    private static bool HasCachedUserSession()
+    {
+        string currentUserId = UserDataStore.CurrentUserData?.UserId;
+        return !string.IsNullOrEmpty(currentUserId);
     }
 
     public async Task<UserData> SignInWithEmailAsync(string email, string password)

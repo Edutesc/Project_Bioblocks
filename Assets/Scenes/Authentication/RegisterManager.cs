@@ -123,6 +123,7 @@ public class RegisterManager : MonoBehaviour
                 throw new Exception("Erro: usuário criado mas ID não encontrado.");
 
             UserDataStore.CurrentUserData = userData;
+            CacheUserDataLocally(userData);
 
             Debug.Log("[RegisterManager] UserData definido. Iniciando ForceUpdate...");
             await AppContext.AnsweredQuestions.ForceUpdate();
@@ -152,6 +153,26 @@ public class RegisterManager : MonoBehaviour
                 SetAllButtonsInteractable(true);
                 isProcessing = false;
             }
+        }
+    }
+
+    private void CacheUserDataLocally(UserData userData)
+    {
+        if (userData == null || string.IsNullOrEmpty(userData.UserId) || _userDataLocal == null)
+            return;
+
+        try
+        {
+            _userDataLocal.UpdateUser(userData);
+            _userDataLocal.MarkAsSynced(userData.UserId);
+            PlayerPrefs.SetString("UserId", userData.UserId);
+            PlayerPrefs.SetString("UserEmail", userData.Email ?? string.Empty);
+            PlayerPrefs.SetString("UserNickname", userData.NickName ?? string.Empty);
+            PlayerPrefs.Save();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[RegisterManager] Falha ao salvar UserData no cache local: {e.Message}");
         }
     }
 

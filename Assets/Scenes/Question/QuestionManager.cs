@@ -15,6 +15,7 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionCanvasGroupManager questionCanvasGroupManager;
     [SerializeField] private FeedbackUIElements feedbackElements;
     [SerializeField] private QuestionTransitionManager transitionManager;
+    [SerializeField] private QuestionHintButtonManager hintButtonManager;
 
     [Header("Game Logic Managers")]
     [SerializeField] private QuestionTimerManager timerManager;
@@ -99,6 +100,8 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError("QuestionManager: feedbackElements é null");
         if (transitionManager == null)
             Debug.LogError("QuestionManager: transitionManager é null");
+        if (hintButtonManager == null)
+            Debug.LogWarning("QuestionManager: hintButtonManager não atribuído");
         return questionBottomBarManager != null &&
                questionUIManager        != null &&
                questionCanvasGroupManager != null &&
@@ -243,6 +246,7 @@ public class QuestionManager : MonoBehaviour
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
 
+            hintButtonManager?.ShowForQuestion(currentQuestion);
             questionBottomBarManager.EnableNavigationButtons();
             SetupNavigationButtons();
         }
@@ -375,6 +379,7 @@ public class QuestionManager : MonoBehaviour
                 nextQuestionToShow.questionType == QuestionType.Image,
                 nextQuestionToShow.answerType   == AnswerType.Image,
                 nextQuestionToShow.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(nextQuestionToShow);
             nextQuestionToShow = null;
         }
@@ -397,6 +402,7 @@ public class QuestionManager : MonoBehaviour
                 newQuestion.questionType == QuestionType.Image,
                 newQuestion.answerType   == AnswerType.Image,
                 newQuestion.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(newQuestion);
         }
     }
@@ -412,6 +418,7 @@ public class QuestionManager : MonoBehaviour
                 currentQuestion.questionType == QuestionType.Image,
                 currentQuestion.answerType   == AnswerType.Image,
                 currentQuestion.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(currentQuestion);
             timerManager.StartTimerForQuestion(currentQuestion);
         }
@@ -423,9 +430,12 @@ public class QuestionManager : MonoBehaviour
 
     private async void HandleTimeUp()
     {
+        var currentQuestion = currentSession.GetCurrentQuestion();
+
         answerManager.DisableAllButtons();
         feedbackElements.ShowTimeout();
-        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
+        await scoreManager.UpdateScore(-1, false, currentQuestion);
+        hintButtonManager?.ShowForQuestion(currentQuestion);
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();
     }
