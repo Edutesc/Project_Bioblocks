@@ -7849,15 +7849,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Teste18:2<sup>\u22069, 12</sup>"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b4f080307749e4fef89e48d46c37f6af, type: 2}
-  m_sharedMaterial: {fileID: -969081218096265377, guid: b4f080307749e4fef89e48d46c37f6af, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 464a1fe542023418c97188351f5546d2, type: 2}
+  m_sharedMaterial: {fileID: 7700700001920798284, guid: 464a1fe542023418c97188351f5546d2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281277960
-  m_fontColor: {r: 0.03137255, g: 0.11764706, b: 0.18431373, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7874,13 +7874,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 8
   m_VerticalAlignment: 512
   m_textAlignment: 65535

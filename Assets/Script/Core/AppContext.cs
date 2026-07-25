@@ -77,6 +77,8 @@ public class AppContext : MonoBehaviour
         {
             Debug.Log("[AppContext] questionPreviewMode=true — inicialização Firebase ignorada.");
 
+            ClearImageServicesForPreviewMode();
+
             QuestionSource    = new HardcodedQuestionSource();
             AnsweredQuestions = new FakeAnsweredQuestionsManager();
 
@@ -329,6 +331,14 @@ public class AppContext : MonoBehaviour
             IsReady = false;
             throw;
         }
+    }
+
+    private static void ClearImageServicesForPreviewMode()
+    {
+        ImageCache   = null;
+        ImageStorage = null;
+        ImageLocal   = null;
+        ImageSync    = null;
     }
 
     private static void ValidateFirebaseEnvironment(FirebaseEnvironment env)
