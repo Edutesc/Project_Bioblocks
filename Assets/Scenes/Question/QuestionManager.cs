@@ -351,6 +351,7 @@ public class QuestionManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("Teste");
             string userId = UserDataStore.CurrentUserData?.UserId;
 
             if (!string.IsNullOrEmpty(userId) && reviewmanager != null)
