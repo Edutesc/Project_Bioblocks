@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System.Data;
 
 public class QuestionManager : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionAnswerManager answerManager;
     [SerializeField] private QuestionScoreManager scoreManager;
     [SerializeField] private TopicReviewManager reviewManagerComponent;
-    private ITopicReviewManager reviewmanager;
+    private ITopicReviewManager topicReviewmanager;
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
     private List<Question> allDatabaseQuestions;
@@ -42,7 +43,7 @@ public class QuestionManager : MonoBehaviour
     {
         _navigation = AppContext.Navigation;
         _sceneData = AppContext.SceneData;
-        reviewmanager = reviewManagerComponent;
+        topicReviewmanager = reviewManagerComponent;
         if (!ValidateManagers())
         {
             Debug.LogError("Falha na validação dos managers necessários.");
@@ -354,22 +355,28 @@ public class QuestionManager : MonoBehaviour
             Debug.Log("Teste");
             string userId = UserDataStore.CurrentUserData?.UserId;
 
-            if (!string.IsNullOrEmpty(userId) && reviewmanager != null)
+
+            if (!string.IsNullOrEmpty(userId) && topicReviewmanager == null)
             {
-                try
-                {
-                    List<TopicReviewData> dueReviews =
-                        await reviewmanager.GetDueTopicReviewsAsync(userId);
+                
+                Debug.Log($"[TopicReviewManager] chamando schedule.");
+                
+                DateTime nextReviewAt = DateTime.UtcNow.AddDays(7);
+                Debug.Log($"[TopicReviewManager] Revisão criada para  {DateTime.UtcNow}");
+                Debug.Log($"[TopicReviewManager] Próxima revisão: {nextReviewAt}");
 
-                    Debug.Log($"[TopicReviewManager] Há {dueReviews.Count} revisões pendentes.");
 
-                    // aqui você pode, por exemplo, guardar dueReviews num campo
-                    // da classe para usar depois (ex: mostrar um prompt de revisão)
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"[QuestionManager] Erro ao buscar revisões pendentes: {e.Message}");
-                }
+                Debug.Log($"[TopicReviewManager] foi schedule.");
+
+                topicReviewmanager.ScheduleNextRevision();
+                
+        
+                
+                //List<TopicReviewData> dueReviews =
+                  // await topicReviewmanager.GetDueTopicReviewsAsync(userId);
+
+                // Debug.Log($"[TopicReviewManager] Há {dueReviews.Count} revisões pendentes.");
+               
             }
 
             var envCfg = EnvironmentConfig.Load();

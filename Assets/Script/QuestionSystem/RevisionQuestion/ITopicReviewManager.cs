@@ -14,4 +14,6 @@ public interface ITopicReviewManager
     );
 
     Task<List<TopicReviewData>> GetDueTopicReviewsAsync(string userId);
+
+    public void ScheduleNextRevision();
 }

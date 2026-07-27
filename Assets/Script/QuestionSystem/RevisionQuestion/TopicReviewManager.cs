@@ -77,6 +77,17 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
         return data;
     }
 
+    public void ScheduleNextRevision()
+        {
+
+                DateTime nextReviewAt = DateTime.UtcNow.AddDays(7);
+                Debug.Log($"[TopicReviewManager] Revisão criada para  {DateTime.UtcNow}");
+                Debug.Log($"[TopicReviewManager] Próxima revisão: {nextReviewAt}");
+            
+        }
+
+
+
     private void ScheduleRevision(TopicReviewData data)
     {
         if (data.totalSessionsCompleted % SessionsRequiredForRevision == 0)
