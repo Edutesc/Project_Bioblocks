@@ -267,11 +267,15 @@ public class ProfileManager : MonoBehaviour
                 }
             }
 
+            if (!string.IsNullOrEmpty(currentUserId))
+            {
+                ClearLocalUserData(currentUserId);
+                AnsweredQuestionsListStore.ClearUserAnsweredQuestions(currentUserId);
+            }
+
             UserDataStore.CurrentUserData = null;
             AppContext.AnsweredQuestions?.ResetManager();
-
-            if (!string.IsNullOrEmpty(currentUserId))
-                AnsweredQuestionsListStore.ClearUserAnsweredQuestions(currentUserId);
+            ClearLastUserPrefs();
 
             await _auth.LogoutAsync();
             Debug.Log("Logout realizado com sucesso");
@@ -281,6 +285,34 @@ public class ProfileManager : MonoBehaviour
         {
             Debug.LogError($"Erro ao realizar logout: {ex.Message}");
             throw;
+        }
+    }
+
+    private void ClearLocalUserData(string userId)
+    {
+        try
+        {
+            AppContext.UserDataLocal?.DeleteUser(userId);
+            Debug.Log($"[ProfileManager] Dados locais removidos do LiteDB para o usuário {userId}.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[ProfileManager] Falha ao remover dados locais do usuário {userId}: {e.Message}");
+        }
+    }
+
+    private void ClearLastUserPrefs()
+    {
+        try
+        {
+            PlayerPrefs.DeleteKey("UserId");
+            PlayerPrefs.DeleteKey("UserEmail");
+            PlayerPrefs.DeleteKey("UserNickname");
+            PlayerPrefs.Save();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[ProfileManager] Falha ao limpar PlayerPrefs do usuário: {e.Message}");
         }
     }
 
@@ -542,6 +574,8 @@ public class ProfileManager : MonoBehaviour
 
             // Limpa dados locais
             UserDataStore.OnUserDataChanged -= OnUserDataChanged;
+            ClearLocalUserData(userId);
+            ClearLastUserPrefs();
             UserDataStore.CurrentUserData    = null;
             AppContext.AnsweredQuestions?.ResetManager();
             AnsweredQuestionsListStore.ClearAll();

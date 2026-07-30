@@ -9,7 +9,7 @@ using QuestionSystem;
 /// Uso:
 ///   - Substitui cada um dos 10 MonoBehaviours de banco hardcoded na QuestionScene.
 ///   - Configure no Inspector: QuestionSet + DatabankName + DisplayName.
-///   - A flag DatabaseInDevelopment controla se a sessão exibe questões de dev ou de prod.
+///   - A flag DatabaseInDevelopment controla bloqueios de publicação/sync, não a visibilidade das questões.
 ///
 /// Não há chamada de rede aqui: o QuestionSyncService já garantiu que o LiteDB
 /// está populado durante a inicialização do app.
@@ -26,7 +26,7 @@ public class FirestoreQuestionDatabase : MonoBehaviour, IQuestionDatabase
     [Tooltip("Nome de exibição legível ao usuário (ex: 'Ácidos, Bases e Tampões').")]
     [SerializeField] private string displayName;
 
-    [Tooltip("Ativa o modo desenvolvimento: exibe apenas questões com questionInDevelopment = true.")]
+    [Tooltip("Ativa o modo desenvolvimento do banco para validações/editor. Questões com questionInDevelopment=true não aparecem fora do preview mode.")]
     [SerializeField] private bool databaseInDevelopment = false;
 
     // ── IQuestionDatabase ──────────────────────────────────────────────────────

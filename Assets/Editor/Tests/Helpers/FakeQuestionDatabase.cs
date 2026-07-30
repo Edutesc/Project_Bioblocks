@@ -46,7 +46,7 @@ public class FakeQuestionDatabase : IQuestionDatabase
     // -------------------------------------------------------
 
     /// <summary>
-    /// Banco em modo PRODUÇÃO com questões mistas (prod + dev).
+    /// Banco com databaseInDevelopment=false e questões mistas.
     /// </summary>
     public static FakeQuestionDatabase ProductionWith(
         int prodCount,
@@ -69,7 +69,7 @@ public class FakeQuestionDatabase : IQuestionDatabase
     }
 
     /// <summary>
-    /// Banco em modo DESENVOLVIMENTO com questões mistas.
+    /// Banco com databaseInDevelopment=true e questões mistas.
     /// </summary>
     public static FakeQuestionDatabase DevelopmentWith(
         int devCount,
@@ -92,7 +92,7 @@ public class FakeQuestionDatabase : IQuestionDatabase
     }
 
     /// <summary>
-    /// Banco vazio em modo produção.
+    /// Banco vazio com databaseInDevelopment=false.
     /// </summary>
     public static FakeQuestionDatabase Empty()
         => new FakeQuestionDatabase { IsInDevelopmentMode = false };

@@ -15,13 +15,13 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionCanvasGroupManager questionCanvasGroupManager;
     [SerializeField] private FeedbackUIElements feedbackElements;
     [SerializeField] private QuestionTransitionManager transitionManager;
+    [SerializeField] private QuestionHintButtonManager hintButtonManager;
 
     [Header("Game Logic Managers")]
     [SerializeField] private QuestionTimerManager timerManager;
     [SerializeField] private QuestionLoadManager loadManager;
     [SerializeField] private QuestionAnswerManager answerManager;
     [SerializeField] private QuestionScoreManager scoreManager;
-    [SerializeField] private QuestionCounterManager counterManager;
 
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
@@ -100,9 +100,8 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError("QuestionManager: feedbackElements é null");
         if (transitionManager == null)
             Debug.LogError("QuestionManager: transitionManager é null");
-        if (counterManager == null)
-            Debug.LogWarning("QuestionManager: counterManager é null (opcional)");
-
+        if (hintButtonManager == null)
+            Debug.LogWarning("QuestionManager: hintButtonManager não atribuído");
         return questionBottomBarManager != null &&
                questionUIManager        != null &&
                questionCanvasGroupManager != null &&
@@ -111,8 +110,7 @@ public class QuestionManager : MonoBehaviour
                answerManager            != null &&
                scoreManager             != null &&
                feedbackElements         != null &&
-               transitionManager        != null &&
-               counterManager           != null;
+               transitionManager        != null;
     }
 
     // -------------------------------------------------------
@@ -179,12 +177,6 @@ public class QuestionManager : MonoBehaviour
             }
 
             currentSession = new QuestionSession(questions);
-
-            if (counterManager != null)
-            {
-                counterManager.Initialize(allDatabaseQuestions, answeredQuestions);
-                Debug.Log("[QuestionManager] QuestionCounterManager inicializado");
-            }
         }
         catch (Exception e)
         {
@@ -246,13 +238,6 @@ public class QuestionManager : MonoBehaviour
                 feedbackElements.ShowCorrectAnswer(bonusActive);
 
                 await scoreManager.UpdateScore(baseScore, true, currentQuestion);
-
-                if (counterManager != null)
-                {
-                    counterManager.MarkQuestionAsAnswered(currentQuestion.questionNumber);
-                    counterManager.UpdateCounter(currentQuestion);
-                }
-
                 await CheckLevelCompletionAfterCorrectAnswer(currentQuestion);
             }
             else
@@ -261,6 +246,7 @@ public class QuestionManager : MonoBehaviour
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
 
+            hintButtonManager?.ShowForQuestion(currentQuestion);
             questionBottomBarManager.EnableNavigationButtons();
             SetupNavigationButtons();
         }
@@ -393,11 +379,8 @@ public class QuestionManager : MonoBehaviour
                 nextQuestionToShow.questionType == QuestionType.Image,
                 nextQuestionToShow.answerType   == AnswerType.Image,
                 nextQuestionToShow.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(nextQuestionToShow);
-
-            if (counterManager != null)
-                counterManager.UpdateCounter(nextQuestionToShow);
-
             nextQuestionToShow = null;
         }
         else
@@ -419,10 +402,8 @@ public class QuestionManager : MonoBehaviour
                 newQuestion.questionType == QuestionType.Image,
                 newQuestion.answerType   == AnswerType.Image,
                 newQuestion.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(newQuestion);
-
-            if (counterManager != null)
-                counterManager.UpdateCounter(newQuestion);
         }
     }
 
@@ -437,12 +418,9 @@ public class QuestionManager : MonoBehaviour
                 currentQuestion.questionType == QuestionType.Image,
                 currentQuestion.answerType   == AnswerType.Image,
                 currentQuestion.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(currentQuestion);
-
-            if (counterManager != null)
-                counterManager.UpdateCounter(currentQuestion);
-
-            timerManager.StartTimer();
+            timerManager.StartTimerForQuestion(currentQuestion);
         }
         catch (Exception e)
         {
@@ -452,9 +430,12 @@ public class QuestionManager : MonoBehaviour
 
     private async void HandleTimeUp()
     {
+        var currentQuestion = currentSession.GetCurrentQuestion();
+
         answerManager.DisableAllButtons();
         feedbackElements.ShowTimeout();
-        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
+        await scoreManager.UpdateScore(-1, false, currentQuestion);
+        hintButtonManager?.ShowForQuestion(currentQuestion);
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();
     }
@@ -485,7 +466,7 @@ public class QuestionManager : MonoBehaviour
                 // Preview Mode: sem usuário logado → transiciona normalmente;
                 // o loop é gerenciado em PrepareNextQuestion().
                 await transitionManager.TransitionToNextQuestion();
-                timerManager.StartTimer();
+                timerManager.StartTimerForQuestion(currentSession.GetCurrentQuestion());
                 return;
             }
 
@@ -538,7 +519,7 @@ public class QuestionManager : MonoBehaviour
         }
 
         await transitionManager.TransitionToNextQuestion();
-        timerManager.StartTimer();
+        timerManager.StartTimerForQuestion(currentSession.GetCurrentQuestion());
     }
 
     private async Task CheckAndLoadMoreQuestions()

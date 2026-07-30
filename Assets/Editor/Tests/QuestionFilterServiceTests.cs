@@ -44,11 +44,11 @@ public class QuestionFilterServiceTests
     }
 
     // =======================================================
-    // FilterQuestions — modo PRODUÇÃO
+    // FilterQuestions — modo normal
     // =======================================================
 
     [Test]
-    public void FilterQuestions_ModoProd_RetornaApenasProdQuestions()
+    public void FilterQuestions_RetornaApenasQuestoesVisiveis()
     {
         // 3 de produção, 2 de desenvolvimento
         var db = FakeQuestionDatabase.ProductionWith(prodCount: 3, devCount: 2);
@@ -61,7 +61,7 @@ public class QuestionFilterServiceTests
     }
 
     [Test]
-    public void FilterQuestions_ModoProd_SemQuestoesEmDev_RetornaTodas()
+    public void FilterQuestions_SemQuestoesEmDev_RetornaTodas()
     {
         var db = FakeQuestionDatabase.ProductionWith(prodCount: 5, devCount: 0);
 
@@ -71,7 +71,7 @@ public class QuestionFilterServiceTests
     }
 
     [Test]
-    public void FilterQuestions_ModoProd_TodasEmDev_RetornaListaVazia()
+    public void FilterQuestions_TodasEmDev_RetornaListaVazia()
     {
         // Banco em modo prod, mas todas as questões marcadas como dev
         var db = FakeQuestionDatabase.ProductionWith(prodCount: 0, devCount: 4);
@@ -82,38 +82,39 @@ public class QuestionFilterServiceTests
     }
 
     // =======================================================
-    // FilterQuestions — modo DESENVOLVIMENTO
+    // FilterQuestions — databaseInDevelopment não altera visibilidade
     // =======================================================
 
     [Test]
-    public void FilterQuestions_ModoDev_RetornaApenasDevQuestions()
+    public void FilterQuestions_DatabaseInDevelopment_TambemOcultaQuestionsInDevelopment()
     {
         // 3 em dev, 2 de produção
         var db = FakeQuestionDatabase.DevelopmentWith(devCount: 3, prodCount: 2);
 
         var result = QuestionFilterService.FilterQuestions(db);
 
-        Assert.AreEqual(3, result.Count);
-        Assert.IsTrue(result.All(q => q.questionInDevelopment),
-            "Modo desenvolvimento deve retornar apenas questões marcadas como dev");
+        Assert.AreEqual(2, result.Count);
+        Assert.IsTrue(result.All(q => !q.questionInDevelopment),
+            "Modo desenvolvimento também não deve retornar questões marcadas como dev");
     }
 
     [Test]
-    public void FilterQuestions_ModoDev_SemDevQuestions_RetornaListaVazia()
+    public void FilterQuestions_DatabaseInDevelopment_SemDevQuestions_RetornaTodasAsVisiveis()
     {
         // Banco em modo dev, mas nenhuma questão marcada como dev
         var db = FakeQuestionDatabase.DevelopmentWith(devCount: 0, prodCount: 3);
 
         var result = QuestionFilterService.FilterQuestions(db);
 
-        Assert.AreEqual(0, result.Count);
+        Assert.AreEqual(3, result.Count);
+        Assert.IsTrue(result.All(q => !q.questionInDevelopment));
     }
 
     [Test]
-    public void FilterQuestions_ModoProdEDev_RetornamConjuntosOpostos()
+    public void FilterQuestions_DatabaseInDevelopment_RetornaMesmoConjuntoVisivel()
     {
-        // O mesmo conjunto de questões filtrado de modos opostos
-        // deve produzir resultados complementares
+        // O mesmo conjunto de questões deve ocultar questionInDevelopment
+        // tanto em produção quanto em desenvolvimento.
         var questions = new List<Question>
         {
             QuestionTestHelpers.MakeQuestion(1, inDevelopment: false),
@@ -130,32 +131,9 @@ public class QuestionFilterServiceTests
 
         Assert.AreEqual(2, prodResult.Count);
         Assert.AreEqual(2, devResult.Count);
-        // União deve cobrir todas as questões sem sobreposição
-        Assert.AreEqual(questions.Count, prodResult.Count + devResult.Count);
-    }
-
-    // =======================================================
-    // ShouldSaveToFirebase
-    // =======================================================
-
-    [Test]
-    public void ShouldSaveToFirebase_ModoProd_RetornaTrue()
-    {
-        var db = FakeQuestionDatabase.ProductionWith(prodCount: 3);
-
-        bool result = QuestionFilterService.ShouldSaveToFirebase(db);
-
-        Assert.IsTrue(result);
-    }
-
-    [Test]
-    public void ShouldSaveToFirebase_ModoDev_RetornaFalse()
-    {
-        var db = FakeQuestionDatabase.DevelopmentWith(devCount: 3);
-
-        bool result = QuestionFilterService.ShouldSaveToFirebase(db);
-
-        Assert.IsFalse(result, "Banco em desenvolvimento NUNCA deve salvar no Firebase");
+        CollectionAssert.AreEquivalent(
+            prodResult.Select(q => q.questionNumber).ToList(),
+            devResult.Select(q => q.questionNumber).ToList());
     }
 
     // =======================================================
@@ -184,16 +162,16 @@ public class QuestionFilterServiceTests
     }
 
     [Test]
-    public void GetQuestionByNumber_QuestaoDeDevEmModoProd_NaoEncontra()
+    public void GetQuestionByNumber_QuestionInDevelopment_NaoEncontra()
     {
-        // Questão número 4 está marcada como dev; banco em modo produção
+        // Questão número 4 está marcada como em desenvolvimento
         var db = FakeQuestionDatabase.ProductionWith(prodCount: 3, devCount: 2);
-        // As questões de dev são os números 4 e 5 (geradas por último no helper)
+        // As questões em desenvolvimento são os números 4 e 5 (geradas por último no helper)
         int devQuestionNumber = db.Questions.First(q => q.questionInDevelopment).questionNumber;
 
         var result = QuestionFilterService.GetQuestionByNumber(db, devQuestionNumber);
 
-        Assert.IsNull(result, "Questão em dev não deve ser encontrada em modo produção");
+        Assert.IsNull(result, "Questão em desenvolvimento não deve ser encontrada fora do preview mode");
     }
 
     [Test]
@@ -237,9 +215,9 @@ public class QuestionFilterServiceTests
     }
 
     [Test]
-    public void GetQuestionsByLevel_RespeiraFiltroDeModoProd()
+    public void GetQuestionsByLevel_RespeitaFiltroDeQuestionInDevelopment()
     {
-        // Nível 1 tem 2 prod + 1 dev; modo produção deve retornar só 2
+        // Nível 1 tem 2 visíveis + 1 em desenvolvimento; deve retornar só 2
         var db = new FakeQuestionDatabase { IsInDevelopmentMode = false };
         db.Questions.Add(QuestionTestHelpers.MakeQuestion(1, level: 1, inDevelopment: false));
         db.Questions.Add(QuestionTestHelpers.MakeQuestion(2, level: 1, inDevelopment: false));
@@ -255,7 +233,7 @@ public class QuestionFilterServiceTests
     // =======================================================
 
     [Test]
-    public void GetTotalQuestionsCount_ModoProd_ContaApenasQuestoesProd()
+    public void GetTotalQuestionsCount_ContaApenasQuestoesVisiveis()
     {
         var db = FakeQuestionDatabase.ProductionWith(prodCount: 4, devCount: 2);
 
@@ -266,13 +244,13 @@ public class QuestionFilterServiceTests
     }
 
     [Test]
-    public void GetTotalQuestionsCount_ModoDev_ContaApenasQuestoesEmDev()
+    public void GetTotalQuestionsCount_DatabaseInDevelopment_ContaApenasQuestoesVisiveis()
     {
         var db = FakeQuestionDatabase.DevelopmentWith(devCount: 3, prodCount: 5);
 
         int count = QuestionFilterService.GetTotalQuestionsCount(db);
 
-        Assert.AreEqual(3, count);
+        Assert.AreEqual(5, count);
     }
 
     [Test]

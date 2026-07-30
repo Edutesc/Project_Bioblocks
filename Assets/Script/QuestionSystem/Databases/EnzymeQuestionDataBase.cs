@@ -28,7 +28,7 @@ public class EnzymeQuestionDatabase : IQuestionDatabase
     //         topic = "enzymes",
     //         subtopic = null,
     //         displayName = "Enzimas",
-    //         bloomLevel = BloomLevel.Unclassified,
+    //         bloomLevel = BloomLevel.Remember,
     //         conceptTags = null,
     //         prerequisites = null,
     //         questionHint = null

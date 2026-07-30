@@ -859,10 +859,12 @@ public class UserHeaderManager : BarsManager
     {
         if (AppContext.PlayerLevel == null) return;
 
-        int currentLevel = AppContext.PlayerLevel.GetCurrentLevel();
         int questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
-        int questionsUntilNext = AppContext.PlayerLevel.GetQuestionsUntilNextLevel();
-        int questionsAtStart = AppContext.PlayerLevel.GetQuestionsAtLevelStart();
+        int totalQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
+        int currentLevel = GetLevelForProgressDisplay(questionsAnswered, totalQuestions);
+        int questionsAtStart = GetQuestionsAtLevelStart(currentLevel, totalQuestions);
+        int questionsAtNextLevel = GetQuestionsAtNextLevel(currentLevel, totalQuestions);
+        int questionsUntilNext = Mathf.Max(0, questionsAtNextLevel - questionsAnswered);
 
         if (playerLevelText != null)
             playerLevelText.text = currentLevel.ToString();
@@ -880,6 +882,10 @@ public class UserHeaderManager : BarsManager
                 int maxQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
                 playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
             }
+            else if (playerLevelProgressBar != null)
+            {
+                playerLevelProgressBar.fillAmount = 1f;
+            }
 
             if (playerLevelProgressText != null)
                 playerLevelProgressText.text = "MÁXIMO!";
@@ -888,15 +894,17 @@ public class UserHeaderManager : BarsManager
         {
             int nextLevel = currentLevel + 1;
             int progressInLevel = questionsAnswered - questionsAtStart;
-            int intervalSize = questionsUntilNext + progressInLevel;
+            int intervalSize = questionsAtNextLevel - questionsAtStart;
 
             if (intervalSize <= 0 || progressInLevel < 0)
             {
-                Debug.LogWarning($"[UserHeaderManager] Dados inconsistentes: " +
+                Debug.Log($"[UserHeaderManager] Dados de progresso ainda indisponíveis: " +
                                 $"answered={questionsAnswered}, start={questionsAtStart}, " +
                                 $"untilNext={questionsUntilNext}, interval={intervalSize}. " +
-                                $"Aguardando dados consistentes...");
-                return;
+                                $"Atualizando UI com fallback temporário.");
+
+                progressInLevel = Mathf.Max(0, progressInLevel);
+                intervalSize = Mathf.Max(1, progressInLevel + questionsUntilNext);
             }
 
             if (playerLevelProgressBarManager != null)
@@ -910,13 +918,15 @@ public class UserHeaderManager : BarsManager
                 Debug.Log($"[UserHeaderManager] Barra: {progressInLevel}/{intervalSize} " +
                         $"(answered={questionsAnswered}, start={questionsAtStart})");
             }
+            else if (playerLevelProgressBar != null)
+            {
+                playerLevelProgressBar.fillAmount = Mathf.Clamp01(progressInLevel / (float)intervalSize);
+            }
 
             if (playerLevelProgressText != null)
             {
-                float percentageLeft = intervalSize > 0 
-                    ? (questionsUntilNext / (float)intervalSize) * 100f 
-                    : 0f;
-                int   roundedPercentage = Mathf.RoundToInt(percentageLeft);
+                int clampedProgress = Mathf.Clamp(progressInLevel, 0, intervalSize);
+                int remainingQuestions = Mathf.Max(0, intervalSize - clampedProgress);
 
                 Debug.Log($"[UserHeaderManager] currentLevel={currentLevel}, " +
                         $"questionsAnswered={questionsAnswered}, " +
@@ -924,11 +934,56 @@ public class UserHeaderManager : BarsManager
                         $"progressInLevel={progressInLevel}, " +
                         $"intervalSize={intervalSize}, " +
                         $"questionsUntilNext={questionsUntilNext}, " +
-                        $"percentageLeft={percentageLeft:F1}%");
+                        $"remainingQuestions={remainingQuestions}");
 
-                playerLevelProgressText.text = $"{roundedPercentage}% para o Level {nextLevel}";
+                if (remainingQuestions == 0)
+                {
+                    playerLevelProgressText.text = $"Parabéns, você completou o nível {currentLevel}";
+                }
+                else
+                {
+                    float percentageLeft = (remainingQuestions / (float)intervalSize) * 100f;
+                    int roundedPercentage = Mathf.RoundToInt(percentageLeft);
+                    playerLevelProgressText.text = $"{roundedPercentage}% para o nível {nextLevel}";
+                }
             }
         }
+    }
+
+    private int GetLevelForProgressDisplay(int questionsAnswered, int totalQuestions)
+    {
+        if (totalQuestions <= 0)
+        {
+            return Mathf.Clamp(AppContext.PlayerLevel.GetCurrentLevel(), 1, PlayerLevelConfig.MaxLevel);
+        }
+
+        for (int level = 1; level < PlayerLevelConfig.MaxLevel; level++)
+        {
+            int nextLevelStart = GetQuestionsAtNextLevel(level, totalQuestions);
+            if (questionsAnswered <= nextLevelStart)
+            {
+                return level;
+            }
+        }
+
+        return PlayerLevelConfig.MaxLevel;
+    }
+
+    private int GetQuestionsAtLevelStart(int level, int totalQuestions)
+    {
+        if (totalQuestions <= 0) return 0;
+
+        var threshold = PlayerLevelConfig.GetThresholdForLevel(level);
+        return threshold.GetMinRequiredQuestions(totalQuestions);
+    }
+
+    private int GetQuestionsAtNextLevel(int currentLevel, int totalQuestions)
+    {
+        if (totalQuestions <= 0) return 0;
+        if (currentLevel >= PlayerLevelConfig.MaxLevel) return totalQuestions;
+
+        var nextThreshold = PlayerLevelConfig.GetThresholdForLevel(currentLevel + 1);
+        return nextThreshold.GetMinRequiredQuestions(totalQuestions);
     }
 
     #endregion

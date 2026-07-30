@@ -22,7 +22,7 @@ public class AminoacidQuestionDatabase : IQuestionDatabase
         //     answerType = AnswerType.Text,
         //     questionType = QuestionType.Text,
         //     questionImagePath = "",
-        //     questionLevel = 2,
+        //     questionLevel = 1,
         //     questionInDevelopment = false,
         //     globalId = "aminoacids_001",
         //     topic = "aminoacids",
