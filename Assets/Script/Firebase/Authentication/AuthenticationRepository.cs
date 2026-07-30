@@ -122,7 +122,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
         }
         catch (Exception e)
         {
-            Debug.LogError($"[AuthRepository] Exception during login: {e.Message}");
+            Debug.LogError($"[AuthRepository] Exception during login:\n {e}");
             throw;
         }
     }

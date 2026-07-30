@@ -39,7 +39,7 @@ public class AminoacidQuestionDatabase : IQuestionDatabase
         //         link = null
         //     }
         // },
-        
+
     };
 
     public List<Question> GetQuestions() => questions;
