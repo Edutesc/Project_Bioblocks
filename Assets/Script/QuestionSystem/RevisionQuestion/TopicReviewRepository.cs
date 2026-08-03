@@ -30,57 +30,15 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
         }
     }
 
-    public async Task UpsertTopicReviewAsync(string userId, TopicReviewData topicReview)
+    public async Task UpsertTopicReviewAsync(string userId, string topicId, DateTime nextReviewAt)
     {
-        if (!isInitialized) Initialize();
-        if (!isInitialized) throw new Exception("Firestore não inicializado.");
-        if (string.IsNullOrEmpty(userId)) throw new ArgumentException("UserId não pode ser nulo ou vazio.");
-        if (topicReview == null) throw new ArgumentNullException(nameof(topicReview));
-        if (string.IsNullOrEmpty(topicReview.databankName))
-            throw new ArgumentException("databankName não pode ser nulo ou vazio.");
-
-        try
-        {
-            DocumentReference docRef = db
-                .Collection("Users").Document(userId)
-                .Collection("TopicReviews").Document(topicReview.databankName);
-
-            await docRef.SetAsync(topicReview, SetOptions.MergeAll);
-
-            Debug.Log($"[TopicReviewRepository] Progresso do tópico '{topicReview.databankName}' salvo para o usuário {userId}.");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[TopicReviewRepository] Erro ao salvar progresso: {e.Message}");
-            throw;
-        }
+        DocumentReference docRef = db
+        .Collection("usersid")
+        .Document(userId)
+        .Collection("TopicReviews")
+        .Document(topicId);
     }
-
-    public async Task<TopicReviewData> GetTopicReviewAsync(string userId, string databankName)
-    {
-        if (!isInitialized) Initialize();
-        if (!isInitialized) throw new Exception("Firestore não inicializado.");
-        if (string.IsNullOrEmpty(userId)) throw new ArgumentException("UserId não pode ser nulo ou vazio.");
-        if (string.IsNullOrEmpty(databankName)) throw new ArgumentException("databankName não pode ser nulo ou vazio.");
-
-        try
-        {
-            DocumentReference docRef = db
-                .Collection("Users").Document(userId)
-                .Collection("TopicReviews").Document(databankName);
-
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-            if (snapshot == null || !snapshot.Exists) return null;
-
-            return snapshot.ConvertTo<TopicReviewData>();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[TopicReviewRepository] Erro ao carregar tópico '{databankName}': {e.Message}");
-            throw;
-        }
-    }
-
+    
     public async Task<List<TopicReviewData>> GetDueTopicReviewsAsync(string userId, DateTime nowUtc)
     {
         if (!isInitialized) Initialize();
@@ -95,8 +53,6 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
                 .Collection("Users").Document(userId)
                 .Collection("TopicReviews");
 
-            // Exclui quem nunca teve revisão agendada (nextReviewAt == MinValue)
-            // e traz só quem já venceu.
             Query query = topicReviewsRef
                 .WhereGreaterThan("nextReviewAt", Timestamp.FromDateTime(new DateTime(1, 1, 2, 0, 0, 0, DateTimeKind.Utc)))
                 .WhereLessThanOrEqualTo("nextReviewAt", Timestamp.FromDateTime(DateTime.SpecifyKind(nowUtc, DateTimeKind.Utc)));

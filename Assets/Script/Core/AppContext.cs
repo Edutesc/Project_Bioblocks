@@ -45,6 +45,7 @@ public class AppContext : MonoBehaviour
     public static IFirebaseStorageImageRepository   ImageStorage            { get; private set; }
     public static IImageLocalRepository             ImageLocal              { get; private set; }
     public static IImageSyncService                 ImageSync               { get; private set; }
+    public static ITopicReviewManager TopicReview { get; private set; }
 
     public static bool IsReady { get; private set; }
 
@@ -180,9 +181,10 @@ public class AppContext : MonoBehaviour
             var firebaseStorageRepo   = GetComponent<FirebaseStorageImageRepository>();
             var imageLocalRepo        = GetComponent<ImageLocalRepository>();
             var imageSyncSvc          = GetComponent<ImageSyncService>();
+            var topicReviewManager    = GetComponent<TopicReviewManager>();
 
             // ── Validações existentes ──────────────────────────────────────────
-            if (authRepo                == null) throw new Exception("[AppContext] AuthenticationRepository não encontrado.");
+            if (authRepo == null) throw new Exception("[AppContext] AuthenticationRepository não encontrado.");
             if (firestoreRepo           == null) throw new Exception("[AppContext] FirestoreRepository não encontrado.");
             if (liteDBMgr               == null) throw new Exception("[AppContext] LiteDBManager não encontrado.");
             if (imageCacheSvc           == null) throw new Exception("[AppContext] ImageCacheService não encontrado.");
@@ -317,6 +319,7 @@ public class AppContext : MonoBehaviour
             ImageStorage      = firebaseStorageRepo;
             ImageLocal        = imageLocalRepo;
             ImageSync         = imageSyncSvc;
+            TopicReview       = topicReviewManager;
 
             IsReady = true;
             OnReady?.Invoke();

@@ -8,16 +8,14 @@ public class TopicReviewData
 {
     [FirestoreProperty] public string userId { get; set; }
     [FirestoreProperty] public string databankName { get; set; }
-    [FirestoreProperty] public string displayName { get; set; }
 
     [FirestoreProperty] public DateTime lastInteractionAt { get; set; }
     [FirestoreProperty] public DateTime nextReviewAt { get; set; }
 
-    [FirestoreProperty] public List<string> lastSessionQuestionGlobalIds { get; set; }
-    [FirestoreProperty] public List<string> recentCorrectQuestionGlobalIds { get; set; }
-    [FirestoreProperty] public List<string> recentWrongQuestionGlobalIds { get; set; }
+    [FirestoreProperty] public string recentCorrectQuestionGlobalIds { get; set; }
+    [FirestoreProperty] public string recentWrongQuestionGlobalIds { get; set; }
 
-    [FirestoreProperty] public List<TopicReviewSessionHistoryItem> sessionHistory { get; set; }
+    [FirestoreProperty] public TopicReviewSessionHistoryItem sessionHistory { get; set; }
 
     [FirestoreProperty] public int totalSessionsCompleted { get; set; }
     [FirestoreProperty] public DateTime updatedAt { get; set; }

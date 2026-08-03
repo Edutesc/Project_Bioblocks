@@ -5,15 +5,13 @@ public interface ITopicReviewManager
 {
     Task RegisterCompletedSessionAsync(
         string userId,
-        string databankName,
-        string displayName,
-        List<string> sessionQuestionGlobalIds,
-        List<string> correctQuestionGlobalIds,
-        List<string> wrongQuestionGlobalIds,
+        string topicId,
+        string correctQuestionGlobalIds,
+        string wrongQuestionGlobalIds,
         string source
     );
 
-    Task<List<TopicReviewData>> GetDueTopicReviewsAsync(string userId);
-
-    public void ScheduleNextRevision();
+    Task ScheduleNextRevision(
+        string userId,
+        string databankName);
 }

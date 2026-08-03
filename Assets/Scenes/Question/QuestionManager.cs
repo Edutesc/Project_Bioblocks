@@ -355,29 +355,9 @@ public class QuestionManager : MonoBehaviour
             Debug.Log("Teste");
             string userId = UserDataStore.CurrentUserData?.UserId;
 
+            string topicfake = "lipidios";
 
-            if (!string.IsNullOrEmpty(userId) && topicReviewmanager == null)
-            {
-                
-                Debug.Log($"[TopicReviewManager] chamando schedule.");
-                
-                DateTime nextReviewAt = DateTime.UtcNow.AddDays(7);
-                Debug.Log($"[TopicReviewManager] Revisão criada para  {DateTime.UtcNow}");
-                Debug.Log($"[TopicReviewManager] Próxima revisão: {nextReviewAt}");
-
-
-                Debug.Log($"[TopicReviewManager] foi schedule.");
-
-                topicReviewmanager.ScheduleNextRevision();
-                
-        
-                
-                //List<TopicReviewData> dueReviews =
-                  // await topicReviewmanager.GetDueTopicReviewsAsync(userId);
-
-                // Debug.Log($"[TopicReviewManager] Há {dueReviews.Count} revisões pendentes.");
-               
-            }
+            topicReviewmanager.ScheduleNextRevision(userId,topicfake);
 
             var envCfg = EnvironmentConfig.Load();
             if (envCfg != null && envCfg.QuestionPreviewMode)
