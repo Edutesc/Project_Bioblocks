@@ -13,18 +13,20 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
     string databankName,
     string correctQuestionGlobalIds,
     string wrongQuestionGlobalIds,
+    string globalId,
     string source)
     {
         Debug.Log($"[TopicReviewManager] Sessão concluída.");
         Debug.Log($"[TopicReviewManager] Usuário: {userId}");
         Debug.Log($"[TopicReviewManager] Tópico: {databankName}");
 
-        await ScheduleNextRevision(userId, databankName);
+        await ScheduleNextRevision(userId, globalId, databankName);
     }
 
 
-    public async Task ScheduleNextRevision(string userId, string topicId)
+    public async Task ScheduleNextRevision(string userId, string globalId, string topicId)
     {
+        Debug.Log("chegou");
         EnsureRepository();
 
         DateTime nextReviewAt = DateTime.UtcNow.AddDays(7);
@@ -32,7 +34,7 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
         Debug.Log($"[TopicReviewManager] Databank: {topicId}");
         Debug.Log($"[TopicReviewManager] Próxima revisão: {nextReviewAt}"); 
 
-        await progressRepository.UpsertTopicReviewAsync(userId, topicId, nextReviewAt);        
+        await progressRepository.UpsertTopicReviewAsync(userId, globalId, topicId, nextReviewAt);        
             
         }
 

@@ -8,10 +8,12 @@ public interface ITopicReviewManager
         string topicId,
         string correctQuestionGlobalIds,
         string wrongQuestionGlobalIds,
+        string globalId,
         string source
     );
 
     Task ScheduleNextRevision(
         string userId,
-        string databankName);
+        string globalId,
+        string topicId);
 }

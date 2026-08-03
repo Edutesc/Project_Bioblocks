@@ -30,14 +30,43 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
         }
     }
 
-    public async Task UpsertTopicReviewAsync(string userId, string topicId, DateTime nextReviewAt)
+        public async Task UpsertTopicReviewAsync(
+        string userId,
+        string globalId,
+        string topicId,
+        DateTime nextReviewAt)
     {
+        if (!isInitialized)
+            Initialize();
+
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new ArgumentException("userId não pode ser vazio.");
+
+        if (string.IsNullOrWhiteSpace(topicId))
+            throw new ArgumentException("topicId não pode ser vazio.");
+
         DocumentReference docRef = db
-        .Collection("usersid")
-        .Document(userId)
-        .Collection("TopicReviews")
-        .Document(topicId);
+            .Collection("Users")
+            .Document(userId)
+            .Collection("TopicReviews")
+            .Document(topicId);
+
+        var data = new Dictionary<string, object>
+        {
+            { "userId", userId },
+            { "databankName", topicId },
+            { "lastInteractionAt", Timestamp.GetCurrentTimestamp() },
+            { "nextReviewAt", Timestamp.FromDateTime(nextReviewAt.ToUniversalTime()) },
+            { "updatedAt", Timestamp.GetCurrentTimestamp() }
+        };
+
+        await docRef.SetAsync(data, SetOptions.MergeAll);
+
+        Debug.Log(
+            $"[TopicReviewRepository] Revisão salva: " +
+            $"Users/{userId}/TopicReviews/{topicId}");
     }
+
     
     public async Task<List<TopicReviewData>> GetDueTopicReviewsAsync(string userId, DateTime nowUtc)
     {

@@ -45,7 +45,7 @@ public class AppContext : MonoBehaviour
     public static IFirebaseStorageImageRepository   ImageStorage            { get; private set; }
     public static IImageLocalRepository             ImageLocal              { get; private set; }
     public static IImageSyncService                 ImageSync               { get; private set; }
-    public static ITopicReviewManager TopicReview { get; private set; }
+    public static ITopicReviewManager               TopicReview             { get; private set; }
 
     public static bool IsReady { get; private set; }
 
@@ -181,7 +181,8 @@ public class AppContext : MonoBehaviour
             var firebaseStorageRepo   = GetComponent<FirebaseStorageImageRepository>();
             var imageLocalRepo        = GetComponent<ImageLocalRepository>();
             var imageSyncSvc          = GetComponent<ImageSyncService>();
-            var topicReviewManager    = GetComponent<TopicReviewManager>();
+            var topicReview           = GetComponent<TopicReviewManager>();
+            var topicReviewRepository = GetComponent<TopicReviewRepository>();
 
             // ── Validações existentes ──────────────────────────────────────────
             if (authRepo == null) throw new Exception("[AppContext] AuthenticationRepository não encontrado.");
@@ -204,6 +205,8 @@ public class AppContext : MonoBehaviour
             if (firebaseStorageRepo     == null) throw new Exception("[AppContext] FirebaseStorageImageRepository não encontrado.");
             if (imageLocalRepo          == null) throw new Exception("[AppContext] ImageLocalRepository não encontrado.");
             if (imageSyncSvc            == null) throw new Exception("[AppContext] ImageSyncService não encontrado.");
+            if (topicReview             == null) throw new Exception("[AppContext] TopicReview não encontrado.");
+            if (topicReviewRepository   == null) throw new Exception("[AppContext] TopicReviewRepository não encontrado.");
 
             // ── 1. LiteDB ──────────────────────────────────────────────────────
             liteDBMgr.Initialize();
@@ -211,6 +214,7 @@ public class AppContext : MonoBehaviour
             // ── 2. Firebase/Auth/Firestore ─────────────────────────────────────
             await authRepo.InitializeAsync();
             firestoreRepo.Initialize();
+            topicReviewRepository.Initialize();
 
             FirebaseFirestore firestoreDb = FirebaseFirestore.DefaultInstance;
 
@@ -319,7 +323,7 @@ public class AppContext : MonoBehaviour
             ImageStorage      = firebaseStorageRepo;
             ImageLocal        = imageLocalRepo;
             ImageSync         = imageSyncSvc;
-            TopicReview       = topicReviewManager;
+            TopicReview       = topicReview;
 
             IsReady = true;
             OnReady?.Invoke();
@@ -391,7 +395,8 @@ public class AppContext : MonoBehaviour
         IAvatarSelectionService           avatarSelection         = null,
         IFirebaseStorageImageRepository   imageStorage            = null,
         IImageLocalRepository             imageLocal              = null,
-        IImageSyncService                 imageSync               = null)
+        IImageSyncService                 imageSync               = null,
+        ITopicReviewManager               topicReview             = null)
     {
         if (firestore             != null) Firestore             = firestore;
         if (firestoreUsers        != null) FirestoreUsers        = firestoreUsers;
@@ -422,6 +427,7 @@ public class AppContext : MonoBehaviour
         if (imageStorage          != null) ImageStorage          = imageStorage;
         if (imageLocal            != null) ImageLocal            = imageLocal;
         if (imageSync             != null) ImageSync             = imageSync;
+        if (topicReview           != null) TopicReview          = topicReview;
 
         IsReady = true;
     }

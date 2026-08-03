@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Data;
+using UnityEditor;
 
 public class QuestionManager : MonoBehaviour
 {
@@ -22,7 +23,6 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionLoadManager loadManager;
     [SerializeField] private QuestionAnswerManager answerManager;
     [SerializeField] private QuestionScoreManager scoreManager;
-    [SerializeField] private TopicReviewManager reviewManagerComponent;
     private ITopicReviewManager topicReviewmanager;
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
@@ -43,7 +43,7 @@ public class QuestionManager : MonoBehaviour
     {
         _navigation = AppContext.Navigation;
         _sceneData = AppContext.SceneData;
-        topicReviewmanager = reviewManagerComponent;
+        topicReviewmanager = AppContext.TopicReview;
         if (!ValidateManagers())
         {
             Debug.LogError("Falha na validação dos managers necessários.");
@@ -108,6 +108,8 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError("QuestionManager: feedbackElements é null");
         if (transitionManager == null)
             Debug.LogError("QuestionManager: transitionManager é null");
+        if (topicReviewmanager == null)
+            Debug.LogError("QuestionManager: AppContext.TopicReview é null");
         return questionBottomBarManager != null &&
                questionUIManager        != null &&
                questionCanvasGroupManager != null &&
@@ -116,7 +118,8 @@ public class QuestionManager : MonoBehaviour
                answerManager            != null &&
                scoreManager             != null &&
                feedbackElements         != null &&
-               transitionManager        != null;
+               transitionManager        != null &&
+               topicReviewmanager       != null;
     }
 
     // -------------------------------------------------------
@@ -354,10 +357,11 @@ public class QuestionManager : MonoBehaviour
         {
             Debug.Log("Teste");
             string userId = UserDataStore.CurrentUserData?.UserId;
+            string topicId = "questoa1";
+            string globalId = "lipidios";
 
-            string topicfake = "lipidios";
-
-            topicReviewmanager.ScheduleNextRevision(userId,topicfake);
+            await topicReviewmanager.ScheduleNextRevision(userId, globalId, topicId);
+            Debug.Log("saiu");
 
             var envCfg = EnvironmentConfig.Load();
             if (envCfg != null && envCfg.QuestionPreviewMode)
