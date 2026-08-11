@@ -2461,239 +2461,239 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //             }
 //         },
 
-//         //QUESTION 076
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Um laboratório propõe identificar DNA apenas medindo absorvância a 260 nm. Qual avaliação é mais adequada?",
-//             answers = new string[]
-//             {
-//                 "A medida detecta ácidos nucleicos, mas exige controles para distinguir DNA de RNA",
-//                 "O método é totalmente específico para DNA",
-//                 "A medida identifica apenas proteínas",
-//                 "O método determina diretamente a sequência de bases"
-//             },
-//             correctIndex = 0,
-//             questionNumber = 76,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 3,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_076",
-//             topic = "nucleicAcids",
-//             subtopic = "nucleic_acid_methods",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Evaluate,
-//             conceptTags = new List<string>
-//             {
-//                 "absorbance",
-//                 "method_limitations"
-//             },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "A absorbância a 260 nm é produzida pelas bases dos ácidos nucleicos, tanto de DNA quanto de RNA. Assim, uma leitura elevada confirma material que absorve nessa faixa, mas não distingue sozinha as duas moléculas. Avalie a proposta considerando especificidade, possíveis contaminantes e necessidade de controles adicionais.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //QUESTION 076
+        new Question
+        {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "",
+            answers = new string[]
+            {
+                "A medida detecta ácidos nucleicos, mas exige controles para distinguir DNA de RNA",
+                "O método é totalmente específico para DNA",
+                "A medida identifica apenas proteínas",
+                "O método determina diretamente a sequência de bases"
+            },
+            correctIndex = 0,
+            questionNumber = 76,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer76",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_076",
+            topic = "nucleicAcids",
+            subtopic = "nucleic_acid_methods",
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string>
+            {
+                "absorbance",
+                "method_limitations"
+            },
+            prerequisites = null,
+            questionHint = new QuestionHint
+            {
+                text = "A absorbância a 260 nm é produzida pelas bases dos ácidos nucleicos, tanto de DNA quanto de RNA. Assim, uma leitura elevada confirma material que absorve nessa faixa, mas não distingue sozinha as duas moléculas. Avalie a proposta considerando especificidade, possíveis contaminantes e necessidade de controles adicionais.",
+                imagePath = null,
+                videoUrl = null,
+                link = null
+            }
+        },
 
-//         //QUESTION 077
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Para armazenar informação genética por longo prazo, um pesquisador escolheria DNA em vez de RNA. Qual justificativa é cientificamente mais sólida?",
-//             answers = new string[]
-//             {
-//                 "O DNA é sempre fita simples",
-//                 "O DNA não possui fosfato",
-//                 "A desoxirribose favorece maior estabilidade química",
-//                 "O RNA não contém bases nitrogenadas"
-//             },
-//             correctIndex = 2,
-//             questionNumber = 77,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 3,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_077",
-//             topic = "nucleicAcids",
-//             subtopic = "dna_stability",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Evaluate,
-//             conceptTags = new List<string>
-//             {
-//                 "deoxyribose",
-//                 "information_storage"
-//             },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "A diferença decisiva está no carbono 2' da pentose. O RNA possui uma hidroxila que favorece reações de hidrólise do esqueleto, enquanto o DNA tem hidrogênio nessa posição e é quimicamente menos reativo. Julgue as justificativas pela relação causal entre estrutura do açúcar e conservação prolongada.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //QUESTION 077
+        new Question
+        {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "",
+            answers = new string[]
+            {
+                "O DNA é sempre fita simples",
+                "O DNA não possui fosfato",
+                "A desoxirribose favorece maior estabilidade química",
+                "O RNA não contém bases nitrogenadas"
+            },
+            correctIndex = 2,
+            questionNumber = 77,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer77",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_077",
+            topic = "nucleicAcids",
+            subtopic = "dna_stability",
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string>
+            {
+                "deoxyribose",
+                "information_storage"
+            },
+            prerequisites = null,
+            questionHint = new QuestionHint
+            {
+                text = "A diferença decisiva está no carbono 2' da pentose. O RNA possui uma hidroxila que favorece reações de hidrólise do esqueleto, enquanto o DNA tem hidrogênio nessa posição e é quimicamente menos reativo. Julgue as justificativas pela relação causal entre estrutura do açúcar e conservação prolongada.",
+                imagePath = null,
+                videoUrl = null,
+                link = null
+            }
+        },
 
-//         //QUESTION 078
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Um aluno afirma que maior conteúdo de GC torna o DNA menos estável. Como avaliar essa afirmação?",
-//             answers = new string[]
-//             {
-//                 "Correta, pois G-C forma uma ligação de hidrogênio",
-//                 "Correta, pois GC elimina fosfatos",
-//                 "Incorreta, pois composição não influencia desnaturação",
-//                 "Incorreta, pois pares G-C geralmente aumentam a estabilidade da dupla hélice"
-//             },
-//             correctIndex = 3,
-//             questionNumber = 78,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 3,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_078",
-//             topic = "nucleicAcids",
-//             subtopic = "dna_stability",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Evaluate,
-//             conceptTags = new List<string>
-//             {
-//                 "gc_content",
-//                 "critical_reasoning"
-//             },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Avalie a afirmação comparando as interações dos pares: G–C estabelece três ligações de hidrogênio e A–T, duas. Em condições comparáveis, aumentar GC costuma elevar a temperatura necessária para separar as fitas. A alternativa defensável deve corrigir o sentido da afirmação e apresentar uma justificativa estrutural coerente.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //QUESTION 078
+        new Question
+        {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "",
+            answers = new string[]
+            {
+                "Correta, pois G-C forma uma ligação de hidrogênio",
+                "Correta, pois GC elimina fosfatos",
+                "Incorreta, pois composição não influencia desnaturação",
+                "Incorreta, pois pares G-C geralmente aumentam a estabilidade da dupla hélice"
+            },
+            correctIndex = 3,
+            questionNumber = 78,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer78",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_078",
+            topic = "nucleicAcids",
+            subtopic = "dna_stability",
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string>
+            {
+                "gc_content",
+                "critical_reasoning"
+            },
+            prerequisites = null,
+            questionHint = new QuestionHint
+            {
+                text = "Avalie a afirmação comparando as interações dos pares: G–C estabelece três ligações de hidrogênio e A–T, duas. Em condições comparáveis, aumentar GC costuma elevar a temperatura necessária para separar as fitas. A alternativa defensável deve corrigir o sentido da afirmação e apresentar uma justificativa estrutural coerente.",
+                imagePath = null,
+                videoUrl = null,
+                link = null
+            }
+        },
 
-//         //QUESTION 079
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Uma equipe usa apenas a presença de uracila para concluir que uma amostra é RNA. Qual limitação deve ser considerada?",
-//             answers = new string[]
-//             {
-//                 "Uracila prova que a amostra é proteína",
-//                 "Uracila é um forte indício, mas a identificação deve combinar outros dados estruturais",
-//                 "Todo DNA contém grande quantidade de uracila",
-//                 "RNA nunca contém uracila"
-//             },
-//             correctIndex = 1,
-//             questionNumber = 79,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 3,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_079",
-//             topic = "nucleicAcids",
-//             subtopic = "dna_rna_identification",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Evaluate,
-//             conceptTags = new List<string>
-//             {
-//                 "uracil",
-//                 "evidence_evaluation"
-//             },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Uracila é característica importante do RNA celular típico, mas uma conclusão robusta não deve depender de um único marcador. Considere possíveis modificações, contaminações ou misturas e procure evidências adicionais, como tipo de pentose e sensibilidade a enzimas específicas. Escolha a avaliação que reconhece o indício sem tratá-lo como prova absoluta.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //QUESTION 079
+        new Question
+        {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "",
+            answers = new string[]
+            {
+                "Uracila prova que a amostra é proteína",
+                "Uracila é um forte indício, mas a identificação deve combinar outros dados estruturais",
+                "Todo DNA contém grande quantidade de uracila",
+                "RNA nunca contém uracila"
+            },
+            correctIndex = 1,
+            questionNumber = 79,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer79",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_079",
+            topic = "nucleicAcids",
+            subtopic = "dna_rna_identification",
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string>
+            {
+                "uracil",
+                "evidence_evaluation"
+            },
+            prerequisites = null,
+            questionHint = new QuestionHint
+            {
+                text = "Uracila é característica importante do RNA celular típico, mas uma conclusão robusta não deve depender de um único marcador. Considere possíveis modificações, contaminações ou misturas e procure evidências adicionais, como tipo de pentose e sensibilidade a enzimas específicas. Escolha a avaliação que reconhece o indício sem tratá-lo como prova absoluta.",
+                imagePath = null,
+                videoUrl = null,
+                link = null
+            }
+        },
 
-//         //QUESTION 080
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Qual estratégia oferece evidência mais convincente de que duas fitas de DNA são complementares?",
-//             answers = new string[]
-//             {
-//                 "Comparar apenas o comprimento",
-//                 "Medir somente a massa total",
-//                 "Verificar pareamento A-T e G-C em posições correspondentes",
-//                 "Confirmar que ambas contêm ribose"
-//             },
-//             correctIndex = 2,
-//             questionNumber = 80,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 3,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_080",
-//             topic = "nucleicAcids",
-//             subtopic = "base_pairing",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Evaluate,
-//             conceptTags = new List<string>
-//             {
-//                 "complementarity",
-//                 "evidence"
-//             },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Complementaridade exige correspondência posição por posição, não apenas igualdade de comprimento ou composição global. Alinhe as fitas em sentidos antiparalelos e verifique se cada adenina corresponde a timina e cada guanina a citosina. A melhor evidência deve testar diretamente essa previsão do pareamento canônico ao longo das sequências.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //QUESTION 080
+        new Question
+        {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "",
+            answers = new string[]
+            {
+                "Comparar apenas o comprimento",
+                "Medir somente a massa total",
+                "Verificar pareamento A-T e G-C em posições correspondentes",
+                "Confirmar que ambas contêm ribose"
+            },
+            correctIndex = 2,
+            questionNumber = 80,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer80",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_080",
+            topic = "nucleicAcids",
+            subtopic = "base_pairing",
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string>
+            {
+                "complementarity",
+                "evidence"
+            },
+            prerequisites = null,
+            questionHint = new QuestionHint
+            {
+                text = "Complementaridade exige correspondência posição por posição, não apenas igualdade de comprimento ou composição global. Alinhe as fitas em sentidos antiparalelos e verifique se cada adenina corresponde a timina e cada guanina a citosina. A melhor evidência deve testar diretamente essa previsão do pareamento canônico ao longo das sequências.",
+                imagePath = null,
+                videoUrl = null,
+                link = null
+            }
+        },
 
-//         //QUESTION 081
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Um modelo didático representa as duas fitas de DNA paralelas no mesmo sentido. Qual julgamento é adequado?",
-//             answers = new string[]
-//             {
-//                 "O modelo é correto para qualquer DNA",
-//                 "O modelo deve ser corrigido, pois as fitas da dupla hélice são antiparalelas",
-//                 "O sentido das fitas depende da quantidade de uracila",
-//                 "A orientação não se relaciona à estrutura"
-//             },
-//             correctIndex = 1,
-//             questionNumber = 81,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 3,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_081",
-//             topic = "nucleicAcids",
-//             subtopic = "dna_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Evaluate,
-//             conceptTags = new List<string>
-//             {
-//                 "antiparallelism",
-//                 "model_evaluation"
-//             },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Na dupla hélice, as ligações fosfodiéster conferem uma direção 5'→3' a cada fita, mas as duas direções são opostas. Um modelo que as mostra paralelas no mesmo sentido representa incorretamente a geometria do DNA. Julgue-o pela orientação dos esqueletos, não apenas pelo aspecto helicoidal.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //QUESTION 081
+        new Question
+        {
+            questionDatabankName = "NucleicAcidsQuestionDatabase",
+            questionText = "",
+            answers = new string[]
+            {
+                "O modelo é correto para qualquer DNA",
+                "O modelo deve ser corrigido, pois as fitas da dupla hélice são antiparalelas",
+                "O sentido das fitas depende da quantidade de uracila",
+                "A orientação não se relaciona à estrutura"
+            },
+            correctIndex = 1,
+            questionNumber = 81,
+            answerType = AnswerType.Text,
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer81",
+            questionLevel = 3,
+            questionInDevelopment = false,
+            globalId = "nucleicAcids_081",
+            topic = "nucleicAcids",
+            subtopic = "dna_structure",
+            displayName = "Ácidos Nucleicos",
+            bloomLevel = BloomLevel.Evaluate,
+            conceptTags = new List<string>
+            {
+                "antiparallelism",
+                "model_evaluation"
+            },
+            prerequisites = null,
+            questionHint = new QuestionHint
+            {
+                text = "Na dupla hélice, as ligações fosfodiéster conferem uma direção 5'→3' a cada fita, mas as duas direções são opostas. Um modelo que as mostra paralelas no mesmo sentido representa incorretamente a geometria do DNA. Julgue-o pela orientação dos esqueletos, não apenas pelo aspecto helicoidal.",
+                imagePath = null,
+                videoUrl = null,
+                link = null
+            }
+        },
 
         //QUESTION 082
         new Question
@@ -2738,7 +2738,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Um estudante diz que o RNAt determina sozinho a ordem dos aminoácidos. Qual avaliação é mais precisa?",
+            questionText = "",
             answers = new string[]
             {
                 "Correta, pois o RNAt armazena o gene",
@@ -2749,8 +2749,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 3,
             questionNumber = 83,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer83",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_083",
@@ -2778,7 +2778,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Qual explicação melhor sustenta o uso de ATP como fonte imediata de energia celular?",
+            questionText = "",
             answers = new string[]
             {
                 "Ele substitui permanentemente o DNA",
@@ -2789,8 +2789,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 1,
             questionNumber = 84,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer84",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_084",
@@ -2817,7 +2817,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Uma análise conclui que uma molécula é nucleotídeo porque contém apenas açúcar e base. Como avaliar a conclusão?",
+            questionText = "",
             answers = new string[]
             {
                 "Correta, pois fosfato é opcional",
@@ -2828,8 +2828,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 3,
             questionNumber = 85,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer85",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_085",
@@ -2857,7 +2857,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Dois métodos estimam concentração de DNA: absorvância a 260 nm e um ensaio fluorescente específico. Qual escolha é mais defensável em amostra contaminada com RNA?",
+            questionText = "",
             answers = new string[]
             {
                 "Usar apenas A260, que distingue perfeitamente DNA de RNA",
@@ -2868,8 +2868,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 2,
             questionNumber = 86,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer86",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_086",
@@ -2896,7 +2896,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Um livro afirma que todas as moléculas de RNA têm apenas função intermediária. Qual crítica é mais adequada?",
+            questionText = "",
             answers = new string[]
             {
                 "A afirmação é ampla demais, pois RNAr, RNAt e RNAs catalíticos exercem outras funções",
@@ -2907,8 +2907,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 0,
             questionNumber = 87,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer87",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_087",
@@ -2935,7 +2935,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Qual evidência melhor apoia que uma amostra sofreu desnaturação, mas não degradação completa?",
+            questionText = "",
             answers = new string[]
             {
                 "Desaparecimento irreversível de todos os nucleotídeos",
@@ -2946,8 +2946,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 2,
             questionNumber = 88,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer88",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_088",
@@ -2974,7 +2974,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Um pesquisador propõe usar RNA para arquivo genético muito duradouro sem proteção adicional. Qual avaliação é mais adequada?",
+            questionText = "",
             answers = new string[]
             {
                 "A escolha é questionável porque o grupo 2'-OH aumenta a suscetibilidade à hidrólise",
@@ -2985,8 +2985,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 0,
             questionNumber = 89,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer89",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_089",
@@ -3013,7 +3013,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
         new Question
         {
             questionDatabankName = "NucleicAcidsQuestionDatabase",
-            questionText = "Para explicar a fidelidade da replicação, qual argumento é mais completo?",
+            questionText = "",
             answers = new string[]
             {
                 "A replicação é fiel apenas porque DNA contém fosfato",
@@ -3024,8 +3024,8 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
             correctIndex = 1,
             questionNumber = 90,
             answerType = AnswerType.Text,
-            questionType = QuestionType.Text,
-            questionImagePath = "",
+            questionType = QuestionType.Image,
+            questionImagePath = "QuestionImages/NucleicAcidsDB/NucleicAcidsDB_ImageQuestionContainer90",
             questionLevel = 3,
             questionInDevelopment = false,
             globalId = "nucleicAcids_090",
