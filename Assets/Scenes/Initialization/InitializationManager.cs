@@ -206,9 +206,21 @@ public class InitializationManager : MonoBehaviour
 
         try
         {
-            await WithTimeout(_auth.ReloadCurrentUserAsync(), 8000, "Validação da sessão Firebase excedeu o tempo limite.");
+            await WithTimeout(_auth.CheckAuthenticationStatus(), 8000, "Validação da sessão Firebase excedeu o tempo limite.");
             Debug.Log("[InitializationManager] Sessão validada com o servidor.");
             return true;
+        }
+        catch (FirebaseEnvironmentMismatchException e)
+        {
+            Debug.LogWarning($"[InitializationManager] Sessão pertence a outro ambiente: {e.Message}");
+            ClearInvalidSessionIdentity();
+            return false;
+        }
+        catch (Firebase.FirebaseException e) when (IsDefinitivelyInvalidSession(e))
+        {
+            Debug.LogWarning($"[InitializationManager] Sessão Firebase inválida; novo login necessário: {e.Message}");
+            ClearInvalidSessionIdentity();
+            return false;
         }
         catch (Exception e)
         {
@@ -235,6 +247,33 @@ public class InitializationManager : MonoBehaviour
             Debug.LogWarning("[InitializationManager] Sessão não validada online e sem UserData local. Indo para LoginView sem limpar a sessão Firebase.");
             return false;
         }
+    }
+
+    private static bool IsDefinitivelyInvalidSession(Firebase.FirebaseException exception)
+    {
+        var authError = (AuthError)exception.ErrorCode;
+        return authError == AuthError.InvalidUserToken
+            || authError == AuthError.UserTokenExpired
+            || authError == AuthError.UserDisabled
+            || authError == AuthError.UserNotFound;
+    }
+
+    private static void ClearInvalidSessionIdentity()
+    {
+        try
+        {
+            FirebaseAuth.DefaultInstance.SignOut();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Falha ao encerrar sessão inválida: {e.Message}");
+        }
+
+        UserDataStore.CurrentUserData = null;
+        PlayerPrefs.DeleteKey("UserId");
+        PlayerPrefs.DeleteKey("UserEmail");
+        PlayerPrefs.DeleteKey("UserNickname");
+        PlayerPrefs.Save();
     }
 
     private async Task<bool> WaitForLocalSessionRestore(int timeoutMillis)

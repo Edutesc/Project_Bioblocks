@@ -25,6 +25,7 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     private IFirestoreQuestionRepository _firestore;
     private IQuestionLocalRepository     _local;
     private IImageSyncService            _imageSync;
+    private IAuthGate                    _authGate;
 
     private bool _authListenerRegistered;
 
@@ -51,11 +52,13 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
     public void InjectDependencies(
         IFirestoreQuestionRepository firestore,
         IQuestionLocalRepository     local,
-        IImageSyncService            imageSync = null)
+        IImageSyncService            imageSync = null,
+        IAuthGate                    authGate = null)
     {
         _firestore = firestore;
         _local     = local;
         _imageSync = imageSync;
+        _authGate  = authGate;
     }
 
     public void RegisterAuthListener()
@@ -81,6 +84,17 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
 
         if (auth.CurrentUser == null)
             return;
+
+        try
+        {
+            if (_authGate != null)
+                await _authGate.WaitForAuthenticatedAsync();
+        }
+        catch (Exception authError)
+        {
+            Debug.LogWarning($"[QuestionSyncService] Auth ainda não está pronta; sync adiado: {authError.Message}");
+            return;
+        }
 
         // Se já existe cache válido, não precisamos disparar outra sincronização.
         // A chamada a _local passa pelo LiteDBManager e será serializada com as
@@ -135,6 +149,23 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         try
         {
             bool hasCache = _local.HasAnyQuestions();
+
+            if (_authGate != null)
+            {
+                try
+                {
+                    await _authGate.WaitForAuthenticatedAsync();
+                }
+                catch (Exception authError)
+                {
+                    IsCacheReady = hasCache;
+                    Debug.LogWarning(
+                        $"[QuestionSyncService] Sessão remota indisponível; " +
+                        $"usando cache local={hasCache}: {authError.Message}"
+                    );
+                    return IsCacheReady;
+                }
+            }
 
             if (!hasCache)
             {

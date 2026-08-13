@@ -11,6 +11,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     private IFirestoreUserRepository     _usersRemote;
     private INicknameRepository          _nicknames;
     private IUserRealtimeListenerService _userRealtimeListeners;
+    private IAuthGate _authGate;
 
     private bool isInitialized;
 
@@ -39,11 +40,13 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     public void InjectDependencies(
         IFirestoreUserRepository usersRemote,
         INicknameRepository nicknames,
-        IUserRealtimeListenerService userRealtimeListeners = null)
+        IUserRealtimeListenerService userRealtimeListeners = null,
+        IAuthGate authGate = null)
     {
         _usersRemote = usersRemote ?? throw new ArgumentNullException(nameof(usersRemote));
         _nicknames = nicknames ?? throw new ArgumentNullException(nameof(nicknames));
         _userRealtimeListeners = userRealtimeListeners;
+        _authGate = authGate;
     }
 
     public async Task InitializeAsync()
@@ -105,7 +108,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
         try
         {
-            var result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+            var result = await SignInWithEnvironmentRecoveryAsync(email, password);
 
             if (result?.User == null)
                 throw new Exception("Login falhou: resultado ou usuário nulo.");
@@ -125,6 +128,47 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
             Debug.LogError($"[AuthRepository] Exception during login:\n {e}");
             throw;
         }
+    }
+
+    private async Task<AuthResult> SignInWithEnvironmentRecoveryAsync(
+        string email,
+        string password)
+    {
+        var result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+
+        if (result?.User == null || _authGate == null)
+            return result;
+
+        try
+        {
+            await _authGate.WaitForAuthenticatedAsync();
+            return result;
+        }
+        catch (FirebaseEnvironmentMismatchException e)
+        {
+            Debug.LogWarning(
+                $"[AuthRepository] Sessão de outro ambiente detectada durante login. " +
+                $"Limpando e repetindo autenticação uma vez: {e.Message}"
+            );
+
+            ClearIncompatibleIdentity();
+            result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+
+            if (result?.User != null)
+                await _authGate.WaitForAuthenticatedAsync();
+
+            return result;
+        }
+    }
+
+    private void ClearIncompatibleIdentity()
+    {
+        _auth.SignOut();
+        UserDataStore.CurrentUserData = null;
+        PlayerPrefs.DeleteKey("UserId");
+        PlayerPrefs.DeleteKey("UserEmail");
+        PlayerPrefs.DeleteKey("UserNickname");
+        PlayerPrefs.Save();
     }
 
     public async Task<UserData> RegisterUserAsync(
@@ -148,10 +192,22 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
             if (result?.User == null)
                 throw new Exception("Registro falhou: resultado ou usuário nulo.");
 
-            string token = await result.User.TokenAsync(forceRefresh: true);
-
-            if (string.IsNullOrWhiteSpace(token))
-                throw new Exception("Token vazio após criação do usuário.");
+            if (_authGate != null)
+            {
+                try
+                {
+                    await _authGate.WaitForAuthenticatedAsync();
+                }
+                catch (FirebaseEnvironmentMismatchException)
+                {
+                    // A conta pode já ter sido criada antes de detectarmos o
+                    // token legado. Não repetimos CreateUser; limpamos a sessão
+                    // incompatível e autenticamos a conta recém-criada.
+                    ClearIncompatibleIdentity();
+                    result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
+                    await _authGate.WaitForAuthenticatedAsync();
+                }
+            }
 
             var user = new UserData
             {
@@ -230,12 +286,18 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
             await user.ReloadAsync();
 
-            string token = await user.TokenAsync(true);
+            if (_authGate != null)
+            {
+                await _authGate.WaitForAuthenticatedAsync();
+            }
+            else
+            {
+                string token = await user.TokenAsync(false);
+                if (string.IsNullOrEmpty(token))
+                    throw new ReauthenticationRequiredException("Token inválido.");
+            }
 
-            if (string.IsNullOrEmpty(token))
-                throw new ReauthenticationRequiredException("Token inválido.");
-
-            Debug.Log("[AuthRepository] Token atualizado com sucesso");
+            Debug.Log("[AuthRepository] Sessão Firebase validada com sucesso");
         }
         catch (Firebase.FirebaseException e) when (IsRecentAuthenticationRequired(e))
         {
