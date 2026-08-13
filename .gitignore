@@ -54,6 +54,7 @@ Assets/ExternalDependencyManager/**
 .DS_Store*
 Thumbs.db
 Desktop.ini
+Assets/Resources/EnvironmentConfig.asset
 
 # ===========================
 # iOS / tvOS Libraries
