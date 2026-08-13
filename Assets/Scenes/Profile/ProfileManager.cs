@@ -375,6 +375,12 @@ public class ProfileManager : MonoBehaviour
     private static bool SessionStillBelongsTo(string expectedUserId)
     {
         string activeUserId = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+
+        // Em modo offline o Firebase pode ainda não ter restaurado CurrentUser;
+        // nesse caso a sessão local explícita é a autoridade para permitir logout.
+        if (string.IsNullOrEmpty(activeUserId))
+            activeUserId = UserDataStore.CurrentUserData?.UserId;
+
         return !string.IsNullOrEmpty(expectedUserId)
             && string.Equals(activeUserId, expectedUserId, StringComparison.Ordinal);
     }
@@ -396,10 +402,7 @@ public class ProfileManager : MonoBehaviour
     {
         try
         {
-            PlayerPrefs.DeleteKey("UserId");
-            PlayerPrefs.DeleteKey("UserEmail");
-            PlayerPrefs.DeleteKey("UserNickname");
-            PlayerPrefs.Save();
+            LocalSessionState.MarkSignedOut();
         }
         catch (Exception e)
         {

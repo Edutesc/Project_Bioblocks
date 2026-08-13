@@ -150,6 +150,16 @@ public class QuestionSyncService : MonoBehaviour, IQuestionSyncService
         {
             bool hasCache = _local.HasAnyQuestions();
 
+            // No bootstrap offline-first não esperamos indefinidamente o AuthGate.
+            // O listener de StateChanged retomará a atualização remota assim que
+            // o Firebase restaurar uma identidade válida.
+            if (Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser == null)
+            {
+                IsCacheReady = hasCache;
+                Debug.Log($"[QuestionSyncService] Sessão Firebase em restauração — bootstrap liberado com cache local={hasCache}.");
+                return IsCacheReady;
+            }
+
             if (_authGate != null)
             {
                 try

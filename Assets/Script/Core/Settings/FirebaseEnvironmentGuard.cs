@@ -16,6 +16,7 @@ public static class FirebaseEnvironmentGuard
         "UserId",
         "UserEmail",
         "UserNickname",
+        LocalSessionState.ActiveKey,
         "QuestionCache_Version",
         "RankingCache_LastSyncUtcTicks"
     };

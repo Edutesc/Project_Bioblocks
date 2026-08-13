@@ -165,10 +165,7 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
     {
         _auth.SignOut();
         UserDataStore.CurrentUserData = null;
-        PlayerPrefs.DeleteKey("UserId");
-        PlayerPrefs.DeleteKey("UserEmail");
-        PlayerPrefs.DeleteKey("UserNickname");
-        PlayerPrefs.Save();
+        LocalSessionState.MarkSignedOut();
     }
 
     public async Task<UserData> RegisterUserAsync(
@@ -273,11 +270,28 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
 
         try
         {
+            string userId = CurrentUserId;
+
             _userRealtimeListeners?.StopListening();
             AppContext.UserRealtimeListeners?.StopListening();
 
             _auth.SignOut();
             UserDataStore.CurrentUserData = null;
+            LocalSessionState.MarkSignedOut();
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                try
+                {
+                    AppContext.UserDataLocal?.DeleteUser(userId);
+                }
+                catch (Exception cacheError)
+                {
+                    // A identidade já foi invalidada; uma falha de limpeza do
+                    // cache não pode transformar um logout concluído em erro.
+                    Debug.LogWarning($"[AuthRepository] Sessão encerrada, mas o cache do usuário não pôde ser removido: {cacheError.Message}");
+                }
+            }
 
             await Task.CompletedTask;
 
