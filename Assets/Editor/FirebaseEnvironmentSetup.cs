@@ -177,4 +177,51 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
 
         EditorUtility.DisplayDialog("Firebase Setup Validation", message, "OK");
     }
+
+    [MenuItem("BioBlocks/Reset Local Data For Current Firebase Environment")]
+    public static void ResetLocalDataForCurrentEnvironmentMenu()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            EditorUtility.DisplayDialog(
+                "Pare o Play Mode",
+                "A redefinição deve ser executada fora do Play Mode para garantir que o LiteDB esteja fechado.",
+                "OK"
+            );
+            return;
+        }
+
+        var cfg = EnvironmentConfig.Load();
+        if (cfg == null)
+        {
+            EditorUtility.DisplayDialog("Erro", "EnvironmentConfig não encontrado.", "OK");
+            return;
+        }
+
+        bool confirmed = EditorUtility.DisplayDialog(
+            "Redefinir dados locais?",
+            $"Isto encerrará a sessão e removerá LiteDB, cache de imagens e dados locais de usuário.\n\n" +
+            $"Ambiente que permanecerá ativo: {cfg.FirebaseEnvironment}",
+            "Redefinir",
+            "Cancelar"
+        );
+
+        if (!confirmed)
+            return;
+
+        try
+        {
+            FirebaseEnvironmentGuard.ResetCurrentEnvironment(cfg.FirebaseEnvironment);
+            EditorUtility.DisplayDialog(
+                "Dados redefinidos",
+                $"Dados locais removidos. O ambiente {cfg.FirebaseEnvironment} continua ativo.",
+                "OK"
+            );
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[FirebaseEnvironmentSetup] Falha ao redefinir dados locais: {e}");
+            EditorUtility.DisplayDialog("Erro", e.Message, "OK");
+        }
+    }
 }

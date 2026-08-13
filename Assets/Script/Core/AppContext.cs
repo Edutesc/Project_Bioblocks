@@ -131,6 +131,10 @@ public class AppContext : MonoBehaviour
 
             Debug.Log("[AppContext] Firebase disponível.");
 
+            // Sessao e caches pertencem ao projeto Firebase que os criou.
+            // A protecao roda antes da abertura do LiteDB e do uso de Auth.
+            FirebaseEnvironmentGuard.Apply(envCfg.FirebaseEnvironment);
+
             // ── 0. App Check — deve ser o primeiro serviço inicializado ───────────
             Debug.Log("AppCheck IN");
 
