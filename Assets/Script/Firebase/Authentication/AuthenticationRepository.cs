@@ -224,7 +224,34 @@ public class AuthenticationRepository : MonoBehaviour, IAuthRepository
                 AnsweredQuestions = new Dictionary<string, List<int>>()
             };
 
-            await _usersRemote.CreateUserDocument(user);
+            try
+            {
+                await _usersRemote.CreateUserDocument(user);
+            }
+            catch
+            {
+                // Não deixa uma conta Auth sem Users/{uid}. Como a conta acabou
+                // de ser criada, DeleteAsync atende ao requisito de login recente.
+                try
+                {
+                    if (_auth.CurrentUser?.UserId == user.UserId)
+                        await _auth.CurrentUser.DeleteAsync();
+
+                    Debug.LogWarning(
+                        $"[AuthRepository] Registro revertido: conta Auth {user.UserId} " +
+                        "removida após falha ao criar Users/{uid}."
+                    );
+                }
+                catch (Exception rollbackError)
+                {
+                    Debug.LogError(
+                        $"[AuthRepository] Falha ao reverter conta Auth órfã " +
+                        $"{user.UserId}: {rollbackError.Message}"
+                    );
+                }
+
+                throw;
+            }
 
             // Mantém o comportamento antigo do FirestoreRepository.CreateUserDocument:
             // além de criar Users/{userId}, também reserva Nicknames/{nickName}.

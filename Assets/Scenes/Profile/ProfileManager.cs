@@ -43,6 +43,8 @@ public class ProfileManager : MonoBehaviour
 
     private UserData currentUserData;
     private bool firestoreDeleted = false;
+    private bool _isLoggingOut;
+    private readonly Dictionary<Selectable, bool> _logoutInteractableStates = new();
 
     // -------------------------------------------------------
     // Ciclo de vida
@@ -53,7 +55,9 @@ public class ProfileManager : MonoBehaviour
         _auth         = AppContext.Auth;
         _statistics   = AppContext.Statistics;
         _navigation   = AppContext.Navigation;
-     //   loadingSpinner = LoadingSpinnerComponent.Instance;
+        loadingSpinner = FindFirstObjectByType<LoadingSpinnerComponent>(
+            FindObjectsInactive.Include
+        );
 
         if (deleteAccountPanel == null)
             Debug.LogError("DeleteAccountPanel não está atribuído no ProfileManager!");
@@ -236,18 +240,49 @@ public class ProfileManager : MonoBehaviour
     // -------------------------------------------------------
     // Logout
     // -------------------------------------------------------
-    public void LogoutButton()
+    public async void LogoutButton()
     {
-        StartCoroutine(LogoutAsync().AsCoroutine());
+        if (_isLoggingOut)
+            return;
+
+        _isLoggingOut = true;
+
+        // Fecha o modal antes de bloquear a cena, pois HideMenu reabilita os
+        // Selectables que o HalfView havia desativado.
+        _halfView?.HideMenu();
+        SetLogoutUiBlocked(true);
+
+        try
+        {
+            bool completed = await LogoutAsync();
+            if (!completed)
+            {
+                _isLoggingOut = false;
+                SetLogoutUiBlocked(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[ProfileManager] Logout falhou: {ex.Message}");
+            _isLoggingOut = false;
+            SetLogoutUiBlocked(false);
+        }
     }
 
-    public async Task LogoutAsync()
+    public async Task<bool> LogoutAsync()
     {
         try
         {
             UserDataStore.OnUserDataChanged -= OnUserDataChanged;
             AnsweredQuestionsManager.OnAnsweredQuestionsUpdated -= HandleAnsweredQuestionsUpdated;
-            string currentUserId = UserDataStore.CurrentUserData?.UserId;
+            string currentUserId = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser?.UserId
+                ?? UserDataStore.CurrentUserData?.UserId;
+
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                Debug.LogWarning("[ProfileManager] Logout ignorado: nenhuma sessão ativa.");
+                return false;
+            }
 
             // Sincroniza tudo que estiver pendente antes de limpar
             if (!string.IsNullOrEmpty(currentUserId) &&
@@ -267,6 +302,18 @@ public class ProfileManager : MonoBehaviour
                 }
             }
 
+            // O await acima permite troca de cena e até um novo login/registro.
+            // Um logout iniciado pelo usuário A nunca pode encerrar ou limpar a
+            // sessão do usuário B que tenha sido criada enquanto aguardávamos.
+            if (!SessionStillBelongsTo(currentUserId))
+            {
+                Debug.LogWarning(
+                    $"[ProfileManager] Logout obsoleto para {currentUserId} cancelado: " +
+                    "a sessão ativa mudou durante a sincronização."
+                );
+                return false;
+            }
+
             if (!string.IsNullOrEmpty(currentUserId))
             {
                 ClearLocalUserData(currentUserId);
@@ -280,12 +327,56 @@ public class ProfileManager : MonoBehaviour
             await _auth.LogoutAsync();
             Debug.Log("Logout realizado com sucesso");
             Navigate("LoginView");
+            return true;
         }
         catch (Exception ex)
         {
             Debug.LogError($"Erro ao realizar logout: {ex.Message}");
             throw;
         }
+    }
+
+    private void SetLogoutUiBlocked(bool blocked)
+    {
+        if (blocked)
+        {
+            _logoutInteractableStates.Clear();
+
+            Selectable[] selectables = FindObjectsByType<Selectable>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.InstanceID
+            );
+
+            foreach (Selectable selectable in selectables)
+            {
+                if (selectable == null)
+                    continue;
+
+                _logoutInteractableStates[selectable] = selectable.interactable;
+                selectable.interactable = false;
+            }
+
+            loadingSpinner?.SetMessage("Saindo da conta...");
+            loadingSpinner?.ShowSpinner();
+            return;
+        }
+
+        loadingSpinner?.HideSpinner();
+
+        foreach (var entry in _logoutInteractableStates)
+        {
+            if (entry.Key != null)
+                entry.Key.interactable = entry.Value;
+        }
+
+        _logoutInteractableStates.Clear();
+    }
+
+    private static bool SessionStillBelongsTo(string expectedUserId)
+    {
+        string activeUserId = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+        return !string.IsNullOrEmpty(expectedUserId)
+            && string.Equals(activeUserId, expectedUserId, StringComparison.Ordinal);
     }
 
     private void ClearLocalUserData(string userId)
