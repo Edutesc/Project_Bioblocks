@@ -2,6 +2,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Claims atribuídas exclusivamente pelo Admin SDK. Nunca confiar em um
+    // campo gravado pelo próprio usuário em /Users para autorização.
+    function isDeveloper() {
+      return isSignedIn()
+        && (request.auth.token.developer == true
+          || request.auth.token.admin == true);
+    }
+
     // ────────────────────────────────────────────────────────────
     // Users — documento principal do jogador.
     // Cada usuário só pode ler/escrever o seu próprio.
@@ -89,6 +101,32 @@ service cloud.firestore {
     match /Config/{docId} {
       allow read: if request.auth != null;
       allow write: if false;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Assessments — configuração criada pelo Admin SDK/createAssessments.
+    // Jogadores autenticados podem ler. Escrita pelo cliente é exclusiva de
+    // contas com custom claim developer=true ou admin=true.
+    //
+    // Attempts — tentativas por avaliação.
+    // Jogadores criam/leem apenas as próprias. Desenvolvedores podem executar
+    // qualquer leitura ou escrita para construir, testar e dar suporte ao fluxo.
+    // ─────────────────────────────────────────────────────────────
+    match /Assessments/{assessmentId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isDeveloper();
+
+      match /Attempts/{attemptId} {
+        allow create: if isDeveloper()
+          || (isSignedIn()
+            && request.resource.data.userId == request.auth.uid
+            && request.resource.data.assessmentId == assessmentId);
+
+        allow read: if isDeveloper()
+          || (isSignedIn() && resource.data.userId == request.auth.uid);
+
+        allow update, delete: if isDeveloper();
+      }
     }
 
     // Catch-all — bloqueia qualquer coleção não listada acima.
