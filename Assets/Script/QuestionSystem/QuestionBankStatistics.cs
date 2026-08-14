@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using QuestionSystem;
 
 /// <summary>
 /// Gerencia estatísticas dos bancos de questões, incluindo contagem por nível
@@ -109,6 +111,27 @@ public static class QuestionBankStatistics
     {
         int totalQuestions = GetTotalQuestions(databaseName);
         return totalQuestions > 0 && answeredCount >= totalQuestions;
+    }
+
+    public static bool AreAllQuestionsAnswered(
+        IEnumerable<Question> questions,
+        IEnumerable<string> answeredQuestionIds)
+    {
+        HashSet<string> availableQuestionIds = new HashSet<string>(
+            questions?
+                .Where(question => question != null && !question.questionInDevelopment)
+                .Select(question => question.questionNumber.ToString())
+            ?? Enumerable.Empty<string>());
+
+        if (availableQuestionIds.Count == 0)
+        {
+            return false;
+        }
+
+        HashSet<string> answeredIds = new HashSet<string>(
+            answeredQuestionIds ?? Enumerable.Empty<string>());
+
+        return availableQuestionIds.IsSubsetOf(answeredIds);
     }
 
     /// <summary>
