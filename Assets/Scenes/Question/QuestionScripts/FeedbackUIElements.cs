@@ -25,12 +25,6 @@ public class FeedbackUIElements : MonoBehaviour
     [SerializeField] private Sprite feedbackTimeout;
     [Tooltip("Imagem: 'Tempo Esgotado! -1 ponto'")]
 
-    [Header("Feedback Completo (Conclusão de Nível)")]
-    [SerializeField] private CanvasGroup levelCompletionFeedbackGroup;
-    [SerializeField] private TextMeshProUGUI levelCompletionTitle;
-    [SerializeField] private TextMeshProUGUI levelCompletionText;
-    [SerializeField] private Image levelCompletionPanel;
-
     [Header("Feedback de Questões Completas")]
     [SerializeField] private TextMeshProUGUI questionsCompletedFeedbackText;
 
@@ -49,26 +43,11 @@ public class FeedbackUIElements : MonoBehaviour
     public float FadeDuration => fadeDuration;
     public float DisplayDuration => displayDuration;
 
-    // Propriedades de conclusão de nível
-    public CanvasGroup LevelCompletionFeedbackGroup => levelCompletionFeedbackGroup;
-    public TextMeshProUGUI LevelCompletionTitle => levelCompletionTitle;
-    public TextMeshProUGUI LevelCompletionText => levelCompletionText;
-    public Image LevelCompletionPanel => levelCompletionPanel;
-
     private Coroutine currentFeedbackCoroutine;
 
     private void Awake()
     {
         ValidateComponents();
-
-        // Inicializar feedback de conclusão de nível como invisível
-        if (levelCompletionFeedbackGroup != null)
-        {
-            levelCompletionFeedbackGroup.alpha = 0f;
-            levelCompletionFeedbackGroup.interactable = false;
-            levelCompletionFeedbackGroup.blocksRaycasts = false;
-            levelCompletionFeedbackGroup.gameObject.SetActive(false);
-        }
 
         // Esconde feedback simples no início
         if (feedbackPanel != null)
@@ -234,104 +213,6 @@ public class FeedbackUIElements : MonoBehaviour
     }
 
     // ========================================
-    // MÉTODOS DE CONCLUSÃO DE NÍVEL (SEM ALTERAÇÕES)
-    // ========================================
-
-    /// <summary>
-    /// Mostra feedback de conclusão de nível com título e texto
-    /// </summary>
-    public void ShowLevelCompletionFeedback(string title, string bodyText, bool isSuccess = true)
-    {
-        if (levelCompletionFeedbackGroup == null)
-        {
-            Debug.LogWarning("LevelCompletionFeedbackGroup não está atribuído.");
-            return;
-        }
-
-        // Define título e texto
-        if (levelCompletionTitle != null)
-        {
-            levelCompletionTitle.text = title;
-        }
-
-        if (levelCompletionText != null)
-        {
-            levelCompletionText.text = bodyText;
-        }
-
-        // Para animação anterior se houver
-        if (currentFeedbackCoroutine != null)
-        {
-            StopCoroutine(currentFeedbackCoroutine);
-        }
-
-        // Mostra com animação
-        currentFeedbackCoroutine = StartCoroutine(ShowLevelFeedbackCoroutine());
-    }
-
-    /// <summary>
-    /// Animação de entrada do feedback de nível
-    /// </summary>
-    private IEnumerator ShowLevelFeedbackCoroutine()
-    {
-        // Ativa o grupo
-        levelCompletionFeedbackGroup.gameObject.SetActive(true);
-        levelCompletionFeedbackGroup.interactable = true;
-        levelCompletionFeedbackGroup.blocksRaycasts = true;
-
-        // Fade in
-        float elapsed = 0f;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            levelCompletionFeedbackGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
-            yield return null;
-        }
-
-        levelCompletionFeedbackGroup.alpha = 1f;
-
-        // Aguarda tempo de exibição
-        yield return new WaitForSeconds(displayDuration);
-
-        // Fade out
-        elapsed = 0f;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            levelCompletionFeedbackGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
-            yield return null;
-        }
-
-        // Desativa
-        levelCompletionFeedbackGroup.alpha = 0f;
-        levelCompletionFeedbackGroup.interactable = false;
-        levelCompletionFeedbackGroup.blocksRaycasts = false;
-        levelCompletionFeedbackGroup.gameObject.SetActive(false);
-
-        currentFeedbackCoroutine = null;
-    }
-
-    /// <summary>
-    /// Esconde o feedback de nível imediatamente
-    /// </summary>
-    public void HideLevelCompletionFeedback()
-    {
-        if (currentFeedbackCoroutine != null)
-        {
-            StopCoroutine(currentFeedbackCoroutine);
-            currentFeedbackCoroutine = null;
-        }
-
-        if (levelCompletionFeedbackGroup != null)
-        {
-            levelCompletionFeedbackGroup.alpha = 0f;
-            levelCompletionFeedbackGroup.interactable = false;
-            levelCompletionFeedbackGroup.blocksRaycasts = false;
-            levelCompletionFeedbackGroup.gameObject.SetActive(false);
-        }
-    }
-
-    // ========================================
     // VALIDAÇÃO
     // ========================================
 
@@ -374,9 +255,6 @@ public class FeedbackUIElements : MonoBehaviour
         // Componentes opcionais
         if (questionsCompletedFeedbackText == null)
             Debug.LogWarning("[FeedbackUIElements] QuestionsCompletedFeedbackText não atribuído");
-
-        if (levelCompletionFeedbackGroup == null)
-            Debug.LogWarning("[FeedbackUIElements] LevelCompletionFeedbackGroup não atribuído (feedback de nível)");
 
         if (hasErrors)
         {

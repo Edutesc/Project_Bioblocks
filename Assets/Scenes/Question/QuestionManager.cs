@@ -26,7 +26,6 @@ public class QuestionManager : MonoBehaviour
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
     private List<Question> allDatabaseQuestions;
-    private int maxLevelInDatabase = 1;
     private INavigationService _navigation;
     private ISceneDataService _sceneData;
 
@@ -139,9 +138,8 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            maxLevelInDatabase = LevelCalculator.GetMaxLevel(allDatabaseQuestions);
             Debug.Log($"[QuestionManager] Banco: {currentDatabaseName} | " +
-                      $"Questões: {allDatabaseQuestions.Count} | Níveis: {maxLevelInDatabase}");
+                      $"Questões: {allDatabaseQuestions.Count}");
 
             List<string> answeredQuestions = await AppContext.AnsweredQuestions?
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
