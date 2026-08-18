@@ -24,7 +24,7 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
     }
 
 
-    public async Task ScheduleNextRevision(string userId, string globalId, string topicId)
+    public async Task ScheduleNextRevision(string userId, string databankname, string topicId)
     {
         Debug.Log("chegou");
         EnsureRepository();
@@ -34,7 +34,7 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
         Debug.Log($"[TopicReviewManager] Databank: {topicId}");
         Debug.Log($"[TopicReviewManager] Próxima revisão: {nextReviewAt}"); 
 
-        await progressRepository.UpsertTopicReviewAsync(userId, globalId, topicId, nextReviewAt);        
+        await progressRepository.UpsertTopicReviewAsync(userId, databankname, topicId, nextReviewAt);        
             
         }
 

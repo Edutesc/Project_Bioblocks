@@ -270,6 +270,7 @@ public class QuestionManager : MonoBehaviour
         {
             string userId      = UserDataStore.CurrentUserData?.UserId;
             string databankName = loadManager.DatabankName;
+          
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(databankName)) return;
 
@@ -356,12 +357,29 @@ public class QuestionManager : MonoBehaviour
         else
         {
             Debug.Log("Teste");
-            string userId = UserDataStore.CurrentUserData?.UserId;
-            string topicId = "questoa1";
-            string globalId = "lipidios";
 
-            await topicReviewmanager.ScheduleNextRevision(userId, globalId, topicId);
+            string userId = UserDataStore.CurrentUserData?.UserId;
+            Question currentQuestion = currentSession.GetCurrentQuestion();
+
+            string topicId = currentQuestion.topic;
+            string globalId = currentQuestion.globalId;
+            string databankName = currentQuestion.questionDatabankName;
+
+            Debug.Log(
+                $"Calculando revisão | " +
+                $"Banco: {databankName} | " +
+                $"GlobalId: {globalId} | " +
+                $"TopicId: {topicId}"
+            );
+
+            await topicReviewmanager.ScheduleNextRevision(
+                userId,
+                databankName,
+                topicId
+            );
+
             Debug.Log("saiu");
+
 
             var envCfg = EnvironmentConfig.Load();
             if (envCfg != null && envCfg.QuestionPreviewMode)

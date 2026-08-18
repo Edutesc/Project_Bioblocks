@@ -32,10 +32,11 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
 
         public async Task UpsertTopicReviewAsync(
         string userId,
-        string globalId,
+        string databankName,
         string topicId,
         DateTime nextReviewAt)
     {
+        Debug.Log("entrei no topicreviewrepository");
         if (!isInitialized)
             Initialize();
 
@@ -45,26 +46,29 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
         if (string.IsNullOrWhiteSpace(topicId))
             throw new ArgumentException("topicId não pode ser vazio.");
 
+         Debug.Log($"Dados que chegaram no TopicReviewRepository {userId}, {databankName}, {topicId}, {nextReviewAt}"); 
+
         DocumentReference docRef = db
             .Collection("Users")
             .Document(userId)
             .Collection("TopicReviews")
-            .Document(topicId);
+            .Document(databankName);
 
         var data = new Dictionary<string, object>
         {
             { "userId", userId },
-            { "databankName", topicId },
+            { "questionDatabankName", topicId },
             { "lastInteractionAt", Timestamp.GetCurrentTimestamp() },
             { "nextReviewAt", Timestamp.FromDateTime(nextReviewAt.ToUniversalTime()) },
-            { "updatedAt", Timestamp.GetCurrentTimestamp() }
         };
+
+        Debug.Log($"Esperando no TopicReviewRepository"); 
 
         await docRef.SetAsync(data, SetOptions.MergeAll);
 
         Debug.Log(
             $"[TopicReviewRepository] Revisão salva: " +
-            $"Users/{userId}/TopicReviews/{topicId}");
+            $"Users/{userId}/TopicReviews/{topicId}/GlobalId/{databankName}");
     }
 
     
