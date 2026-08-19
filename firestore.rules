@@ -36,6 +36,20 @@ service cloud.firestore {
         && request.resource.data.Email  == resource.data.Email;
 
       allow delete: if request.auth != null && request.auth.uid == userId;
+
+      // ────────────────────────────────────────────────────────────
+      // TopicReviews — estado de revisão por tema do próprio usuário.
+      // Sessions — histórico de sessões concluídas para cada tema.
+      // ────────────────────────────────────────────────────────────
+      match /TopicReviews/{databankName} {
+        allow read, create, update, delete: if request.auth != null
+          && request.auth.uid == userId;
+
+        match /Sessions/{sessionId} {
+          allow read, create, update, delete: if request.auth != null
+            && request.auth.uid == userId;
+        }
+      }
     }
 
     // ────────────────────────────────────────────────────────────
