@@ -4,102 +4,102 @@ using QuestionSystem;
 public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 {
     private bool databaseInDevelopment = false;
-    
+
     private List<Question> questions = new List<Question>
     {
-//         //QUESTION 001
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Quem primeiro isolou o ácido nucléico?",
-//             answers = new string[] { "Watson", "Crick", "Friedrich Miescher", "Chargaff" },
-//             correctIndex = 2,
-//             questionNumber = 1,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_001",
-//             topic = "nucleicAcids",
-//             subtopic = "nucleic_acid_history",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "friedrich_miescher", "nuclein" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Esta questão recupera um marco anterior ao modelo da dupla hélice. Revise o início da história dos ácidos nucleicos, quando uma substância rica em fósforo foi isolada de núcleos celulares e recebeu o nome de nucleína. Diferencie esse isolamento das contribuições posteriores de Chargaff, Watson e Crick.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //         //QUESTION 001
+        //         new Question {
+        //             questionDatabankName = "NucleicAcidsQuestionDatabase",
+        //             questionText = "Quem primeiro isolou o ácido nucléico?",
+        //             answers = new string[] { "Watson", "Crick", "Friedrich Miescher", "Chargaff" },
+        //             correctIndex = 2,
+        //             questionNumber = 1,
+        //             answerType = AnswerType.Text,
+        //             questionType = QuestionType.Text,
+        //             questionImagePath = "",
+        //             questionLevel = 1,
+        //             questionInDevelopment = false,
+        //             globalId = "nucleicAcids_001",
+        //             topic = "nucleicAcids",
+        //             subtopic = "nucleic_acid_history",
+        //             displayName = "Ácidos Nucleicos",
+        //             bloomLevel = BloomLevel.Remember,
+        //             conceptTags = new List<string> { "friedrich_miescher", "nuclein" },
+        //             prerequisites = null,
+        //             questionHint = new QuestionHint
+        //             {
+        //                 text = "Esta questão recupera um marco anterior ao modelo da dupla hélice. Revise o início da história dos ácidos nucleicos, quando uma substância rica em fósforo foi isolada de núcleos celulares e recebeu o nome de nucleína. Diferencie esse isolamento das contribuições posteriores de Chargaff, Watson e Crick.",
+        //                 imagePath = null,
+        //                 videoUrl = null,
+        //                 link = null
+        //             }
+        //         },
 
-//         //QUESTION 002
-//         new Question
-//         {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Qual a principal função do RNA na célula?",
-//             answers = new string[] { 
-//                 "Armazenamento de informação genética", 
-//                 "Síntese de proteínas", 
-//                 "Catálise de reações", 
-//                 "Transporte de íons" 
-//             },
-//             correctIndex = 1,
-//             questionNumber = 2,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_002",
-//             topic = "nucleicAcids",
-//             subtopic = "rna_function",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "protein_synthesis", "gene_expression" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Pense no RNA como participante da expressão da informação armazenada no DNA. Embora alguns RNAs tenham atividade catalítica, considere a função que reúne RNAm, RNAt e RNAr em um mesmo processo celular. A alternativa mais abrangente deve representar o papel central desses três tipos de RNA.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+        //         //QUESTION 002
+        //         new Question
+        //         {
+        //             questionDatabankName = "NucleicAcidsQuestionDatabase",
+        //             questionText = "Qual a principal função do RNA na célula?",
+        //             answers = new string[] { 
+        //                 "Armazenamento de informação genética", 
+        //                 "Síntese de proteínas", 
+        //                 "Catálise de reações", 
+        //                 "Transporte de íons" 
+        //             },
+        //             correctIndex = 1,
+        //             questionNumber = 2,
+        //             answerType = AnswerType.Text,
+        //             questionType = QuestionType.Text,
+        //             questionImagePath = "",
+        //             questionLevel = 1,
+        //             questionInDevelopment = false,
+        //             globalId = "nucleicAcids_002",
+        //             topic = "nucleicAcids",
+        //             subtopic = "rna_function",
+        //             displayName = "Ácidos Nucleicos",
+        //             bloomLevel = BloomLevel.Remember,
+        //             conceptTags = new List<string> { "protein_synthesis", "gene_expression" },
+        //             prerequisites = null,
+        //             questionHint = new QuestionHint
+        //             {
+        //                 text = "Pense no RNA como participante da expressão da informação armazenada no DNA. Embora alguns RNAs tenham atividade catalítica, considere a função que reúne RNAm, RNAt e RNAr em um mesmo processo celular. A alternativa mais abrangente deve representar o papel central desses três tipos de RNA.",
+        //                 imagePath = null,
+        //                 videoUrl = null,
+        //                 link = null
+        //             }
+    //},
 
-//         //QUESTION 003
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Quais são os três componentes de um nucleotídeo?",
-//             answers = new string[] { 
-//                 "Açúcar, base, fosfato", 
-//                 "Açúcar, base, aminoácido", 
-//                 "Base, aminoácido, fosfato", 
-//                 "Açúcar, lipídeo, base" 
-//             },
-//             correctIndex = 0,
-//             questionNumber = 3,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_003",
-//             topic = "nucleicAcids",
-//             subtopic = "nucleotide_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "pentose", "nitrogenous_base", "phosphate_group" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Um nucleotídeo possui uma parte orgânica formada por uma pentose ligada a uma base nitrogenada e uma parte que participa das ligações da cadeia. Compare as alternativas procurando exatamente esses três elementos. Não confunda nucleotídeo com nucleosídeo, que não apresenta grupo fosfato.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
+         //QUESTION 003
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Quais são os três componentes de um nucleotídeo?",
+             answers = new string[] {
+                 "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer003.0",
+                 "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer003.1",
+                 "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer003.2",
+                 "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer003.3"
+             },
+             correctIndex = 0,
+             questionNumber = 3,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_003",
+             topic = "nucleicAcids",
+             subtopic = "nucleotide_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Remember,
+             conceptTags = new List<string> { "pentose", "nitrogenous_base", "phosphate_group" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "Um nucleotídeo possui uma parte orgânica formada por uma pentose ligada a uma base nitrogenada e uma parte que participa das ligações da cadeia. Compare as alternativas procurando exatamente esses três elementos. Não confunda nucleotídeo com nucleosídeo, que não apresenta grupo fosfato.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             },
 //         },
 
 //         //QUESTION 004
@@ -3047,8 +3047,13 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
                 videoUrl = null,
                 link = null
             }
+
         },
-    };
+
+};
+
+
+         
 
     public List<Question> GetQuestions() => questions;
 
