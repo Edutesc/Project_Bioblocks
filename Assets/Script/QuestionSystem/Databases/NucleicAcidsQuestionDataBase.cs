@@ -159,37 +159,34 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
          },
 
 //         //QUESTION 006
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "O que são nucleosídeos?",
-//             answers = new string[] {
-//                 "Açúcar + base",
-//                 "Açúcar + base + fosfato",
-//                 "Base + fosfato",
-//                 "Açúcar + aminoácido"
-//             },
-//             correctIndex = 0,
-//             questionNumber = 6,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_006",
-//             topic = "nucleicAcids",
-//             subtopic = "nucleosides",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "pentose", "nitrogenous_base" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Compare um nucleosídeo com um nucleotídeo: ambos contêm uma pentose ligada a uma base nitrogenada, mas somente um deles precisa incluir fosfato. Identifique a alternativa que representa a estrutura antes da adição do grupo fosfato. Aminoácidos não fazem parte dessa definição química.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "O que são nucleosídeos?",
+             answers = new string[] {
+                 "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.3"
+             },
+             correctIndex = 0,
+             questionNumber = 6,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_006",
+             topic = "nucleicAcids",
+             subtopic = "nucleosides",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Remember,
+             conceptTags = new List<string> { "pentose", "nitrogenous_base" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "Compare um nucleosídeo com um nucleotídeo: ambos contêm uma pentose ligada a uma base nitrogenada, mas somente um deles precisa incluir fosfato. Identifique a alternativa que representa a estrutura antes da adição do grupo fosfato. Aminoácidos não fazem parte dessa definição química.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 007
 //         new Question {
