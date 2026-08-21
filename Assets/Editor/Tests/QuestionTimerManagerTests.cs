@@ -26,4 +26,12 @@ public class QuestionTimerManagerTests
     {
         Assert.AreEqual(30f, QuestionTimerManager.GetDurationForQuestionLevel(99));
     }
+
+    [Test]
+    public void GetDurationForQuestionLevel_PreviewMode_Retorna5Segundos()
+    {
+        Assert.AreEqual(5f, QuestionTimerManager.GetDurationForQuestionLevel(1, isPreviewMode: true));
+        Assert.AreEqual(5f, QuestionTimerManager.GetDurationForQuestionLevel(2, isPreviewMode: true));
+        Assert.AreEqual(5f, QuestionTimerManager.GetDurationForQuestionLevel(3, isPreviewMode: true));
+    }
 }

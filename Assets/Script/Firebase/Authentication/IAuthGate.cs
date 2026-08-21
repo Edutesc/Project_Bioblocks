@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 public interface IAuthGate
 {
     /// <summary>
-    /// Retorna assim que houver usuário autenticado. Se já houver, retorna
-    /// imediatamente (Task completed). Cancela via CancellationToken.
+    /// Retorna quando houver usuário e um ID token utilizável. O token em cache
+    /// pode ser usado; o SDK o renova quando estiver expirado. Cancela a espera
+    /// por CurrentUser via CancellationToken.
     /// </summary>
     Task WaitForAuthenticatedAsync(CancellationToken ct = default);
 }

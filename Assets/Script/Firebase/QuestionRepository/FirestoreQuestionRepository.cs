@@ -273,7 +273,7 @@ public class FirestoreQuestionRepository : MonoBehaviour, IFirestoreQuestionRepo
             return new QuestionHint
             {
                 imagePath = GetString(map, "imagePath", null),
-                link      = GetString(map, "Link",      null),  // nota: "Link" com L maiúsculo conforme Firestore
+                link      = GetString(map, "link",      GetString(map, "Link", null)),
                 text      = GetString(map, "text",      null),
                 videoUrl  = GetString(map, "videoUrl",  null)
             };

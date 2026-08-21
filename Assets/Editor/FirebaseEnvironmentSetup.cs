@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// Gerencia a seleção e cópia do google-services.json correto baseado em EnvironmentConfig.FirebaseEnvironment.
@@ -18,6 +19,9 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
     private const string FirebaseIOSSourceDevPath  = "Firebase/Dev/GoogleService-Info.plist";
     private const string FirebaseIOSSourceProdPath = "Firebase/Prod/GoogleService-Info.plist";
     private const string FirebaseIOSTargetPath     = "Assets/GoogleService-Info.plist";
+    private const string FirebaseDesktopSourceDevPath  = "Firebase/Dev/google-services-desktop.json";
+    private const string FirebaseDesktopSourceProdPath = "Firebase/Prod/google-services-desktop.json";
+    private const string FirebaseDesktopTargetPath     = "Assets/StreamingAssets/google-services-desktop.json";
 
     private const string DevProjectId   = "microlearning-dev-79c0c";
     private const string ProdProjectId  = "microlearning-33132";
@@ -55,6 +59,9 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
         string iosSourcePath = Path.Combine(Application.dataPath, "..",
             cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? FirebaseIOSSourceProdPath : FirebaseIOSSourceDevPath);
         string iosTargetPath = Path.Combine(Application.dataPath, "GoogleService-Info.plist");
+        string desktopSourcePath = Path.Combine(Application.dataPath, "..",
+            cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? FirebaseDesktopSourceProdPath : FirebaseDesktopSourceDevPath);
+        string desktopTargetPath = Path.Combine(Application.dataPath, "StreamingAssets", "google-services-desktop.json");
         string expectedProjectId = cfg.FirebaseEnvironment == FirebaseEnvironment.Prod ? ProdProjectId : DevProjectId;
 
         try
@@ -84,6 +91,20 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
                     $"Build iOS com Firebase pode falhar ou usar configuração incorreta.");
             }
 
+            if (File.Exists(desktopSourcePath))
+            {
+                ValidateDesktopConfiguration(desktopSourcePath, iosSourcePath, expectedProjectId);
+                Directory.CreateDirectory(Path.GetDirectoryName(desktopTargetPath));
+                File.Copy(desktopSourcePath, desktopTargetPath, overwrite: true);
+                Debug.Log($"[FirebaseEnvironmentSetup] ✓ google-services-desktop.json copiado de Firebase/{environment}/");
+            }
+            else
+            {
+                Debug.LogWarning(
+                    $"[FirebaseEnvironmentSetup] google-services-desktop.json não encontrado: {desktopSourcePath}\n" +
+                    $"Unity Editor/Device Simulator pode usar configuração Firebase incorreta.");
+            }
+
             // 3. Validar conteúdo (verificar project_id)
             string content = File.ReadAllText(targetPath);
             if (!content.Contains(expectedProjectId))
@@ -98,6 +119,8 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
             AssetDatabase.ImportAsset("Assets/google-services.json", ImportAssetOptions.ForceUpdate);
             if (File.Exists(iosTargetPath))
                 AssetDatabase.ImportAsset("Assets/GoogleService-Info.plist", ImportAssetOptions.ForceUpdate);
+            if (File.Exists(desktopTargetPath))
+                AssetDatabase.ImportAsset("Assets/StreamingAssets/google-services-desktop.json", ImportAssetOptions.ForceUpdate);
             Debug.Log($"[FirebaseEnvironmentSetup] ✓ Assets reimportados.");
 
             // 5. Log final
@@ -149,11 +172,135 @@ public class FirebaseEnvironmentSetup : IPreprocessBuildWithReport
         string content = File.ReadAllText(targetPath);
         bool hasCorrectProjectId = content.Contains(expectedProjectId);
 
+        string desktopSourcePath = Path.Combine(
+            Application.dataPath,
+            "..",
+            cfg.FirebaseEnvironment == FirebaseEnvironment.Prod
+                ? FirebaseDesktopSourceProdPath
+                : FirebaseDesktopSourceDevPath
+        );
+        string iosSourcePath = Path.Combine(
+            Application.dataPath,
+            "..",
+            cfg.FirebaseEnvironment == FirebaseEnvironment.Prod
+                ? FirebaseIOSSourceProdPath
+                : FirebaseIOSSourceDevPath
+        );
+
+        bool desktopOk = true;
+        string desktopError = null;
+        try
+        {
+            ValidateDesktopConfiguration(desktopSourcePath, iosSourcePath, expectedProjectId);
+        }
+        catch (Exception e)
+        {
+            desktopOk = false;
+            desktopError = e.Message;
+        }
+
         string message = $"Ambiente: {environment}\n" +
                         $"Project ID Esperado: {expectedProjectId}\n" +
-                        $"Status: {(hasCorrectProjectId ? "✓ OK" : "✗ ERRO")}\n\n" +
+                        $"Android: {(hasCorrectProjectId ? "✓ OK" : "✗ ERRO")}\n" +
+                        $"Editor/Desktop: {(desktopOk ? "✓ OK" : "✗ ERRO")}\n\n" +
+                        (desktopOk ? string.Empty : $"{desktopError}\n\n") +
                         $"Se o status for ERRO, verifique Firebase/{environment}/google-services.json";
 
         EditorUtility.DisplayDialog("Firebase Setup Validation", message, "OK");
+    }
+
+    private static void ValidateDesktopConfiguration(
+        string desktopJsonPath,
+        string plistPath,
+        string expectedProjectId)
+    {
+        if (!File.Exists(desktopJsonPath))
+            throw new InvalidOperationException($"Config desktop não encontrada: {desktopJsonPath}");
+        if (!File.Exists(plistPath))
+            throw new InvalidOperationException($"Config iOS de referência não encontrada: {plistPath}");
+
+        string desktop = File.ReadAllText(desktopJsonPath);
+        string plist = File.ReadAllText(plistPath);
+
+        string desktopProject = ExtractJsonString(desktop, "project_id");
+        string desktopApiKey = ExtractJsonString(desktop, "current_key");
+        string desktopAppId = ExtractJsonString(desktop, "mobilesdk_app_id");
+        string plistApiKey = ExtractPlistString(plist, "API_KEY");
+        string plistAppId = ExtractPlistString(plist, "GOOGLE_APP_ID");
+
+        if (desktopProject != expectedProjectId)
+            throw new InvalidOperationException(
+                $"Config desktop pertence a '{desktopProject}', esperado '{expectedProjectId}'."
+            );
+
+        if (desktopApiKey != plistApiKey || desktopAppId != plistAppId)
+            throw new InvalidOperationException(
+                "Config desktop está híbrida/desatualizada: API key ou App ID não corresponde ao GoogleService-Info.plist."
+            );
+    }
+
+    private static string ExtractJsonString(string json, string key)
+    {
+        Match match = Regex.Match(
+            json,
+            $"\\\"{Regex.Escape(key)}\\\"\\s*:\\s*\\\"([^\\\"]+)\\\""
+        );
+        return match.Success ? match.Groups[1].Value : null;
+    }
+
+    private static string ExtractPlistString(string plist, string key)
+    {
+        Match match = Regex.Match(
+            plist,
+            $"<key>\\s*{Regex.Escape(key)}\\s*</key>\\s*<string>([^<]+)</string>"
+        );
+        return match.Success ? match.Groups[1].Value.Trim() : null;
+    }
+
+    [MenuItem("BioBlocks/Reset Local Data For Current Firebase Environment")]
+    public static void ResetLocalDataForCurrentEnvironmentMenu()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            EditorUtility.DisplayDialog(
+                "Pare o Play Mode",
+                "A redefinição deve ser executada fora do Play Mode para garantir que o LiteDB esteja fechado.",
+                "OK"
+            );
+            return;
+        }
+
+        var cfg = EnvironmentConfig.Load();
+        if (cfg == null)
+        {
+            EditorUtility.DisplayDialog("Erro", "EnvironmentConfig não encontrado.", "OK");
+            return;
+        }
+
+        bool confirmed = EditorUtility.DisplayDialog(
+            "Redefinir dados locais?",
+            $"Isto encerrará a sessão e removerá LiteDB, cache de imagens e dados locais de usuário.\n\n" +
+            $"Ambiente que permanecerá ativo: {cfg.FirebaseEnvironment}",
+            "Redefinir",
+            "Cancelar"
+        );
+
+        if (!confirmed)
+            return;
+
+        try
+        {
+            FirebaseEnvironmentGuard.ResetCurrentEnvironment(cfg.FirebaseEnvironment);
+            EditorUtility.DisplayDialog(
+                "Dados redefinidos",
+                $"Dados locais removidos. O ambiente {cfg.FirebaseEnvironment} continua ativo.",
+                "OK"
+            );
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[FirebaseEnvironmentSetup] Falha ao redefinir dados locais: {e}");
+            EditorUtility.DisplayDialog("Erro", e.Message, "OK");
+        }
     }
 }

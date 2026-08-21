@@ -7,6 +7,8 @@
 Assets/StreamingAssets/google-services-desktop
 **/google-services.json.meta
 **/GoogleService-Info.plist.meta
+Assets/Resources/Secrets*
+FirebaseSecrets-Local/
 
 # StreamingAssets com credenciais
 Assets/StreamingAssets/google-services-desktop.json
@@ -52,7 +54,6 @@ Assets/ExternalDependencyManager/**
 .DS_Store*
 Thumbs.db
 Desktop.ini
-
 # ===========================
 # iOS / tvOS Libraries
 # ===========================
@@ -117,8 +118,6 @@ mono_crash.mem.*
 # Specific Firebase binaries / plugins that can be regenerated
 # ===========================
 # (keep only versioned ones in Assets/Firebase)
-Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.so
-Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.bundle
 Library/PackageCache/**/*.dylib
 iOS/Libraries/*.a
 iOS/Libraries/libiPhone-lib.a
@@ -150,4 +149,3 @@ run_check_storage.sh
 run_reorganize.sh
 run_upload.sh
 upload_images_to_firebase.py
-

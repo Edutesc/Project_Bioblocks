@@ -7,6 +7,7 @@
 
 using NUnit.Framework;
 using System.Collections.Generic;
+using QuestionSystem;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -218,6 +219,60 @@ public class QuestionBankStatisticsTests
         QuestionBankStatistics.SetTotalQuestions(DB_BIO, 30);
 
         bool result = QuestionBankStatistics.AreAllQuestionsAnswered(DB_BIO, answeredCount: 29);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void AreAllQuestionsAnswered_QuestoesMistasRespondidasEmQualquerOrdem_RetornaTrue()
+    {
+        var questions = new List<Question>
+        {
+            QuestionTestHelpers.MakeQuestion(1, level: 1),
+            QuestionTestHelpers.MakeQuestion(2, level: 2),
+            QuestionTestHelpers.MakeQuestion(3, level: 3)
+        };
+
+        bool result = QuestionBankStatistics.AreAllQuestionsAnswered(
+            questions, new[] { "3", "1", "2" });
+
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void AreAllQuestionsAnswered_FaltaQuestaoDeQualquerNivel_RetornaFalse()
+    {
+        var questions = new List<Question>
+        {
+            QuestionTestHelpers.MakeQuestion(1, level: 1),
+            QuestionTestHelpers.MakeQuestion(2, level: 2),
+            QuestionTestHelpers.MakeQuestion(3, level: 3)
+        };
+
+        bool result = QuestionBankStatistics.AreAllQuestionsAnswered(
+            questions, new[] { "1", "3" });
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void AreAllQuestionsAnswered_IgnoraQuestoesEmDesenvolvimento()
+    {
+        var availableQuestion = QuestionTestHelpers.MakeQuestion(1, level: 1);
+        var developmentQuestion = QuestionTestHelpers.MakeQuestion(2, level: 3);
+        developmentQuestion.questionInDevelopment = true;
+
+        bool result = QuestionBankStatistics.AreAllQuestionsAnswered(
+            new[] { availableQuestion, developmentQuestion }, new[] { "1" });
+
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void AreAllQuestionsAnswered_SemQuestoesDisponiveis_RetornaFalse()
+    {
+        bool result = QuestionBankStatistics.AreAllQuestionsAnswered(
+            new List<Question>(), new List<string>());
 
         Assert.IsFalse(result);
     }

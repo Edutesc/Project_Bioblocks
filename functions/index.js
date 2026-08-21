@@ -16,6 +16,125 @@ const QUESTION_STATS_COLLECTION = "Config";
 const QUESTION_STATS_DOC_ID = "QuestionStats";
 const QUESTIONS_COLLECTION = "Questions";
 const DATABANK_FIELD = "questionDatabankName";
+const ASSESSMENTS_COLLECTION = "Assessments";
+
+const ASSESSMENTS = {
+  "2026-3-agua-acidos-bases-tampoes": {
+    assessmentId: "2026-3-agua-acidos-bases-tampoes",
+    assessmentType: "agua-acidos-bases-tampoes",
+    academicTerm: "2026-3",
+    courseId: "bioquimica",
+    classId: "",
+    title: "Água, ácidos, bases e tampões",
+    description: "Atividade formativa para testar seus conhecimentos.",
+    displayTopics: ["Água", "Ácidos e bases", "Sistemas tampão"],
+    allowedDatabanks: [
+      "WaterQuestionDatabase",
+      "AcidBaseBufferQuestionDatabase",
+    ],
+    questionDistribution: {basic: 4, intermediate: 3, hard: 3},
+    totalQuestions: 10,
+    durationMinutes: 15,
+    allowRetakes: true,
+    enabled: false,
+    opensAt: null,
+    lastStartAt: null,
+    closesAt: null,
+    displayTimeZone: "America/Sao_Paulo",
+    archived: false,
+  },
+  "2026-3-aminoacidos-proteinas-enzimas": {
+    assessmentId: "2026-3-aminoacidos-proteinas-enzimas",
+    assessmentType: "aminoacidos-proteinas-enzimas",
+    academicTerm: "2026-3",
+    courseId: "bioquimica",
+    classId: "",
+    title: "Aminoácidos, proteínas e enzimas",
+    description: "Atividade formativa para testar seus conhecimentos.",
+    displayTopics: ["Aminoácidos", "Proteínas", "Enzimas"],
+    allowedDatabanks: [
+      "AminoacidQuestionDatabase",
+      "ProteinQuestionDatabase",
+      "EnzymeQuestionDatabase",
+    ],
+    questionDistribution: {basic: 4, intermediate: 3, hard: 3},
+    totalQuestions: 10,
+    durationMinutes: 15,
+    allowRetakes: true,
+    enabled: false,
+    opensAt: null,
+    lastStartAt: null,
+    closesAt: null,
+    displayTimeZone: "America/Sao_Paulo",
+    archived: false,
+  },
+  "2026-3-lipideos-membranas": {
+    assessmentId: "2026-3-lipideos-membranas",
+    assessmentType: "lipideos-membranas",
+    academicTerm: "2026-3",
+    courseId: "bioquimica",
+    classId: "",
+    title: "Lipídios e membranas biológicas",
+    description: "Atividade formativa para testar seus conhecimentos.",
+    displayTopics: ["Lipídios", "Membranas biológicas"],
+    allowedDatabanks: [
+      "LipidsQuestionDatabase",
+      "MembranesQuestionDatabase",
+    ],
+    questionDistribution: {basic: 4, intermediate: 3, hard: 3},
+    totalQuestions: 10,
+    durationMinutes: 15,
+    allowRetakes: true,
+    enabled: false,
+    opensAt: null,
+    lastStartAt: null,
+    closesAt: null,
+    displayTimeZone: "America/Sao_Paulo",
+    archived: false,
+  },
+  "2026-3-carboidratos": {
+    assessmentId: "2026-3-carboidratos",
+    assessmentType: "carboidratos",
+    academicTerm: "2026-3",
+    courseId: "bioquimica",
+    classId: "",
+    title: "Carboidratos",
+    description: "Atividade formativa para testar seus conhecimentos.",
+    displayTopics: ["Carboidratos"],
+    allowedDatabanks: ["CarbohydratesQuestionDatabase"],
+    questionDistribution: {basic: 4, intermediate: 3, hard: 3},
+    totalQuestions: 10,
+    durationMinutes: 15,
+    allowRetakes: true,
+    enabled: false,
+    opensAt: null,
+    lastStartAt: null,
+    closesAt: null,
+    displayTimeZone: "America/Sao_Paulo",
+    archived: false,
+  },
+  "2026-3-acidos-nucleicos": {
+    assessmentId: "2026-3-acidos-nucleicos",
+    assessmentType: "acidos-nucleicos",
+    academicTerm: "2026-3",
+    courseId: "bioquimica",
+    classId: "",
+    title: "Ácidos nucleicos",
+    description: "Atividade formativa para testar seus conhecimentos.",
+    displayTopics: ["Ácidos nucleicos", "DNA", "RNA"],
+    allowedDatabanks: ["NucleicAcidsQuestionDatabase"],
+    questionDistribution: {basic: 4, intermediate: 3, hard: 3},
+    totalQuestions: 10,
+    durationMinutes: 15,
+    allowRetakes: true,
+    enabled: false,
+    opensAt: null,
+    lastStartAt: null,
+    closesAt: null,
+    displayTimeZone: "America/Sao_Paulo",
+    archived: false,
+  },
+};
 
 // ─────────────────────────────────────────────────────────────
 // TRIGGER: Sincroniza Rankings sempre que um Users/{uid} muda
@@ -238,6 +357,70 @@ exports.rebuildQuestionStats = onRequest(
       } catch (err) {
         console.error("[rebuildQuestionStats] Erro:", err);
         res.status(500).send(`Erro: ${err.message}`);
+      }
+    },
+);
+
+// ─────────────────────────────────────────────────────────────
+// HTTP: Cria ou atualiza as configurações de Assessments
+// ─────────────────────────────────────────────────────────────
+exports.createAssessments = onRequest(
+    {secrets: [resetSecretKey]},
+    async (req, res) => {
+      const secretKey = resetSecretKey.value();
+
+      if (!secretKey) {
+        res.status(500).send("RESET_SECRET_KEY não configurada.");
+        return;
+      }
+      if (req.query.key !== secretKey) {
+        res.status(403).send("Acesso não autorizado.");
+        return;
+      }
+      if (req.method !== "POST") {
+        res.set("Allow", "POST");
+        res.status(405).send("Método não permitido. Use POST.");
+        return;
+      }
+
+      try {
+        const db = admin.firestore();
+        const entries = Object.entries(ASSESSMENTS);
+        const refs = entries.map(([assessmentId]) =>
+          db.collection(ASSESSMENTS_COLLECTION).doc(assessmentId),
+        );
+        const snapshots = await db.getAll(...refs);
+        const batch = db.batch();
+
+        entries.forEach(([, assessment], index) => {
+          const timestamps = {
+            updatedAt: FieldValue.serverTimestamp(),
+          };
+
+          if (!snapshots[index].exists) {
+            timestamps.createdAt = FieldValue.serverTimestamp();
+          }
+
+          batch.set(refs[index], {
+            ...assessment,
+            ...timestamps,
+          }, {merge: true});
+        });
+
+        await batch.commit();
+
+        const assessmentIds = entries.map(([assessmentId]) => assessmentId);
+        console.log(
+            `[createAssessments] ${assessmentIds.length} assessments gravados.`,
+        );
+        res.status(200).json({
+          collection: ASSESSMENTS_COLLECTION,
+          documentsWritten: assessmentIds.length,
+          assessmentIds,
+        });
+      } catch (err) {
+        console.error("[createAssessments] Erro:", err);
+        res.status(500).json({error: err.message});
       }
     },
 );

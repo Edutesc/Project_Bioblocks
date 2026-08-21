@@ -8,6 +8,12 @@ using Firebase.Auth;
 
 public class InitializationManager : MonoBehaviour
 {
+    // Em cold starts (principalmente depois de o SO suspender/encerrar o app),
+    // o SDK nativo pode publicar CurrentUser alguns segundos depois de
+    // FirebaseAuth.DefaultInstance estar disponível. Não devemos interpretar
+    // esse intervalo como logout.
+    private const int FirebaseSessionRestoreTimeoutMillis = 10000;
+
     [Header("Configuration")]
     [SerializeField] private float minimumLoadingTime = 2.0f;
 
@@ -18,6 +24,7 @@ public class InitializationManager : MonoBehaviour
     private IAuthRepository _auth;
     private IUserDataSyncService _userDataSync;
     private IUserDataLocalRepository _userDataLocal;
+    private bool _usingLocalSessionFallback;
 
     private void Awake()
     {
@@ -80,8 +87,6 @@ public class InitializationManager : MonoBehaviour
             if (_auth == null)
                 throw new Exception("[InitManager] AppContext.Auth está null após AppContext.IsReady=true.");
 
-            ResetSessionIfFirebaseEnvironmentChanged(envCfg);
-
             bool isAuthenticated = await CheckAuthentication();
             // ── Usuário não autenticado: ir imediatamente para LoginView ─────────
             if (!isAuthenticated)
@@ -134,7 +139,14 @@ public class InitializationManager : MonoBehaviour
                 }
 
                 var statsManager = AppContext.Statistics as DatabaseStatisticsManager;
-                if (statsManager != null)
+                if (_usingLocalSessionFallback)
+                {
+                    // Não segura a entrada offline por uma leitura remota de stats.
+                    // A PathwayScene inicializa esse serviço em coroutine e a
+                    // implementação já possui fallback para o cache de questões.
+                    Debug.Log("[InitManager] Sessão offline — estatísticas remotas adiadas.");
+                }
+                else if (statsManager != null)
                 {
                     await statsManager.Initialize();
                 }
@@ -149,7 +161,7 @@ public class InitializationManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("[InitManager] Usuário autenticado, mas dados do usuário não foram carregados.");
-                await ForceLogoutAndGoToLoginAsync("Usuário autenticado, mas documento/UserData não encontrado.");
+                await GoToLoginPreservingLocalSessionAsync("Usuário autenticado, mas documento/UserData não encontrado.");
                 return;
             }
 
@@ -157,6 +169,7 @@ public class InitializationManager : MonoBehaviour
             if (elapsed < minimumLoadingTime)
                 await Task.Delay(Mathf.RoundToInt((minimumLoadingTime - elapsed) * 1000));
 
+            StartRemoteSessionRefreshInBackgroundIfNeeded();
             NavigateAfterInit(userDataLoaded);
         }
         catch (Exception ex)
@@ -197,14 +210,41 @@ public class InitializationManager : MonoBehaviour
 
     private async Task<bool> CheckAuthentication()
     {
-        if (!_auth.HasLocalSession())
-            return false;
+        // Offline-first: se há uma sessão local explicitamente ativa e seu
+        // UserData está no LiteDB, libera o app imediatamente. A identidade
+        // Firebase será restaurada e validada em background antes de sincronizar.
+        if (TryLoadOfflineUserFromCache("Sessão local disponível no bootstrap."))
+            return true;
+
+        if (!HasFirebaseCurrentUser())
+        {
+            UpdateStatus("Restaurando sua sessão...");
+            Debug.Log("[InitializationManager] Firebase ainda não publicou CurrentUser. Aguardando restauração da sessão persistida.");
+
+            bool restored = await WaitForLocalSessionRestore(FirebaseSessionRestoreTimeoutMillis);
+            if (!restored)
+                return TryLoadOfflineUserFromCache("Sem sessão Firebase restaurada.");
+
+            Debug.Log("[InitializationManager] Sessão Firebase persistida restaurada.");
+        }
 
         try
         {
-            await WithTimeout(_auth.ReloadCurrentUserAsync(), 8000, "Validação da sessão Firebase excedeu o tempo limite.");
+            await WithTimeout(_auth.CheckAuthenticationStatus(), 8000, "Validação da sessão Firebase excedeu o tempo limite.");
             Debug.Log("[InitializationManager] Sessão validada com o servidor.");
             return true;
+        }
+        catch (FirebaseEnvironmentMismatchException e)
+        {
+            Debug.LogWarning($"[InitializationManager] Sessão pertence a outro ambiente: {e.Message}");
+            ClearInvalidSessionIdentity();
+            return false;
+        }
+        catch (Firebase.FirebaseException e) when (IsDefinitivelyInvalidSession(e))
+        {
+            Debug.LogWarning($"[InitializationManager] Sessão Firebase inválida; novo login necessário: {e.Message}");
+            ClearInvalidSessionIdentity();
+            return false;
         }
         catch (Exception e)
         {
@@ -219,21 +259,110 @@ public class InitializationManager : MonoBehaviour
                 if (cached != null)
                 {
                     UserDataStore.CurrentUserData = cached;
+                    _usingLocalSessionFallback = true;
                     Debug.LogWarning("[InitializationManager] Sessão não validada online, mas há UserData local. Permitindo modo offline.");
                     return true;
                 }
             }
 
-            await ForceLogoutAndGoToLoginAsync("Sessão Firebase inválida e sem UserData local.");
+            if (TryLoadOfflineUserFromCache("Sessão Firebase não validada."))
+                return true;
+
+            Debug.LogWarning("[InitializationManager] Sessão não validada online e sem UserData local. Indo para LoginView sem limpar a sessão Firebase.");
             return false;
         }
+    }
+
+    private static bool IsDefinitivelyInvalidSession(Firebase.FirebaseException exception)
+    {
+        var authError = (AuthError)exception.ErrorCode;
+        return authError == AuthError.InvalidUserToken
+            || authError == AuthError.UserTokenExpired
+            || authError == AuthError.UserDisabled
+            || authError == AuthError.UserNotFound;
+    }
+
+    private static void ClearInvalidSessionIdentity()
+    {
+        try
+        {
+            FirebaseAuth.DefaultInstance.SignOut();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Falha ao encerrar sessão inválida: {e.Message}");
+        }
+
+        UserDataStore.CurrentUserData = null;
+        LocalSessionState.MarkSignedOut();
+    }
+
+    private async Task<bool> WaitForLocalSessionRestore(int timeoutMillis)
+    {
+        if (HasFirebaseCurrentUser())
+            return true;
+
+        var auth = FirebaseAuth.DefaultInstance;
+        var restored = new TaskCompletionSource<bool>(
+            TaskCreationOptions.RunContinuationsAsynchronously
+        );
+
+        EventHandler handler = null;
+        handler = (_, __) =>
+        {
+            if (HasFirebaseCurrentUser())
+                restored.TrySetResult(true);
+        };
+
+        auth.StateChanged += handler;
+
+        try
+        {
+            if (HasFirebaseCurrentUser())
+                return true;
+
+            Task completed = await Task.WhenAny(restored.Task, Task.Delay(timeoutMillis));
+            return completed == restored.Task && HasFirebaseCurrentUser();
+        }
+        finally
+        {
+            auth.StateChanged -= handler;
+        }
+    }
+
+    private bool TryLoadOfflineUserFromCache(string reason)
+    {
+        string lastUserId = PlayerPrefs.GetString("UserId", string.Empty);
+        if (!LocalSessionState.CanRestore(lastUserId) || _userDataLocal == null)
+        {
+            Debug.LogWarning($"[InitializationManager] Sem sessão local ativa. Motivo: {reason}");
+            return false;
+        }
+
+        var cached = _userDataLocal.GetUser(lastUserId);
+        if (cached == null)
+        {
+            Debug.LogWarning($"[InitializationManager] UserData local não foi encontrado para {lastUserId}. Motivo: {reason}");
+            return false;
+        }
+
+        UserDataStore.CurrentUserData = cached;
+        _usingLocalSessionFallback = true;
+        PersistCurrentUserIdentity(cached);
+        Debug.LogWarning($"[InitializationManager] Usando sessão local LiteDB para {lastUserId}. Motivo: {reason}");
+        return true;
     }
 
     private async Task<bool> LoadUserData()
     {
         try
         {
-            if (!_auth.HasLocalSession()) return false;
+            if (_usingLocalSessionFallback && UserDataStore.CurrentUserData != null)
+                return true;
+
+            if (!HasFirebaseCurrentUser())
+                return UserDataStore.CurrentUserData != null
+                    || TryLoadOfflineUserFromCache("Carregamento sem sessão Firebase.");
 
             string userId = _auth.CurrentUserId;
             if (string.IsNullOrEmpty(userId)) return false;
@@ -255,6 +384,8 @@ public class InitializationManager : MonoBehaviour
                 return false;
             }
 
+            PersistCurrentUserIdentity(UserDataStore.CurrentUserData);
+
             Debug.Log($"[InitializationManager] UserData pronto. " +
                       $"UserId: {UserDataStore.CurrentUserData.UserId}, " +
                       $"Level: {UserDataStore.CurrentUserData.PlayerLevel}");
@@ -272,6 +403,7 @@ public class InitializationManager : MonoBehaviour
                 if (cached != null)
                 {
                     UserDataStore.CurrentUserData = cached;
+                    _usingLocalSessionFallback = true;
                     Debug.LogWarning("[InitializationManager] UserData carregado do cache de emergência.");
                     return true;
                 }
@@ -279,6 +411,91 @@ public class InitializationManager : MonoBehaviour
 
             return false;
         }
+    }
+
+    private static bool HasFirebaseCurrentUser()
+    {
+        return FirebaseAuth.DefaultInstance?.CurrentUser != null;
+    }
+
+    private static void PersistCurrentUserIdentity(UserData userData)
+    {
+        if (userData == null || string.IsNullOrEmpty(userData.UserId))
+            return;
+
+        // Também migra sessões criadas por versões antigas que ainda não
+        // gravavam o UID local. Assim, um próximo cold start pode seguir pelo
+        // cache mesmo se a restauração nativa do Firebase estiver lenta/offline.
+        LocalSessionState.MarkAuthenticated(
+            userData.UserId,
+            userData.Email,
+            userData.NickName);
+    }
+
+    private void StartRemoteSessionRefreshInBackgroundIfNeeded()
+    {
+        if (!_usingLocalSessionFallback)
+            return;
+
+        string localUserId = UserDataStore.CurrentUserData?.UserId;
+        if (string.IsNullOrEmpty(localUserId))
+            return;
+
+        _ = RefreshRemoteSessionWhenAvailableAsync(localUserId);
+    }
+
+    private async Task RefreshRemoteSessionWhenAvailableAsync(string localUserId)
+    {
+        try
+        {
+            Debug.Log("[InitializationManager] Sessão local ativa. Tentando restaurar Firebase em background.");
+
+            bool restored = HasFirebaseCurrentUser() || await WaitForLocalSessionRestore(30000);
+            if (!restored)
+            {
+                Debug.LogWarning("[InitializationManager] Firebase não restaurou sessão em background. Mantendo modo local.");
+                return;
+            }
+
+            await WithTimeout(
+                _auth.CheckAuthenticationStatus(),
+                8000,
+                "Renovação do token Firebase em background excedeu o tempo limite.");
+
+            string remoteUserId = FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+            if (remoteUserId != localUserId)
+            {
+                Debug.LogError($"[InitializationManager] Divergência de identidade: Firebase restaurou {remoteUserId}, mas a sessão local pertence a {localUserId}. Novo login será exigido.");
+                InvalidateLocalSessionAndNavigateToLogin();
+                return;
+            }
+
+            var sync = _userDataSync ?? AppContext.UserDataSync;
+            if (sync != null)
+                await sync.TrySyncPendingData(localUserId);
+
+            Debug.Log("[InitializationManager] Sessão Firebase restaurada e UserData sincronizado em background.");
+        }
+        catch (FirebaseEnvironmentMismatchException e)
+        {
+            Debug.LogWarning($"[InitializationManager] Sessão restaurada pertence a outro ambiente: {e.Message}");
+            InvalidateLocalSessionAndNavigateToLogin();
+        }
+        catch (Firebase.FirebaseException e) when (IsDefinitivelyInvalidSession(e))
+        {
+            Debug.LogWarning($"[InitializationManager] Firebase invalidou definitivamente a sessão local: {e.Message}");
+            InvalidateLocalSessionAndNavigateToLogin();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[InitializationManager] Não foi possível renovar Firebase em background. Modo local preservado: {e.Message}");
+        }
+    }
+
+    private void InvalidateLocalSessionAndNavigateToLogin()
+    {
+        ClearInvalidSessionIdentity();
+        SceneManager.LoadScene("LoginView", LoadSceneMode.Single);
     }
 
     private void NavigateAfterInit(bool authenticated)
@@ -321,18 +538,9 @@ public class InitializationManager : MonoBehaviour
         loadingSpinner?.SetMessage(message);
     }
 
-    private async Task ForceLogoutAndGoToLoginAsync(string reason)
+    private async Task GoToLoginPreservingLocalSessionAsync(string reason)
     {
-        Debug.LogWarning($"[InitializationManager] Limpando sessão e voltando para LoginView. Motivo: {reason}");
-
-        try
-        {
-            FirebaseAuth.DefaultInstance.SignOut();
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[InitializationManager] Erro ao fazer Firebase SignOut: {e.Message}");
-        }
+        Debug.LogWarning($"[InitializationManager] Voltando para LoginView sem limpar sessão/cache local. Motivo: {reason}");
 
         try
         {
@@ -342,18 +550,14 @@ public class InitializationManager : MonoBehaviour
 
         try
         {
-            PlayerPrefs.DeleteKey("UserId");
-            PlayerPrefs.DeleteKey("UserEmail");
-            PlayerPrefs.DeleteKey("UserNickname");
-            PlayerPrefs.Save();
-
             loadingSpinner?.HideSpinner();
             await Task.Yield();
             NavigateAfterInit(false);
+            return;
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"[InitializationManager] Erro ao limpar PlayerPrefs: {e.Message}");
+            Debug.LogWarning($"[InitializationManager] Erro ao navegar para LoginView: {e.Message}");
         }
 
         try
@@ -363,37 +567,6 @@ public class InitializationManager : MonoBehaviour
         catch { }
 
         NavigateAfterInit(false);
-    }
-
-    private void ResetSessionIfFirebaseEnvironmentChanged(EnvironmentConfig envCfg)
-    {
-        if (envCfg == null) return;
-
-        const string envKey = "FirebaseEnvironment";
-        string currentEnv = envCfg.FirebaseEnvironment.ToString();
-        string previousEnv = PlayerPrefs.GetString(envKey, "");
-
-        if (!string.IsNullOrEmpty(previousEnv) && previousEnv != currentEnv)
-        {
-            Debug.LogWarning($"[InitManager] Ambiente Firebase mudou de {previousEnv} para {currentEnv}. Limpando sessão local.");
-
-            try
-            {
-                FirebaseAuth.DefaultInstance.SignOut();
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[InitManager] Erro ao limpar sessão ao trocar ambiente: {e.Message}");
-            }
-
-            UserDataStore.CurrentUserData = null;
-            PlayerPrefs.DeleteKey("UserId");
-            PlayerPrefs.DeleteKey("UserEmail");
-            PlayerPrefs.DeleteKey("UserNickname");
-        }
-
-        PlayerPrefs.SetString(envKey, currentEnv);
-        PlayerPrefs.Save();
     }
 
     private static async Task WithTimeout(Task task, int timeoutMillis, string timeoutMessage)
