@@ -100,35 +100,35 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
                  videoUrl = null,
                  link = null
              },
-//         },
+         },
 
 //         //QUESTION 004
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Qual açúcar está presente no RNA?",
-//             answers = new string[] { "Desoxirribose", "Ribose", "Glicose", "Frutose" },
-//             correctIndex = 1,
-//             questionNumber = 4,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_004",
-//             topic = "nucleicAcids",
-//             subtopic = "rna_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "ribose", "pentose" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Compare os nomes completos dos dois ácidos nucleicos: ácido ribonucleico e ácido desoxirribonucleico. O prefixo presente em “ribonucleico” indica diretamente a pentose procurada. Glicose e frutose também são açúcares, mas não constituem o esqueleto normal das moléculas celulares de RNA.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Qual açúcar está presente no RNA?",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.3" },
+             correctIndex = 1,
+             questionNumber = 4,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_004",
+             topic = "nucleicAcids",
+             subtopic = "rna_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Remember,
+             conceptTags = new List<string> { "ribose", "pentose" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "Compare os nomes completos dos dois ácidos nucleicos: ácido ribonucleico e ácido desoxirribonucleico. O prefixo presente em “ribonucleico” indica diretamente a pentose procurada. Glicose e frutose também são açúcares, mas não constituem o esqueleto normal das moléculas celulares de RNA.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 005
 //         new Question {
