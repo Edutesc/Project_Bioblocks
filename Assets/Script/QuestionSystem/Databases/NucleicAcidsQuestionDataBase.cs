@@ -131,32 +131,32 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
          },
 
 //         //QUESTION 005
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Qual açúcar está presente no DNA?",
-//             answers = new string[] { "Desoxirribose", "Ribose", "Glicose", "Frutose" },
-//             correctIndex = 0,
-//             questionNumber = 5,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_005",
-//             topic = "nucleicAcids",
-//             subtopic = "dna_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "deoxyribose", "pentose" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "O próprio nome “ácido desoxirribonucleico” contém uma pista sobre sua pentose. “Desoxi” indica que esse açúcar possui um oxigênio a menos que a pentose encontrada no RNA, especificamente no carbono 2'. Procure a alternativa cujo nome expressa essa diferença química, não uma característica da dupla hélice.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Qual açúcar está presente no DNA?",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.3" },
+             correctIndex = 0,
+             questionNumber = 5,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_005",
+             topic = "nucleicAcids",
+             subtopic = "dna_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Remember,
+             conceptTags = new List<string> { "deoxyribose", "pentose" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "O próprio nome “ácido desoxirribonucleico” contém uma pista sobre sua pentose. “Desoxi” indica que esse açúcar possui um oxigênio a menos que a pentose encontrada no RNA, especificamente no carbono 2'. Procure a alternativa cujo nome expressa essa diferença química, não uma característica da dupla hélice.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 006
 //         new Question {
