@@ -6,14 +6,16 @@ public interface ITopicReviewManager
     Task RegisterCompletedSessionAsync(
         string userId,
         string topicId,
-        string correctQuestionGlobalIds,
-        string wrongQuestionGlobalIds,
+        List<string> correctQuestionGlobalIds,
+        List<string> wrongQuestionGlobalIds,
         string globalId,
         string source
     );
 
     Task ScheduleNextRevision(
         string userId,
-        string globalId,
-        string topicId);
+        string databankName,
+        string topicId,
+        List<string> correctQuestionGlobalIds,
+        List<string> wrongQuestionGlobalIds);
 }

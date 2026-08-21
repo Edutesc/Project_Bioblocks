@@ -229,6 +229,9 @@ public class QuestionManager : MonoBehaviour
     // -------------------------------------------------------
     // Resposta
     // -------------------------------------------------------
+    private List<string> recentcorrectQuestionGlobalIds = new List<string>(); // questoes certas
+    private List<string> recentwrongQuestionGlobalIds    = new List<string>();   // questoes erradas
+
     private async void CheckAnswer(int selectedAnswerIndex)
     {
         timerManager.StopTimer();
@@ -245,12 +248,16 @@ public class QuestionManager : MonoBehaviour
                 int baseScore   = 5;
                 bool bonusActive = scoreManager.HasBonusActive();
 
+                recentcorrectQuestionGlobalIds.Add(currentQuestion.globalId);
+
                 feedbackElements.ShowCorrectAnswer(bonusActive);
 
                 await scoreManager.UpdateScore(baseScore, true, currentQuestion);
             }
             else
             {
+                recentwrongQuestionGlobalIds.Add(currentQuestion.globalId);
+
                 feedbackElements.ShowWrongAnswer();
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
@@ -308,7 +315,8 @@ public class QuestionManager : MonoBehaviour
             await topicReviewmanager.ScheduleNextRevision(
                 userId,
                 databankName,
-                topicId
+                topicId, recentcorrectQuestionGlobalIds,
+                recentwrongQuestionGlobalIds
             );
 
             Debug.Log("saiu");

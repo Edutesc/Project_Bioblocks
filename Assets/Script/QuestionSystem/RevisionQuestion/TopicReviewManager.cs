@@ -11,8 +11,8 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
     public async Task RegisterCompletedSessionAsync(
     string userId,
     string databankName,
-    string correctQuestionGlobalIds,
-    string wrongQuestionGlobalIds,
+    List<string> correctQuestionGlobalIds,
+    List<string>  wrongQuestionGlobalIds,
     string globalId,
     string source)
     {
@@ -20,11 +20,12 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
         Debug.Log($"[TopicReviewManager] Usuário: {userId}");
         Debug.Log($"[TopicReviewManager] Tópico: {databankName}");
 
-        await ScheduleNextRevision(userId, globalId, databankName);
+        await ScheduleNextRevision(userId, databankName, globalId, correctQuestionGlobalIds, wrongQuestionGlobalIds);
     }
 
 
-    public async Task ScheduleNextRevision(string userId, string databankname, string topicId)
+    public async Task ScheduleNextRevision(string userId, string databankname, string topicId, List<string> correctQuestionGlobalIds,
+    List<string> wrongQuestionGlobalIds)
     {
         Debug.Log("chegou");
         EnsureRepository();
