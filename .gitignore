@@ -118,8 +118,6 @@ mono_crash.mem.*
 # Specific Firebase binaries / plugins that can be regenerated
 # ===========================
 # (keep only versioned ones in Assets/Firebase)
-Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.so
-Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.bundle
 Library/PackageCache/**/*.dylib
 iOS/Libraries/*.a
 iOS/Libraries/libiPhone-lib.a
