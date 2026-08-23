@@ -33,6 +33,7 @@ public class NavigationBottomBarManager : BarsManager
         "Initialization",
         "QuestionHintScene",
         "AssessmentRegisterScene",
+        "AssessmentIntroScene",
         "AssessmentScene"
     };
 
@@ -40,9 +41,27 @@ public class NavigationBottomBarManager : BarsManager
     protected override string BarName => "PersistentBottomBar";
     protected override string BarChildName => "BottomBar";
 
+    private void EnsureHiddenSceneConfigured(string sceneName)
+    {
+        if (!scenesWithoutBottomBar.Contains(sceneName))
+        {
+            scenesWithoutBottomBar.Add(sceneName);
+        }
+    }
+
     protected override void OnAwake()
     {
         Debug.Log("[BottomBar] OnAwake chamado");
+
+        EnsureHiddenSceneConfigured("LoginView");
+        EnsureHiddenSceneConfigured("RegisterView");
+        EnsureHiddenSceneConfigured("QuestionScene");
+        EnsureHiddenSceneConfigured("ResetDatabaseView");
+        EnsureHiddenSceneConfigured("Initialization");
+        EnsureHiddenSceneConfigured("QuestionHintScene");
+        EnsureHiddenSceneConfigured("AssessmentRegisterScene");
+        EnsureHiddenSceneConfigured("AssessmentIntroScene");
+        EnsureHiddenSceneConfigured("AssessmentScene");
 
         base.scenesWithoutBar.Clear();
         foreach (var scene in scenesWithoutBottomBar)

@@ -7,8 +7,6 @@ using TMPro;
 
 public class TopBarManager : BarsManager
 {
-    protected INavigationService _navigation;
-
     [System.Serializable]
     public class TopButton
     {

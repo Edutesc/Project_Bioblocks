@@ -21,6 +21,8 @@ public class UserHeaderManager : BarsManager
     [SerializeField] private Image fireIcon;
     [SerializeField] private TMP_Text bonusText;
     [SerializeField] private Button assessmentBellButton;
+    [SerializeField] private bool alwaysShowBellInEditor = true;
+    [SerializeField] private bool forceShowBellButton = false;
 
     [Header("Avatar Catalog")]
     [SerializeField] private AvatarCatalogPanelController avatarCatalogPanel;
@@ -114,6 +116,7 @@ public class UserHeaderManager : BarsManager
         EnsureHiddenSceneConfigured("ResetDatabaseView");
         EnsureHiddenSceneConfigured("Initialization");
         EnsureHiddenSceneConfigured("AssessmentRegisterScene");
+        EnsureHiddenSceneConfigured("AssessmentIntroScene");
         EnsureHiddenSceneConfigured("AssessmentScene");
         EnsureVisibleSceneConfigured("PathwayScene");
         EnsureVisibleSceneConfigured("ProfileScene");
@@ -127,10 +130,15 @@ public class UserHeaderManager : BarsManager
         
         if (assessmentBellButton != null)
         {
-            assessmentBellButton.onClick.AddListener(OpenAssessmentRegister);
+            assessmentBellButton.onClick.AddListener(OpenAssessmentIntro);
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public void OpenAssessmentIntro()
+    {
+        SceneManager.LoadScene("AssessmentIntroScene");
     }
 
     public void OpenAssessmentRegister()
@@ -178,6 +186,38 @@ public class UserHeaderManager : BarsManager
             AppContext.PlayerLevel.OnLevelProgressUpdated += OnPlayerLevelProgressUpdated;
             UpdatePlayerLevelUI();
         }
+
+        RefreshBellButtonVisibility();
+    }
+
+    public async void RefreshBellButtonVisibility()
+    {
+        if (assessmentBellButton == null) return;
+
+        if (forceShowBellButton || (Application.isEditor && alwaysShowBellInEditor))
+        {
+            assessmentBellButton.gameObject.SetActive(true);
+            return;
+        }
+
+        try
+        {
+            var repo = AppContext.FirestoreAssessment;
+            if (repo != null)
+            {
+                var activeAssessment = await repo.GetActiveAssessmentAsync();
+                assessmentBellButton.gameObject.SetActive(activeAssessment != null && activeAssessment.Enabled);
+            }
+            else
+            {
+                assessmentBellButton.gameObject.SetActive(false);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[UserHeaderManager] Erro ao verificar avaliação ativa para o sino: {e.Message}");
+            assessmentBellButton.gameObject.SetActive(false);
+        }
     }
 
     protected override void OnCleanup()
@@ -215,6 +255,8 @@ public class UserHeaderManager : BarsManager
         {
             RefreshActiveBonuses();
         }
+
+        RefreshBellButtonVisibility();
     }
 
     private void OnDisable()
@@ -625,6 +667,7 @@ public class UserHeaderManager : BarsManager
         UpdateBarState(currentScene);
         isSceneBeingLoaded = false;
         RefreshPendingAvatar();
+        RefreshBellButtonVisibility();
     }
 
     protected override void OnSceneChangedSpecific(string sceneName)

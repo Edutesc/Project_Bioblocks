@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Edutesc.BioBlocks.Core.Models;
 using QuestionSystem;
 
 namespace Edutesc.BioBlocks.Assessment
@@ -16,7 +17,18 @@ namespace Edutesc.BioBlocks.Assessment
             _random = new Random();
         }
 
-        public List<Question> GenerateAssessment(int totalQuestions = 10)
+        public List<Question> GenerateAssessment(AssessmentData assessmentData)
+        {
+            if (assessmentData == null)
+            {
+                return GenerateAssessment();
+            }
+
+            int total = assessmentData.TotalQuestions > 0 ? assessmentData.TotalQuestions : 10;
+            return GenerateAssessment(assessmentData.AllowedDatabanks, assessmentData.QuestionDistribution, total);
+        }
+
+        public List<Question> GenerateAssessment(List<string> allowedDatabanks = null, QuestionDistribution distribution = null, int totalQuestions = 10)
         {
             var allQuestions = _repository.GetAllQuestions();
             
@@ -25,6 +37,24 @@ namespace Edutesc.BioBlocks.Assessment
                 return new List<Question>();
             }
 
+            // Filtro por allowedDatabanks (se fornecido)
+            if (allowedDatabanks != null && allowedDatabanks.Count > 0)
+            {
+                allQuestions = allQuestions
+                    .Where(q => !string.IsNullOrEmpty(q.questionDatabankName) && 
+                                allowedDatabanks.Any(db => string.Equals(db, q.questionDatabankName, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+            }
+
+            if (allQuestions.Count == 0)
+            {
+                return new List<Question>();
+            }
+
+            int targetBasic = distribution != null ? distribution.Basic : 4;
+            int targetIntermediate = distribution != null ? distribution.Intermediate : 3;
+            int targetHard = distribution != null ? distribution.Hard : 3;
+
             var basic = allQuestions.Where(q => q.questionLevel <= 1).ToList();
             var intermediate = allQuestions.Where(q => q.questionLevel == 2).ToList();
             var hard = allQuestions.Where(q => q.questionLevel >= 3).ToList();
@@ -32,10 +62,6 @@ namespace Edutesc.BioBlocks.Assessment
             Shuffle(basic);
             Shuffle(intermediate);
             Shuffle(hard);
-
-            int targetBasic = 4;
-            int targetIntermediate = 3;
-            int targetHard = 3;
 
             var finalQuestions = new List<Question>();
 
@@ -48,6 +74,7 @@ namespace Edutesc.BioBlocks.Assessment
             var selectedHard = hard.Take(targetHard).ToList();
             finalQuestions.AddRange(selectedHard);
 
+            // Fallback se alguma categoria não tiver questões suficientes
             if (finalQuestions.Count < totalQuestions)
             {
                 int missing = totalQuestions - finalQuestions.Count;

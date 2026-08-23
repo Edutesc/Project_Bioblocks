@@ -977,7 +977,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4862105177932450124, guid: 4d1c567b918c8204a8803b52ff9a9176, type: 3}
       propertyPath: scenesWithoutBottomBar.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4862105177932450124, guid: 4d1c567b918c8204a8803b52ff9a9176, type: 3}
       propertyPath: scenesWithoutBottomBar.Array.data[4]
@@ -993,6 +993,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4862105177932450124, guid: 4d1c567b918c8204a8803b52ff9a9176, type: 3}
       propertyPath: scenesWithoutBottomBar.Array.data[7]
+      value: AssessmentIntroScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4862105177932450124, guid: 4d1c567b918c8204a8803b52ff9a9176, type: 3}
+      propertyPath: scenesWithoutBottomBar.Array.data[8]
       value: AssessmentScene
       objectReference: {fileID: 0}
     - target: {fileID: 5610577299793292681, guid: 4d1c567b918c8204a8803b52ff9a9176, type: 3}
@@ -2812,50 +2816,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4990771792744921542, guid: 70b1bd1d9a7d06a409d5d5a4b86af9cb, type: 3}
   m_PrefabInstance: {fileID: 2099051401}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1398554297
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1398554299}
-  - component: {fileID: 1398554298}
-  m_Layer: 0
-  m_Name: LogcatTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1398554298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1398554297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39077d41113654fba84e689b4c968ad4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1398554299
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1398554297}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 934.2193, y: 829.0018, z: -13.001825}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1417369625
 GameObject:
   m_ObjectHideFlags: 0
@@ -4444,4 +4404,3 @@ SceneRoots:
   - {fileID: 1467229983}
   - {fileID: 564396344}
   - {fileID: 1379775355}
-  - {fileID: 1398554299}

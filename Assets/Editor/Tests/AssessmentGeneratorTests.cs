@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using QuestionSystem;
 using Edutesc.BioBlocks.Assessment;
+using Edutesc.BioBlocks.Core.Models;
 
 public class AssessmentGeneratorTests
 {
@@ -20,9 +21,9 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_ShouldReturnExactProportions_WhenEnoughQuestionsExist()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1 });
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2 });
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3 });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
         
         _fakeRepository.SaveQuestions(questions);
 
@@ -40,12 +41,58 @@ public class AssessmentGeneratorTests
     }
 
     [Test]
+    public void GenerateAssessment_ShouldFilterByAllowedDatabanks()
+    {
+        var questions = new List<Question>();
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Amino_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Protein_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Enzyme_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Water_{i}", questionLevel = 1, questionDatabankName = "WaterQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Lipid_{i}", questionLevel = 2, questionDatabankName = "LipidsQuestionDataBase" });
+        
+        _fakeRepository.SaveQuestions(questions);
+
+        var allowed = new List<string> { "AminoacidQuestionDataBase", "ProteinQuestionDataBase", "EnzymeQuestionDataBase" };
+        var assessment = _generator.GenerateAssessment(allowedDatabanks: allowed);
+
+        Assert.AreEqual(10, assessment.Count);
+        Assert.IsTrue(assessment.All(q => allowed.Contains(q.questionDatabankName)), "Todas as questões devem pertencer exclusivamente aos allowedDatabanks.");
+        Assert.IsFalse(assessment.Any(q => q.questionDatabankName == "WaterQuestionDataBase" || q.questionDatabankName == "LipidsQuestionDataBase"));
+    }
+
+    [Test]
+    public void GenerateAssessment_WithAssessmentData_ShouldRespectDistributionAndDatabanks()
+    {
+        var questions = new List<Question>();
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"A_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"P_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"E_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
+
+        _fakeRepository.SaveQuestions(questions);
+
+        var assessmentData = new AssessmentData
+        {
+            AssessmentId = "2026-3-aminoacidos-proteinas-enzimas",
+            AllowedDatabanks = new List<string> { "AminoacidQuestionDataBase", "ProteinQuestionDataBase", "EnzymeQuestionDataBase" },
+            QuestionDistribution = new QuestionDistribution { Basic = 5, Intermediate = 2, Hard = 3 },
+            TotalQuestions = 10
+        };
+
+        var assessment = _generator.GenerateAssessment(assessmentData);
+
+        Assert.AreEqual(10, assessment.Count);
+        Assert.AreEqual(5, assessment.Count(q => q.questionLevel <= 1));
+        Assert.AreEqual(2, assessment.Count(q => q.questionLevel == 2));
+        Assert.AreEqual(3, assessment.Count(q => q.questionLevel >= 3));
+    }
+
+    [Test]
     public void GenerateAssessment_ShouldFallback_WhenNotEnoughQuestions()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1 });
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2 });
-        for (int i = 0; i < 2; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3 }); // ONLY 2
+        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 2; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "AminoacidQuestionDataBase" }); // APENAS 2
         
         _fakeRepository.SaveQuestions(questions);
 
@@ -61,9 +108,9 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_ShouldProduceDifferentAssessments_WhenRunMultipleTimes()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1 });
-        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2 });
-        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3 });
+        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "AminoacidQuestionDataBase" });
         
         _fakeRepository.SaveQuestions(questions);
 

@@ -92,9 +92,22 @@ service cloud.firestore {
     }
 
     // ────────────────────────────────────────────────────────────
-    // Assessments — resultados de avaliações (provas).
-    // Criação livre para logados, leitura liberada, e update/delete bloqueados (anti-trapaça).
+    // Assessments — definições de avaliações e subcoleção Attempts (tentativas).
+    // Documento principal: leitura por usuários autenticados, escrita bloqueada (apenas admin/seed).
+    // Subcoleção Attempts: leitura autenticada, criação restrita ao próprio usuário logado.
     // ────────────────────────────────────────────────────────────
+    match /Assessments/{assessmentId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+
+      match /Attempts/{attemptId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null
+          && request.resource.data.userId == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+
     match /assessments/{assessmentId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null;

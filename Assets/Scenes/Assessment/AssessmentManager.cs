@@ -72,18 +72,10 @@ public class AssessmentManager : MonoBehaviour
         var session = AssessmentSession.Current;
         var question = session.GetCurrentQuestion();
 
-        bool isCorrect = (selectedIndex == question.correctIndex);
-
-        string userAnsText = (question.answers != null && question.answers.Length > selectedIndex) ? question.answers[selectedIndex] : selectedIndex.ToString();
-        string correctAnsText = (question.answers != null && question.answers.Length > question.correctIndex) ? question.answers[question.correctIndex] : question.correctIndex.ToString();
-
-        session.RecordAnswer(
-            questionId: question.globalId, 
-            difficulty: question.questionLevel.ToString(), 
-            isCorrect: isCorrect, 
-            userAnswer: userAnsText, 
-            correctAnswer: correctAnsText
-        );
+        if (question != null)
+        {
+            session.RecordAnswer(question, selectedIndex);
+        }
 
         await Task.Delay(250);
 
@@ -105,14 +97,26 @@ public class AssessmentManager : MonoBehaviour
             progressText.text = "Salvando Resultado...";
         }
 
+        var session = AssessmentSession.Current;
         var firestoreRepo = AppContext.FirestoreAssessment;
-        if (firestoreRepo != null)
+
+        if (firestoreRepo != null && session != null)
         {
-            await firestoreRepo.SaveAssessmentAsync(AssessmentSession.Current.CurrentResult);
+            var attempt = session.FinalizeAttempt();
+            string assessmentId = session.AssessmentConfig?.AssessmentId ?? attempt.AssessmentId;
+
+            try
+            {
+                await firestoreRepo.SaveAssessmentAttemptAsync(assessmentId, attempt);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[AssessmentManager] Erro ao salvar tentativa no Firestore: {e.Message}");
+            }
         }
         else
         {
-            Debug.LogError("[AssessmentManager] Repositório Firestore nulo! A nota não será salva na nuvem.");
+            Debug.LogError("[AssessmentManager] Repositório Firestore nulo! O resultado não será salvo na nuvem.");
         }
 
         AssessmentSession.Clear();

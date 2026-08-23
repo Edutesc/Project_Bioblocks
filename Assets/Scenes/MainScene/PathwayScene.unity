@@ -2943,7 +2943,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08c73729466245dfad93cef890842fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navigationManager: {fileID: 0}
 --- !u!4 &995379910
 Transform:
   m_ObjectHideFlags: 0
@@ -3085,7 +3084,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 706281771}
   m_HandleRect: {fileID: 706281770}
   m_Direction: 2
-  m_Value: 0.9999999
+  m_Value: 1.0000001
   m_Size: 0.6229925
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5733,52 +5732,6 @@ MonoBehaviour:
   releaseDuration: 0.15
   dragThreshold: 15
   maxClickDuration: 0.5
---- !u!1 &2099027088
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2099027090}
-  - component: {fileID: 2099027089}
-  m_Layer: 0
-  m_Name: ProjectSettings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2099027089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2099027088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f093c8d1781f4bab8da941c51669453, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDebugMode: 1
-  useMockQuestions: 0
---- !u!4 &2099027090
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2099027088}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 806.69965, y: 1078.284, z: -5.299034}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2108361891
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6088,7 +6041,6 @@ SceneRoots:
   - {fileID: 510325094}
   - {fileID: 993291188}
   - {fileID: 995379910}
-  - {fileID: 2099027090}
   - {fileID: 699064870}
   - {fileID: 1883264509}
   - {fileID: 8301470}
