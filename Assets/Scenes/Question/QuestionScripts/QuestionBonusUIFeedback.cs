@@ -22,15 +22,11 @@ public class QuestionBonusUIFeedback : MonoBehaviour
         if (bonusMessageText == null)
         {
             bonusMessageText = transform.Find("FeedbackText")?.GetComponent<TextMeshProUGUI>();
-            if (bonusMessageText == null)
-                Debug.LogError("QuestionBonusUIFeedback: Não foi possível encontrar o TextMeshProUGUI 'FeedbackText'");
         }
 
         if (bonusPanel == null)
         {
             bonusPanel = GetComponent<Image>();
-            if (bonusPanel == null)
-                Debug.LogError("QuestionBonusUIFeedback: Não foi possível encontrar o componente Image");
         }
     }
 

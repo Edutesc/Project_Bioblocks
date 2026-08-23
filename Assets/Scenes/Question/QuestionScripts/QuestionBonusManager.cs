@@ -356,7 +356,6 @@ public class QuestionBonusManager : MonoBehaviour
         QuestionManager questionManager = FindFirstObjectByType<QuestionManager>();
         if (questionManager == null)
         {
-            Debug.LogError("QuestionBonusManager: QuestionManager não encontrado.");
             return;
         }
 

@@ -77,27 +77,40 @@ public class AssessmentIntroManager : MonoBehaviour
                 }
             }
 
-            if (_loadedAssessment == null)
+            if (_loadedAssessment == null && !string.IsNullOrEmpty(defaultAssessmentId))
             {
                 _loadedAssessment = CreateDefaultAssessment(defaultAssessmentId);
             }
 
-            UpdateUI(_loadedAssessment);
-
-            if (btnStart != null)
+            if (_loadedAssessment != null)
             {
-                btnStart.interactable = true;
+                UpdateUI(_loadedAssessment);
+
+                if (btnStart != null)
+                {
+                    btnStart.interactable = true;
+                }
+            }
+            else
+            {
+                ShowNoActiveAssessmentUI();
             }
         }
         catch (Exception e)
         {
             Debug.LogError($"[AssessmentIntroManager] Erro ao carregar dados da avaliação: {e.Message}");
-            _loadedAssessment = CreateDefaultAssessment(defaultAssessmentId);
-            UpdateUI(_loadedAssessment);
-            
-            if (btnStart != null)
+            if (!string.IsNullOrEmpty(defaultAssessmentId))
             {
-                btnStart.interactable = true;
+                _loadedAssessment = CreateDefaultAssessment(defaultAssessmentId);
+                UpdateUI(_loadedAssessment);
+                if (btnStart != null)
+                {
+                    btnStart.interactable = true;
+                }
+            }
+            else
+            {
+                ShowNoActiveAssessmentUI();
             }
         }
         finally
@@ -152,11 +165,45 @@ public class AssessmentIntroManager : MonoBehaviour
         }
     }
 
+    private void ShowNoActiveAssessmentUI()
+    {
+        if (titleText != null)
+        {
+            titleText.text = "Avaliação formativa";
+        }
+
+        if (topicsText != null)
+        {
+            topicsText.text = "Nenhuma avaliação ativa encontrada no momento.\nFique atento aos avisos do professor!";
+        }
+
+        if (totalQuestionsText != null)
+        {
+            totalQuestionsText.text = "Esta atividade não está disponível no momento.";
+        }
+
+        if (durationText != null)
+        {
+            durationText.text = "";
+        }
+
+        if (disclaimerText != null)
+        {
+            disclaimerText.text = "Quando uma nova avaliação for liberada, você poderá acessá-la por aqui.";
+        }
+
+        if (btnStart != null)
+        {
+            btnStart.interactable = false;
+        }
+    }
+
     private void OnStartClicked()
     {
         if (_loadedAssessment == null)
         {
-            _loadedAssessment = CreateDefaultAssessment(defaultAssessmentId);
+            ShowError("Nenhuma avaliação ativa selecionada.");
+            return;
         }
 
         var questions = _generator.GenerateAssessment(_loadedAssessment);

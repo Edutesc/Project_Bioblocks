@@ -68,8 +68,8 @@ public class FirestoreAssessmentRepository : IFirestoreAssessmentRepository
                 }
             }
 
-            Debug.LogWarning("[FirestoreAssessmentRepository] Nenhuma avaliação ativa encontrada. Tentando fallback padrão.");
-            return await GetAssessmentAsync("2026-3-aminoacidos-proteinas-enzimas");
+            Debug.LogWarning("[FirestoreAssessmentRepository] Nenhuma avaliação ativa encontrada no Firestore.");
+            return null;
         }
         catch (Exception e)
         {

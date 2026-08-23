@@ -337,37 +337,43 @@ public class FeedbackUIElements : MonoBehaviour
 
     public void ValidateComponents()
     {
+        // Se nenhum painel ou sprite foi configurado (como em cenas de Assessment onde não há feedback imediato), não gera erro
+        if (feedbackPanel == null && feedbackCorrect5Points == null && feedbackWrong == null)
+        {
+            return;
+        }
+
         bool hasErrors = false;
 
         // Componentes essenciais
         if (feedbackPanel == null)
         {
-            Debug.LogError("[FeedbackUIElements] FeedbackPanel não atribuído!");
+            Debug.LogWarning("[FeedbackUIElements] FeedbackPanel não atribuído!");
             hasErrors = true;
         }
 
         // Sprites de feedback
         if (feedbackCorrect5Points == null)
         {
-            Debug.LogError("[FeedbackUIElements] Sprite 'feedbackCorrect5Points' não atribuído!");
+            Debug.LogWarning("[FeedbackUIElements] Sprite 'feedbackCorrect5Points' não atribuído!");
             hasErrors = true;
         }
 
         if (feedbackCorrect10PointsBonus == null)
         {
-            Debug.LogError("[FeedbackUIElements] Sprite 'feedbackCorrect10PointsBonus' não atribuído!");
+            Debug.LogWarning("[FeedbackUIElements] Sprite 'feedbackCorrect10PointsBonus' não atribuído!");
             hasErrors = true;
         }
 
         if (feedbackWrong == null)
         {
-            Debug.LogError("[FeedbackUIElements] Sprite 'feedbackWrong' não atribuído!");
+            Debug.LogWarning("[FeedbackUIElements] Sprite 'feedbackWrong' não atribuído!");
             hasErrors = true;
         }
 
         if (feedbackTimeout == null)
         {
-            Debug.LogError("[FeedbackUIElements] Sprite 'feedbackTimeout' não atribuído!");
+            Debug.LogWarning("[FeedbackUIElements] Sprite 'feedbackTimeout' não atribuído!");
             hasErrors = true;
         }
 
@@ -380,7 +386,7 @@ public class FeedbackUIElements : MonoBehaviour
 
         if (hasErrors)
         {
-            Debug.LogError("[FeedbackUIElements] Configure os sprites de feedback no Inspector!");
+            Debug.LogWarning("[FeedbackUIElements] Configure os sprites de feedback no Inspector se esta cena utilizar feedback!");
         }
     }
 

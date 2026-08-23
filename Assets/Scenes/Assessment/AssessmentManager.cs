@@ -26,6 +26,9 @@ public class AssessmentManager : MonoBehaviour
         var hintManager = FindObjectOfType<QuestionHintButtonManager>();
         if (hintManager != null) hintManager.gameObject.SetActive(false);
 
+        var bonusManager = FindObjectOfType<QuestionBonusManager>();
+        if (bonusManager != null) bonusManager.gameObject.SetActive(false);
+
         answerManager.OnAnswerSelected += HandleAnswerSelected;
 
         ShowCurrentQuestion();
