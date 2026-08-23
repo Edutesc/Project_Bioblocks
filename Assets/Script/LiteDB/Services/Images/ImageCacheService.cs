@@ -87,10 +87,10 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
         try
         {
             bool needsResize = texture.width > MAX_IMAGE_DIMENSION || texture.height > MAX_IMAGE_DIMENSION;
-            Texture2D toSave = needsResize ? ResizeTexture(texture, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION) : texture;
+            Texture2D toSave = needsResize ? ResizeTexture(texture, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION) : (texture.isReadable ? texture : MakeReadable(texture));
             byte[] imageBytes = toSave.EncodeToPNG();
 
-            if (needsResize && toSave != texture)
+            if (toSave != texture)
                 Destroy(toSave);
 
             SaveImageBytesToCache(imageUrl, imageBytes, topic, sha256);
@@ -266,6 +266,22 @@ public class ImageCacheService : MonoBehaviour, IImageCacheService
 
         Texture2D result = new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false);
         result.ReadPixels(new Rect(0, 0, newWidth, newHeight), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = null;
+        RenderTexture.ReleaseTemporary(rt);
+        return result;
+    }
+
+    private Texture2D MakeReadable(Texture2D source)
+    {
+        RenderTexture rt = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+        rt.filterMode = source.filterMode;
+        RenderTexture.active = rt;
+        Graphics.Blit(source, rt);
+
+        Texture2D result = new Texture2D(source.width, source.height, TextureFormat.RGBA32, false);
+        result.ReadPixels(new Rect(0, 0, source.width, source.height), 0, 0);
         result.Apply();
 
         RenderTexture.active = null;

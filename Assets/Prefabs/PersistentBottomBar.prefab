@@ -1087,6 +1087,7 @@ MonoBehaviour:
   - Initialization
   - QuestionHintScene
   - AssessmentRegisterScene
+  - AssessmentIntroScene
   - AssessmentScene
 --- !u!1 &8634253958893738647
 GameObject:

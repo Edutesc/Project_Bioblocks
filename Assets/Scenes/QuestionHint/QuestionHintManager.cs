@@ -263,7 +263,9 @@ public class QuestionHintManager : MonoBehaviour
                 texture,
                 new Rect(0, 0, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f),
-                100f);
+                100f,
+                0,
+                SpriteMeshType.FullRect);
 
             hintImage.sprite = _loadedImageSprite;
             hintImage.preserveAspect = true;

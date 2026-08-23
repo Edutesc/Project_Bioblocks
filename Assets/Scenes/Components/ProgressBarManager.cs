@@ -71,7 +71,9 @@ public class ProgressBarManager : MonoBehaviour
             _gradientTexture,
             new Rect(0, 0, width, 1),
             new Vector2(0.5f, 0.5f),
-            pixelsPerUnit: 100f
+            100f,
+            0,
+            SpriteMeshType.FullRect
         );
 
         fillImage.color = Color.white; // garante que a cor não tinja o gradiente

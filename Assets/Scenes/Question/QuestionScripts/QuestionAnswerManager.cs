@@ -287,7 +287,9 @@ public class QuestionAnswerManager : MonoBehaviour
                 texture,
                 new Rect(0, 0, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f),
-                100f);
+                100f,
+                0,
+                SpriteMeshType.FullRect);
 
             // Limpa a sprite anterior (se a tivermos criado nós mesmos)
             if (_ownedAnswerSprites != null &&

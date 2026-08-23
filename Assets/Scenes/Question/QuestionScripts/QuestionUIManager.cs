@@ -109,7 +109,9 @@ public class QuestionUIManager : MonoBehaviour
                 resourceTexture,
                 new Rect(0, 0, resourceTexture.width, resourceTexture.height),
                 new Vector2(0.5f, 0.5f),
-                100f);
+                100f,
+                0,
+                SpriteMeshType.FullRect);
             AssignSprite(resourceSprite);
             return;
         }
@@ -127,7 +129,9 @@ public class QuestionUIManager : MonoBehaviour
                 texture,
                 new Rect(0, 0, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f),
-                100f);
+                100f,
+                0,
+                SpriteMeshType.FullRect);
 
             AssignSprite(sprite);
         }
@@ -166,7 +170,9 @@ public class QuestionUIManager : MonoBehaviour
                     resourceTexture,
                     new Rect(0, 0, resourceTexture.width, resourceTexture.height),
                     new Vector2(0.5f, 0.5f),
-                    100f);
+                    100f,
+                    0,
+                    SpriteMeshType.FullRect);
                 return;
             }
 
@@ -183,7 +189,9 @@ public class QuestionUIManager : MonoBehaviour
                 texture,
                 new Rect(0, 0, texture.width, texture.height),
                 new Vector2(0.5f, 0.5f),
-                100f);
+                100f,
+                0,
+                SpriteMeshType.FullRect);
         }
         catch (System.Exception e)
         {

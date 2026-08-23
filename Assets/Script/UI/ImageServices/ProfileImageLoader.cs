@@ -112,7 +112,7 @@ public class ProfileImageLoader : MonoBehaviour
 
     private Sprite CreateCircleSprite(int resolution)
     {
-        Texture2D texture = new Texture2D(resolution, resolution);
+        Texture2D texture = new Texture2D(resolution, resolution, TextureFormat.RGBA32, false);
         float radius = resolution / 2f;
         Vector2 center = new Vector2(radius, radius);
 
@@ -126,14 +126,14 @@ public class ProfileImageLoader : MonoBehaviour
             }
         }
 
-        texture.Apply();
+        texture.Apply(false, false);
         return Sprite.Create(
             texture,
             new Rect(0, 0, resolution, resolution),
             Vector2.one * 0.5f,
             100f,
             0,
-            SpriteMeshType.Tight
+            SpriteMeshType.FullRect
         );
     }
 
@@ -301,14 +301,14 @@ public class ProfileImageLoader : MonoBehaviour
 
     private void CreateAndSetPlaceholderTexture()
     {
-        Texture2D texture = new Texture2D(128, 128);
+        Texture2D texture = new Texture2D(128, 128, TextureFormat.RGBA32, false);
         Color[] colors = new Color[128 * 128];
         for (int i = 0; i < colors.Length; i++)
         {
             colors[i] = Color.gray;
         }
         texture.SetPixels(colors);
-        texture.Apply();
+        texture.Apply(false, false);
         SetTexture(texture);
     }
 
