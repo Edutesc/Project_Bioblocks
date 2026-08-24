@@ -21,9 +21,10 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_ShouldReturnExactProportions_WhenEnoughQuestionsExist()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
+        int num = 1;
+        for (int i = 0; i < 20; i++) questions.Add(new Question { questionNumber = num++, globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { questionNumber = num++, globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { questionNumber = num++, globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
         
         _fakeRepository.SaveQuestions(questions);
 
@@ -44,11 +45,12 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_ShouldFilterByAllowedDatabanks()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Amino_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Protein_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Enzyme_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Water_{i}", questionLevel = 1, questionDatabankName = "WaterQuestionDataBase" });
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"Lipid_{i}", questionLevel = 2, questionDatabankName = "LipidsQuestionDataBase" });
+        int num = 1;
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"Amino_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"Protein_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"Enzyme_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"Water_{i}", questionLevel = 1, questionDatabankName = "WaterQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"Lipid_{i}", questionLevel = 2, questionDatabankName = "LipidsQuestionDataBase" });
         
         _fakeRepository.SaveQuestions(questions);
 
@@ -64,9 +66,10 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_WithAssessmentData_ShouldRespectDistributionAndDatabanks()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"A_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"P_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
-        for (int i = 0; i < 10; i++) questions.Add(new Question { globalId = $"E_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
+        int num = 1;
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"A_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"P_{i}", questionLevel = 2, questionDatabankName = "ProteinQuestionDataBase" });
+        for (int i = 0; i < 10; i++) questions.Add(new Question { questionNumber = num++, globalId = $"E_{i}", questionLevel = 3, questionDatabankName = "EnzymeQuestionDataBase" });
 
         _fakeRepository.SaveQuestions(questions);
 
@@ -90,9 +93,10 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_ShouldFallback_WhenNotEnoughQuestions()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 20; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 2; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "AminoacidQuestionDataBase" }); // APENAS 2
+        int num = 1;
+        for (int i = 0; i < 20; i++) questions.Add(new Question { questionNumber = num++, globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 20; i++) questions.Add(new Question { questionNumber = num++, globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 2; i++) questions.Add(new Question { questionNumber = num++, globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "AminoacidQuestionDataBase" }); // APENAS 2
         
         _fakeRepository.SaveQuestions(questions);
 
@@ -108,9 +112,10 @@ public class AssessmentGeneratorTests
     public void GenerateAssessment_ShouldProduceDifferentAssessments_WhenRunMultipleTimes()
     {
         var questions = new List<Question>();
-        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "AminoacidQuestionDataBase" });
-        for (int i = 0; i < 50; i++) questions.Add(new Question { globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "AminoacidQuestionDataBase" });
+        int num = 1;
+        for (int i = 0; i < 50; i++) questions.Add(new Question { questionNumber = num++, globalId = $"B_{i}", questionLevel = 1, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 50; i++) questions.Add(new Question { questionNumber = num++, globalId = $"I_{i}", questionLevel = 2, questionDatabankName = "AminoacidQuestionDataBase" });
+        for (int i = 0; i < 50; i++) questions.Add(new Question { questionNumber = num++, globalId = $"H_{i}", questionLevel = 3, questionDatabankName = "AminoacidQuestionDataBase" });
         
         _fakeRepository.SaveQuestions(questions);
 

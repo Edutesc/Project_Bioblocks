@@ -238,9 +238,11 @@ public class FakeQuestionLocalRepository : IQuestionLocalRepository
             if (!_storage.ContainsKey(databankName))
                 _storage[databankName] = new List<Question>();
 
-            // Upsert por questionNumber dentro do banco.
             var existing = _storage[databankName]
-                .FindIndex(x => x.questionNumber == q.questionNumber);
+                .FindIndex(x =>
+                    (!string.IsNullOrEmpty(q.globalId) && !string.IsNullOrEmpty(x.globalId))
+                        ? string.Equals(x.globalId, q.globalId, StringComparison.OrdinalIgnoreCase)
+                        : (q.questionNumber != 0 && x.questionNumber == q.questionNumber));
 
             if (existing >= 0)
                 _storage[databankName][existing] = q;
