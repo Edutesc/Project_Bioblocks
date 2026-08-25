@@ -72,7 +72,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
          //QUESTION 003
          new Question {
              questionDatabankName = "NucleicAcidsQuestionDatabase",
-             questionText = "Quais são os três componentes de um nucleotídeo?",
+             questionText = "Qual das imagens abaixo representa corretamente a união dos três componentes fundamentais de um nucleotídeo?",
              answers = new string[] {
                  "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer003.0",
                  "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer003.1",
@@ -105,7 +105,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //         //QUESTION 004
          new Question {
              questionDatabankName = "NucleicAcidsQuestionDatabase",
-             questionText = "Qual açúcar está presente no RNA?",
+             questionText = "Qual das estruturas de pentose (açúcar) abaixo é encontrada na formação do RNA?",
              answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer004.3" },
              correctIndex = 1,
              questionNumber = 4,
@@ -133,7 +133,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //         //QUESTION 005
          new Question {
              questionDatabankName = "NucleicAcidsQuestionDatabase",
-             questionText = "Qual açúcar está presente no DNA?",
+             questionText = "O DNA possui uma pentose específica em seu esqueleto. Qual imagem ilustra esse açúcar?",
              answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer005.3" },
              correctIndex = 0,
              questionNumber = 5,
@@ -161,7 +161,7 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //         //QUESTION 006
          new Question {
              questionDatabankName = "NucleicAcidsQuestionDatabase",
-             questionText = "O que são nucleosídeos?",
+             questionText = "Observe as estruturas químicas. Qual delas corresponde unicamente a um nucleosídeo?",
              answers = new string[] {
                  "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer006.3"
              },
