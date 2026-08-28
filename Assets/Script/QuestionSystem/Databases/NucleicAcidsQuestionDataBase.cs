@@ -710,32 +710,32 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //         },
 
 //         //QUESTION 024
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Qual tipo de RNA transporta aminoácidos para os ribossomos?",
-//             answers = new string[] { "tRNA", "rRNA", "mRNA", "snRNA" },
-//             correctIndex = 0,
-//             questionNumber = 24,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_024",
-//             topic = "nucleicAcids",
-//             subtopic = "rna_types",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Remember,
-//             conceptTags = new List<string> { "trna", "amino_acid_transport", "translation" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Durante a tradução, cada aminoácido precisa chegar ao ribossomo associado a uma molécula que possui anticódon. Esse anticódon reconhece um códon do RNAm, posicionando o aminoácido correto na cadeia nascente. Identifique o tipo de RNA cuja função combina transporte de aminoácido e reconhecimento da mensagem.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Identifique abaixo a molécula responsável por carregar os aminoácidos até o ribossomo durante a tradução.",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer024.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer024.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer024.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer024.3" },
+             correctIndex = 0,
+             questionNumber = 24,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_024",
+             topic = "nucleicAcids",
+             subtopic = "rna_types",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Remember,
+             conceptTags = new List<string> { "trna", "amino_acid_transport", "translation" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "Durante a tradução, cada aminoácido precisa chegar ao ribossomo associado a uma molécula que possui anticódon. Esse anticódon reconhece um códon do RNAm, posicionando o aminoácido correto na cadeia nascente. Identifique o tipo de RNA cuja função combina transporte de aminoácido e reconhecimento da mensagem.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 025
 //         new Question {
