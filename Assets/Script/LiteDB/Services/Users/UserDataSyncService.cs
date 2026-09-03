@@ -10,6 +10,7 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
     private IUserDataLocalRepository _localRepository;
     private IFirestoreRepository _firestore;
+    private IAuthGate _authGate;
 
     private readonly SemaphoreSlim _syncGate = new SemaphoreSlim(1, 1);
 
@@ -17,10 +18,12 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
     public void InjectDependencies(
         IUserDataLocalRepository localRepository,
-        IFirestoreRepository firestore)
+        IFirestoreRepository firestore,
+        IAuthGate authGate = null)
     {
         _localRepository = localRepository;
         _firestore       = firestore;
+        _authGate        = authGate;
     }
 
     // ── Sincronização principal ───────────────────────────────────────────────
@@ -35,6 +38,9 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
         try
         {
+            if (_authGate != null)
+                await _authGate.WaitForAuthenticatedAsync();
+
             var userData = await _firestore.GetUserData(userId);
 
             if (userData == null)
@@ -75,6 +81,9 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
         try
         {
+            if (_authGate != null)
+                await _authGate.WaitForAuthenticatedAsync();
+
             var userData = _localRepository.GetUser(userId);
             if (userData == null)
             {
@@ -164,6 +173,9 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
             try
             {
+                if (_authGate != null)
+                    await _authGate.WaitForAuthenticatedAsync();
+
                 remoteData = await _firestore.GetUserData(userId);
             }
             catch (Exception e)
@@ -308,6 +320,9 @@ public class UserDataSyncService : MonoBehaviour, IUserDataSyncService
 
         try
         {
+            if (_authGate != null)
+                await _authGate.WaitForAuthenticatedAsync();
+
             await _firestore.UpdateUserScores(
                 userId,
                 additionalScore,

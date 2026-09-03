@@ -17,6 +17,7 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private QuestionCanvasGroupManager questionCanvasGroupManager;
     [SerializeField] private FeedbackUIElements feedbackElements;
     [SerializeField] private QuestionTransitionManager transitionManager;
+    [SerializeField] private QuestionHintButtonManager hintButtonManager;
 
     [Header("Game Logic Managers")]
     [SerializeField] private QuestionTimerManager timerManager;
@@ -27,7 +28,6 @@ public class QuestionManager : MonoBehaviour
     private QuestionSession currentSession;
     private Question nextQuestionToShow;
     private List<Question> allDatabaseQuestions;
-    private int maxLevelInDatabase = 1;
     private INavigationService _navigation;
     private ISceneDataService _sceneData;
 
@@ -110,6 +110,8 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError("QuestionManager: transitionManager é null");
         if (topicReviewmanager == null)
             Debug.LogError("QuestionManager: AppContext.TopicReview é null");
+        if (hintButtonManager == null)
+            Debug.LogWarning("QuestionManager: hintButtonManager não atribuído");
         return questionBottomBarManager != null &&
                questionUIManager        != null &&
                questionCanvasGroupManager != null &&
@@ -148,9 +150,8 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            maxLevelInDatabase = LevelCalculator.GetMaxLevel(allDatabaseQuestions);
             Debug.Log($"[QuestionManager] Banco: {currentDatabaseName} | " +
-                      $"Questões: {allDatabaseQuestions.Count} | Níveis: {maxLevelInDatabase}");
+                      $"Questões: {allDatabaseQuestions.Count}");
 
             List<string> answeredQuestions = await AppContext.AnsweredQuestions?
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
@@ -247,7 +248,6 @@ public class QuestionManager : MonoBehaviour
                 feedbackElements.ShowCorrectAnswer(bonusActive);
 
                 await scoreManager.UpdateScore(baseScore, true, currentQuestion);
-                await CheckLevelCompletionAfterCorrectAnswer(currentQuestion);
             }
             else
             {
@@ -255,6 +255,7 @@ public class QuestionManager : MonoBehaviour
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
             }
 
+            hintButtonManager?.ShowForQuestion(currentQuestion);
             questionBottomBarManager.EnableNavigationButtons();
             SetupNavigationButtons();
         }
@@ -263,74 +264,6 @@ public class QuestionManager : MonoBehaviour
             Debug.LogError($"Erro ao processar resposta: {e.Message}");
         }
     }
-
-    private async Task CheckLevelCompletionAfterCorrectAnswer(Question answeredQuestion)
-    {
-        try
-        {
-            string userId      = UserDataStore.CurrentUserData?.UserId;
-            string databankName = loadManager.DatabankName;
-          
-
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(databankName)) return;
-
-            int questionLevel = answeredQuestion.questionLevel > 0
-                ? answeredQuestion.questionLevel : 1;
-
-            // FetchUserAnsweredQuestionsInTargetDatabase lê do UserDataStore
-            // — sem rede, sem delay necessário
-            List<string> answeredQuestions = await AppContext.AnsweredQuestions?
-                .FetchUserAnsweredQuestionsInTargetDatabase(databankName);
-
-            bool isComplete = LevelCalculator.IsLevelComplete(
-                allDatabaseQuestions, answeredQuestions, questionLevel);
-
-            if (isComplete)
-            {
-                Debug.Log($"Nível {questionLevel} COMPLETO!");
-                ShowLevelCompletionFeedback(questionLevel,
-                    isLastLevel: questionLevel >= maxLevelInDatabase);
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Erro ao verificar conclusão de nível: {e.Message}");
-        }
-    }
-
-    // -------------------------------------------------------
-    // Feedback de nível
-    // -------------------------------------------------------
-    private void ShowLevelCompletionFeedback(int completedLevel, bool isLastLevel)
-    {
-        string levelName = GetLevelName(completedLevel);
-        string title;
-        string bodyText;
-
-        if (isLastLevel)
-        {
-            title    = "INCRÍVEL!";
-            bodyText = $"Você completou o Nível {levelName}. Este é o nível mais difícil.";
-        }
-        else
-        {
-            string nextLevelName = GetLevelName(completedLevel + 1);
-            title    = "PARABÉNS!";
-            bodyText = $"Você completou o Nível {levelName}. O Nível {nextLevelName} foi desbloqueado.";
-        }
-
-        feedbackElements.ShowLevelCompletionFeedback(title, bodyText, true);
-    }
-
-    private string GetLevelName(int level) => level switch
-    {
-        1 => "Básico",
-        2 => "Intermediário",
-        3 => "Difícil",
-        4 => "Avançado",
-        5 => "Expert",
-        _ => $"Nível {level}"
-    };
 
     private void ShowAnswerFeedback(string message, bool isCorrect, bool isCompleted = false)
     {
@@ -414,6 +347,7 @@ public class QuestionManager : MonoBehaviour
                 nextQuestionToShow.questionType == QuestionType.Image,
                 nextQuestionToShow.answerType   == AnswerType.Image,
                 nextQuestionToShow.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(nextQuestionToShow);
             nextQuestionToShow = null;
         }
@@ -436,6 +370,7 @@ public class QuestionManager : MonoBehaviour
                 newQuestion.questionType == QuestionType.Image,
                 newQuestion.answerType   == AnswerType.Image,
                 newQuestion.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(newQuestion);
         }
     }
@@ -451,6 +386,7 @@ public class QuestionManager : MonoBehaviour
                 currentQuestion.questionType == QuestionType.Image,
                 currentQuestion.answerType   == AnswerType.Image,
                 currentQuestion.questionLevel);
+            hintButtonManager?.HideInstant();
             questionUIManager.ShowQuestion(currentQuestion);
             timerManager.StartTimerForQuestion(currentQuestion);
         }
@@ -462,9 +398,12 @@ public class QuestionManager : MonoBehaviour
 
     private async void HandleTimeUp()
     {
+        var currentQuestion = currentSession.GetCurrentQuestion();
+
         answerManager.DisableAllButtons();
         feedbackElements.ShowTimeout();
-        await scoreManager.UpdateScore(-1, false, currentSession.GetCurrentQuestion());
+        await scoreManager.UpdateScore(-1, false, currentQuestion);
+        hintButtonManager?.ShowForQuestion(currentQuestion);
         questionBottomBarManager.EnableNavigationButtons();
         SetupNavigationButtons();
     }
@@ -499,51 +438,33 @@ public class QuestionManager : MonoBehaviour
                 return;
             }
 
-            // Lê do UserDataStore — sem rede
             List<string> answeredQuestions = await AppContext.AnsweredQuestions?
                 .FetchUserAnsweredQuestionsInTargetDatabase(currentDatabaseName);
 
-            int currentLevel = LevelCalculator.CalculateCurrentLevel(
-                allDatabaseQuestions, answeredQuestions);
-
-            var stats = LevelCalculator.GetLevelStats(allDatabaseQuestions, answeredQuestions);
-
-            bool currentLevelComplete = stats.ContainsKey(currentLevel) &&
-                                        stats[currentLevel].IsComplete;
-
-            if (currentLevelComplete)
+            if (QuestionBankStatistics.AreAllQuestionsAnswered(
+                    allDatabaseQuestions, answeredQuestions))
             {
-                if (currentLevel < maxLevelInDatabase)
+                int totalQuestions = allDatabaseQuestions.Count(question =>
+                    question != null && !question.questionInDevelopment);
+
+                try
                 {
+                    await HandleDatabaseCompletion(currentDatabaseName);
                     ShowAnswerFeedback(
-                        $"Nível {GetLevelName(currentLevel)} Completo!\n" +
-                        $"Volte ao menu para acessar as questões do {GetLevelName(currentLevel + 1)}!",
+                        $"CONQUISTA DESBLOQUEADA!\n" +
+                        $"Você completou todas as {totalQuestions} questões!\n" +
+                        $"Bônus das Listas desbloqueado!",
                         true, true);
-                    return;
                 }
-
-                int totalAnswered  = stats.Values.Sum(s => s.AnsweredQuestions);
-                int totalQuestions = stats.Values.Sum(s => s.TotalQuestions);
-
-                if (totalAnswered >= totalQuestions)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        await HandleDatabaseCompletion(currentDatabaseName);
-                        ShowAnswerFeedback(
-                            $"CONQUISTA DESBLOQUEADA!\n" +
-                            $"Você completou TODAS as {totalQuestions} questões!\n" +
-                            $"Todos os {maxLevelInDatabase} níveis foram dominados!\n" +
-                            $"Bônus das Listas desbloqueado!",
-                            true, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"Erro ao processar bônus: {ex.Message}");
-                        ShowAnswerFeedback("Parabéns! Você completou todos os níveis!", true, true);
-                    }
-                    return;
+                    Debug.LogError($"Erro ao processar bônus: {ex.Message}");
+                    ShowAnswerFeedback(
+                        $"Parabéns! Você completou todas as {totalQuestions} questões!",
+                        true, true);
                 }
+
+                return;
             }
         }
 
