@@ -4,18 +4,16 @@ using System.Threading.Tasks;
 public interface ITopicReviewManager
 {
     Task RegisterCompletedSessionAsync(
-        string userId,
-        string topicId,
-        List<string> correctQuestionGlobalIds,
-        List<string> wrongQuestionGlobalIds,
-        string globalId,
-        string source
+    string userId,
+    string databankName,
+    TopicReviewSessionHistoryItem sessionHistoryItem,
+    string globalId
     );
 
     Task ScheduleNextRevision(
         string userId,
         string databankName,
         string topicId,
-        List<string> correctQuestionGlobalIds,
-        List<string> wrongQuestionGlobalIds);
+        TopicReviewSessionHistoryItem sessionHistoryItem
+);
 }

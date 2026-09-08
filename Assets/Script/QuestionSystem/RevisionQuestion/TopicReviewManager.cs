@@ -11,21 +11,19 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
     public async Task RegisterCompletedSessionAsync(
     string userId,
     string databankName,
-    List<string> correctQuestionGlobalIds,
-    List<string>  wrongQuestionGlobalIds,
-    string globalId,
-    string source)
+    TopicReviewSessionHistoryItem sessionHistoryItem,
+    string globalId)
+
     {
         Debug.Log($"[TopicReviewManager] Sessão concluída.");
         Debug.Log($"[TopicReviewManager] Usuário: {userId}");
         Debug.Log($"[TopicReviewManager] Tópico: {databankName}");
 
-        await ScheduleNextRevision(userId, databankName, globalId, correctQuestionGlobalIds, wrongQuestionGlobalIds);
-    }
+        await ScheduleNextRevision(userId, databankName, globalId, sessionHistoryItem);
+            }
 
 
-    public async Task ScheduleNextRevision(string userId, string databankname, string topicId, List<string> correctQuestionGlobalIds,
-    List<string> wrongQuestionGlobalIds)
+    public async Task ScheduleNextRevision(string userId, string databankname, string topicId,TopicReviewSessionHistoryItem sessionHistoryItem)
     {
         Debug.Log("chegou");
         EnsureRepository();
@@ -35,8 +33,7 @@ public class TopicReviewManager : MonoBehaviour, ITopicReviewManager
         Debug.Log($"[TopicReviewManager] Databank: {topicId}");
         Debug.Log($"[TopicReviewManager] Próxima revisão: {nextReviewAt}"); 
 
-        await progressRepository.UpsertTopicReviewAsync(userId, databankname, topicId, nextReviewAt);        
-            
+        await progressRepository.UpsertTopicReviewAsync(userId, databankname, topicId, sessionHistoryItem, nextReviewAt);            
         }
 
     private void EnsureRepository()

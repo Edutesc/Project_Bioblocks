@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase.Firestore;
+using System.Globalization;
 
 public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
 {
@@ -34,6 +35,7 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
         string userId,
         string databankName,
         string topicId,
+        TopicReviewSessionHistoryItem sessionHistoryItem,
         DateTime nextReviewAt)
     {
         Debug.Log("entrei no topicreviewrepository");
@@ -46,7 +48,10 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
         if (string.IsNullOrWhiteSpace(topicId))
             throw new ArgumentException("topicId não pode ser vazio.");
 
-         Debug.Log($"Dados que chegaram no TopicReviewRepository {userId}, {databankName}, {topicId}, {nextReviewAt}"); 
+         Debug.Log($"Dados que chegaram no TopicReviewRepository {userId}, {databankName}, {topicId}, {nextReviewAt}, {sessionHistoryItem}"); 
+
+        DateTime lastSession = DateTime.UtcNow;  
+        string sessionId = lastSession.ToString("ddMMyyyy'T'HHmmss'Z'",CultureInfo.InvariantCulture);
 
         DocumentReference docRef = db
             .Collection("Users")
@@ -60,11 +65,25 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
             { "questionDatabankName", topicId },
             { "lastInteractionAt", Timestamp.GetCurrentTimestamp() },
             { "nextReviewAt", Timestamp.FromDateTime(nextReviewAt.ToUniversalTime()) },
+            { "recentcorrectQuestionGlobalIds", sessionHistoryItem.correctQuestionGlobalIds},
+            { "recentwrongQuestionGlobalIds",  sessionHistoryItem.wrongQuestionGlobalIds}
+        };
+
+        DocumentReference sessionDocRef = docRef
+            .Collection("Sessions")
+            .Document(sessionId);
+
+        var sessionData = new Dictionary<string, object>
+        {
+            { "sessionId", sessionId },
+            { "wrongQuestionGlobalIds", sessionHistoryItem.wrongQuestionGlobalIds },
+            { "correctQuestionGlobalIds", sessionHistoryItem.correctQuestionGlobalIds }
         };
 
         Debug.Log($"Esperando no TopicReviewRepository"); 
 
         await docRef.SetAsync(data, SetOptions.MergeAll);
+        await sessionDocRef.SetAsync(sessionData, SetOptions.MergeAll);
 
         Debug.Log(
             $"[TopicReviewRepository] Revisão salva: " +

@@ -4,7 +4,11 @@ using System.Threading.Tasks;
 
 public interface ITopicReviewRepository
 {
-    Task UpsertTopicReviewAsync(string userId, string globalId, string topicId, DateTime nextReviewAt);
+    Task UpsertTopicReviewAsync(string userId,
+        string databankName,
+        string topicId,
+        TopicReviewSessionHistoryItem sessionHistoryItem,
+        DateTime nextReviewAt);
 
     // Task<TopicReviewData> GetTopicReviewAsync(
     //     string userId,

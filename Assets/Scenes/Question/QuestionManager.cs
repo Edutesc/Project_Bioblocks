@@ -30,6 +30,7 @@ public class QuestionManager : MonoBehaviour
     private List<Question> allDatabaseQuestions;
     private INavigationService _navigation;
     private ISceneDataService _sceneData;
+    private TopicReviewSessionHistoryItem currentSessionHistory = new TopicReviewSessionHistoryItem();
 
 
 
@@ -229,8 +230,6 @@ public class QuestionManager : MonoBehaviour
     // -------------------------------------------------------
     // Resposta
     // -------------------------------------------------------
-    private List<string> recentcorrectQuestionGlobalIds = new List<string>(); // questoes certas
-    private List<string> recentwrongQuestionGlobalIds    = new List<string>();   // questoes erradas
 
     private async void CheckAnswer(int selectedAnswerIndex)
     {
@@ -243,20 +242,21 @@ public class QuestionManager : MonoBehaviour
 
         try
         {
+            currentSessionHistory.questionGlobalIds.Add(currentQuestion.globalId);
+
             if (isCorrect)
             {
                 int baseScore   = 5;
                 bool bonusActive = scoreManager.HasBonusActive();
 
-                recentcorrectQuestionGlobalIds.Add(currentQuestion.globalId);
-
+                currentSessionHistory.correctQuestionGlobalIds.Add(currentQuestion.globalId);
                 feedbackElements.ShowCorrectAnswer(bonusActive);
 
                 await scoreManager.UpdateScore(baseScore, true, currentQuestion);
             }
             else
             {
-                recentwrongQuestionGlobalIds.Add(currentQuestion.globalId);
+                currentSessionHistory.wrongQuestionGlobalIds.Add(currentQuestion.globalId);
 
                 feedbackElements.ShowWrongAnswer();
                 await scoreManager.UpdateScore(-2, false, currentQuestion);
@@ -315,8 +315,8 @@ public class QuestionManager : MonoBehaviour
             await topicReviewmanager.ScheduleNextRevision(
                 userId,
                 databankName,
-                topicId, recentcorrectQuestionGlobalIds,
-                recentwrongQuestionGlobalIds
+                topicId,
+                currentSessionHistory
             );
 
             Debug.Log("saiu");
