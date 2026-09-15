@@ -84,6 +84,41 @@ public class UserDataSyncServiceTests
     }
 
     [UnityTest]
+    public IEnumerator SyncFromFirestore_AguardaAuthAntesDeConsultarFirestore()
+    {
+        var remoteUser = MakeUser("u1", score: 200);
+        _firestore.SetFakeUser(remoteUser);
+
+        var authGate = new FakeAuthGate();
+        _syncService.InjectDependencies(_repo, _firestore, authGate);
+
+        var task = _syncService.SyncFromFirestore("u1");
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        Assert.AreEqual(1, authGate.CallCount);
+        Assert.IsNotNull(UserDataStore.CurrentUserData);
+    }
+
+    [UnityTest]
+    public IEnumerator TrySyncPendingData_AuthIndisponivel_ComCache_UsaFallbackLocal()
+    {
+        var localUser = MakeUser("u1", score: 120);
+        _repo.SaveUser(localUser);
+        _repo.MarkAsDirty("u1");
+
+        var authGate = new FakeAuthGate { ShouldThrow = true };
+        _syncService.InjectDependencies(_repo, _firestore, authGate);
+
+        var task = _syncService.TrySyncPendingData("u1");
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        Assert.AreEqual(1, authGate.CallCount);
+        Assert.IsNotNull(UserDataStore.CurrentUserData);
+        Assert.AreEqual(120, UserDataStore.CurrentUserData.Score);
+        Assert.IsTrue(_repo.IsDirty("u1"));
+    }
+
+    [UnityTest]
     public IEnumerator SyncFromFirestore_UsuarioExisteNoFirestore_AtualizaUserDataStore()
     {
         var remoteUser = MakeUser("u1", score: 350);

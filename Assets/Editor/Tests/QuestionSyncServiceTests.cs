@@ -111,6 +111,41 @@ public class QuestionSyncServiceTests
         Assert.IsFalse(_syncService.IsCacheReady, "IsCacheReady deve ser false.");
     }
 
+    [UnityTest]
+    public IEnumerator InitializeAsync_AuthIndisponivel_SemCache_NaoChamaFirestore()
+    {
+        var authGate = new FakeAuthGate { ShouldThrow = true };
+        _syncService.InjectDependencies(_fakeFirestore, _fakeLocal, null, authGate);
+
+        var task = _syncService.InitializeAsync();
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        Assert.IsFalse(task.Result);
+        Assert.AreEqual(1, authGate.CallCount);
+        Assert.AreEqual(0, _fakeFirestore.GetRemoteVersionCallCount);
+        Assert.AreEqual(0, _fakeFirestore.GetAllQuestionsCallCount);
+    }
+
+    [UnityTest]
+    public IEnumerator InitializeAsync_AuthIndisponivel_ComCache_UsaFallbackLocal()
+    {
+        _fakeLocal.SetQuestions(
+            QuestionTestHelpers.MakeQuestions(nivel1: 3, databankName: "TestDB"),
+            savedDaysAgo: 1
+        );
+
+        var authGate = new FakeAuthGate { ShouldThrow = true };
+        _syncService.InjectDependencies(_fakeFirestore, _fakeLocal, null, authGate);
+
+        var task = _syncService.InitializeAsync();
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        Assert.IsTrue(task.Result);
+        Assert.IsTrue(_syncService.IsCacheReady);
+        Assert.AreEqual(0, _fakeFirestore.GetRemoteVersionCallCount);
+        Assert.AreEqual(0, _fakeFirestore.GetAllQuestionsCallCount);
+    }
+
     // =======================================================================
     // InitializeAsync — cache válido (< 7 dias)
     // =======================================================================

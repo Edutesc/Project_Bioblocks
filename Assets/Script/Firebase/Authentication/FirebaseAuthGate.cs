@@ -12,13 +12,17 @@
 /// 
 
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Firebase;
 using Firebase.Auth;
 using UnityEngine;
 
 public sealed class FirebaseAuthGate : IAuthGate
 {
+    private readonly SemaphoreSlim _validationGate = new SemaphoreSlim(1, 1);
+
     public async Task WaitForAuthenticatedAsync(CancellationToken ct = default)
     {
         var auth = FirebaseAuth.DefaultInstance;
@@ -26,22 +30,83 @@ public sealed class FirebaseAuthGate : IAuthGate
         if (auth.CurrentUser == null)
             await WaitForCurrentUserAsync(auth, ct);
 
-        var user = auth.CurrentUser;
-        if (user == null)
-            throw new InvalidOperationException("Usuário não autenticado após StateChanged.");
+        await _validationGate.WaitAsync(ct);
 
         try
         {
-            string token = await user.TokenAsync(forceRefresh: true);
+            var user = auth.CurrentUser;
+            if (user == null)
+                throw new InvalidOperationException("Usuário não autenticado após StateChanged.");
+
+            // O SDK devolve o token em cache quando ele ainda é válido e o
+            // renova automaticamente quando necessário. Forçar refresh em toda
+            // operação torna o app dependente de rede mesmo com token válido.
+            string token = await user.TokenAsync(forceRefresh: false);
 
             if (string.IsNullOrWhiteSpace(token))
                 throw new InvalidOperationException("Token vazio retornado pelo Firebase Auth.");
+
+            ValidateTokenIdentity(token, user);
+
         }
         catch (Exception e)
         {
-            Debug.LogError($"[FirebaseAuthGate] Falha ao refrescar token: {e.Message}");
+            Debug.LogWarning($"[FirebaseAuthGate] Sessão remota indisponível: {e.Message}");
             throw;
         }
+        finally
+        {
+            _validationGate.Release();
+        }
+    }
+
+    private static void ValidateTokenIdentity(string token, FirebaseUser user)
+    {
+        string payload = DecodeJwtPayload(token);
+        string audience = ExtractJsonString(payload, "aud");
+        string subject = ExtractJsonString(payload, "sub");
+        string projectId = FirebaseApp.DefaultInstance.Options.ProjectId;
+
+        if (!string.Equals(audience, projectId, StringComparison.Ordinal))
+            throw new FirebaseEnvironmentMismatchException(
+                $"ID token pertence ao projeto '{audience}', mas o app usa '{projectId}'."
+            );
+
+        if (!string.Equals(subject, user.UserId, StringComparison.Ordinal))
+            throw new InvalidOperationException("UID do ID token diverge do FirebaseAuth.CurrentUser.");
+
+        Debug.Log($"[FirebaseAuthGate] Identidade consistente: project={projectId}, uid={user.UserId}.");
+    }
+
+    private static string DecodeJwtPayload(string token)
+    {
+        string[] parts = token.Split('.');
+        if (parts.Length < 2)
+            throw new InvalidOperationException("ID token não possui formato JWT.");
+
+        string base64 = parts[1].Replace('-', '+').Replace('_', '/');
+        switch (base64.Length % 4)
+        {
+            case 2: base64 += "=="; break;
+            case 3: base64 += "="; break;
+        }
+
+        return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+    }
+
+    private static string ExtractJsonString(string json, string key)
+    {
+        string marker = $"\"{key}\"";
+        int keyIndex = json.IndexOf(marker, StringComparison.Ordinal);
+        if (keyIndex < 0) return null;
+
+        int colon = json.IndexOf(':', keyIndex + marker.Length);
+        int firstQuote = colon < 0 ? -1 : json.IndexOf('"', colon + 1);
+        int lastQuote = firstQuote < 0 ? -1 : json.IndexOf('"', firstQuote + 1);
+
+        return firstQuote >= 0 && lastQuote > firstQuote
+            ? json.Substring(firstQuote + 1, lastQuote - firstQuote - 1)
+            : null;
     }
 
     private static Task WaitForCurrentUserAsync(FirebaseAuth auth, CancellationToken ct)
@@ -95,4 +160,9 @@ public sealed class FirebaseAuthGate : IAuthGate
 
         return tcs.Task;
     }
+}
+
+public sealed class FirebaseEnvironmentMismatchException : InvalidOperationException
+{
+    public FirebaseEnvironmentMismatchException(string message) : base(message) { }
 }

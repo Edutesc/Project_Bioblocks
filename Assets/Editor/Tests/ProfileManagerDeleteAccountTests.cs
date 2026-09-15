@@ -38,6 +38,7 @@ public class ProfileManagerDeleteAccountTests
     private FakeFirestoreRepository  _fakeFirestore;
     private FakeNavigationService    _fakeNavigation;
     private FakeStatisticsProvider   _fakeStatistics;
+    private FakeUserDataLocalRepository _fakeUserDataLocal;
 
     private const string UserId   = "test-user-id";
     private const string NickName = "TestNick";
@@ -52,12 +53,14 @@ public class ProfileManagerDeleteAccountTests
         _fakeFirestore  = new FakeFirestoreRepository();
         _fakeNavigation = new FakeNavigationService();
         _fakeStatistics = new FakeStatisticsProvider();
+        _fakeUserDataLocal = new FakeUserDataLocalRepository();
 
         AppContext.OverrideForTests(
             auth:       _fakeAuth,
             firestore:  _fakeFirestore,
             statistics: _fakeStatistics,
-            navigation: _fakeNavigation
+            navigation: _fakeNavigation,
+            userDataLocal: _fakeUserDataLocal
         );
 
         // Usuário logado com dados completos
@@ -457,5 +460,23 @@ public class ProfileManagerDeleteAccountTests
             type = type.BaseType;
         }
         return null;
+    }
+
+    private sealed class FakeUserDataLocalRepository : IUserDataLocalRepository
+    {
+        public UserData GetUser(string userId) => null;
+        public void SaveUser(UserData userData) { }
+        public void UpdateUser(UserData userData) { }
+        public void MarkAsDirty(string userId) { }
+        public void MarkAsSynced(string userId) { }
+        public bool MarkAsSyncedIfSavedAtMatches(
+            string userId,
+            System.DateTime expectedSavedAt) => true;
+        public bool HasUser(string userId) => false;
+        public bool IsDirty(string userId) => false;
+        public void DeleteUser(string userId) { }
+        public System.DateTime GetLastSyncedAt(string userId) => System.DateTime.MinValue;
+        public void UpdateScore(string userId, int newScore, int newWeekScore) { }
+        public void AddAnsweredQuestion(string userId, string databankName, int questionNumber) { }
     }
 }

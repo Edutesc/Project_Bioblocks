@@ -131,6 +131,16 @@ public class AppContext : MonoBehaviour
 
             Debug.Log("[AppContext] Firebase disponível.");
 
+            FirebaseApp runtimeApp = FirebaseApp.DefaultInstance;
+            Debug.Log(
+                $"[AppContext] Firebase runtime: " +
+                $"project={runtimeApp.Options.ProjectId}, appId={runtimeApp.Options.AppId}."
+            );
+
+            // Sessao e caches pertencem ao projeto Firebase que os criou.
+            // A protecao roda antes da abertura do LiteDB e do uso de Auth.
+            FirebaseEnvironmentGuard.Apply(envCfg.FirebaseEnvironment);
+
             // ── 0. App Check — deve ser o primeiro serviço inicializado ───────────
             Debug.Log("AppCheck IN");
 
@@ -213,6 +223,7 @@ public class AppContext : MonoBehaviour
             firestoreRepo.Initialize();
 
             FirebaseFirestore firestoreDb = FirebaseFirestore.DefaultInstance;
+            var authGate = new FirebaseAuthGate();
 
             // ── 3. Repositórios Firestore específicos ──────────────────────────
             var firestoreUserRepository      = new FirestoreUserRepository(firestoreDb);
@@ -229,11 +240,16 @@ public class AppContext : MonoBehaviour
             //   - AuthenticationRepository pode receber IFirestoreUserRepository + INicknameRepository.
             //   - UserDataSyncService pode receber IFirestoreUserRepository.
             //   - AvatarSelectionService pode receber IFirestoreUserRepository.
-            authRepo.InjectDependencies(firestoreUserRepository, nicknameRepository, userRealtimeListenerService);
+            authRepo.InjectDependencies(
+                firestoreUserRepository,
+                nicknameRepository,
+                userRealtimeListenerService,
+                authGate
+            );
 
             // ── 5. Dependências locais/usuário ─────────────────────────────────
             userDataLocalRepo.InjectDependencies(liteDBMgr);
-            userDataSyncSvc.InjectDependencies(userDataLocalRepo, firestoreRepo);
+            userDataSyncSvc.InjectDependencies(userDataLocalRepo, firestoreRepo, authGate);
             imageCacheSvc.InjectDependencies();
             avatarSelectionSvc.InjectDependencies(firestoreRepo, userDataLocalRepo);
 
@@ -252,7 +268,7 @@ public class AppContext : MonoBehaviour
             imageSyncSvc.InjectDependencies(
                 firebaseStorageRepo,
                 imageLocalRepo,
-                new FirebaseAuthGate()
+                authGate
             );
 
             // ── 8. Dependências LiteDB/questões ────────────────────────────────
@@ -261,7 +277,8 @@ public class AppContext : MonoBehaviour
             questionSyncSvc.InjectDependencies(
                 questionFirestoreRepo,
                 questionLocalRepo,
-                imageSyncSvc
+                imageSyncSvc,
+                authGate
             );
             questionSyncSvc.RegisterAuthListener();
 

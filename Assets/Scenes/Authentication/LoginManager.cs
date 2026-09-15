@@ -128,10 +128,10 @@ public class LoginManager : MonoBehaviour
         {
             _userDataLocal.UpdateUser(userData);
             _userDataLocal.MarkAsSynced(userData.UserId);
-            PlayerPrefs.SetString("UserId", userData.UserId);
-            PlayerPrefs.SetString("UserEmail", userData.Email ?? string.Empty);
-            PlayerPrefs.SetString("UserNickname", userData.NickName ?? string.Empty);
-            PlayerPrefs.Save();
+            LocalSessionState.MarkAuthenticated(
+                userData.UserId,
+                userData.Email,
+                userData.NickName);
         }
         catch (Exception e)
         {
