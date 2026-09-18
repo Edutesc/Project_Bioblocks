@@ -1352,32 +1352,32 @@ public class EnzymeQuestionDatabase : IQuestionDatabase
 //        },
 
 //        // Question 049
-//        new Question
-//        {
-//            questionDatabankName = "EnzymeQuestionDatabase",
-//            questionText = "Quando uma molécula semelhante ao substrato compete pelo sítio ativo da enzima, temos:",
-//            answers = new string[] {
-//                "Ativação enzimática",
-//                "Inibição não-competitiva",
-//                "Inibição competitiva",
-//                "Regulação alostérica"
-//            },
-//            correctIndex = 2,
-//            questionNumber = 49,
-//            answerType = AnswerType.Text,
-//            questionType = QuestionType.Text,
-//            questionImagePath = "",
-//            questionLevel = 1,
-//            questionInDevelopment = false,
-//            globalId = "enzymes_049",
-//            topic = "enzymes",
-//            subtopic = "competitive_inhibition",
-//            displayName = "Enzimas",
-//            bloomLevel = BloomLevel.Understand,
-//            conceptTags = new List<string> { "enzyme_inhibition", "active_site", "substrate_analogs" },
-//            prerequisites = null,
-//            questionHint = new QuestionHint { text = "Observe a relação espacial: uma molécula parecida com o substrato ocupa a região onde o substrato deveria se ligar. Esse cenário envolve disputa direta por acesso à enzima, diferente de uma ligação regulatória distante. Organize as informações do enunciado antes de avaliar qual alternativa é compatível com esse princípio." }
-//        },
+        new Question
+        {
+            questionDatabankName = "EnzymeQuestionDatabase",
+            questionText = "Quando uma molécula semelhante ao substrato compete pelo sítio ativo da enzima, temos:",
+            answers = new string[] {
+                "AnswerImages/EnzymeDB/EnzymeDB_ImageAnswer049.0",
+                " AnswerImages/EnzymeDB/EnzymeDB_ImageAnswer049.1 ",
+                " AnswerImages/EnzymeDB/EnzymeDB_ImageAnswer049.2 ",
+                "AnswerImages/EnzymeDB/EnzymeDB_ImageAnswer049.3"
+            },
+            correctIndex = 2,
+            questionNumber = 49,
+            answerType = AnswerType.Image,
+            questionType = QuestionType.Text,
+            questionImagePath = "",
+            questionLevel = 1,
+            questionInDevelopment = false,
+            globalId = "enzymes_049",
+            topic = "enzymes",
+            subtopic = "competitive_inhibition",
+            displayName = "Enzimas",
+            bloomLevel = BloomLevel.Understand,
+            conceptTags = new List<string> { "enzyme_inhibition", "active_site", "substrate_analogs" },
+            prerequisites = null,
+            questionHint = new QuestionHint { text = "Observe a relação espacial: uma molécula parecida com o substrato ocupa a região onde o substrato deveria se ligar. Esse cenário envolve disputa direta por acesso à enzima, diferente de uma ligação regulatória distante. Organize as informações do enunciado antes de avaliar qual alternativa é compatível com esse princípio." }
+        },
 
 //        // Question 050
 //        new Question
