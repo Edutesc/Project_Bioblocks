@@ -20,4 +20,8 @@ public interface ITopicReviewRepository
         string userId,
         DateTime nowUtc
     );
+
+    // ── Novos métodos usados pelo TopicReviewSyncService ──────────────
+    Task<TopicReviewData> GetTopicReviewData(string userId, string databankName);
+    Task UpdateTopicReviewData(TopicReviewData data);
 }

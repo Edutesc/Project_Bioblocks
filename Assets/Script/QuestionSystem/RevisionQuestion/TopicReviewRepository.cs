@@ -134,4 +134,69 @@ public class TopicReviewRepository : MonoBehaviour, ITopicReviewRepository
             throw;
         }
     }
+
+        // ── Novos métodos usados pelo TopicReviewSyncService ─────────────────────────
+
+    public async Task<TopicReviewData> GetTopicReviewData(string userId, string databankName)
+    {
+        if (!isInitialized) Initialize();
+        if (!isInitialized) throw new Exception("Firestore não inicializado.");
+
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(databankName))
+            throw new ArgumentException("userId e databankName não podem ser vazios.");
+
+        try
+        {
+            DocumentReference docRef = db
+                .Collection("Users")
+                .Document(userId)
+                .Collection("TopicReviews")
+                .Document(databankName);
+
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+            if (!snapshot.Exists)
+            {
+                Debug.LogWarning($"[TopicReviewRepository] Tópico '{databankName}' não encontrado no Firestore.");
+                return null;
+            }
+
+            return snapshot.ConvertTo<TopicReviewData>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TopicReviewRepository] Erro ao buscar tópico '{databankName}': {e.Message}");
+            throw;
+        }
+    }
+
+    public async Task UpdateTopicReviewData(TopicReviewData data)
+    {
+        if (!isInitialized) Initialize();
+        if (!isInitialized) throw new Exception("Firestore não inicializado.");
+
+        if (data == null)
+            throw new ArgumentNullException(nameof(data));
+
+        if (string.IsNullOrWhiteSpace(data.userId) || string.IsNullOrWhiteSpace(data.databankName))
+            throw new ArgumentException("userId e databankName não podem ser vazios.");
+
+        try
+        {
+            DocumentReference docRef = db
+                .Collection("Users")
+                .Document(data.userId)
+                .Collection("TopicReviews")
+                .Document(data.databankName);
+
+            await docRef.SetAsync(data, SetOptions.MergeAll);
+
+            Debug.Log($"[TopicReviewRepository] Tópico '{data.databankName}' atualizado no Firestore.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TopicReviewRepository] Erro ao atualizar tópico '{data.databankName}': {e.Message}");
+            throw;
+        }
+    }
 }
