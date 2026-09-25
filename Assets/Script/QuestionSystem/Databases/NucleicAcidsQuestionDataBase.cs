@@ -921,60 +921,60 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //         },
 
 //         //QUESTION 031
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Explique qual alternativa reúne, sem incluir componentes estranhos, as três partes estruturais de um nucleotídeo.",
-//             answers = new string[] { "Açúcar, base, fosfato", "Açúcar, base, aminoácido", "Base, aminoácido, fosfato", "Açúcar, lipídeo, base" },
-//             correctIndex = 0,
-//             questionNumber = 31,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_031",
-//             topic = "nucleicAcids",
-//             subtopic = "nucleotide_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Understand,
-//             conceptTags = new List<string> { "pentose", "nitrogenous_base", "phosphate_group" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Desmonte conceitualmente um nucleotídeo em três partes: uma pentose, uma base nitrogenada e pelo menos um grupo fosfato. Em seguida, verifique cada alternativa à procura desse conjunto completo. Componentes típicos de proteínas ou lipídios, como aminoácidos e ácidos graxos, são elementos estranhos à estrutura solicitada.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Qual estrutura representa um nucleotídeo funcional completo?",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer031.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer031.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer031.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer031.3" },
+             correctIndex = 0,
+             questionNumber = 31,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_031",
+             topic = "nucleicAcids",
+             subtopic = "nucleotide_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Understand,
+             conceptTags = new List<string> { "pentose", "nitrogenous_base", "phosphate_group" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "Desmonte conceitualmente um nucleotídeo em três partes: uma pentose, uma base nitrogenada e pelo menos um grupo fosfato. Em seguida, verifique cada alternativa à procura desse conjunto completo. Componentes típicos de proteínas ou lipídios, como aminoácidos e ácidos graxos, são elementos estranhos à estrutura solicitada.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 032
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Diferencie nucleosídeo de nucleotídeo escolhendo a composição que representa apenas um nucleosídeo.",
-//             answers = new string[] { "Açúcar + base + fosfato", "Açúcar + base", "Base + fosfato", "Açúcar + aminoácido" },
-//             correctIndex = 1,
-//             questionNumber = 32,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_032",
-//             topic = "nucleicAcids",
-//             subtopic = "nucleosides",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Understand,
-//             conceptTags = new List<string> { "pentose", "nitrogenous_base" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "Use a presença do fosfato como critério decisivo. Pentose ligada a uma base forma um nucleosídeo; quando um ou mais fosfatos são adicionados, forma-se um nucleotídeo. Escolha a composição anterior à fosforilação, eliminando alternativas que introduzem aminoácidos ou omitem um dos dois componentes essenciais.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Identifique o nucleosídeo.",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer032.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer032.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer032.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer032.3" },
+             correctIndex = 1,
+             questionNumber = 32,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_032",
+             topic = "nucleicAcids",
+             subtopic = "nucleosides",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Understand,
+             conceptTags = new List<string> { "pentose", "nitrogenous_base" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "Use a presença do fosfato como critério decisivo. Pentose ligada a uma base forma um nucleosídeo; quando um ou mais fosfatos são adicionados, forma-se um nucleotídeo. Escolha a composição anterior à fosforilação, eliminando alternativas que introduzem aminoácidos ou omitem um dos dois componentes essenciais.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 033
 //         new Question {
