@@ -977,60 +977,60 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
          },
 
 //         //QUESTION 033
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Associe a denominação ribonucleotídeo ao tipo de pentose presente em sua estrutura.",
-//             answers = new string[] { "Desoxirribose", "Ribose", "Glicose", "Frutose" },
-//             correctIndex = 1,
-//             questionNumber = 33,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_033",
-//             topic = "nucleicAcids",
-//             subtopic = "rna_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Understand,
-//             conceptTags = new List<string> { "ribonucleotides", "ribose" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "A palavra “ribonucleotídeo” deriva da pentose presente no monômero do RNA. Observe que o açúcar procurado conserva uma hidroxila no carbono 2', diferentemente da versão desoxigenada do DNA. Glicose e frutose são carboidratos celulares importantes, mas não dão nome aos ribonucleotídeos.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Associe a denominação ribonucleotídeo ao tipo de pentose presente em sua estrutura.",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer033.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer033.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer033.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer033.3" },
+             correctIndex = 1,
+             questionNumber = 33,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_033",
+             topic = "nucleicAcids",
+             subtopic = "rna_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Understand,
+             conceptTags = new List<string> { "ribonucleotides", "ribose" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "A palavra “ribonucleotídeo” deriva da pentose presente no monômero do RNA. Observe que o açúcar procurado conserva uma hidroxila no carbono 2', diferentemente da versão desoxigenada do DNA. Glicose e frutose são carboidratos celulares importantes, mas não dão nome aos ribonucleotídeos.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 034
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Associe a denominação desoxirribonucleotídeo ao tipo de pentose presente em sua estrutura.",
-//             answers = new string[] { "Desoxirribose", "Ribose", "Glicose", "Frutose" },
-//             correctIndex = 0,
-//             questionNumber = 34,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_034",
-//             topic = "nucleicAcids",
-//             subtopic = "dna_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Understand,
-//             conceptTags = new List<string> { "deoxyribonucleotides", "deoxyribose" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "O prefixo “desoxi” indica a ausência da hidroxila no carbono 2' que existe na ribose. Portanto, associe “desoxirribonucleotídeo” à pentose modificada que caracteriza o DNA. Não use como critério a forma de dupla hélice, pois a pergunta trata da composição química do monômero.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Associe a denominação desoxirribonucleotídeo ao tipo de pentose presente em sua estrutura.",
+             answers = new string[] { "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer034.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer034.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer034.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer034.3" },
+             correctIndex = 0,
+             questionNumber = 34,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_034",
+             topic = "nucleicAcids",
+             subtopic = "dna_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Understand,
+             conceptTags = new List<string> { "deoxyribonucleotides", "deoxyribose" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "O prefixo “desoxi” indica a ausência da hidroxila no carbono 2' que existe na ribose. Portanto, associe “desoxirribonucleotídeo” à pentose modificada que caracteriza o DNA. Não use como critério a forma de dupla hélice, pois a pergunta trata da composição química do monômero.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 035
 //         new Question {
@@ -1099,37 +1099,34 @@ public class NucleicAcidsQuestionDatabase : IQuestionDatabase
 //         },
 
 //         //QUESTION 037
-//         new Question {
-//             questionDatabankName = "NucleicAcidsQuestionDatabase",
-//             questionText = "Explique a origem do termo ribonucleico identificando o açúcar característico do RNA.",
-//             answers = new string[] {
-//                 "Desoxirribose",
-//                 "Glicose",
-//                 "Ribose",
-//                 "Maltose"
-//             },
-//             correctIndex = 2,
-//             questionNumber = 37,
-//             answerType = AnswerType.Text,
-//             questionType = QuestionType.Text,
-//             questionImagePath = "",
-//             questionLevel = 1,
-//             questionInDevelopment = false,
-//             globalId = "nucleicAcids_037",
-//             topic = "nucleicAcids",
-//             subtopic = "rna_structure",
-//             displayName = "Ácidos Nucleicos",
-//             bloomLevel = BloomLevel.Understand,
-//             conceptTags = new List<string> { "ribose", "pentose" },
-//             prerequisites = null,
-//             questionHint = new QuestionHint
-//             {
-//                 text = "O nome “ácido ribonucleico” já aponta para o açúcar presente em seus nucleotídeos. Relacione o radical “ribo” à pentose que possui hidroxila no carbono 2'. Não escolha desoxirribose, pois sua perda de oxigênio nessa posição é justamente a característica que nomeia o DNA.",
-//                 imagePath = null,
-//                 videoUrl = null,
-//                 link = null
-//             }
-//         },
+         new Question {
+             questionDatabankName = "NucleicAcidsQuestionDatabase",
+             questionText = "Explique a origem do termo ribonucleico identificando o açúcar característico do RNA.",
+             answers = new string[] {
+                 "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer037.0", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer037.1", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer037.2", "AnswerImages/NucleicAcidDB/NucleicAcidsDB_ImageAnswer037.3"
+             },
+             correctIndex = 2,
+             questionNumber = 37,
+             answerType = AnswerType.Image,
+             questionType = QuestionType.Text,
+             questionImagePath = "",
+             questionLevel = 1,
+             questionInDevelopment = false,
+             globalId = "nucleicAcids_037",
+             topic = "nucleicAcids",
+             subtopic = "rna_structure",
+             displayName = "Ácidos Nucleicos",
+             bloomLevel = BloomLevel.Understand,
+             conceptTags = new List<string> { "ribose", "pentose" },
+             prerequisites = null,
+             questionHint = new QuestionHint
+             {
+                 text = "O nome “ácido ribonucleico” já aponta para o açúcar presente em seus nucleotídeos. Relacione o radical “ribo” à pentose que possui hidroxila no carbono 2'. Não escolha desoxirribose, pois sua perda de oxigênio nessa posição é justamente a característica que nomeia o DNA.",
+                 imagePath = null,
+                 videoUrl = null,
+                 link = null
+             }
+         },
 
 //         //QUESTION 038
 //         new Question {
