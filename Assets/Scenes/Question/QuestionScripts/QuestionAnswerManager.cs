@@ -115,6 +115,22 @@ public class QuestionAnswerManager : MonoBehaviour
 
     public void ResetButtonBackgrounds()
     {
+        if (textButtonBackgrounds != null)
+        {
+            foreach (var bg in textButtonBackgrounds)
+            {
+                if (bg != null) bg.color = Color.white;
+            }
+        }
+
+        if (imageButtonBackgrounds != null)
+        {
+            foreach (var bg in imageButtonBackgrounds)
+            {
+                if (bg != null) bg.color = Color.white;
+            }
+        }
+
         if (answerButtonThemeManager == null)
         {
             Debug.LogWarning("AnswerButtonThemeManager não está atribuído! Não é possível resetar os botões.");
@@ -122,6 +138,27 @@ public class QuestionAnswerManager : MonoBehaviour
         }
 
         answerButtonThemeManager.ResetAllButtonBackgrounds(currentQuestionLevel, currentIsImageAnswer);
+    }
+
+    public void HighlightSelectedAnswer(int selectedIndex)
+    {
+        ResetButtonBackgrounds();
+        if (selectedIndex < 0) return;
+
+        if (currentIsImageAnswer)
+        {
+            if (imageButtonBackgrounds != null && selectedIndex < imageButtonBackgrounds.Length && imageButtonBackgrounds[selectedIndex] != null)
+            {
+                imageButtonBackgrounds[selectedIndex].color = new Color(0.7f, 0.85f, 1f, 1f);
+            }
+        }
+        else
+        {
+            if (textButtonBackgrounds != null && selectedIndex < textButtonBackgrounds.Length && textButtonBackgrounds[selectedIndex] != null)
+            {
+                textButtonBackgrounds[selectedIndex].color = new Color(0.7f, 0.85f, 1f, 1f);
+            }
+        }
     }
 
     private void ApplyTheme(int questionLevel, bool isImageAnswer)

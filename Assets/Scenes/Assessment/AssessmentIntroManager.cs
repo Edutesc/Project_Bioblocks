@@ -29,7 +29,7 @@ public class AssessmentIntroManager : MonoBehaviour
 
     [Header("Fallback & Config Settings")]
     [SerializeField] private string defaultAssessmentId = "2026-3-aminoacidos-proteinas-enzimas";
-    [SerializeField] private bool useDocumentTitle = false;
+    [SerializeField] private bool useDocumentTitle = true;
 
     private AssessmentGenerator _generator;
     private AssessmentData _loadedAssessment;
@@ -67,16 +67,17 @@ public class AssessmentIntroManager : MonoBehaviour
             var repo = AppContext.FirestoreAssessment;
             if (repo != null)
             {
-                if (!string.IsNullOrEmpty(defaultAssessmentId))
+                // Prioridade 1: Tenta buscar a avaliação ativa atualmente configurada no Firestore
+                _loadedAssessment = await repo.GetActiveAssessmentAsync();
+
+                // Prioridade 2: Se nenhuma estiver ativa mas houver defaultAssessmentId, tenta buscá-la diretamente
+                if (_loadedAssessment == null && !string.IsNullOrEmpty(defaultAssessmentId))
                 {
                     _loadedAssessment = await repo.GetAssessmentAsync(defaultAssessmentId);
                 }
-                else
-                {
-                    _loadedAssessment = await repo.GetActiveAssessmentAsync();
-                }
             }
 
+            // Prioridade 3: Fallback local caso offline ou não encontrado no Firestore
             if (_loadedAssessment == null && !string.IsNullOrEmpty(defaultAssessmentId))
             {
                 _loadedAssessment = CreateDefaultAssessment(defaultAssessmentId);
@@ -130,27 +131,21 @@ public class AssessmentIntroManager : MonoBehaviour
                 : "Avaliação formativa";
         }
 
-        if (topicsText != null)
-        {
-            if (data.DisplayTopics != null && data.DisplayTopics.Count > 0)
-            {
-                var sb = new StringBuilder("Temas:\n");
-                foreach (var topic in data.DisplayTopics)
-                {
-                    sb.AppendLine($"• {topic}");
-                }
-                topicsText.text = sb.ToString().TrimEnd();
-            }
-            else
-            {
-                topicsText.text = "Temas:\n• Aminoácidos\n• Proteínas\n• Enzimas";
-            }
-        }
-
         if (totalQuestionsText != null)
         {
             int total = data.TotalQuestions > 0 ? data.TotalQuestions : 10;
-            totalQuestionsText.text = $"Esta atividade contém {total} questões:";
+            totalQuestionsText.text = $"Esta atividade contém {total} questões sobre os temas:";
+        }
+
+        if (topicsText != null)
+        {
+            var topics = GetResolvedTopics(data);
+            var sb = new StringBuilder();
+            foreach (var topic in topics)
+            {
+                sb.AppendLine($"• {topic}");
+            }
+            topicsText.text = sb.ToString().TrimEnd();
         }
 
         if (durationText != null)
@@ -163,6 +158,48 @@ public class AssessmentIntroManager : MonoBehaviour
         {
             disclaimerText.text = "Seu progresso será associado à sua conta do BioBlocks.\nO resultado não será utilizado para atribuição de conceitos na disciplina.";
         }
+    }
+
+    private List<string> GetResolvedTopics(AssessmentData data)
+    {
+        if (data.DisplayTopics != null && data.DisplayTopics.Count > 0)
+        {
+            return data.DisplayTopics;
+        }
+
+        if (data.AllowedDatabanks != null && data.AllowedDatabanks.Count > 0)
+        {
+            var list = new List<string>();
+            foreach (var db in data.AllowedDatabanks)
+            {
+                string friendly = GetFriendlyDatabankName(db);
+                if (!list.Contains(friendly))
+                {
+                    list.Add(friendly);
+                }
+            }
+            if (list.Count > 0) return list;
+        }
+
+        return new List<string> { "Aminoácidos", "Proteínas", "Enzimas" };
+    }
+
+    private static string GetFriendlyDatabankName(string dbName)
+    {
+        return dbName switch
+        {
+            "AminoacidQuestionDataBase" => "Aminoácidos",
+            "ProteinQuestionDataBase" => "Proteínas",
+            "EnzymeQuestionDataBase" => "Enzimas",
+            "WaterQuestionDataBase" => "Água",
+            "BiochemistryIntroductionQuestionDatabase" => "Introdução à Bioquímica",
+            "AcidBaseBufferQuestionDataBase" => "Ácidos, bases e tampões",
+            "LipidsQuestionDataBase" => "Lipídeos",
+            "MembranesQuestionDatabase" => "Membranas",
+            "CarbohydratesQuestionDataBase" => "Carboidratos",
+            "NucleicAcidsQuestionDataBase" => "Ácidos nucleicos",
+            _ => dbName
+        };
     }
 
     private void ShowNoActiveAssessmentUI()

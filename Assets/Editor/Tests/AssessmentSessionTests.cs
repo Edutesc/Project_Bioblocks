@@ -241,6 +241,115 @@ public class AssessmentSessionTests
     }
 
     // =======================================================
+    // Navegação Reversa e Alteração de Respostas
+    // =======================================================
+
+    [Test]
+    public void MoveToPreviousQuestion_DecrementsIndex_AndStopsAtZero()
+    {
+        var q1 = MakeSampleQuestion(1, 0, globalId: "Q1");
+        var q2 = MakeSampleQuestion(2, 1, globalId: "Q2");
+        AssessmentSession.StartNew(new AssessmentData(), "u1", new List<Question> { q1, q2 });
+        var session = AssessmentSession.Current;
+
+        Assert.AreEqual(0, session.CurrentQuestionIndex);
+        Assert.IsFalse(session.CanMoveToPrevious);
+        Assert.IsTrue(session.CanMoveToNext);
+        Assert.IsFalse(session.IsLastQuestion);
+
+        // Tentar voltar no início não deve negativar
+        session.MoveToPreviousQuestion();
+        Assert.AreEqual(0, session.CurrentQuestionIndex);
+
+        // Avança para a questão 2
+        session.MoveToNextQuestion();
+        Assert.AreEqual(1, session.CurrentQuestionIndex);
+        Assert.IsTrue(session.CanMoveToPrevious);
+        Assert.IsFalse(session.CanMoveToNext);
+        Assert.IsTrue(session.IsLastQuestion);
+
+        // Volta para a questão 1
+        session.MoveToPreviousQuestion();
+        Assert.AreEqual(0, session.CurrentQuestionIndex);
+        Assert.AreEqual(q1, session.GetCurrentQuestion());
+    }
+
+    [Test]
+    public void RecordAnswer_ChangeAnswerFromWrongToCorrect_UpdatesScoreWithoutDuplication()
+    {
+        var q = MakeSampleQuestion(1, correctIndex: 2, globalId: "Q_TEST");
+        AssessmentSession.StartNew(new AssessmentData(), "u1", new List<Question> { q });
+        var session = AssessmentSession.Current;
+
+        // 1ª resposta: errada (índice 0, correta é 2)
+        session.RecordAnswer(q, selectedIndex: 0);
+
+        Assert.AreEqual(1, session.CurrentAttempt.Score.Total);
+        Assert.AreEqual(0, session.CurrentAttempt.Score.Correct);
+        Assert.AreEqual(1, session.CurrentAttempt.Score.Wrong);
+        Assert.AreEqual(1, session.CurrentAttempt.Answers.Count);
+        Assert.AreEqual(0, session.GetSelectedAnswer(q));
+
+        // 2ª resposta: usuário volta e troca para correta (índice 2)
+        session.RecordAnswer(q, selectedIndex: 2);
+
+        // Não deve duplicar lista de respostas nem contagem total
+        Assert.AreEqual(1, session.CurrentAttempt.Score.Total);
+        Assert.AreEqual(1, session.CurrentAttempt.Score.Correct);
+        Assert.AreEqual(0, session.CurrentAttempt.Score.Wrong);
+        Assert.AreEqual(1, session.CurrentAttempt.Answers.Count);
+        Assert.AreEqual(2, session.CurrentAttempt.Answers[0].SelectedIndex);
+        Assert.IsTrue(session.CurrentAttempt.Answers[0].IsCorrect);
+        Assert.AreEqual(2, session.GetSelectedAnswer(q));
+
+        // Verifica espelho no CurrentResult
+        Assert.AreEqual(1, session.CurrentResult.Score.Total);
+        Assert.AreEqual(1, session.CurrentResult.Score.Correct);
+        Assert.AreEqual(1, session.CurrentResult.QuestionsAnswered.Count);
+        Assert.IsTrue(session.CurrentResult.QuestionsAnswered[0].IsCorrect);
+    }
+
+    [Test]
+    public void GetSelectedAnswer_ReturnsMinusOne_WhenNotAnswered()
+    {
+        var q = MakeSampleQuestion(1, 0, globalId: "Q_UNANSWERED");
+        AssessmentSession.StartNew(new AssessmentData(), "u1", new List<Question> { q });
+        var session = AssessmentSession.Current;
+
+        Assert.AreEqual(-1, session.GetSelectedAnswer(0));
+        Assert.AreEqual(-1, session.GetSelectedAnswer(q));
+    }
+
+    [Test]
+    public void MoveToQuestion_NavigatesDirectlyToValidIndex_AndIgnoresInvalidIndices()
+    {
+        var q1 = MakeSampleQuestion(1, 0, globalId: "Q1");
+        var q2 = MakeSampleQuestion(2, 1, globalId: "Q2");
+        var q3 = MakeSampleQuestion(3, 2, globalId: "Q3");
+        AssessmentSession.StartNew(new AssessmentData(), "u1", new List<Question> { q1, q2, q3 });
+        var session = AssessmentSession.Current;
+
+        // Pula direto para a questão 3 (índice 2)
+        session.MoveToQuestion(2);
+        Assert.AreEqual(2, session.CurrentQuestionIndex);
+        Assert.AreEqual(q3, session.GetCurrentQuestion());
+        Assert.IsTrue(session.IsLastQuestion);
+
+        // Pula direto para a questão 1 (índice 0)
+        session.MoveToQuestion(0);
+        Assert.AreEqual(0, session.CurrentQuestionIndex);
+        Assert.AreEqual(q1, session.GetCurrentQuestion());
+
+        // Índice negativo deve ser ignorado
+        session.MoveToQuestion(-1);
+        Assert.AreEqual(0, session.CurrentQuestionIndex);
+
+        // Índice além do limite deve ser ignorado
+        session.MoveToQuestion(5);
+        Assert.AreEqual(0, session.CurrentQuestionIndex);
+    }
+
+    // =======================================================
     // Clear
     // =======================================================
 
