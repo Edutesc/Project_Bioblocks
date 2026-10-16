@@ -21,6 +21,7 @@ public class QuestionBonusManager : MonoBehaviour
     [SerializeField] private int consecutiveCorrectAnswersNeeded = 5;
     [SerializeField] private float bonusDuration = 600f;
 
+    private bool isActivatingBonus;
     private int combinedMultiplier = 1;
     private int consecutiveCorrectAnswers = 0;
     private bool isBonusActive = false;
@@ -42,16 +43,6 @@ public class QuestionBonusManager : MonoBehaviour
         if (answerManager != null)
         {
             answerManager.OnAnswerSelected += CheckAnswer;
-        }
-
-        if (questionBottomUIManager != null)
-        {
-            questionBottomUIManager.OnExitButtonClicked += HideBonusFeedback;
-            questionBottomUIManager.OnNextButtonClicked += HideBonusFeedback;
-        }
-        else
-        {
-            Debug.LogWarning("QuestionBonusManager: BottomUIManager não encontrado. O feedback de bônus não será escondido ao navegar.");
         }
 
         QuestionManager questionManager = FindFirstObjectByType<QuestionManager>();
@@ -121,15 +112,8 @@ public class QuestionBonusManager : MonoBehaviour
             questionBottomUIManager = FindFirstObjectByType<QuestionBottomUIManager>();
             if (questionBottomUIManager == null)
             {
-                Debug.LogWarning("QuestionBonusManager: BottomUIManager não encontrado. O feedback de bônus não será escondido automaticamente ao navegar.");
+                Debug.LogWarning("QuestionBonusManager: BottomUIManager não encontrado. Verifique as referências da interface de navegação.");
             }
-        }
-
-        CanvasGroup feedbackCanvasGroup = questionBonusUIFeedback.GetComponent<CanvasGroup>();
-        if (feedbackCanvasGroup == null)
-        {
-            Debug.LogWarning("QuestionBonusUIFeedback não tem um componente CanvasGroup. Adicionando automaticamente.");
-            feedbackCanvasGroup = questionBonusUIFeedback.gameObject.AddComponent<CanvasGroup>();
         }
 
         return true;
@@ -208,6 +192,8 @@ public class QuestionBonusManager : MonoBehaviour
             return;
         }
 
+        if (isActivatingBonus) return;
+        isActivatingBonus = true;
         string userId = UserDataStore.CurrentUserData.UserId;
 
         try
@@ -215,31 +201,11 @@ public class QuestionBonusManager : MonoBehaviour
             // Ativa o bônus no Firestore
             await bonusManager.ActivateBonus(userId, "correctAnswerBonus", bonusDuration, 2);
             await bonusManager.IncrementBonusCounter(userId, "correctAnswerBonusCounter");
+            if (this == null) return;
             isBonusActive = true;
             currentBonusTime = bonusDuration;
 
-            // Mostra feedback visual
-            if (canvasGroupManager != null)
-            {
-                canvasGroupManager.ShowBonusFeedback(true);
-
-                if (questionBonusUIFeedback != null)
-                {
-                    questionBonusUIFeedback.ShowBonusActivatedFeedback();
-                }
-            }
-            else
-            {
-                if (questionBonusUIFeedback != null)
-                {
-                    questionBonusUIFeedback.gameObject.SetActive(true);
-                    questionBonusUIFeedback.ShowBonusActivatedFeedback();
-                }
-                else
-                {
-                    Debug.LogError("questionBonusUIFeedback é null no momento de ativar!");
-                }
-            }
+            ShowBonusFeedback();
 
             // Notifica o UserTopBarManager para atualizar o timer na TopBar
             if (_userHeaderManager != null)
@@ -256,21 +222,17 @@ public class QuestionBonusManager : MonoBehaviour
         {
             Debug.LogError($"QuestionBonusManager: Erro ao ativar bônus: {e.Message}");
         }
+        finally
+        {
+            isActivatingBonus = false;
+        }
     }
 
-    private void HideBonusFeedback()
+    private void ShowBonusFeedback()
     {
-        if (questionBonusUIFeedback != null && questionBonusUIFeedback.IsVisible())
-        {
-            if (canvasGroupManager != null)
-            {
-                canvasGroupManager.ShowBonusFeedback(false);
-            }
-            else
-            {
-                questionBonusUIFeedback.ForceVisibility(false);
-            }
-        }
+        if (this == null || !isActiveAndEnabled) return;
+        if (questionBonusUIFeedback != null)
+            questionBonusUIFeedback.ShowBonusActivatedFeedback();
     }
 
     private void OnDestroy()
@@ -278,12 +240,6 @@ public class QuestionBonusManager : MonoBehaviour
         if (answerManager != null)
         {
             answerManager.OnAnswerSelected -= CheckAnswer;
-        }
-
-        if (questionBottomUIManager != null)
-        {
-            questionBottomUIManager.OnExitButtonClicked -= HideBonusFeedback;
-            questionBottomUIManager.OnNextButtonClicked -= HideBonusFeedback;
         }
 
         // Desinscreve-se do evento do UserTopBarManager

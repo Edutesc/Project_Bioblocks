@@ -847,6 +847,14 @@ public class UserHeaderManager : BarsManager
     private void OnPlayerLevelChanged(int oldLevel, int newLevel)
     {
         Debug.Log($"[UserHeaderManager] Level mudou: {oldLevel} → {newLevel}");
+        int awardedPoints = 0;
+        for (int level = oldLevel + 1; level <= newLevel; level++)
+            awardedPoints += PlayerLevelConfig.GetBonusForLevel(level);
+        levelUpMessage = $"Nível {newLevel}! +{awardedPoints:N0} pontos";
+        levelUpMessageUntil = Time.unscaledTime + 8f;
+        if (levelUpMessageCoroutine != null) StopCoroutine(levelUpMessageCoroutine);
+        if (isActiveAndEnabled)
+            levelUpMessageCoroutine = StartCoroutine(ClearLevelUpMessage());
         UpdatePlayerLevelUI();
     }
 
@@ -855,135 +863,57 @@ public class UserHeaderManager : BarsManager
         UpdatePlayerLevelUI();
     }
 
+    private string levelUpMessage;
+    private float levelUpMessageUntil;
+    private Coroutine levelUpMessageCoroutine;
+
+    private IEnumerator ClearLevelUpMessage()
+    {
+        yield return new WaitForSecondsRealtime(8f);
+        levelUpMessage = null;
+        levelUpMessageCoroutine = null;
+        UpdatePlayerLevelUI();
+    }
+
     private void UpdatePlayerLevelUI()
     {
-        if (AppContext.PlayerLevel == null) return;
+        var levelService = AppContext.PlayerLevel;
+        if (levelService == null) return;
 
-        int questionsAnswered  = AppContext.PlayerLevel.GetTotalValidAnswered();
-        int totalQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
-        int currentLevel = GetLevelForProgressDisplay(questionsAnswered, totalQuestions);
-        int questionsAtStart = GetQuestionsAtLevelStart(currentLevel, totalQuestions);
-        int questionsAtNextLevel = GetQuestionsAtNextLevel(currentLevel, totalQuestions);
-        int questionsUntilNext = Mathf.Max(0, questionsAtNextLevel - questionsAnswered);
+        int currentLevel = levelService.GetCurrentLevel();
+        float progress = levelService.GetProgressInCurrentLevel();
+        int remaining = levelService.GetQuestionsUntilNextLevel();
+        bool isMaxLevel = currentLevel >= PlayerLevelConfig.MaxLevel;
+        string progressLabel = isMaxLevel
+            ? "MÁXIMO!"
+            : $"{remaining} questão(ões) para o nível {currentLevel + 1}";
+
+        if (!string.IsNullOrEmpty(levelUpMessage) && Time.unscaledTime < levelUpMessageUntil)
+            progressLabel = levelUpMessage;
 
         if (playerLevelText != null)
             playerLevelText.text = currentLevel.ToString();
 
         if (playerLevelBackground != null)
+            playerLevelBackground.color = LevelColors[Mathf.Clamp(currentLevel - 1, 0, 9)];
+
+        if (playerLevelProgressBarManager != null)
         {
-            int colorIndex = Mathf.Clamp(currentLevel - 1, 0, 9);
-            playerLevelBackground.color = LevelColors[colorIndex];
+            playerLevelProgressBarManager.ApplyLevelGradient(currentLevel);
+            // A razão vem do snapshot usado pelo serviço, sem recalcular thresholds na UI.
+            playerLevelProgressBarManager.UpdateProgress(
+                Mathf.RoundToInt((isMaxLevel ? 1f : progress) * 10000f),
+                10000,
+                progressLabel
+            );
+        }
+        else if (playerLevelProgressBar != null)
+        {
+            playerLevelProgressBar.fillAmount = isMaxLevel ? 1f : progress;
         }
 
-        if (currentLevel >= 10)
-        {
-            if (playerLevelProgressBarManager != null)
-            {
-                int maxQuestions = AppContext.PlayerLevel.GetTotalQuestionsInAllDatabanks();
-                playerLevelProgressBarManager.UpdateProgress(maxQuestions, maxQuestions, "MÁXIMO!");
-            }
-            else if (playerLevelProgressBar != null)
-            {
-                playerLevelProgressBar.fillAmount = 1f;
-            }
-
-            if (playerLevelProgressText != null)
-                playerLevelProgressText.text = "MÁXIMO!";
-        }
-        else
-        {
-            int nextLevel = currentLevel + 1;
-            int progressInLevel = questionsAnswered - questionsAtStart;
-            int intervalSize = questionsAtNextLevel - questionsAtStart;
-
-            if (intervalSize <= 0 || progressInLevel < 0)
-            {
-                Debug.Log($"[UserHeaderManager] Dados de progresso ainda indisponíveis: " +
-                                $"answered={questionsAnswered}, start={questionsAtStart}, " +
-                                $"untilNext={questionsUntilNext}, interval={intervalSize}. " +
-                                $"Atualizando UI com fallback temporário.");
-
-                progressInLevel = Mathf.Max(0, progressInLevel);
-                intervalSize = Mathf.Max(1, progressInLevel + questionsUntilNext);
-            }
-
-            if (playerLevelProgressBarManager != null)
-            {
-                playerLevelProgressBarManager.ApplyLevelGradient(currentLevel);
-                playerLevelProgressBarManager.UpdateProgress(
-                    progressInLevel,
-                    intervalSize,
-                    $"Level {currentLevel}"
-                );
-                Debug.Log($"[UserHeaderManager] Barra: {progressInLevel}/{intervalSize} " +
-                        $"(answered={questionsAnswered}, start={questionsAtStart})");
-            }
-            else if (playerLevelProgressBar != null)
-            {
-                playerLevelProgressBar.fillAmount = Mathf.Clamp01(progressInLevel / (float)intervalSize);
-            }
-
-            if (playerLevelProgressText != null)
-            {
-                int clampedProgress = Mathf.Clamp(progressInLevel, 0, intervalSize);
-                int remainingQuestions = Mathf.Max(0, intervalSize - clampedProgress);
-
-                Debug.Log($"[UserHeaderManager] currentLevel={currentLevel}, " +
-                        $"questionsAnswered={questionsAnswered}, " +
-                        $"questionsAtStart={questionsAtStart}, " +
-                        $"progressInLevel={progressInLevel}, " +
-                        $"intervalSize={intervalSize}, " +
-                        $"questionsUntilNext={questionsUntilNext}, " +
-                        $"remainingQuestions={remainingQuestions}");
-
-                if (remainingQuestions == 0)
-                {
-                    playerLevelProgressText.text = $"Parabéns, você completou o nível {currentLevel}";
-                }
-                else
-                {
-                    float percentageLeft = (remainingQuestions / (float)intervalSize) * 100f;
-                    int roundedPercentage = Mathf.RoundToInt(percentageLeft);
-                    playerLevelProgressText.text = $"{roundedPercentage}% para o nível {nextLevel}";
-                }
-            }
-        }
-    }
-
-    private int GetLevelForProgressDisplay(int questionsAnswered, int totalQuestions)
-    {
-        if (totalQuestions <= 0)
-        {
-            return Mathf.Clamp(AppContext.PlayerLevel.GetCurrentLevel(), 1, PlayerLevelConfig.MaxLevel);
-        }
-
-        for (int level = 1; level < PlayerLevelConfig.MaxLevel; level++)
-        {
-            int nextLevelStart = GetQuestionsAtNextLevel(level, totalQuestions);
-            if (questionsAnswered <= nextLevelStart)
-            {
-                return level;
-            }
-        }
-
-        return PlayerLevelConfig.MaxLevel;
-    }
-
-    private int GetQuestionsAtLevelStart(int level, int totalQuestions)
-    {
-        if (totalQuestions <= 0) return 0;
-
-        var threshold = PlayerLevelConfig.GetThresholdForLevel(level);
-        return threshold.GetMinRequiredQuestions(totalQuestions);
-    }
-
-    private int GetQuestionsAtNextLevel(int currentLevel, int totalQuestions)
-    {
-        if (totalQuestions <= 0) return 0;
-        if (currentLevel >= PlayerLevelConfig.MaxLevel) return totalQuestions;
-
-        var nextThreshold = PlayerLevelConfig.GetThresholdForLevel(currentLevel + 1);
-        return nextThreshold.GetMinRequiredQuestions(totalQuestions);
+        if (playerLevelProgressText != null)
+            playerLevelProgressText.text = progressLabel;
     }
 
     #endregion

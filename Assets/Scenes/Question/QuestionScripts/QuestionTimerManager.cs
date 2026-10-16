@@ -12,6 +12,9 @@ public class QuestionTimerManager : MonoBehaviour
     [SerializeField] private float initialTime = 30f;
     private float currentTime;
     private bool isRunning;
+    private bool bonusFeedbackPaused;
+
+    public void SetBonusFeedbackPaused(bool paused) => bonusFeedbackPaused = paused;
     
     public event System.Action OnTimerComplete;
 
@@ -123,6 +126,7 @@ public class QuestionTimerManager : MonoBehaviour
         while (isRunning && currentTime > 0)
         {
             yield return new WaitForSeconds(1f);
+            if (bonusFeedbackPaused) continue;
             currentTime -= 1f;
             UpdateTimerDisplay();
         }

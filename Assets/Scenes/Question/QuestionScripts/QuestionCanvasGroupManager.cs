@@ -29,6 +29,35 @@ public class QuestionCanvasGroupManager : MonoBehaviour
     [SerializeField] private Image questionTextBackgroundImage;
     [SerializeField] private Image questionImageBackgroundImage;
 
+    private bool bonusModalOpen;
+    private readonly System.Collections.Generic.Dictionary<CanvasGroup, bool> modalInteractionStates =
+        new System.Collections.Generic.Dictionary<CanvasGroup, bool>();
+
+    private bool IsBlockedByBonus(CanvasGroup group) =>
+        group == answerTextCanvasGroup || group == answerImageCanvasGroup || group == questionBottomBar;
+
+    public void SetBonusModalOpen(bool open)
+    {
+        if (bonusModalOpen == open) return;
+        bonusModalOpen = open;
+        foreach (var group in new[] { answerTextCanvasGroup, answerImageCanvasGroup, questionBottomBar })
+        {
+            if (group == null) continue;
+            if (open)
+            {
+                modalInteractionStates[group] = group.interactable;
+                group.interactable = false;
+                group.blocksRaycasts = false;
+            }
+            else if (modalInteractionStates.TryGetValue(group, out bool desired))
+            {
+                group.interactable = desired;
+                group.blocksRaycasts = desired;
+            }
+        }
+        if (!open) modalInteractionStates.Clear();
+    }
+
     private int currentQuestionLevel = 1;
 
     private void Awake()
@@ -211,8 +240,7 @@ public class QuestionCanvasGroupManager : MonoBehaviour
 
         canvasGroup.gameObject.SetActive(true);
         canvasGroup.alpha = active ? 1f : 0f;
-        canvasGroup.interactable = active;
-        canvasGroup.blocksRaycasts = active;
+        SetCanvasGroupInteractable(canvasGroup, active);
     }
 
     private void SetCanvasGroupInteractable(CanvasGroup canvasGroup, bool interactable)
@@ -224,6 +252,11 @@ public class QuestionCanvasGroupManager : MonoBehaviour
             StopAllButtonAnimations(canvasGroup);
         }
 
+        if (bonusModalOpen && IsBlockedByBonus(canvasGroup))
+        {
+            modalInteractionStates[canvasGroup] = interactable;
+            interactable = false;
+        }
         canvasGroup.interactable = interactable;
         canvasGroup.blocksRaycasts = interactable;
     }
