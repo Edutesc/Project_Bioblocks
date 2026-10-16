@@ -9,16 +9,12 @@ public class QuestionBonusUIFeedback : MonoBehaviour
     [SerializeField] private Image bonusPanel;
 
     private CanvasGroup canvasGroup;
+    private QuestionTimerManager timerManager;
+    private QuestionCanvasGroupManager groupManager;
+    private bool modalOpen;
 
     private void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-        {
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
-            Debug.Log("CanvasGroup adicionado ao QuestionBonusUIFeedback");
-        }
-
         if (bonusMessageText == null)
         {
             bonusMessageText = transform.Find("FeedbackText")?.GetComponent<TextMeshProUGUI>();
@@ -32,17 +28,45 @@ public class QuestionBonusUIFeedback : MonoBehaviour
             if (bonusPanel == null)
                 Debug.LogError("QuestionBonusUIFeedback: Não foi possível encontrar o componente Image");
         }
+        // O controlador pode estar fora do objeto visual (como na QuestionScene).
+        GameObject visualRoot = bonusPanel != null ? bonusPanel.gameObject : gameObject;
+        canvasGroup = visualRoot.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+            canvasGroup = visualRoot.AddComponent<CanvasGroup>();
+
     }
 
     private void Start()
     {
-        HideFeedback();
+        if (!modalOpen) HideFeedback();
+    }
+
+    // Vincule este método ao On Click do botão OK no Inspector.
+    public void DismissBonusFeedback() => HideFeedback();
+
+    private void OnDisable()
+    {
+        ReleaseModal();
+    }
+
+    private void ReleaseModal()
+    {
+        if (!modalOpen) return;
+        modalOpen = false;
+        if (timerManager != null) timerManager.SetBonusFeedbackPaused(false);
+        if (groupManager != null) groupManager.SetBonusModalOpen(false);
     }
 
     public void ShowBonusActivatedFeedback()
     {
         Debug.Log("Mostrando feedback de bônus");
         gameObject.SetActive(true);
+        canvasGroup.gameObject.SetActive(true);
+        if (timerManager == null) timerManager = FindFirstObjectByType<QuestionTimerManager>();
+        if (groupManager == null) groupManager = FindFirstObjectByType<QuestionCanvasGroupManager>();
+        modalOpen = true;
+        timerManager?.SetBonusFeedbackPaused(true);
+        groupManager?.SetBonusModalOpen(true);
 
         if (canvasGroup != null)
         {
@@ -55,6 +79,7 @@ public class QuestionBonusUIFeedback : MonoBehaviour
     public void HideFeedback()
     {
         Debug.Log("Escondendo feedback de bônus");
+        ReleaseModal();
 
         if (canvasGroup != null)
         {
@@ -71,7 +96,7 @@ public class QuestionBonusUIFeedback : MonoBehaviour
     public bool IsVisible()
     {
         if (canvasGroup != null)
-            return canvasGroup.alpha > 0f && gameObject.activeSelf;
+            return canvasGroup.alpha > 0f && canvasGroup.gameObject.activeInHierarchy;
         
         return gameObject.activeSelf;
     }

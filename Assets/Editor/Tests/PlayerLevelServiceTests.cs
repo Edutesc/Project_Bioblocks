@@ -322,6 +322,80 @@ public class PlayerLevelServiceTests
     }
 
     [UnityTest]
+    public IEnumerator CheckAndHandleLevelUp_NivelDois_CreditaBonusUmaUnicaVez()
+    {
+        var user = MakeUserWithSnapshot(level: 1, totalAnswered: 10, snapshot: 100);
+        user.Score = 150;
+        user.WeekScore = 40;
+        _localRepo.UpdateUser(user);
+        UserDataStore.CurrentUserData = user;
+        SetPrivateField("_currentUserData", user);
+        SetCachedTotalQuestions(TOTAL_QUESTIONS);
+
+        var task = _playerLevel.CheckAndHandleLevelUp();
+        yield return new WaitUntil(() => task.IsCompleted);
+        Assert.IsFalse(task.IsFaulted, task.Exception?.ToString());
+
+        Assert.AreEqual(2, _playerLevel.GetCurrentLevel());
+        Assert.AreEqual(2150, UserDataStore.CurrentUserData.Score);
+        Assert.AreEqual(2040, UserDataStore.CurrentUserData.WeekScore);
+        Assert.AreEqual(2150, _localRepo.GetUser(USER_ID).Score);
+        Assert.AreEqual(2040, _localRepo.GetUser(USER_ID).WeekScore);
+
+        task = _playerLevel.CheckAndHandleLevelUp();
+        yield return new WaitUntil(() => task.IsCompleted);
+        Assert.IsFalse(task.IsFaulted, task.Exception?.ToString());
+        Assert.AreEqual(2150, _localRepo.GetUser(USER_ID).Score);
+        Assert.AreEqual(2040, _localRepo.GetUser(USER_ID).WeekScore);
+    }
+
+    [UnityTest]
+    public IEnumerator IncrementTotalAnswered_NotificaProgressoAntesDaRespostaDoFirestore()
+    {
+        var user = MakeUserWithSnapshot(level: 1, totalAnswered: 91, snapshot: 1151);
+        _localRepo.UpdateUser(user);
+        UserDataStore.CurrentUserData = user;
+        SetPrivateField("_currentUserData", user);
+        int notifiedTotal = -1;
+        int remainingAtNotification = -1;
+        _playerLevel.OnLevelProgressUpdated += total =>
+        {
+            notifiedTotal = total;
+            remainingAtNotification = _playerLevel.GetQuestionsUntilNextLevel();
+        };
+        var gate = new System.Threading.Tasks.TaskCompletionSource<bool>();
+        _firestore.UpdateUserFieldGate = gate.Task;
+        System.Threading.Tasks.Task task;
+        try
+        {
+            task = _playerLevel.IncrementTotalAnswered();
+            Assert.AreEqual(92, notifiedTotal);
+            Assert.AreEqual(24, remainingAtNotification);
+            Assert.AreEqual(92, _localRepo.GetUser(USER_ID).TotalValidQuestionsAnswered);
+            if (Application.internetReachability != NetworkReachability.NotReachable)
+                Assert.IsFalse(task.IsCompleted, "A notificação deve ocorrer com o envio remoto pendente.");
+        }
+        finally
+        {
+            gate.TrySetResult(true);
+        }
+        yield return new WaitUntil(() => task.IsCompleted);
+        Assert.IsFalse(task.IsFaulted, task.Exception?.ToString());
+    }
+
+    [Test]
+    public void Progressao_Snapshot1151Com91Acertos_MantemNivelUmEFaltam25()
+    {
+        SetPrivateField("_currentUserData",
+            MakeUserWithSnapshot(level: 1, totalAnswered: 91, snapshot: 1151));
+        SetCachedTotalQuestions(890);
+
+        Assert.AreEqual(1, _playerLevel.GetCurrentLevel());
+        Assert.AreEqual(25, _playerLevel.GetQuestionsUntilNextLevel());
+        Assert.AreEqual(91f / 116f, _playerLevel.GetProgressInCurrentLevel(), 0.0001f);
+    }
+
+    [UnityTest]
     public IEnumerator CheckAndHandleLevelUp_SnapshotAusenteSemTotal_NaoCongelaDenominadorUm()
     {
         // Regressão da conta nova: se Config/QuestionStats ainda não carregou,

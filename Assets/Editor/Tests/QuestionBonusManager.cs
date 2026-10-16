@@ -59,6 +59,51 @@ public class QuestionBonusManagerTests
         field?.SetValue(_bonusManager, value);
     }
 
+    [Test]
+    public void BonusFeedback_ControladorSeparado_AbrePainelInativoEFechaNoOK()
+    {
+        var controller = new GameObject("BonusController");
+        controller.SetActive(false);
+        var panel = new GameObject("BonusPanel", typeof(UnityEngine.UI.Image), typeof(CanvasGroup));
+        var text = new GameObject("FeedbackText", typeof(TMPro.TextMeshProUGUI));
+        text.transform.SetParent(panel.transform);
+        try
+        {
+            var feedback = controller.AddComponent<QuestionBonusUIFeedback>();
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            typeof(QuestionBonusUIFeedback).GetField("bonusPanel", flags)
+                .SetValue(feedback, panel.GetComponent<UnityEngine.UI.Image>());
+            typeof(QuestionBonusUIFeedback).GetField("bonusMessageText", flags)
+                .SetValue(feedback, text.GetComponent<TMPro.TextMeshProUGUI>());
+            controller.SetActive(true);
+            // EditMode não executa automaticamente Awake deste MonoBehaviour.
+            // Inicializa as referências como ocorre ao abrir a cena em Play Mode.
+            typeof(QuestionBonusUIFeedback).GetMethod("Awake", flags)
+                .Invoke(feedback, null);
+            // Mesmo estado usado pelo gerenciador ao inicializar a cena.
+            panel.GetComponent<CanvasGroup>().alpha = 0;
+            panel.SetActive(false);
+
+            feedback.ShowBonusActivatedFeedback();
+
+            Assert.IsTrue(panel.activeInHierarchy);
+            Assert.AreEqual(1f, panel.GetComponent<CanvasGroup>().alpha);
+            Assert.IsTrue(feedback.IsVisible());
+            Assert.IsNull(controller.GetComponent<CanvasGroup>(),
+                "A visibilidade deve ser controlada no painel, não no objeto controlador.");
+
+            feedback.DismissBonusFeedback();
+
+            Assert.IsFalse(feedback.IsVisible());
+            Assert.IsFalse(panel.GetComponent<CanvasGroup>().blocksRaycasts);
+        }
+        finally
+        {
+            Object.DestroyImmediate(controller);
+            Object.DestroyImmediate(panel);
+        }
+    }
+
     // =======================================================
     // IsBonusActive
     // =======================================================

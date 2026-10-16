@@ -196,6 +196,9 @@ public class UploadQuestionImagesToStorageEditor : EditorWindow
             else
             {
                 pendingJobs.Add(job);
+                string localPath = "Assets/" + Path.GetRelativePath(Application.dataPath, job.LocalPath)
+                    .Replace('\\', '/');
+                statusLog += $"✓ {localPath}\n   → {StorageRoot}/{job.StorageKey}.png\n";
             }
         }
 

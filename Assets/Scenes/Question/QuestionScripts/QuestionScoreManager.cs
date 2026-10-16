@@ -138,14 +138,14 @@ public class QuestionScoreManager : MonoBehaviour
                     {
                         await _userDataSync.UpdateUserScores(userId, actualScoreChange, questionNumber, databankName, true);
 
-                        if (answeredQuestionsManager != null && answeredQuestionsManager.IsManagerInitialized)
-                            await answeredQuestionsManager.ForceUpdate();
-
                         if (_playerLevel != null)
                         {
                             await _playerLevel.IncrementTotalAnswered();
                             await _playerLevel.CheckAndHandleLevelUp();
                         }
+
+                        if (answeredQuestionsManager != null && answeredQuestionsManager.IsManagerInitialized)
+                            await answeredQuestionsManager.ForceUpdate();
                     }
                 }
                 catch (Exception ex)

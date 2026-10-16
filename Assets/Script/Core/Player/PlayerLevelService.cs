@@ -340,6 +340,10 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         // Persiste no LiteDB imediatamente — funciona offline
         AppContext.UserDataLocal?.UpdateUser(_currentUserData);
 
+        // A UI acompanha o acerto local sem esperar a sincronização remota.
+        UserDataStore.UpdateTotalValidQuestionsAnswered(total);
+        OnLevelProgressUpdated?.Invoke(total);
+
         // Tenta Firestore — sem bloqueio se offline
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
@@ -361,8 +365,6 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             AppContext.UserDataLocal?.MarkAsDirty(userId);
         }
 
-        UserDataStore.UpdateTotalValidQuestionsAnswered(total);
-        OnLevelProgressUpdated?.Invoke(total);
     }
 
     public async Task CheckAndHandleLevelUp()
@@ -413,6 +415,10 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
         // Persiste no LiteDB imediatamente
         AppContext.UserDataLocal?.UpdateUser(_currentUserData);
 
+        // Confirma a conquista após o crédito local, sem esperar a rede.
+        UserDataStore.UpdatePlayerLevel(newLevel);
+        OnLevelChanged?.Invoke(oldLevel, newLevel);
+
         // Tenta Firestore — sem bloqueio se offline
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
@@ -434,8 +440,6 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
             AppContext.UserDataLocal?.MarkAsDirty(userId);
         }
 
-        UserDataStore.UpdatePlayerLevel(newLevel);
-        OnLevelChanged?.Invoke(oldLevel, newLevel);
     }
 
     public async Task RecalculateTotalAnswered()
@@ -567,10 +571,9 @@ public class PlayerLevelService : MonoBehaviour, IPlayerLevelService
     // -------------------------------------------------------
     private async Task GrantLevelUpBonus(int bonusPoints)
     {
-        _currentUserData.Score     += bonusPoints;
-        _currentUserData.WeekScore += bonusPoints;
-
-        // UpdateUserScores já gerencia LiteDB + Firestore com fallback offline
+        // O serviço de sincronização é responsável por somar os pontos uma única vez
+        // e atualizar o UserDataStore, o LiteDB e o Firestore.
+        // Não incremente o objeto em memória antes desta chamada.
         await _userDataSync.UpdateUserScores(
             _currentUserData.UserId,
             bonusPoints,

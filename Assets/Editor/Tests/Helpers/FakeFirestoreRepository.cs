@@ -7,6 +7,8 @@ public class FakeFirestoreRepository : IFirestoreRepository, IFirestoreUserRepos
     private readonly Dictionary<string, UserData> _users = new();
     private readonly List<UserData> _allUsers = new();
 
+    public Task UpdateUserFieldGate { get; set; } = Task.CompletedTask;
+
     public int UpdateUserFieldCallCount      { get; private set; }
     public int UpdateUserScoresCallCount     { get; private set; }
     public string LastUpdatedField           { get; private set; }
@@ -151,7 +153,7 @@ public class FakeFirestoreRepository : IFirestoreRepository, IFirestoreUserRepos
                 case "ProfileImageUrl":              user.ProfileImageUrl = value?.ToString(); break;
             }
         }
-        return Task.CompletedTask;
+        return UpdateUserFieldGate;
     }
 
     public Task UpdateUserProgress(string userId, int progress)
